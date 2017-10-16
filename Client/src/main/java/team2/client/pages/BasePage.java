@@ -8,6 +8,7 @@ import team2.client.helper.AlertHelper;
 import team2.client.pages.interfaces.BasePageControl;
 
 import javax.lang.model.type.NullType;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BasePage<R, V, L, S> extends BorderPane implements BasePageControl {
@@ -117,6 +118,23 @@ public abstract class BasePage<R, V, L, S> extends BorderPane implements BasePag
         _exit = action;
     }
 
+    /**
+     * returns if changes were made on the page (this is most often used before the user leaves the page)
+     * @return true if changes on the data are available
+     */
+    public boolean hasChanges() {
+        return false;
+    }
+
+    /**
+     * retrieve a list with all the changes which were made on the page (this is most often used before the user leaves the page)
+     * @return a list of changes
+     *         null is not valid
+     */
+    public List<String> getChanges() {
+        return new ArrayList<>();
+    }
+
     protected void validate(List<? extends Control> fields) {
         for (Control field : fields) {
             if(field instanceof TextField) {
@@ -135,23 +153,23 @@ public abstract class BasePage<R, V, L, S> extends BorderPane implements BasePag
         }
     }
 
-    public void showSuccessMessage(String headerText, String contentText) {
+    protected void showSuccessMessage(String headerText, String contentText) {
         AlertHelper.showSuccessMessage(headerText, contentText, this);
     }
 
-    public void showErrorMessage(String headerText, String contentText) {
+    protected void showErrorMessage(String headerText, String contentText) {
         AlertHelper.showErrorMessage(headerText, contentText, this);
     }
 
-    public Boolean showWarningMessage(String headerText, String contentText, String okButtonLabel) {
+    protected Boolean showWarningMessage(String headerText, String contentText, String okButtonLabel) {
         return AlertHelper.showWarningMessage(headerText, contentText, okButtonLabel, this);
     }
 
-    public void showValuesMissingMessage() {
+    protected void showValuesMissingMessage() {
         AlertHelper.showValuesMissingMessage(this);
     }
 
-    public void showTryAgainLaterErrorMessage() {
+    protected void showTryAgainLaterErrorMessage() {
         AlertHelper.showTryAgainLaterErrorMessage(this);
     }
 }
