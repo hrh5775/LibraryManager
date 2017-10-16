@@ -1,6 +1,6 @@
 # LibraryManager
 
-Git project in Intellij:
+Git project in IntelliJ:
 
 1. Download IntelliJ Ultimate
 2. Install Intellij
@@ -10,9 +10,9 @@ Git project in Intellij:
 6. Checkout project from repository url
 7. Start working :D
 
-The git commands are in the bottom right corner of Intellij.
+The git commands are in the bottom right corner of IntelliJ.
 
-Or use a [Git](https://git-scm.com/downloads) client and a preffered IDE.
+Or use a [Git](https://git-scm.com/downloads) client and a preferred IDE.
 
 ## Build
 **Execute the following commands in the main directory of the cloned git repository**
