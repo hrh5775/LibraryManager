@@ -1,0 +1,50 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="Server:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/Server_war_exploded</output-path>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="Server" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: org.json:json:20160810" />
+          <element id="library" level="project" name="Maven: javax.servlet:jstl:1.2" />
+          <element id="library" level="project" name="Maven: javax.ws.rs:javax.ws.rs-api:2.1-m05" />
+          <element id="library" level="project" name="Maven: org.apache.maven.plugins:maven-compiler-plugin:3.6.1" />
+          <element id="library" level="project" name="Maven: org.apache.maven:maven-plugin-api:3.0" />
+          <element id="library" level="project" name="Maven: org.apache.maven:maven-model:3.0" />
+          <element id="library" level="project" name="Maven: org.sonatype.sisu:sisu-inject-plexus:1.4.2" />
+          <element id="library" level="project" name="Maven: org.sonatype.sisu:sisu-inject-bean:1.4.2" />
+          <element id="library" level="project" name="Maven: org.sonatype.sisu:sisu-guice:noaop:2.1.7" />
+          <element id="library" level="project" name="Maven: org.apache.maven:maven-artifact:3.0" />
+          <element id="library" level="project" name="Maven: org.codehaus.plexus:plexus-utils:2.0.4" />
+          <element id="library" level="project" name="Maven: org.apache.maven:maven-core:3.0" />
+          <element id="library" level="project" name="Maven: org.apache.maven:maven-settings:3.0" />
+          <element id="library" level="project" name="Maven: org.apache.maven:maven-settings-builder:3.0" />
+          <element id="library" level="project" name="Maven: org.apache.maven:maven-repository-metadata:3.0" />
+          <element id="library" level="project" name="Maven: org.apache.maven:maven-model-builder:3.0" />
+          <element id="library" level="project" name="Maven: org.apache.maven:maven-aether-provider:3.0" />
+          <element id="library" level="project" name="Maven: org.sonatype.aether:aether-impl:1.7" />
+          <element id="library" level="project" name="Maven: org.sonatype.aether:aether-spi:1.7" />
+          <element id="library" level="project" name="Maven: org.sonatype.aether:aether-api:1.7" />
+          <element id="library" level="project" name="Maven: org.sonatype.aether:aether-util:1.7" />
+          <element id="library" level="project" name="Maven: org.codehaus.plexus:plexus-interpolation:1.14" />
+          <element id="library" level="project" name="Maven: org.codehaus.plexus:plexus-classworlds:2.2.3" />
+          <element id="library" level="project" name="Maven: org.codehaus.plexus:plexus-component-annotations:1.5.5" />
+          <element id="library" level="project" name="Maven: org.sonatype.plexus:plexus-sec-dispatcher:1.3" />
+          <element id="library" level="project" name="Maven: org.sonatype.plexus:plexus-cipher:1.4" />
+          <element id="library" level="project" name="Maven: org.apache.maven.shared:maven-shared-utils:3.1.0" />
+          <element id="library" level="project" name="Maven: commons-io:commons-io:2.5" />
+          <element id="library" level="project" name="Maven: org.apache.maven.shared:maven-shared-incremental:1.1" />
+          <element id="library" level="project" name="Maven: org.ow2.asm:asm:6.0_ALPHA" />
+          <element id="library" level="project" name="Maven: com.thoughtworks.qdox:qdox:2.0-M5" />
+          <element id="library" level="project" name="Maven: org.codehaus.plexus:plexus-compiler-api:2.8.1" />
+          <element id="library" level="project" name="Maven: org.codehaus.plexus:plexus-compiler-manager:2.8.1" />
+          <element id="library" level="project" name="Maven: org.codehaus.plexus:plexus-compiler-javac:2.8.1" />
+          <element id="library" level="project" name="Maven: javax.servlet:javax.servlet-api:4.0.0-b05" />
+        </element>
+      </element>
+      <element id="javaee-facet-resources" facet="Server/web/Web" />
+    </root>
+  </artifact>
+</component>

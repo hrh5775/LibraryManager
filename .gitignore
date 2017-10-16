@@ -1,0 +1,165 @@
+# Editor and IDE artifacts
+*~
+*.swp
+*.orig
+nbproject
+.redcar/
+codekit-config.json
+.pycharm_helpers/
+_mac/
+IntelliLang.xml
+conda_packages.xml
+databaseSettings.xml
+diff.xml
+debugger.xml
+editor.xml
+ide.general.xml
+inspection/Default.xml
+other.xml
+packages.xml
+web-browsers.xml
+github_settings.xml
+codestyles/
+ui.lnf.xml
+filetypes.xml
+colors.scheme.xml
+hs_err_pid4220.log
+debugger.renderers.xml
+baseRefactoring.xml
+
+# installers
+Installers/Client/Client/Client.jar
+Installers/Server/tomcat/webapps/Root.war
+
+# NFS artifacts
+.nfs*
+
+# OS X artifacts
+*.DS_Store
+.AppleDouble
+:2e_*
+:2e#
+
+# maven
+target/
+
+# InstallBuilder artifacts
+*.backup
+*.log
+
+# The following covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
+# Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
+
+# User-specific stuff:
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/dictionaries
+
+Client/.idea/workspace.xml
+Client/.idea/tasks.xml
+Client/.idea/dictionaries
+
+Application/.idea/workspace.xml
+Application/.idea/tasks.xml
+Application/.idea/dictionaries
+
+Domain/.idea/workspace.xml
+Domain/.idea/tasks.xml
+Domain/.idea/dictionaries
+
+Server/.idea/workspace.xml
+Server/.idea/tasks.xml
+Server/.idea/dictionaries
+
+# Sensitive or high-churn files:
+.idea/dataSources/
+.idea/dataSources.ids
+.idea/dataSources.xml
+.idea/dataSources.local.xml
+.idea/sqlDataSources.xml
+.idea/dynamic.xml
+.idea/uiDesigner.xml
+
+Client/.idea/dataSources/
+Client/.idea/dataSources.ids
+Client/.idea/dataSources.xml
+Client/.idea/dataSources.local.xml
+Client/.idea/sqlDataSources.xml
+Client/.idea/dynamic.xml
+Client/.idea/uiDesigner.xml
+
+Application/.idea/dataSources/
+Application/.idea/dataSources.ids
+Application/.idea/dataSources.xml
+Application/.idea/dataSources.local.xml
+Application/.idea/sqlDataSources.xml
+Application/.idea/dynamic.xml
+Application/.idea/uiDesigner.xml
+
+Domain/.idea/dataSources/
+Domain/.idea/dataSources.ids
+Domain/.idea/dataSources.xml
+Domain/.idea/dataSources.local.xml
+Domain/.idea/sqlDataSources.xml
+Domain/.idea/dynamic.xml
+Domain/.idea/uiDesigner.xml
+
+Server/.idea/dataSources/
+Server/.idea/dataSources.ids
+Server/.idea/dataSources.xml
+Server/.idea/dataSources.local.xml
+Server/.idea/sqlDataSources.xml
+Server/.idea/dynamic.xml
+Server/.idea/uiDesigner.xml
+Server/.idea/webContexts.xml
+
+# Gradle:
+.idea/gradle.xml
+.idea/libraries
+
+Client/.idea/gradle.xml
+Client/.idea/libraries
+
+Application/.idea/gradle.xml
+Application/.idea/libraries
+
+Domain/.idea/gradle.xml
+Domain/.idea/libraries
+
+Server/.idea/gradle.xml
+Server/.idea/libraries
+
+# Mongo Explorer plugin:
+.idea/**/mongoSettings.xml
+Client/.idea/**/mongoSettings.xml
+Application/.idea/**/mongoSettings.xml
+Domain/.idea/**/mongoSettings.xml
+Server/.idea/**/mongoSettings.xml
+
+## File-based project format:
+*.iws
+
+## Plugin-specific files:
+
+# IntelliJ
+out/
+resources-filtered/
+
+# mpeltonen/sbt-idea plugin
+.idea_modules/
+
+# JIRA plugin
+atlassian-ide-plugin.xml
+
+# Cursive Clojure plugin
+.idea/replstate.xml
+Client/.idea/replstate.xml
+Application/.idea/replstate.xml
+Domain/.idea/replstate.xml
+Server/.idea/replstate.xml
+
+# Crashlytics plugin (for Android Studio and IntelliJ)
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+fabric.properties

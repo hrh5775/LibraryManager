@@ -1,0 +1,183 @@
+<project>
+    <shortName>LibraryManager</shortName>
+    <fullName>LibraryManager Client</fullName>
+    <version>1.0</version>
+    <installerFilename></installerFilename>
+    <componentList>
+        <component>
+            <name>default</name>
+            <description>Default Component</description>
+            <canBeEdited>1</canBeEdited>
+            <selected>1</selected>
+            <show>1</show>
+            <desktopShortcutList>
+                <shortcut>
+                    <comment>Start ${product_fullname}</comment>
+                    <exec>${installdir}/Client/Client.jar</exec>
+                    <icon>${installdir}/Client/icon.png</icon>
+                    <name>${product_fullname}</name>
+                    <noPinToStart>0</noPinToStart>
+                    <path></path>
+                    <platforms>all</platforms>
+                    <runAsAdmin>0</runAsAdmin>
+                    <runInTerminal>0</runInTerminal>
+                    <windowsExec>${installdir}\Client\Client.jar</windowsExec>
+                    <windowsExecArgs></windowsExecArgs>
+                    <windowsIcon>${installdir}\Client\icon.png</windowsIcon>
+                    <windowsPath></windowsPath>
+                </shortcut>
+            </desktopShortcutList>
+            <folderList>
+                <folder>
+                    <description>Program Files</description>
+                    <destination>${installdir}</destination>
+                    <name>programfiles</name>
+                    <platforms>all</platforms>
+                    <distributionFileList>
+                        <distributionDirectory>
+                            <origin>Client</origin>
+                        </distributionDirectory>
+                    </distributionFileList>
+                    <shortcutList>
+                        <shortcut>
+                            <comment>Uninstall</comment>
+                            <exec>${installdir}/${uninstallerName}</exec>
+                            <icon></icon>
+                            <name>Uninstall ${product_fullname}</name>
+                            <path></path>
+                            <platforms>all</platforms>
+                            <runAsAdmin>0</runAsAdmin>
+                            <runInTerminal>0</runInTerminal>
+                            <windowsExec>${installdir}/${uninstallerName}.exe</windowsExec>
+                            <windowsExecArgs></windowsExecArgs>
+                            <windowsIcon></windowsIcon>
+                            <windowsPath>${installdir}</windowsPath>
+                        </shortcut>
+                    </shortcutList>
+                </folder>
+                <folder>
+                    <description>Program Files</description>
+                    <destination>${installdir}</destination>
+                    <name>programfileslinux</name>
+                    <platforms>linux</platforms>
+                </folder>
+                <folder>
+                    <description>Program Files</description>
+                    <destination>${installdir}</destination>
+                    <name>programfileswindows</name>
+                    <platforms>windows</platforms>
+                </folder>
+                <folder>
+                    <description>Program Files</description>
+                    <destination>${installdir}</destination>
+                    <name>programfilesosx</name>
+                    <platforms>osx</platforms>
+                </folder>
+            </folderList>
+            <startMenuShortcutList>
+                <startMenuShortcut>
+                    <comment>Uninstall ${product_fullname}</comment>
+                    <name>Uninstall ${product_fullname}</name>
+                    <runAsAdmin>0</runAsAdmin>
+                    <runInTerminal>0</runInTerminal>
+                    <windowsExec>${installdir}/${uninstallerName}.exe</windowsExec>
+                    <windowsExecArgs></windowsExecArgs>
+                    <windowsIcon></windowsIcon>
+                    <windowsPath>${installdir}/</windowsPath>
+                </startMenuShortcut>
+            </startMenuShortcutList>
+        </component>
+    </componentList>
+    <preInstallationActionList>
+        <autodetectJava>
+            <customErrorMessage>Java 1.8 is required</customErrorMessage>
+            <promptUser>1</promptUser>
+            <validVersionList>
+                <validVersion>
+                    <bitness></bitness>
+                    <maxVersion></maxVersion>
+                    <minVersion>1.8</minVersion>
+                    <requireJDK>0</requireJDK>
+                    <vendor></vendor>
+                </validVersion>
+            </validVersionList>
+        </autodetectJava>
+    </preInstallationActionList>
+    <postInstallationActionList>
+        <setInstallerVariableFromRegEx>
+            <name>java_home</name>
+            <pattern>bin.java.*$</pattern>
+            <substitution></substitution>
+            <text>${java_executable}</text>
+        </setInstallerVariableFromRegEx>
+        <changePermissions>
+            <files>${installdir}/*.jar</files>
+            <permissions>755</permissions>
+        </changePermissions>
+        <createSymLink>
+            <linkName>~/Desktop/Start LibraryManager</linkName>
+            <target>${installdir}/Client/Client.jar</target>
+            <ruleList>
+                <platformTest>
+                    <type>osx</type>
+                </platformTest>
+            </ruleList>
+        </createSymLink>
+    </postInstallationActionList>
+    <createOsxBundleDmg>1</createOsxBundleDmg>
+    <enableRollback>1</enableRollback>
+    <enableTimestamp>1</enableTimestamp>
+    <saveRelativePaths>1</saveRelativePaths>
+    <vendor>Team F</vendor>
+    <finalPageActionList>
+        <actionGroup>
+            <progressText>Start LibraryManager</progressText>
+            <actionList>
+                <runProgram>
+                    <program>${installdir}/Client/Client.jar</program>
+                    <programArguments></programArguments>
+                    <ruleList>
+                        <platformTest>
+                            <type>linux</type>
+                        </platformTest>
+                    </ruleList>
+                </runProgram>
+                <runProgram>
+                    <customErrorMessage>Could not launch the app due to MacOSX's security policy. Start the app manually</customErrorMessage>
+                    <program>${installdir}/Client/Client.jar</program>
+                    <programArguments></programArguments>
+                    <ruleList>
+                        <platformTest>
+                            <type>osx</type>
+                        </platformTest>
+                    </ruleList>
+                </runProgram>
+                <runProgram>
+                    <program>java</program>
+                    <programArguments>-jar "${installdir}\Client\Client.jar"</programArguments>
+                    <ruleList>
+                        <platformTest>
+                            <type>windows</type>
+                        </platformTest>
+                    </ruleList>
+                </runProgram>
+            </actionList>
+        </actionGroup>
+    </finalPageActionList>
+    <parameterList>
+        <directoryParameter>
+            <name>installdir</name>
+            <description>Installer.Parameter.installdir.description</description>
+            <explanation>Installer.Parameter.installdir.explanation</explanation>
+            <value></value>
+            <default>${platform_install_prefix}/${product_shortname}-${product_version}</default>
+            <allowEmptyValue>0</allowEmptyValue>
+            <ask>yes</ask>
+            <cliOptionName>prefix</cliOptionName>
+            <mustBeWritable>yes</mustBeWritable>
+            <mustExist>0</mustExist>
+            <width>30</width>
+        </directoryParameter>
+    </parameterList>
+</project>
+

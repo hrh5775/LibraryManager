@@ -1,0 +1,44 @@
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0">
+    <persistence-unit name="sem4_team2" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+        <!--<class>team2.database_wrapper.entities.AccountEntity</class>-->
+
+        <properties>
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />
+            <!-- <property name="hibernate.hbm2ddl.auto" value="validate" /> -->
+            <property name="dialect" value="org.hibernate.dialect.MySQL5Dialect" />
+
+            <!-- default one -->
+            <!--
+            <property name="hibernate.connection.username" value="team2" />
+            <property name="hibernate.connection.password" value="8fpE?2j2E6kis2~9" />
+            <property name="hibernate.connection.url" value="jdbc:mysql://mysql.vlbg.org:3306/sem4_team2?useUnicode=yes&amp;characterEncoding=UTF-8&amp;connectionCollation=utf8_general_ci&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC" />
+            -->
+
+            <!-- for test purposes -->
+            <!-- requires the fhv vpn connection or a fhv wlan, lan connection -->
+            <property name="hibernate.connection.username" value="hrh5775" />
+            <property name="hibernate.connection.password" value="ofitthep" />
+            <property name="hibernate.connection.url" value="jdbc:mysql://mysql.fhv.at:3306/hrh5775?useUnicode=yes&amp;characterEncoding=UTF-8&amp;connectionCollation=utf8_general_ci&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC" />
+            <!-- force to use UTC instead of CEST
+            for issue: The server time zone value 'CEST' is unrecognized or represents more than one time zone -->
+            <property name="hibernate.jdbc.time_zone" value="UTC"/>
+
+            <property name="hibernate.connection.characterEncoding" value="utf8"/>
+            <property name="hibernate.connection.useUnicode" value="true"/>
+            <property name="hibernate.connection.charSet" value="UTF-8"/>
+
+            <property name="connection_pool_size" value="5" />
+
+            <!-- only for testing -->
+            <property name="hibernate.show_sql" value="true" />
+            <property name="openjpa.Log" value="DefaultLevel=WARN, Runtime=INFO, Tool=INFO, SQL=TRACE"/>
+            <property name="openjpa.ConnectionFactoryProperties" value="PrintParameters=true" />
+            <property name="hibernate.id.new_generator_mappings" value="true" />
+        </properties>
+    </persistence-unit>
+</persistence>
