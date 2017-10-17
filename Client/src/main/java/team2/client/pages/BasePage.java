@@ -1,5 +1,6 @@
 package team2.client.pages;
 
+import javafx.fxml.Initializable;
 import javafx.scene.control.Control;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
@@ -8,13 +9,15 @@ import team2.client.helper.AlertHelper;
 import team2.client.pages.interfaces.BasePageControl;
 
 import javax.lang.model.type.NullType;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
-public abstract class BasePage<R, V, L, S> extends BorderPane implements BasePageControl {
+public abstract class BasePage<R, V, L, S> extends BorderPane implements BasePageControl, Initializable {
     /**
      * Extends the behaviour of the page without loosing the base functionality and without inheriting from BasePage.
-     * It also separates the the action behaviour from the GUI components and does not allow to access the GUI components
+     * It also separates the action behaviour from the GUI components and does not allow to access the GUI components
      * so easily.
      *
      * The handlers should not display any visual dialogs. Instead they should return the error messages to the GUI (not an Exception)
@@ -23,6 +26,10 @@ public abstract class BasePage<R, V, L, S> extends BorderPane implements BasePag
      * e.g. NotImplemented can be thrown (not recommend nor necessary).
      * The standard behaviour doesn't call the attached event handler when it's not implemented.
      * (implemented actions should be documented in JavaDoc)
+     */
+
+    /**
+     * initialize the page
      */
     protected PageAction<Void, NullType> _initialize;
     /**
@@ -171,5 +178,10 @@ public abstract class BasePage<R, V, L, S> extends BorderPane implements BasePag
 
     protected void showTryAgainLaterErrorMessage() {
         AlertHelper.showTryAgainLaterErrorMessage(this);
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        this.initialize();
     }
 }

@@ -87,7 +87,8 @@ public class NavigationBar {
 
     private void addInitializedPageListItem(BasePage page) {
         if(!_initializedPageList.contains(page)) {
-            page.initialize();
+            page.initializeView();
+            //page.initialize();
             _initializedPageList.add(page);
         }
     }

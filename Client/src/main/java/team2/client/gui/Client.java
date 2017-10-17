@@ -1,6 +1,7 @@
 package team2.client.gui;
 
 import javafx.application.Application;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -57,12 +58,21 @@ public class Client extends Application {
 
         // inserting the mainContentPane in a group enables the scroll pane to get the size of its main content
         mainContent.setContent(new Group(mainContentPane));
-        content.setCenter(mainContent);
+        //content.setCenter(mainContent);
 
         // set the sidebar
         NavigationBar navigationBar = new NavigationBar(mainContentPane, _configuration);
         Sidebar sidebar = navigationBar.getNavigationBar();
-        content.setLeft(sidebar);
+        //content.setLeft(resizeableSidebar);
+
+        // set the split pane
+        SplitPane resizeableMainContent = new SplitPane(sidebar, mainContent);
+        resizeableMainContent.setOrientation(Orientation.HORIZONTAL);
+        //sidebar.prefWidthProperty().bind(sidebar.widthProperty());
+        sidebar.maxWidthProperty().bind(resizeableMainContent.widthProperty().multiply(0.091));
+        sidebar.minWidthProperty().bind(resizeableMainContent.widthProperty().multiply(0.043));
+        sidebar.prefWidthProperty().bind(resizeableMainContent.widthProperty().multiply(0.091));
+        content.setCenter(resizeableMainContent);
 
         // set the menubar
         if (_configuration.getShowMenuBar()) {
