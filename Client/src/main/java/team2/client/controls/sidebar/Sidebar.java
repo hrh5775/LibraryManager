@@ -10,6 +10,10 @@ public class Sidebar extends ScrollPane {
     public Sidebar() {
         _accordion = new Accordion();
         _accordion.setStyle("-fx-background-color: #e0e0d1");
+        _accordion.prefWidthProperty().bind(widthProperty());
+        _accordion.minWidthProperty().bind(minWidthProperty());
+        _accordion.maxWidthProperty().bind(maxWidthProperty());
+
         setContent(_accordion);
     }
 

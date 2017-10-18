@@ -1,10 +1,9 @@
 package team2.client.controls.numberfield;
 
 import jfxtras.labs.scene.control.BigDecimalField;
-import team2.client.exceptions.NumberRangeException;
-
 import java.math.BigDecimal;
 import java.text.*;
+import team2.client.exceptions.NumberRangeException;
 
 public class NumberField extends BigDecimalField {
     private boolean _hasDoubleValue = false;
@@ -62,6 +61,7 @@ public class NumberField extends BigDecimalField {
     @Override
     public String getUserAgentStylesheet() {
         // workaround for jfxtras
+        // @todo
         final String Style = this.getClass().getResource("BigDecimalField.css").toExternalForm();
         return Style;
     }

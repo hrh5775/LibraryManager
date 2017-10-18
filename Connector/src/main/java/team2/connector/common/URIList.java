@@ -1,4 +1,4 @@
-package team2.jsonconnector.common;
+package team2.connector.common;
 
 public class URIList {
     //public static final String root = "";

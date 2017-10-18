@@ -1,32 +1,43 @@
 package team2.client.pages;
 
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.control.Control;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import jfxtras.labs.scene.control.BigDecimalField;
-import team2.client.helper.AlertHelper;
-import team2.client.pages.interfaces.BasePageControl;
-
 import javax.lang.model.type.NullType;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import team2.client.helper.AlertHelper;
+import team2.client.pages.interfaces.BasePageControl;
 
+/**
+ * Extends the behaviour of the page without loosing the base functionality and without inheriting from BasePage.
+ * It also separates the action behaviour from the GUI components and does not allow to access the GUI components
+ * so easily.
+ *
+ * The handlers should not display any visual dialogs. Instead they should return the error messages to the GUI (not an Exception)
+ *
+ * Can be implemented by the page which inherits from it, but it's not necessary
+ * e.g. NotImplemented can be thrown (not recommend nor necessary).
+ * The standard behaviour doesn't call the attached event handler when it's not implemented.
+ * (implemented actions should be documented in JavaDoc)
+ *
+ * @param <R>
+ * @param <V>
+ * @param <L>
+ * @param <S>
+ */
 public abstract class BasePage<R, V, L, S> extends BorderPane implements BasePageControl, Initializable {
-    /**
-     * Extends the behaviour of the page without loosing the base functionality and without inheriting from BasePage.
-     * It also separates the action behaviour from the GUI components and does not allow to access the GUI components
-     * so easily.
-     *
-     * The handlers should not display any visual dialogs. Instead they should return the error messages to the GUI (not an Exception)
-     *
-     * Can be implemented by the page which inherits from it, but it's not necessary
-     * e.g. NotImplemented can be thrown (not recommend nor necessary).
-     * The standard behaviour doesn't call the attached event handler when it's not implemented.
-     * (implemented actions should be documented in JavaDoc)
-     */
+    public BasePage() {
+        this.initialize();
+        this.initializeView();
+    }
 
     /**
      * initialize the page
@@ -180,8 +191,36 @@ public abstract class BasePage<R, V, L, S> extends BorderPane implements BasePag
         AlertHelper.showTryAgainLaterErrorMessage(this);
     }
 
+    /**
+     * loads the view from a fxml file
+     * @param location
+     * @return a view element
+     */
+    protected Parent loadView(URL location) {
+        Parent parent = null;
+
+        try {
+            FXMLLoader loader = new FXMLLoader(location);
+            loader.setController(this);
+            parent = loader.load();
+        } catch (IOException e) {
+            System.out.println(e);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        return parent;
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.initialize();
+        //this.initialize();
+    }
+
+    // https://stackoverflow.com/questions/17372533/why-we-override-finalize-method-in-java
+    @Override
+    protected void finalize() throws Throwable {
+        this.dispose();
+        super.finalize();
     }
 }

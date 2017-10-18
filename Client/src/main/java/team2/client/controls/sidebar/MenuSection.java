@@ -6,8 +6,8 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
-import team2.client.helper.ImageUtilHelper;
 import java.util.Collection;
+import team2.client.helper.ImageUtilHelper;
 
 public class MenuSection extends TitledPane {
     private VBox _vBox;
@@ -15,17 +15,24 @@ public class MenuSection extends TitledPane {
 
     public MenuSection(String title, String graphicPath, ToggleGroup toggleGroup) {
         setText(title);
-        Image buildImage = ImageUtilHelper.getImage(graphicPath);
-        setGraphic(new ImageView(buildImage));
+        Image image = ImageUtilHelper.getImage(graphicPath);
+        ImageView imageView = new ImageView(image);
+        imageView.setSmooth(true);
+        setGraphic(imageView);
+        setWrapText(false);
+        //setTextOverrun(OverrunStyle.CLIP);
+        setEllipsisString(" ");
+        setPadding(new Insets(0, 0, 0, 0));
 
         // initialize with predefined settings
         _vBox = new VBox(5);
         _vBox.setPadding(new Insets(0, 0, 0, 0));
         _vBox.setStyle("-fx-background-color: #e0e0d1");
+        _vBox.setMinWidth(0);
         setContent(_vBox);
-        setStyle(" -fx-font-size: 14px;\n" +
+        setStyle(" -fx-font-size: 1em;\n" +
                 "    -fx-text-fill: #333333;\n" +
-                "    -fx-effect: dropshadow( gaussian , rgba(255,255,255,0.5) , 0,0,0,1 );");
+                "    -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.5), 0, 0, 0, 1);");
 
         _toggleGroup = toggleGroup;
     }

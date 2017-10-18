@@ -1,6 +1,7 @@
 package team2.client.gui;
 
 import javafx.application.Application;
+import javafx.beans.property.adapter.ReadOnlyJavaBeanDoubleProperty;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -16,6 +17,7 @@ import javafx.stage.Stage;
 import team2.client.configuration.Configuration;
 import team2.client.controls.sidebar.Sidebar;
 import team2.client.controls.slider.Slider;
+import team2.client.helper.AlertHelper;
 import team2.client.pages.BasePage;
 import team2.client.pages.PageAction;
 import team2.client.singletons.HomeScreenSingleton;
@@ -53,25 +55,24 @@ public class Client extends Application {
         mainContent.setFitToHeight(true);
         mainContent.setFitToWidth(true);
         BorderPane mainContentPane = new BorderPane();
+        mainContentPane.minHeightProperty().bind(mainContent.minHeightProperty());
         mainContentPane.maxHeightProperty().bind(mainContent.heightProperty());
+        mainContentPane.minWidthProperty().bind(mainContent.minWidthProperty());
         mainContentPane.maxWidthProperty().bind(mainContent.widthProperty());
 
         // inserting the mainContentPane in a group enables the scroll pane to get the size of its main content
         mainContent.setContent(new Group(mainContentPane));
-        //content.setCenter(mainContent);
 
         // set the sidebar
         NavigationBar navigationBar = new NavigationBar(mainContentPane, _configuration);
         Sidebar sidebar = navigationBar.getNavigationBar();
-        //content.setLeft(resizeableSidebar);
 
         // set the split pane
         SplitPane resizeableMainContent = new SplitPane(sidebar, mainContent);
+        sidebar.setMinWidth(80);
+        sidebar.setMaxWidth(200);
+        sidebar.setPrefWidth(80);
         resizeableMainContent.setOrientation(Orientation.HORIZONTAL);
-        //sidebar.prefWidthProperty().bind(sidebar.widthProperty());
-        sidebar.maxWidthProperty().bind(resizeableMainContent.widthProperty().multiply(0.091));
-        sidebar.minWidthProperty().bind(resizeableMainContent.widthProperty().multiply(0.043));
-        sidebar.prefWidthProperty().bind(resizeableMainContent.widthProperty().multiply(0.091));
         content.setCenter(resizeableMainContent);
 
         // set the menubar
@@ -93,15 +94,6 @@ public class Client extends Application {
             menuFile.getItems().add(menuItem);
 
             Menu menuHelp = new Menu("Help");
-            menuItem = new MenuItem("Show Schedule Explanation");
-            menuItem.setOnAction(actionEvent -> {
-                /*LegendTable legendTablePage = LegendSingleton.getInstance();
-                legendTablePage.initialize();
-                legendTablePage.load();*/
-            });
-
-            menuHelp.getItems().add(menuItem);
-
             menuItem = new MenuItem("Info");
             menuItem.setOnAction(actionEvent -> {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);

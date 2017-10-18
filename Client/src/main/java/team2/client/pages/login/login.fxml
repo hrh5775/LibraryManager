@@ -6,8 +6,8 @@
 
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
-           fx:controller="team2.client.pages.login.Login"
-           stylesheets="team2/client/pages/login/login.css">
+           stylesheets="/team2/client/pages/login/login.css">
+    <Label text="Username" GridPane.columnIndex="0" GridPane.rowIndex="0" />
     <children>
         <StackPane>
             <children>

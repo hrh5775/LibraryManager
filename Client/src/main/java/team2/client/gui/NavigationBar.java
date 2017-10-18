@@ -2,6 +2,7 @@ package team2.client.gui;
 
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
+import team2.client.helper.gui.PageHelper;
 import team2.client.pages.PageAction;
 import team2.client.configuration.Configuration;
 import team2.client.controls.sidebar.MenuSection;
@@ -13,7 +14,6 @@ import javax.lang.model.type.NullType;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
 
 public class NavigationBar {
     private Sidebar _sidebar;
@@ -81,14 +81,9 @@ public class NavigationBar {
         setPane(_currentPage);
     }
 
-    private List<BasePage> getInitializedPageList() {
-        return _initializedPageList;
-    }
-
     private void addInitializedPageListItem(BasePage page) {
         if(!_initializedPageList.contains(page)) {
             page.initializeView();
-            //page.initialize();
             _initializedPageList.add(page);
         }
     }
@@ -98,28 +93,22 @@ public class NavigationBar {
     }
 
     private boolean loadPage(BasePage page) {
-        if(page != null) {
-            if(exitPage(page)) {
-                addInitializedPageListItem(page);
-                setCurrentPage(page);
+        if(PageHelper.load(page)) {
+            addInitializedPageListItem(page);
+            setCurrentPage(page);
 
-                if(_loadPage != null) {
-                    _loadPage.doAction(null);
-                }
-
-                page.load();
-                return true;
+            if(_loadPage != null) {
+                _loadPage.doAction(null);
             }
 
-            return false;
+            return true;
         }
 
         return false;
     }
 
     private boolean exitPage(BasePage page) {
-        if(page != null) {
-            page.exit();
+        if(PageHelper.exit(page)) {
             setCurrentPage(null);
             return true;
         }

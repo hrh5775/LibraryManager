@@ -1,28 +1,18 @@
 package team2.client.pages.login;
 
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javax.lang.model.type.NullType;
-import java.io.IOException;
 import team2.client.pages.BasePage;
 
 public class Login extends BasePage<Void, NullType, NullType, NullType> {
-    public Login() {
-    }
-
     @Override
     public void initialize() {
     }
 
     @Override
     public void initializeView() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("login.fxml"));
-            Parent parent = loader.load();
-            this.setCenter(parent);
-        } catch (IOException ex) {
-            System.out.print(ex);
-        }
+        Parent parent = loadView(Login.class.getResource("login.fxml"));
+        setCenter(parent);
     }
 
     @Override
@@ -30,7 +20,8 @@ public class Login extends BasePage<Void, NullType, NullType, NullType> {
     }
 
     @Override
-    public void update() {
+    public void reload() {
+
     }
 
     @Override
