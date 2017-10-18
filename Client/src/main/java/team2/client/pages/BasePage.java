@@ -11,6 +11,7 @@ import javax.lang.model.type.NullType;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 import team2.client.helper.AlertHelper;
@@ -34,9 +35,27 @@ import team2.client.pages.interfaces.BasePageControl;
  * @param <S>
  */
 public abstract class BasePage<R, V, L, S> extends BorderPane implements BasePageControl, Initializable {
+    private LinkedList<Thread> _tasks;
+
     public BasePage() {
-        this.initialize();
-        this.initializeView();
+        _tasks = new LinkedList<>();
+        initialize();
+
+        if(_initialize != null) {
+            _initialize.doAction(null);
+        }
+
+        initializeView();
+
+        Thread thread = new Thread(() -> {
+            load();
+
+            if(_load != null) {
+                _load.doAction(null);
+            }
+        });
+
+        _tasks.add(thread);
     }
 
     /**
@@ -214,13 +233,13 @@ public abstract class BasePage<R, V, L, S> extends BorderPane implements BasePag
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //this.initialize();
+        //initialize();
     }
 
     // https://stackoverflow.com/questions/17372533/why-we-override-finalize-method-in-java
     @Override
     protected void finalize() throws Throwable {
-        this.dispose();
+        dispose();
         super.finalize();
     }
 }
