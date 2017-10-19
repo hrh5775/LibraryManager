@@ -19,7 +19,7 @@ Or use a [Git](https://git-scm.com/downloads) client and a preferred IDE.
 **Maven has to be installed!**  
 cd Domain    
 mvn clean install  
-cd ../Hibernate  
+cd ../Persistence  
 mvn clean install  
 cd ../Application  
 mvn clean install  
@@ -50,8 +50,9 @@ install [Maven](https://maven.apache.org/download.cgi) for the automated build p
   * Does rudimentary data validation
   * Provides a GUI
   * Uses Java8 and JavaFX
-* Hibernate
+* Persistence
   * Provides our Server with an eayse to use API
+* ...
 
 ## Repository
 Try to avoid adding binary files such as \*.pdf, \*.docx, \*.zip, ... .

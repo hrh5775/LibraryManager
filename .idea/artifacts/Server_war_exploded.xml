@@ -23,7 +23,7 @@
           <element id="library" level="project" name="Maven: commons-logging:commons-logging:1.2" />
           <element id="library" level="project" name="Maven: commons-collections:commons-collections:3.2.2" />
           <element id="archive" name="database-connector-1.0.jar">
-            <element id="module-output" name="Hibernate" />
+            <element id="module-output" name="Persistence" />
           </element>
           <element id="library" level="project" name="Maven: mysql:mysql-connector-java:6.0.6" />
           <element id="library" level="project" name="Maven: org.hibernate:hibernate-core:5.2.9.Final" />
