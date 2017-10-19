@@ -9,6 +9,7 @@ public class LdapTest {
     @Test
     public void ldapConnection() throws NamingException {
         // https://inside.fhv.at/display/is/LDAP+Verzeichnis
+        // a VPN connection to the FHV network is required
 
         /*String searchBase = "o=fhv.at";
         String username = "hrh5775";
@@ -57,8 +58,5 @@ public class LdapTest {
         //String searchBase = "dc=example,dc=com";
         //LdapContext context = LdapHelper.getContext("ldap://ldap.forumsys.com:389", searchBase, "uid=tesla,dc=example,dc=com", "password");
         //LdapHelper.findUser(context, searchBase, "riemann");
-    }
-
-    public static void main(String [] args) {
     }
 }
