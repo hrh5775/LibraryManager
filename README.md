@@ -8,7 +8,9 @@ Git project in IntelliJ:
 4. Start IntelliJ
 5. Integrate Git and GitHub Plugin
 6. Checkout project from repository url
-7. import the maven dependencies (mvn clearn install)
+7. import the maven dependencies
++ use the following view to resolve the maven dependencies instead of the "auto import" feature:
+View -> Tool Windows -> Maven Projects -> click on "reimport all maven projects"
 8. due to the nasty behaviour of InteliJ the auto import feature which can be used in step 7 modifies the *iml files
 git checkout -- Application/Application.iml
 git checkout -- Client/Client.iml
