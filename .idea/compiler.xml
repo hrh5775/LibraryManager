@@ -27,6 +27,8 @@
       <module name="Connector" target="1.8" />
       <module name="connector" target="1.8" />
       <module name="Domain" target="1.8" />
+      <module name="library-manager" target="1.8" />
+      <module name="LibraryManager" target="1.8" />
       <module name="Persistence" target="1.8" />
       <module name="persistence" target="1.8" />
       <module name="server" target="1.5" />
