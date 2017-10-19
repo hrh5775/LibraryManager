@@ -63,12 +63,13 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/Hibernate/pom.xml" />
-        <option value="$PROJECT_DIR$/Server/pom.xml" />
-        <option value="$PROJECT_DIR$/Client/pom.xml" />
         <option value="$PROJECT_DIR$/Domain/pom.xml" />
         <option value="$PROJECT_DIR$/Application/pom.xml" />
         <option value="$PROJECT_DIR$/JSONConnector/pom.xml" />
         <option value="$PROJECT_DIR$/Persistence/pom.xml" />
+        <option value="$PROJECT_DIR$/Client/pom.xml" />
+        <option value="$PROJECT_DIR$/Server/pom.xml" />
+        <option value="$PROJECT_DIR$/Connector/pom.xml" />
       </list>
     </option>
   </component>

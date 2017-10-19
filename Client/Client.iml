@@ -19,7 +19,11 @@
     <orderEntry type="library" name="Maven: com.teamdev.jxbrowser:jxbrowser-linux32:6.13" level="project" />
     <orderEntry type="library" name="Maven: com.teamdev.jxbrowser:jxbrowser-linux64:6.13" level="project" />
     <orderEntry type="library" name="Maven: com.teamdev.jxbrowser:jxbrowser-mac:6.13" level="project" />
-    <orderEntry type="library" name="Maven: connector:connector:1.0" level="project" />
+    <orderEntry type="module" module-name="Connector" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.9.0.pr3" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.9.0.pr3" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.9.0.pr3" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.0.pr3" level="project" />
     <orderEntry type="library" name="Maven: org.jfxtras:jfxtras-all:8.0-r5" level="project" />
     <orderEntry type="library" name="Maven: org.jfxtras:jfxtras-labs:8.0-r5" level="project" />
     <orderEntry type="library" name="Maven: org.jfxtras:jfxtras-agenda:8.0-r5" level="project" />

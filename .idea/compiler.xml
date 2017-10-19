@@ -8,21 +8,26 @@
         <outputRelativeToContentRoot value="true" />
         <module name="Application" />
         <module name="client" />
+        <module name="Client" />
+        <module name="connector" />
         <module name="Domain" />
         <module name="Hibernate" />
         <module name="JSONConnector" />
         <module name="persistence" />
+        <module name="Persistence" />
         <module name="server" />
+        <module name="Server" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="1.8">
       <module name="Application" target="1.8" />
       <module name="client" target="1.8" />
       <module name="Client" target="1.8" />
+      <module name="connector" target="1.8" />
       <module name="Domain" target="1.8" />
       <module name="Persistence" target="1.8" />
       <module name="persistence" target="1.8" />
-      <module name="server" target="1.8" />
+      <module name="server" target="1.5" />
       <module name="Server" target="1.8" />
     </bytecodeTargetLevel>
   </component>

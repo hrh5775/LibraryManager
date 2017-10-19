@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="exploded-war" build-on-make="true" name="Server:war exploded">
-    <output-path>$PROJECT_DIR$/Server/target/Server-1.0</output-path>
+    <output-path>$PROJECT_DIR$/Server/target/server-1.0</output-path>
     <root id="root">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
@@ -63,7 +63,13 @@
           <element id="library" level="project" name="Maven: org.jboss.spec.javax.xml.soap:jboss-saaj-api_1.3_spec:1.0.3.Final" />
           <element id="library" level="project" name="Maven: org.jboss.spec.javax.xml.ws:jboss-jaxws-api_2.2_spec:2.0.3.Final" />
           <element id="library" level="project" name="Maven: org.eclipse.persistence:javax.persistence:2.1.1" />
-          <element id="library" level="project" name="Maven: connector:connector:1.0" />
+          <element id="archive" name="connector-1.0.jar">
+            <element id="module-output" name="Connector" />
+          </element>
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.9.0.pr3" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.9.0.pr3" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-core:2.9.0.pr3" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.0.pr3" />
           <element id="library" level="project" name="Maven: org.mnode.ical4j:ical4j:2.0.0" />
           <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.10" />
           <element id="library" level="project" name="Maven: org.apache.commons:commons-collections4:4.0" />
@@ -75,7 +81,7 @@
         </element>
       </element>
       <element id="directory" name="META-INF">
-        <element id="file-copy" path="$PROJECT_DIR$/Server/target/Server-1.0/META-INF/MANIFEST.MF" />
+        <element id="file-copy" path="$PROJECT_DIR$/Server/target/server-1.0/META-INF/MANIFEST.MF" />
       </element>
       <element id="javaee-facet-resources" facet="Server/web/Web" />
     </root>

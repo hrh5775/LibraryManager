@@ -42,6 +42,7 @@ Installers/Server/tomcat/webapps/Root.war
 
 # maven
 target/
+dependency-reduced-pom.xml
 
 # InstallBuilder artifacts
 *.backup
@@ -55,21 +56,13 @@ target/
 .idea/tasks.xml
 .idea/dictionaries
 
-Client/.idea/workspace.xml
-Client/.idea/tasks.xml
-Client/.idea/dictionaries
-
-Application/.idea/workspace.xml
-Application/.idea/tasks.xml
-Application/.idea/dictionaries
-
-Domain/.idea/workspace.xml
-Domain/.idea/tasks.xml
-Domain/.idea/dictionaries
-
-Server/.idea/workspace.xml
-Server/.idea/tasks.xml
-Server/.idea/dictionaries
+# Modules do not require a ida folder
+Application/.idea/
+Client/.idea/
+Connector/.idea/
+Domain/.idea/
+Persistence/.idea/
+Server/.idea/
 
 # Sensitive or high-churn files:
 .idea/dataSources/
@@ -80,61 +73,12 @@ Server/.idea/dictionaries
 .idea/dynamic.xml
 .idea/uiDesigner.xml
 
-Client/.idea/dataSources/
-Client/.idea/dataSources.ids
-Client/.idea/dataSources.xml
-Client/.idea/dataSources.local.xml
-Client/.idea/sqlDataSources.xml
-Client/.idea/dynamic.xml
-Client/.idea/uiDesigner.xml
-
-Application/.idea/dataSources/
-Application/.idea/dataSources.ids
-Application/.idea/dataSources.xml
-Application/.idea/dataSources.local.xml
-Application/.idea/sqlDataSources.xml
-Application/.idea/dynamic.xml
-Application/.idea/uiDesigner.xml
-
-Domain/.idea/dataSources/
-Domain/.idea/dataSources.ids
-Domain/.idea/dataSources.xml
-Domain/.idea/dataSources.local.xml
-Domain/.idea/sqlDataSources.xml
-Domain/.idea/dynamic.xml
-Domain/.idea/uiDesigner.xml
-
-Server/.idea/dataSources/
-Server/.idea/dataSources.ids
-Server/.idea/dataSources.xml
-Server/.idea/dataSources.local.xml
-Server/.idea/sqlDataSources.xml
-Server/.idea/dynamic.xml
-Server/.idea/uiDesigner.xml
-Server/.idea/webContexts.xml
-
 # Gradle:
 .idea/gradle.xml
 .idea/libraries
 
-Client/.idea/gradle.xml
-Client/.idea/libraries
-
-Application/.idea/gradle.xml
-Application/.idea/libraries
-
-Domain/.idea/gradle.xml
-Domain/.idea/libraries
-
-Server/.idea/gradle.xml
-Server/.idea/libraries
-
 # Mongo Explorer plugin:
 .idea/**/mongoSettings.xml
-Client/.idea/**/mongoSettings.xml
-Application/.idea/**/mongoSettings.xml
-Domain/.idea/**/mongoSettings.xml
-Server/.idea/**/mongoSettings.xml
 
 ## File-based project format:
 *.iws
@@ -153,10 +97,6 @@ atlassian-ide-plugin.xml
 
 # Cursive Clojure plugin
 .idea/replstate.xml
-Client/.idea/replstate.xml
-Application/.idea/replstate.xml
-Domain/.idea/replstate.xml
-Server/.idea/replstate.xml
 
 # Crashlytics plugin (for Android Studio and IntelliJ)
 com_crashlytics_export_strings.xml
