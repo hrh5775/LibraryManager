@@ -2,7 +2,7 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
              version="2.0">
-    <persistence-unit name="sem4_team2" transaction-type="RESOURCE_LOCAL">
+    <persistence-unit name="library" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
         <!--<class>team2.database_wrapper.entities.AccountEntity</class>-->
@@ -12,14 +12,6 @@
             <!-- <property name="hibernate.hbm2ddl.auto" value="validate" /> -->
             <property name="dialect" value="org.hibernate.dialect.MySQL5Dialect" />
 
-            <!-- default one -->
-            <!--
-            <property name="hibernate.connection.username" value="team2" />
-            <property name="hibernate.connection.password" value="8fpE?2j2E6kis2~9" />
-            <property name="hibernate.connection.url" value="jdbc:mysql://mysql.vlbg.org:3306/sem4_team2?useUnicode=yes&amp;characterEncoding=UTF-8&amp;connectionCollation=utf8_general_ci&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC" />
-            -->
-
-            <!-- for test purposes -->
             <!-- requires the fhv vpn connection or a fhv wlan, lan connection -->
             <property name="hibernate.connection.username" value="hrh5775" />
             <property name="hibernate.connection.password" value="ofitthep" />
