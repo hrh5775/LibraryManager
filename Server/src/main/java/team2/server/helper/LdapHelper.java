@@ -10,18 +10,26 @@ import javax.naming.ldap.LdapContext;
 import java.util.Hashtable;
 
 public class LdapHelper {
-    /*final String ldapAdServer = "ldap://ad.your-server.com:389";
-    final String ldapSearchBase = "dc=ad,dc=my-domain,dc=com";
-
-    final String username = "tf-test";
-    final String password = "tf-test";*/
-
-    public static LdapContext getContext(String ldapAdServer, String ldapSearchBase, String username, String password) throws NamingException {
+    public static LdapContext getContext(String ldapAdServer, boolean useSSL, String username, String password) throws NamingException {
         Hashtable<String, Object> env = new Hashtable();
-        env.put(Context.SECURITY_AUTHENTICATION, "simple");
+        String authentication;
+
+        if(useSSL) {
+            env.put(Context.SECURITY_PROTOCOL, "ssl");
+        }
 
         env.put(Context.SECURITY_PRINCIPAL, username);
-        env.put(Context.SECURITY_CREDENTIALS, password);
+
+        // http://docs.oracle.com/javase/jndi/tutorial/ldap/security/ldap.html
+        if(password == null) {
+            authentication = "none";
+        } else {
+            authentication = "simple";
+            env.put(Context.SECURITY_CREDENTIALS, password);
+        }
+
+        env.put(Context.SECURITY_AUTHENTICATION, authentication);
+
         env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
         env.put(Context.PROVIDER_URL, ldapAdServer);
         env.put("com.sun.jndi.ldap.read.timeout", "5000");
@@ -29,39 +37,36 @@ public class LdapHelper {
 
         //ensures that objectSID attribute values
         //will be returned as a byte[] instead of a String
-        env.put("java.naming.ldap.attributes.binary", "objectSID");
+        //env.put("java.naming.ldap.attributes.binary", "objectSID");
 
         // the following is helpful in debugging errors
-        env.put("com.sun.jndi.ldap.trace.ber", System.err);
+        //env.put("com.sun.jndi.ldap.trace.ber", System.err);
 
         LdapContext context = new InitialLdapContext(env, null);
         return context;
     }
 
-    public static void findUser(LdapContext context, String ldapSearchBase, String username) throws NamingException {
-        String searchFilter = "(&(objectClass=user)(sAMAccountName=" + username + "))";
+    public static SearchResult findUser(LdapContext context, String ldapSearchBase, String username) throws NamingException {
+        String searchFilter = "(uid=" + username + ")";
         SearchControls searchControls = new SearchControls();
         searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
         NamingEnumeration<SearchResult> results = context.search(ldapSearchBase, searchFilter, searchControls);
 
-        System.out.println("Connected to server");
-    }
-
-    public static void checkCredentials(String username, String password) {
-
-    }
-
-    public static void main(String [] args) {
-        try {
-//            String searchBase = "uid=tf-test,ou=special,o=fhv.at";
-//            LdapContext context = LdapHelper.getContext("ldap://fhv.at:389", searchBase, "tf-test", "");
-//            LdapHelper.findUser(context, searchBase, "tf-test");
-
-            String searchBase = "dc=example,dc=com";
-            LdapContext context = LdapHelper.getContext("ldap://ldap.forumsys.com:389", searchBase, "uid=tesla,dc=example,dc=com", "password");
-            LdapHelper.findUser(context, searchBase, "riemann");
-        } catch (NamingException e) {
-            e.printStackTrace();
+        if(results.hasMore()) {
+            return results.next();
         }
+
+        return null;
+    }
+
+    public static boolean hasValidCredentials(String ldapAdServer, boolean useSSL, String username, String password) {
+        try {
+            if(getContext(ldapAdServer, useSSL, username, password) != null) {
+                return true;
+            }
+        } catch (NamingException e) {
+        }
+
+        return false;
     }
 }

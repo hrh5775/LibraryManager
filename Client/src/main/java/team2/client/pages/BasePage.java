@@ -231,6 +231,18 @@ public abstract class BasePage<R, V, L, S> extends BorderPane implements BasePag
         return parent;
     }
 
+    protected void stopTasks() throws InterruptedException {
+        if(_tasks != null) {
+            for(Thread task : _tasks) {
+                task.interrupt();
+
+                while(task.isAlive()) {
+                    Thread.sleep(1000);
+                }
+            }
+        }
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //initialize();
@@ -238,8 +250,15 @@ public abstract class BasePage<R, V, L, S> extends BorderPane implements BasePag
 
     // https://stackoverflow.com/questions/17372533/why-we-override-finalize-method-in-java
     @Override
-    protected void finalize() throws Throwable {
-        dispose();
-        super.finalize();
+    protected void finalize() {
+        try {
+            stopTasks();
+            dispose();
+            super.finalize();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
     }
 }
