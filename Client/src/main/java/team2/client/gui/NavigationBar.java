@@ -49,8 +49,8 @@ public class NavigationBar {
         menuSectionItem.setOnAction(event -> {
         });*/
         //menuSectionUserScreen.add(menuSectionItem);
-        _sidebar.add(menuSectionUserScreen);
-        menuSectionArrayList.add(menuSectionUserScreen);
+        /*_sidebar.add(menuSectionUserScreen);
+        menuSectionArrayList.add(menuSectionUserScreen);*/
 
         menuSectionHome.setOnMouseClicked(event -> {
             for (MenuSection menuSection : menuSectionArrayList) {

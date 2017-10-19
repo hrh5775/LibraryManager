@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="Application" />
         <module name="Client" />
+        <module name="Persistence" />
         <module name="Domain" />
         <module name="Hibernate" />
         <module name="JSONConnector" />
@@ -17,8 +18,8 @@
     <bytecodeTargetLevel target="1.8">
       <module name="Application" target="1.8" />
       <module name="Client" target="1.8" />
+      <module name="Persistence" target="1.8" />
       <module name="Domain" target="1.8" />
-      <module name="Hibernate" target="1.8" />
       <module name="Server" target="1.8" />
     </bytecodeTargetLevel>
   </component>

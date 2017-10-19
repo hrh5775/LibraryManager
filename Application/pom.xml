@@ -47,8 +47,8 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>database-connector</groupId>
-            <artifactId>database-connector</artifactId>
+            <groupId>persistence</groupId>
+            <artifactId>persistence</artifactId>
             <version>1.0</version>
             <scope>compile</scope>
         </dependency>
