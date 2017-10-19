@@ -8,7 +8,7 @@
     <artifactId>domain-layer</artifactId>
     <packaging>jar</packaging>
     <version>1.0</version>
-    <name>Domain</name>
+    <name>Domain Layer</name>
     <url></url>
     
     <repositories>
