@@ -8,6 +8,14 @@ Git project in IntelliJ:
 4. Start IntelliJ
 5. Integrate Git and GitHub Plugin
 6. Checkout project from repository url
+7. import the maven dependencies (mvn clearn install)
+8. due to the nasty behaviour of InteliJ the auto import feature which can be used in step 7 modifies the *iml files
+git checkout -- Application/Application.iml
+git checkout -- Client/Client.iml
+git checkout -- Connector/Connector.iml
+git checkout -- Domain/Domain.iml
+git checkout -- Persistence/Persistence.iml
+git checkout -- Server/Server.iml
 7. Start working :D
 
 The git commands are in the bottom right corner of IntelliJ.
@@ -15,19 +23,8 @@ The git commands are in the bottom right corner of IntelliJ.
 Or use a [Git](https://git-scm.com/downloads) client and a preferred IDE.
 
 ## Build
-**Execute the following commands in the main directory of the cloned git repository**
+**Execute the following command in the main directory of the cloned git repository**
 **Maven has to be installed!**  
-cd Domain    
-mvn clean install  
-cd ../Persistence  
-mvn clean install  
-cd ../Application  
-mvn clean install  
-cd ../Connector  
-mvn clean install  
-cd ../Server  
-mvn clean install  
-cd ../Client  
 mvn clean install
 
 # Create installable file
