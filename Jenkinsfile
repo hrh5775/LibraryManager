@@ -10,7 +10,7 @@ pipeline {
         stage('Test'){
             steps {
                 sh 'mvn test -DskipTests=false'
-                junit './**/target/surefire-reports/*.xml' 
+                junit '**/target/surefire-reports/*.xml' 
             }
         }
         stage('Deploy') {
@@ -21,7 +21,7 @@ pipeline {
     }
     post {
         always {
-            archive './**/target/*.jar'
+            archive '**/target/*.jar'
         }
     }
 }
