@@ -29,6 +29,12 @@ Or use a [Git](https://git-scm.com/downloads) client and a preferred IDE.
 **Maven has to be installed!**  
 mvn clean install
 
+**Enable the tests at build time**
+mvn install -DskipTests=false
+
+## Tests
+mvn test
+
 # Create installable file
 1. Install [Bitrock's InstallBuilder](https://installbuilder.bitrock.com/). You can download it [here](https://installbuilder.bitrock.com/download-step-2.html).
 2. Open the *.xml in one of the subfolder of "Installers".
