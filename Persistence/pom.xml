@@ -53,7 +53,6 @@
             <version>1.1.0.Final</version>
             <type>pom</type>
         </dependency>
-
         <dependency>
             <groupId>org.eclipse.persistence</groupId>
             <artifactId>javax.persistence</artifactId>
@@ -61,10 +60,9 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20160810</version>
-            <scope>compile</scope>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <version>1.1.1</version>
         </dependency>
         <dependency>
             <groupId>domain-layer</groupId>
