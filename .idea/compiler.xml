@@ -31,7 +31,7 @@
       <module name="LibraryManager" target="1.8" />
       <module name="Persistence" target="1.8" />
       <module name="persistence" target="1.8" />
-      <module name="server" target="1.5" />
+      <module name="server" target="1.8" />
       <module name="Server" target="1.8" />
     </bytecodeTargetLevel>
   </component>
