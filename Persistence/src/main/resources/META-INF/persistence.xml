@@ -26,17 +26,20 @@
         <class>team2.database_wrapper.entities.StaffEntity</class>
 
         <properties>
-            <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />
+            <!--<property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />-->
+            <property name="javax.persistence.jdbc.driver" value="org.mariadb.jdbc.Driver" />
             <!-- <property name="hibernate.hbm2ddl.auto" value="validate" /> -->
-            <property name="dialect" value="org.hibernate.dialect.MySQL5Dialect" />
+            <!--<property name="dialect" value="org.hibernate.dialect.MySQL5Dialect" />-->
 
             <!-- requires the fhv vpn connection or a fhv wlan, lan connection -->
             <property name="hibernate.connection.username" value="root" />
             <property name="hibernate.connection.password" value="WS2017+fhv" />
-            <property name="hibernate.connection.url" value="jdbc:mysql://10.0.51.92:3306/Library" />
+            <property name="hibernate.connection.url" value="jdbc:mariadb://10.0.51.92:3306/Library" />
             <!-- force to use UTC instead of CEST
             for issue: The server time zone value 'CEST' is unrecognized or represents more than one time zone -->
             <property name="hibernate.jdbc.time_zone" value="UTC"/>
+            <property name="hibernate.connection.autocommit" value="false"/>
+            <property name="hibernate.globally_quoted_identifiers" value="true"/>
 
             <property name="hibernate.connection.characterEncoding" value="utf8"/>
             <property name="hibernate.connection.useUnicode" value="true"/>
