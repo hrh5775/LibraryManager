@@ -9,6 +9,7 @@ import java.util.List;
 public class MediaType extends BaseDomainEntity<MediaTypeProperty>  {
     private int _id;
     private String _name;
+    private LoanCondition _loanCondition;
 
     @Override
     public int getID() {
@@ -19,12 +20,20 @@ public class MediaType extends BaseDomainEntity<MediaTypeProperty>  {
         return _name;
     }
 
+    public LoanCondition getLoanCondition() {
+        return _loanCondition;
+    }
+
     public void setId(int id) {
         _id = id;
     }
 
     public void setName(String name) {
         _name = name;
+    }
+
+    public void setLoanCondition(LoanCondition loanCondition) {
+        _loanCondition = loanCondition;
     }
 
     @Override

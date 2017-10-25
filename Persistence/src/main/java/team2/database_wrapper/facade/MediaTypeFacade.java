@@ -1,61 +1,61 @@
 package team2.database_wrapper.facade;
 
 import org.modelmapper.ModelMapper;
-import team2.database_wrapper.entities.BookMetaEntity;
+import team2.database_wrapper.entities.MediaTypeEntity;
 import team2.database_wrapper.enums.TransactionType;
 import team2.database_wrapper.helper.MapperHelper;
 import team2.database_wrapper.helper.StoreHelper;
-import team2.domain.entities.Book;
+import team2.domain.entities.MediaType;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.LinkedList;
 import java.util.List;
 
-public class BookFacade extends BaseDatabaseFacade<Book> {
-    private List<Book> listType = new LinkedList<>();
+public class MediaTypeFacade extends BaseDatabaseFacade<MediaType> {
+    private static List<MediaType> listType = new LinkedList<>();
 
-    public BookFacade() {
+    public MediaTypeFacade() {
         super();
     }
 
-    public BookFacade(EntityManager session) {
+    public MediaTypeFacade(EntityManager session) {
         super(session);
     }
 
     @Override
-    public Book getById(int id) {
+    public MediaType getById(int id) {
         EntityManager session = getCurrentSession();
-        Query query = session.createQuery("from BookMetaEntity where id = :id");
+        Query query = session.createQuery("from MediaTypeEntity where id = :id");
         query.setParameter("id", id);
         query.setMaxResults(1);
-        List<BookMetaEntity> entities = query.getResultList();
+        List<MediaTypeEntity> entities = query.getResultList();
 
         if (entities.size() > 0) {
-            BookMetaEntity entity = entities.get(0);
+            MediaTypeEntity entity = entities.get(0);
 
             ModelMapper mapper = MapperHelper.getMapper();
-            return mapper.map(entity, Book.class);
+            return mapper.map(entity, MediaType.class);
         }
 
         return null;
     }
 
     @Override
-    public List<Book> getList() {
+    public List<MediaType> getList() {
         EntityManager session = getCurrentSession();
-        Query query = session.createQuery("from BookMetaEntity");
-        List<BookMetaEntity> entities = query.getResultList();
+        Query query = session.createQuery("from MediaTypeEntity ");
+        List<MediaTypeEntity> entities = query.getResultList();
         ModelMapper mapper = MapperHelper.getMapper();
 
         return mapper.map(entities, listType.getClass());
     }
 
     @Override
-    public int add(Book value, TransactionType transactionType) {
+    public int add(MediaType value, TransactionType transactionType) {
         EntityManager session = getCurrentSession(transactionType);
         ModelMapper mapper = MapperHelper.getMapper();
-        BookMetaEntity entity = mapper.map(value, BookMetaEntity.class);
+        MediaTypeEntity entity = mapper.map(value, MediaTypeEntity.class);
 
         session.persist(entity);
         StoreHelper.storeEntities(session, transactionType);
@@ -64,10 +64,10 @@ public class BookFacade extends BaseDatabaseFacade<Book> {
     }
 
     @Override
-    public int update(Book value, TransactionType transactionType) {
+    public int update(MediaType value, TransactionType transactionType) {
         EntityManager session = getCurrentSession(transactionType);
         ModelMapper mapper = MapperHelper.getMapper();
-        BookMetaEntity entity = mapper.map(value, BookMetaEntity.class);
+        MediaTypeEntity entity = mapper.map(value, MediaTypeEntity.class);
 
         session.merge(entity);
         StoreHelper.storeEntities(session, transactionType);
@@ -78,7 +78,7 @@ public class BookFacade extends BaseDatabaseFacade<Book> {
     @Override
     public boolean delete(int id, TransactionType transactionType) {
         EntityManager session = getCurrentSession(transactionType);
-        Query query = session.createQuery("delete BookMetaEntity where id = :id");
+        Query query = session.createQuery("delete MediaTypeEntity where id = :id");
         query.setParameter("id", id);
         query.executeUpdate();
 

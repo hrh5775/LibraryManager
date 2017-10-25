@@ -21,7 +21,7 @@ public class Account extends BaseDomainEntity<AccountProperty>  {
         return _userName;
     }
 
-    public String get_password() {
+    public String getPassword() {
         return _password;
     }
 
@@ -33,11 +33,11 @@ public class Account extends BaseDomainEntity<AccountProperty>  {
         _id = id;
     }
 
-    public void set_userName(String userName) {
+    public void setUserName(String userName) {
         _userName = userName;
     }
 
-    public void set_password(String password) {
+    public void setPassword(String password) {
         _password = password;
     }
 

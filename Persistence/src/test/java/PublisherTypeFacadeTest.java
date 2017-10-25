@@ -1,13 +1,13 @@
 import org.junit.Assert;
 import org.junit.Test;
 import team2.database_wrapper.enums.TransactionType;
-import team2.database_wrapper.facade.AccountRoleFacade;
-import team2.domain.entities.AccountRole;
+import team2.database_wrapper.facade.PublisherTypeFacade;
+import team2.domain.entities.PublisherType;
 
 import javax.naming.NamingException;
 import java.util.List;
 
-public class AccountRoleFacadeTest {
+public class PublisherTypeFacadeTest {
     @Test
     public void testAll() throws NamingException {
         int id = testAdd();
@@ -17,25 +17,24 @@ public class AccountRoleFacadeTest {
         testDelete(id);
     }
 
-    private AccountRole testById(int id) {
-        AccountRoleFacade facade = new AccountRoleFacade();
-        AccountRole result = facade.getById(id);
+    private PublisherType testById(int id) {
+        PublisherTypeFacade facade = new PublisherTypeFacade();
+        PublisherType result = facade.getById(id);
         Assert.assertNotNull(result);
 
         return result;
     }
 
     private void testGetList() {
-        AccountRoleFacade facade = new AccountRoleFacade();
-        List<AccountRole> list = facade.getList();
+        PublisherTypeFacade facade = new PublisherTypeFacade();
+        List<PublisherType> list = facade.getList();
         Assert.assertTrue(list.size() > 0);
     }
 
     private int testAdd() {
-        AccountRoleFacade facade = new AccountRoleFacade();
-        AccountRole value = new AccountRole();
-        value.setKey("TEST_KEY");
-        value.setRoleName("Test Role");
+        PublisherTypeFacade facade = new PublisherTypeFacade();
+        PublisherType value = new PublisherType();
+        value.setTypeName("Publisher Type Test");
         int id = facade.add(value, TransactionType.AUTO_COMMIT);
         Assert.assertTrue(id > 0);
 
@@ -43,14 +42,14 @@ public class AccountRoleFacadeTest {
     }
 
     private void testUpdate(int id) {
-        AccountRoleFacade facade = new AccountRoleFacade();
-        AccountRole value = facade.getById(id);
-        value.setKey("TEST_KEY_2");
+        PublisherTypeFacade facade = new PublisherTypeFacade();
+        PublisherType value = facade.getById(id);
+        value.setTypeName("Publisher Type Test 2");
         Assert.assertTrue(facade.update(value, TransactionType.AUTO_COMMIT) > 0);
     }
 
     private void testDelete(int id) {
-        AccountRoleFacade facade = new AccountRoleFacade();
+        PublisherTypeFacade facade = new PublisherTypeFacade();
         Assert.assertTrue(facade.delete(id, TransactionType.AUTO_COMMIT));
     }
 }

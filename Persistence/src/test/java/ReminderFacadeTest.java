@@ -1,13 +1,15 @@
 import org.junit.Assert;
 import org.junit.Test;
 import team2.database_wrapper.enums.TransactionType;
-import team2.database_wrapper.facade.AccountRoleFacade;
-import team2.domain.entities.AccountRole;
+import team2.database_wrapper.facade.ReminderFacade;
+import team2.domain.entities.Reminder;
 
 import javax.naming.NamingException;
+import java.sql.Date;
+import java.util.Calendar;
 import java.util.List;
 
-public class AccountRoleFacadeTest {
+public class ReminderFacadeTest {
     @Test
     public void testAll() throws NamingException {
         int id = testAdd();
@@ -17,25 +19,25 @@ public class AccountRoleFacadeTest {
         testDelete(id);
     }
 
-    private AccountRole testById(int id) {
-        AccountRoleFacade facade = new AccountRoleFacade();
-        AccountRole result = facade.getById(id);
+    private Reminder testById(int id) {
+        ReminderFacade facade = new ReminderFacade();
+        Reminder result = facade.getById(id);
         Assert.assertNotNull(result);
 
         return result;
     }
 
     private void testGetList() {
-        AccountRoleFacade facade = new AccountRoleFacade();
-        List<AccountRole> list = facade.getList();
+        ReminderFacade facade = new ReminderFacade();
+        List<Reminder> list = facade.getList();
         Assert.assertTrue(list.size() > 0);
     }
 
     private int testAdd() {
-        AccountRoleFacade facade = new AccountRoleFacade();
-        AccountRole value = new AccountRole();
-        value.setKey("TEST_KEY");
-        value.setRoleName("Test Role");
+        ReminderFacade facade = new ReminderFacade();
+        Reminder value = new Reminder();
+        value.setReminderDate(new Date(Calendar.getInstance().getTime().getTime()));
+        value.setReminderCount(0);
         int id = facade.add(value, TransactionType.AUTO_COMMIT);
         Assert.assertTrue(id > 0);
 
@@ -43,14 +45,14 @@ public class AccountRoleFacadeTest {
     }
 
     private void testUpdate(int id) {
-        AccountRoleFacade facade = new AccountRoleFacade();
-        AccountRole value = facade.getById(id);
-        value.setKey("TEST_KEY_2");
+        ReminderFacade facade = new ReminderFacade();
+        Reminder value = facade.getById(id);
+        value.setReminderCount(1);
         Assert.assertTrue(facade.update(value, TransactionType.AUTO_COMMIT) > 0);
     }
 
     private void testDelete(int id) {
-        AccountRoleFacade facade = new AccountRoleFacade();
+        ReminderFacade facade = new ReminderFacade();
         Assert.assertTrue(facade.delete(id, TransactionType.AUTO_COMMIT));
     }
 }

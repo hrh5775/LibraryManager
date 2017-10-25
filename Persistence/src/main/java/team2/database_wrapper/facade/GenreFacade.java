@@ -2,6 +2,7 @@ package team2.database_wrapper.facade;
 
 import org.modelmapper.ModelMapper;
 import team2.database_wrapper.entities.GenreEntity;
+import team2.database_wrapper.enums.TransactionType;
 import team2.database_wrapper.helper.MapperHelper;
 import team2.database_wrapper.helper.StoreHelper;
 import team2.domain.entities.Genre;
@@ -51,42 +52,36 @@ public class GenreFacade extends BaseDatabaseFacade<Genre> {
     }
 
     @Override
-    public int add(Genre value) {
-        EntityManager session = getCurrentSession();
-        session.getTransaction().begin();
-
+    public int add(Genre value, TransactionType transactionType) {
+        EntityManager session = getCurrentSession(transactionType);
         ModelMapper mapper = MapperHelper.getMapper();
         GenreEntity entity = mapper.map(value, GenreEntity.class);
 
         session.persist(entity);
-        session.flush();
-        StoreHelper.storeEntities(session);
+        StoreHelper.storeEntities(session, transactionType);
 
         return entity.getId();
     }
 
     @Override
-    public int update(Genre value) {
-        EntityManager session = getCurrentSession();
-        session.getTransaction().begin();
-
+    public int update(Genre value, TransactionType transactionType) {
+        EntityManager session = getCurrentSession(transactionType);
         ModelMapper mapper = MapperHelper.getMapper();
         GenreEntity entity = mapper.map(value, GenreEntity.class);
 
         session.merge(entity);
-        StoreHelper.storeEntities(session);
+        StoreHelper.storeEntities(session, transactionType);
 
         return entity.getId();
     }
 
     @Override
-    public boolean delete(int id) {
-        EntityManager session = getCurrentSession();
-        session.getTransaction().begin();
+    public boolean delete(int id, TransactionType transactionType) {
+        EntityManager session = getCurrentSession(transactionType);
         Query query = session.createQuery("delete GenreEntity where id = :id");
         query.setParameter("id", id);
         query.executeUpdate();
 
-        return StoreHelper.storeEntities(session);
+        return StoreHelper.storeEntities(session, transactionType);
     }
 }

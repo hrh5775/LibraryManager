@@ -1,5 +1,6 @@
 package team2.database_wrapper.facade;
 
+import team2.database_wrapper.enums.TransactionType;
 import team2.database_wrapper.interfaces.Editeable;
 import team2.database_wrapper.interfaces.Session;
 import javax.persistence.EntityManager;
@@ -29,6 +30,15 @@ public abstract class BaseDatabaseFacade<V> implements Session, Editeable<V> {
 
     @Override
     public EntityManager getCurrentSession() {
+        return _session;
+    }
+
+    @Override
+    public EntityManager getCurrentSession(TransactionType transactionType) {
+        if(transactionType == TransactionType.AUTO_COMMIT) {
+            _session.getTransaction().begin();
+        }
+
         return _session;
     }
 }

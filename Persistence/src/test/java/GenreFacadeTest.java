@@ -1,5 +1,6 @@
 import org.junit.Assert;
 import org.junit.Test;
+import team2.database_wrapper.enums.TransactionType;
 import team2.database_wrapper.facade.GenreFacade;
 import team2.domain.entities.Genre;
 
@@ -34,7 +35,7 @@ public class GenreFacadeTest {
         GenreFacade facade = new GenreFacade();
         Genre value = new Genre();
         value.setName("Test Krimi");
-        int id = facade.add(value);
+        int id = facade.add(value, TransactionType.AUTO_COMMIT);
         Assert.assertTrue(id > 0);
 
         return id;
@@ -44,11 +45,11 @@ public class GenreFacadeTest {
         GenreFacade facade = new GenreFacade();
         Genre value = facade.getById(id);
         value.setName("Test Krimi 2");
-        Assert.assertTrue(facade.update(value) > 0);
+        Assert.assertTrue(facade.update(value, TransactionType.AUTO_COMMIT) > 0);
     }
 
     private void testDelete(int id) {
         GenreFacade facade = new GenreFacade();
-        Assert.assertTrue(facade.delete(id));
+        Assert.assertTrue(facade.delete(id, TransactionType.AUTO_COMMIT));
     }
 }

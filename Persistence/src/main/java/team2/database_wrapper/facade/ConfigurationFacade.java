@@ -2,6 +2,7 @@ package team2.database_wrapper.facade;
 
 import org.modelmapper.ModelMapper;
 import team2.database_wrapper.entities.ConfigurationEntity;
+import team2.database_wrapper.enums.TransactionType;
 import team2.database_wrapper.helper.MapperHelper;
 import team2.database_wrapper.helper.StoreHelper;
 import team2.domain.entities.Configuration;
@@ -68,42 +69,36 @@ public class ConfigurationFacade extends BaseDatabaseFacade<Configuration> {
     }
 
     @Override
-    public int add(Configuration value) {
-        EntityManager session = getCurrentSession();
-        session.getTransaction().begin();
-
+    public int add(Configuration value, TransactionType transactionType) {
+        EntityManager session = getCurrentSession(transactionType);
         ModelMapper mapper = MapperHelper.getMapper();
         ConfigurationEntity entity = mapper.map(value, ConfigurationEntity.class);
 
         session.persist(entity);
-        session.flush();
-        StoreHelper.storeEntities(session);
+        StoreHelper.storeEntities(session, transactionType);
 
         return entity.getId();
     }
 
     @Override
-    public int update(Configuration value) {
-        EntityManager session = getCurrentSession();
-        session.getTransaction().begin();
-
+    public int update(Configuration value, TransactionType transactionType) {
+        EntityManager session = getCurrentSession(transactionType);
         ModelMapper mapper = MapperHelper.getMapper();
         ConfigurationEntity entity = mapper.map(value, ConfigurationEntity.class);
 
         session.merge(entity);
-        StoreHelper.storeEntities(session);
+        StoreHelper.storeEntities(session, transactionType);
 
         return entity.getId();
     }
 
     @Override
-    public boolean delete(int id) {
-        EntityManager session = getCurrentSession();
-        session.getTransaction().begin();
+    public boolean delete(int id, TransactionType transactionType) {
+        EntityManager session = getCurrentSession(transactionType);
         Query query = session.createQuery("delete ConfigurationEntity where id = :id");
         query.setParameter("id", id);
         query.executeUpdate();
 
-        return StoreHelper.storeEntities(session);
+        return StoreHelper.storeEntities(session, transactionType);
     }
 }

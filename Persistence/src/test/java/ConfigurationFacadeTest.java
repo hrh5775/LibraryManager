@@ -1,5 +1,6 @@
 import org.junit.Assert;
 import org.junit.Test;
+import team2.database_wrapper.enums.TransactionType;
 import team2.database_wrapper.facade.ConfigurationFacade;
 import team2.domain.entities.Configuration;
 
@@ -44,7 +45,7 @@ public class ConfigurationFacadeTest {
         Configuration value = new Configuration();
         value.setIdentifier("IDENTIFIER_TEST");
         value.setData("Data Test");
-        int id = facade.add(value);
+        int id = facade.add(value, TransactionType.AUTO_COMMIT);
         Assert.assertTrue(id > 0);
 
         return id;
@@ -55,11 +56,11 @@ public class ConfigurationFacadeTest {
         Configuration value = facade.getById(id);
         value.setIdentifier("IDENTIFIER_TEST_2");
         value.setData("Data Test 2");
-        Assert.assertTrue(facade.update(value) > 0);
+        Assert.assertTrue(facade.update(value, TransactionType.AUTO_COMMIT) > 0);
     }
 
     private void testDelete(int id) {
         ConfigurationFacade facade = new ConfigurationFacade();
-        Assert.assertTrue(facade.delete(id));
+        Assert.assertTrue(facade.delete(id, TransactionType.AUTO_COMMIT));
     }
 }
