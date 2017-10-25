@@ -12,6 +12,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class GenreFacade extends BaseDatabaseFacade<Genre> {
+    private static List<Genre> listType = new LinkedList<>();
+
     public GenreFacade() {
         super();
     }
@@ -43,11 +45,9 @@ public class GenreFacade extends BaseDatabaseFacade<Genre> {
         EntityManager session = getCurrentSession();
         Query query = session.createQuery("from GenreEntity ");
         List<GenreEntity> entities = query.getResultList();
-
         ModelMapper mapper = MapperHelper.getMapper();
-        List<Genre> result = new LinkedList<>();
 
-        return mapper.map(entities, result.getClass());
+        return mapper.map(entities, listType.getClass());
     }
 
     @Override

@@ -20,6 +20,7 @@ public class GenreFacadeTest {
         GenreFacade facade = new GenreFacade();
         Genre result = facade.getById(id);
         Assert.assertNotNull(result);
+
         return result;
     }
 
@@ -34,14 +35,15 @@ public class GenreFacadeTest {
         Genre value = new Genre();
         value.setName("Test Krimi");
         int id = facade.add(value);
-
         Assert.assertTrue(id > 0);
+
         return id;
     }
 
     private void testUpdate(int id) {
         GenreFacade facade = new GenreFacade();
         Genre value = facade.getById(id);
+        value.setName("Test Krimi 2");
         Assert.assertTrue(facade.update(value) > 0);
     }
 
