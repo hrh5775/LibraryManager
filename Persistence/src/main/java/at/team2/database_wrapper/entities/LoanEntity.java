@@ -13,7 +13,7 @@ public class LoanEntity {
     private int mediaId;
     private Integer reminderId;
     private Date start;
-    private String lastRenewalStart;
+    private Date lastRenewalStart;
     private Date end;
     private byte closed;
     private CustomerEntity customerByCustomerId;
@@ -73,11 +73,11 @@ public class LoanEntity {
 
     @Basic
     @Column(name = "lastRenewalStart", nullable = true, length = 45)
-    public String getLastRenewalStart() {
+    public Date getLastRenewalStart() {
         return lastRenewalStart;
     }
 
-    public void setLastRenewalStart(String lastRenewalStart) {
+    public void setLastRenewalStart(Date lastRenewalStart) {
         this.lastRenewalStart = lastRenewalStart;
     }
 
