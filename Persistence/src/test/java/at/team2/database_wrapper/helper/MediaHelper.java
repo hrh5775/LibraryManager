@@ -3,7 +3,6 @@ package at.team2.database_wrapper.helper;
 import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.facade.*;
 import at.team2.domain.entities.*;
-import team2.database_wrapper.facade.*;
 
 import java.sql.Date;
 import java.util.Calendar;

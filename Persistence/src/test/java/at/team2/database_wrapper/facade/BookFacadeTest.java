@@ -5,7 +5,6 @@ import at.team2.domain.entities.Book;
 import at.team2.domain.entities.Media;
 import org.junit.Assert;
 import org.junit.Test;
-import team2.database_wrapper.facade.*;
 import at.team2.database_wrapper.helper.MediaHelper;
 
 import javax.naming.NamingException;
