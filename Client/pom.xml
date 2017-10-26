@@ -211,7 +211,7 @@
                     <archive>
                         <index>true</index>
                         <manifest>
-                            <mainClass>team2.client.gui.Client</mainClass>
+                            <mainClass>at.team2.client.gui.Client</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

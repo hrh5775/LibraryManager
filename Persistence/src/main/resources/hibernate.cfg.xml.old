@@ -12,6 +12,6 @@
         <property name="hibernate.cache.use_second_level_cache">false</property>
         <property name="hibernate.cache.use_query_cache">false</property>
         <property name="hibernate.connection.isolation">4</property>
-        <!--<mapping class="team2.database_wrapper.entities.AccountEntity"/>-->
+        <!--<mapping class="AccountEntity"/>-->
     </session-factory>
 </hibernate-configuration>

@@ -4,27 +4,27 @@
              version="2.0">
     <persistence-unit name="library" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-        <class>team2.database_wrapper.entities.AccountEntity</class>
-        <class>team2.database_wrapper.entities.AccountRoleEntity</class>
-        <class>team2.database_wrapper.entities.BookMetaEntity</class>
-        <class>team2.database_wrapper.entities.ConfigurationEntity</class>
-        <class>team2.database_wrapper.entities.CreatorPersonEntity</class>
-        <class>team2.database_wrapper.entities.CreatorTypeEntity</class>
-        <class>team2.database_wrapper.entities.CustomerEntity</class>
-        <class>team2.database_wrapper.entities.DvdMetaEntity</class>
-        <class>team2.database_wrapper.entities.GenreEntity</class>
-        <class>team2.database_wrapper.entities.LoanEntity</class>
-        <class>team2.database_wrapper.entities.LoanConditionEntity</class>
-        <class>team2.database_wrapper.entities.MediaEntity</class>
-        <class>team2.database_wrapper.entities.MediaMemberEntity</class>
-        <class>team2.database_wrapper.entities.MediaTypeEntity</class>
-        <class>team2.database_wrapper.entities.MediaCreatorPersonEntity</class>
-        <class>team2.database_wrapper.entities.PublisherEntity</class>
-        <class>team2.database_wrapper.entities.PublisherTypeEntity</class>
-        <class>team2.database_wrapper.entities.ReminderEntity</class>
-        <class>team2.database_wrapper.entities.ReservationEntity</class>
-        <class>team2.database_wrapper.entities.StaffEntity</class>
-        <class>team2.database_wrapper.entities.AccountEntity</class>
+        <class>at.team2.database_wrapper.entities.AccountEntity</class>
+        <class>at.team2.database_wrapper.entities.AccountRoleEntity</class>
+        <class>at.team2.database_wrapper.entities.BookMetaEntity</class>
+        <class>at.team2.database_wrapper.entities.ConfigurationEntity</class>
+        <class>at.team2.database_wrapper.entities.CreatorPersonEntity</class>
+        <class>at.team2.database_wrapper.entities.CreatorTypeEntity</class>
+        <class>at.team2.database_wrapper.entities.CustomerEntity</class>
+        <class>at.team2.database_wrapper.entities.DvdMetaEntity</class>
+        <class>at.team2.database_wrapper.entities.GenreEntity</class>
+        <class>at.team2.database_wrapper.entities.LoanEntity</class>
+        <class>at.team2.database_wrapper.entities.LoanConditionEntity</class>
+        <class>at.team2.database_wrapper.entities.MediaEntity</class>
+        <class>at.team2.database_wrapper.entities.MediaMemberEntity</class>
+        <class>at.team2.database_wrapper.entities.MediaTypeEntity</class>
+        <class>at.team2.database_wrapper.entities.MediaCreatorPersonEntity</class>
+        <class>at.team2.database_wrapper.entities.PublisherEntity</class>
+        <class>at.team2.database_wrapper.entities.PublisherTypeEntity</class>
+        <class>at.team2.database_wrapper.entities.ReminderEntity</class>
+        <class>at.team2.database_wrapper.entities.ReservationEntity</class>
+        <class>at.team2.database_wrapper.entities.StaffEntity</class>
+        <class>at.team2.database_wrapper.entities.AccountEntity</class>
 
         <properties>
             <!--<property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />-->
