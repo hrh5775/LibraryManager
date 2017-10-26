@@ -11,14 +11,14 @@ Git project in IntelliJ:
 7. import the maven dependencies
 + use the following view to resolve the maven dependencies instead of the "auto import" feature:
 View -> Tool Windows -> Maven Projects -> click on "reimport all maven projects"
-8. due to the nasty behaviour of InteliJ the auto import feature which can be used in step 7 modifies the *iml files
-git checkout -- Application/Application.iml
-git checkout -- Client/Client.iml
-git checkout -- Connector/Connector.iml
-git checkout -- Domain/Domain.iml
-git checkout -- Persistence/Persistence.iml
+8. due to the nasty behaviour of InteliJ the auto import feature which can be used in step 7 modifies the *iml files  
+git checkout -- Application/Application.iml  
+git checkout -- Client/Client.iml  
+git checkout -- Connector/Connector.iml  
+git checkout -- Domain/Domain.iml  
+git checkout -- Persistence/Persistence.iml  
 git checkout -- Server/Server.iml
-7. Start working :D
+9. Start working :D
 
 The git commands are in the bottom right corner of IntelliJ.
 
@@ -29,7 +29,7 @@ Or use a [Git](https://git-scm.com/downloads) client and a preferred IDE.
 **Maven has to be installed!**  
 mvn clean install
 
-**Enable the tests at build time**
+**Enable the tests at build time**  
 mvn install -DskipTests=false
 
 ## Tests
