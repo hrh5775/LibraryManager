@@ -1,7 +1,6 @@
 import org.junit.Assert;
 import org.junit.Test;
 import team2.database_wrapper.enums.TransactionType;
-import team2.database_wrapper.facade.AccountRoleFacade;
 import team2.database_wrapper.facade.StaffFacade;
 import team2.domain.entities.Account;
 import team2.domain.entities.AccountRole;
@@ -45,20 +44,19 @@ public class StaffFacadeTest {
         value.setBirthDate(new Date(Calendar.getInstance().getTime().getTime()));
         value.setAddress("Addresse Test");
 
-        AccountRoleFacade prevPrevFacade = new AccountRoleFacade(facade.getCurrentSession());
         AccountRole prevPrevValue = new AccountRole();
-        prevPrevValue.setKey("Account Role Key Test");
+        prevPrevValue.setKey("Staff Account Role Key Test");
         prevPrevValue.setRoleName("Account Role Name Test");
-        prevPrevValue.setId(prevPrevFacade.add(prevPrevValue, TransactionType.MANUAL_COMMIT));
 
         Account prevValue = new Account();
-        prevValue.setUserName("Max Mustermann");
+        prevValue.setUserName("Staff Max Test");
         prevValue.setPassword("Passwort Test");
         prevValue.setAccountRole(prevPrevValue);
 
         value.setAccount(prevValue);
         int id = facade.add(value, TransactionType.AUTO_COMMIT);
         Assert.assertTrue(id > 0);
+        Assert.assertNotNull(facade.getById(id));
 
         return id;
     }
@@ -74,5 +72,6 @@ public class StaffFacadeTest {
     private void testDelete(int id) {
         StaffFacade facade = new StaffFacade();
         Assert.assertTrue(facade.delete(id, TransactionType.AUTO_COMMIT));
+        Assert.assertNull(facade.getById(id));
     }
 }

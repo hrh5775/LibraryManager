@@ -37,6 +37,7 @@ public class CreatorTypeFacadeTest {
         value.setTypeName("Creator Type Test");
         int id = facade.add(value, TransactionType.AUTO_COMMIT);
         Assert.assertTrue(id > 0);
+        Assert.assertNotNull(facade.getById(id));
 
         return id;
     }
@@ -51,5 +52,6 @@ public class CreatorTypeFacadeTest {
     private void testDelete(int id) {
         CreatorTypeFacade facade = new CreatorTypeFacade();
         Assert.assertTrue(facade.delete(id, TransactionType.AUTO_COMMIT));
+        Assert.assertNull(facade.getById(id));
     }
 }

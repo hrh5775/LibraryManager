@@ -47,6 +47,7 @@ public class MediaTypeFacadeTest {
         value.setLoanCondition(prevValue);
         int id = facade.add(value, TransactionType.AUTO_COMMIT);
         Assert.assertTrue(id > 0);
+        Assert.assertNotNull(facade.getById(id));
 
         return id;
     }
@@ -69,5 +70,6 @@ public class MediaTypeFacadeTest {
     private void testDelete(int id) {
         MediaTypeFacade facade = new MediaTypeFacade();
         Assert.assertTrue(facade.delete(id, TransactionType.AUTO_COMMIT));
+        Assert.assertNull(facade.getById(id));
     }
 }

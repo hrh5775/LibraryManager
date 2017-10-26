@@ -3,14 +3,15 @@ package team2.database_wrapper.helper;
 import org.modelmapper.ModelMapper;
 
 public class MapperHelper {
-    private static ModelMapper _modelMapper;
+    private static ModelMapper modelMapper;
 
     public static ModelMapper getMapper() {
-        if(_modelMapper == null) {
-            _modelMapper = new ModelMapper();
+        if(modelMapper == null) {
+            modelMapper = new ModelMapper();
             // http://modelmapper.org/user-manual/property-mapping/
+            // https://www.programcreek.com/java-api-examples/index.php?api=org.modelmapper.ModelMapper
         }
 
-        return _modelMapper;
+        return modelMapper;
     }
 }

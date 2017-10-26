@@ -1,5 +1,7 @@
 package team2.database_wrapper.entities;
 
+import team2.database_wrapper.helper.TypeHelper;
+
 import javax.persistence.*;
 import java.util.Collection;
 
@@ -10,6 +12,7 @@ public class AccountEntity {
     private int accountRoleId;
     private String userName;
     private String password;
+    private byte active;
     private AccountRoleEntity accountRoleByAccountRoleId;
     private Collection<CustomerEntity> customersById;
     private Collection<StaffEntity> staffById;
@@ -55,6 +58,16 @@ public class AccountEntity {
         this.password = password;
     }
 
+    @Basic
+    @Column(name = "active", nullable = false)
+    public boolean getActive() {
+        return TypeHelper.toBoolean(active);
+    }
+
+    public void setActive(boolean active) {
+        this.active = TypeHelper.toByte(active);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -66,6 +79,7 @@ public class AccountEntity {
         if (accountRoleId != that.accountRoleId) return false;
         if (userName != null ? !userName.equals(that.userName) : that.userName != null) return false;
         if (password != null ? !password.equals(that.password) : that.password != null) return false;
+        if (active != that.active) return false;
 
         return true;
     }
@@ -76,6 +90,7 @@ public class AccountEntity {
         result = 31 * result + accountRoleId;
         result = 31 * result + (userName != null ? userName.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (int) active;
         return result;
     }
 

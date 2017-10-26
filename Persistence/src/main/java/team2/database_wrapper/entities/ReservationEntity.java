@@ -1,5 +1,7 @@
 package team2.database_wrapper.entities;
 
+import team2.database_wrapper.helper.TypeHelper;
+
 import javax.persistence.*;
 import java.sql.Date;
 
@@ -68,12 +70,12 @@ public class ReservationEntity {
 
     @Basic
     @Column(name = "closed", nullable = false)
-    public byte getClosed() {
-        return closed;
+    public boolean getClosed() {
+        return TypeHelper.toBoolean(closed);
     }
 
-    public void setClosed(byte closed) {
-        this.closed = closed;
+    public void setClosed(boolean closed) {
+        this.closed = TypeHelper.toByte(closed);
     }
 
     @Override

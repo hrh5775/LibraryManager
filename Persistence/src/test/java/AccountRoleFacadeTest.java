@@ -38,6 +38,7 @@ public class AccountRoleFacadeTest {
         value.setRoleName("Test Role");
         int id = facade.add(value, TransactionType.AUTO_COMMIT);
         Assert.assertTrue(id > 0);
+        Assert.assertNotNull(facade.getById(id));
 
         return id;
     }
@@ -52,5 +53,6 @@ public class AccountRoleFacadeTest {
     private void testDelete(int id) {
         AccountRoleFacade facade = new AccountRoleFacade();
         Assert.assertTrue(facade.delete(id, TransactionType.AUTO_COMMIT));
+        Assert.assertNull(facade.getById(id));
     }
 }

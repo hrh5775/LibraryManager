@@ -24,6 +24,7 @@
         <class>team2.database_wrapper.entities.ReminderEntity</class>
         <class>team2.database_wrapper.entities.ReservationEntity</class>
         <class>team2.database_wrapper.entities.StaffEntity</class>
+        <class>team2.database_wrapper.entities.AccountEntity</class>
 
         <properties>
             <!--<property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />-->
@@ -34,7 +35,7 @@
             <!-- requires the fhv vpn connection or a fhv wlan, lan connection -->
             <property name="hibernate.connection.username" value="root" />
             <property name="hibernate.connection.password" value="WS2017+fhv" />
-            <property name="hibernate.connection.url" value="jdbc:mariadb://10.0.51.92:3306/Library" />
+            <property name="hibernate.connection.url" value="jdbc:mysql://10.0.51.92:3306/Library" />
             <!-- force to use UTC instead of CEST
             for issue: The server time zone value 'CEST' is unrecognized or represents more than one time zone -->
             <property name="hibernate.jdbc.time_zone" value="UTC"/>

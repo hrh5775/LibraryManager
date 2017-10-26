@@ -1,14 +1,10 @@
 package team2.database_wrapper.facade;
 
 import org.modelmapper.ModelMapper;
-import team2.database_wrapper.entities.AccountEntity;
-import team2.database_wrapper.entities.AccountRoleEntity;
 import team2.database_wrapper.entities.StaffEntity;
 import team2.database_wrapper.enums.TransactionType;
 import team2.database_wrapper.helper.MapperHelper;
 import team2.database_wrapper.helper.StoreHelper;
-import team2.domain.entities.Account;
-import team2.domain.entities.AccountRole;
 import team2.domain.entities.Staff;
 
 import javax.persistence.EntityManager;
@@ -27,18 +23,27 @@ public class StaffFacade extends BaseDatabaseFacade<Staff> {
         super(session);
     }
 
-    @Override
-    public Staff getById(int id) {
+    private StaffEntity getEntityById(int id, boolean includeInactive) {
         EntityManager session = getCurrentSession();
-        Query query = session.createQuery("from StaffEntity where id = :id");
+        String includeInactiveQuery = includeInactive ? "" : " and accountByAccountId.active >= 1";
+        Query query = session.createQuery("from StaffEntity where id = :id" + includeInactiveQuery);
         query.setParameter("id", id);
         query.setMaxResults(1);
         List<StaffEntity> entities = query.getResultList();
 
         if (entities.size() > 0) {
-            StaffEntity entity = entities.get(0);
-            ModelMapper mapper = MapperHelper.getMapper();
+            return entities.get(0);
+        }
 
+        return null;
+    }
+
+    @Override
+    public Staff getById(int id) {
+        StaffEntity entity = getEntityById(id, false);
+
+        if (entity != null) {
+            ModelMapper mapper = MapperHelper.getMapper();
             return mapper.map(entity, Staff.class);
         }
 
@@ -61,23 +66,9 @@ public class StaffFacade extends BaseDatabaseFacade<Staff> {
         ModelMapper mapper = MapperHelper.getMapper();
         StaffEntity entity = mapper.map(value, StaffEntity.class);
 
-        //AccountFacade facade = new AccountFacade(session);
-        //entity.setAccountId(facade.add(value.getAccount(), TransactionType.MANUAL_COMMIT)); // @todo
+        AccountFacade facade = new AccountFacade(session);
+        entity.setAccountId(facade.add(value.getAccount(), TransactionType.MANUAL_COMMIT));
 
-        Account account = value.getAccount();
-        AccountEntity accountEntity = mapper.map(account, AccountEntity.class);
-
-        int accountRoleId = value.getAccount().getAccountRole().getID();
-
-        if(accountRoleId > 0) {
-            accountEntity.setAccountRoleId(value.getAccount().getAccountRole().getID());// @todo: accountRole id überprüfen => ansonsten erstellen
-        } else {
-            AccountRole accountRole = value.getAccount().getAccountRole();
-            AccountRoleEntity accountRoleEntity = mapper.map(accountRole, AccountRoleEntity.class);
-            accountEntity.setAccountRoleByAccountRoleId(accountRoleEntity);
-        }
-
-        entity.setAccountByAccountId(accountEntity);
         session.persist(entity);
         StoreHelper.storeEntities(session, transactionType);
 
@@ -99,14 +90,15 @@ public class StaffFacade extends BaseDatabaseFacade<Staff> {
     @Override
     public boolean delete(int id, TransactionType transactionType) {
         EntityManager session = getCurrentSession(transactionType);
-        Query query = session.createQuery("delete StaffEntity where id = :id");
+        StaffEntity entity = getEntityById(id, false);
+
+        /*Query query = session.createQuery("delete StaffEntity where id = :id");
         query.setParameter("id", id);
-        query.executeUpdate();
+        query.executeUpdate();*/
 
-        //AccountFacade facade = new AccountFacade(session);
-        //facade.delete()
+        AccountFacade facade = new AccountFacade(session);
+        facade.delete(entity.getAccountId(), TransactionType.MANUAL_COMMIT);
 
-        // @todo: delete account
         return StoreHelper.storeEntities(session, transactionType);
     }
 }

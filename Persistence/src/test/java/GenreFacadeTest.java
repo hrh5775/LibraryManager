@@ -37,6 +37,7 @@ public class GenreFacadeTest {
         value.setName("Test Krimi");
         int id = facade.add(value, TransactionType.AUTO_COMMIT);
         Assert.assertTrue(id > 0);
+        Assert.assertNotNull(facade.getById(id));
 
         return id;
     }
@@ -51,5 +52,6 @@ public class GenreFacadeTest {
     private void testDelete(int id) {
         GenreFacade facade = new GenreFacade();
         Assert.assertTrue(facade.delete(id, TransactionType.AUTO_COMMIT));
+        Assert.assertNull(facade.getById(id));
     }
 }

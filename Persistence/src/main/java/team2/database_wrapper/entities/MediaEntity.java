@@ -1,5 +1,7 @@
 package team2.database_wrapper.entities;
 
+import team2.database_wrapper.helper.TypeHelper;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.Arrays;
@@ -72,12 +74,12 @@ public class MediaEntity {
 
     @Basic
     @Column(name = "available", nullable = false)
-    public byte getAvailable() {
-        return available;
+    public boolean getAvailable() {
+        return TypeHelper.toBoolean(available);
     }
 
-    public void setAvailable(byte available) {
-        this.available = available;
+    public void setAvailable(boolean available) {
+        this.available = TypeHelper.toByte(available);
     }
 
     @Basic

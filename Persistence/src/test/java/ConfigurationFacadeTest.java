@@ -47,6 +47,7 @@ public class ConfigurationFacadeTest {
         value.setData("Data Test");
         int id = facade.add(value, TransactionType.AUTO_COMMIT);
         Assert.assertTrue(id > 0);
+        Assert.assertNotNull(facade.getById(id));
 
         return id;
     }
@@ -62,5 +63,6 @@ public class ConfigurationFacadeTest {
     private void testDelete(int id) {
         ConfigurationFacade facade = new ConfigurationFacade();
         Assert.assertTrue(facade.delete(id, TransactionType.AUTO_COMMIT));
+        Assert.assertNull(facade.getById(id));
     }
 }
