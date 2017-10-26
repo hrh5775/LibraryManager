@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>server</groupId>
+    <groupId>at.team2.server</groupId>
     <artifactId>server</artifactId>
     <packaging>war</packaging>
     <version>1.0</version>
@@ -58,13 +58,13 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>application-layer</groupId>
+            <groupId>at.team2.application_layer</groupId>
             <artifactId>application-layer</artifactId>
             <version>1.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>connector</groupId>
+            <groupId>at.team2.connector</groupId>
             <artifactId>connector</artifactId>
             <version>1.0</version>
             <scope>compile</scope>

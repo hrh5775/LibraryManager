@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>client</groupId>
+    <groupId>at.team2.client</groupId>
     <artifactId>client</artifactId>
     <packaging>jar</packaging>
     <version>1.0</version>
@@ -51,12 +51,6 @@
             <artifactId>jxbrowser-cross-platform</artifactId>
             <version>6.13</version>
             <type>pom</type>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>connector</groupId>
-            <artifactId>connector</artifactId>
-            <version>1.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -143,6 +137,13 @@
             <version>5.5.11</version>
             <scope>compile</scope>
         </dependency>-->
+
+        <dependency>
+            <groupId>at.team2.connector</groupId>
+            <artifactId>connector</artifactId>
+            <version>1.0</version>
+            <scope>compile</scope>
+        </dependency>
 
         <!-- This is only included because of the requirements of a FAT client. Can also be removed and used only as a HTTP-Client. -->
         <!--<dependency>
