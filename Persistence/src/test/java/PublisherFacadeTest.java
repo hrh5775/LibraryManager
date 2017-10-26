@@ -7,6 +7,7 @@ import team2.domain.entities.PublisherType;
 
 import javax.naming.NamingException;
 import java.util.List;
+import java.util.Random;
 
 public class PublisherFacadeTest {
     @Test
@@ -35,11 +36,11 @@ public class PublisherFacadeTest {
     private int testAdd() {
         PublisherFacade facade = new PublisherFacade();
         Publisher value = new Publisher();
-        value.setName("Publisher Test");
+        value.setName("Publisher Test" + (new Random()).nextDouble());
         value.setAddress("Address");
 
         PublisherType prevValue = new PublisherType();
-        prevValue.setTypeName("Publisher Type Name");
+        prevValue.setTypeName("Publisher Type Name" + (new Random()).nextDouble());
 
         value.setPublisherType(prevValue);
         int id = facade.add(value, TransactionType.AUTO_COMMIT);

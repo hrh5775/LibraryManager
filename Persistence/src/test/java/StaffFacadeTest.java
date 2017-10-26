@@ -10,6 +10,7 @@ import javax.naming.NamingException;
 import java.sql.Date;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Random;
 
 public class StaffFacadeTest {
     @Test
@@ -45,7 +46,7 @@ public class StaffFacadeTest {
         value.setAddress("Addresse Test");
 
         AccountRole prevPrevValue = new AccountRole();
-        prevPrevValue.setKey("Staff Account Role Key Test");
+        prevPrevValue.setKey("Staff Account Role Key Test" + (new Random()).nextDouble());
         prevPrevValue.setRoleName("Account Role Name Test");
 
         Account prevValue = new Account();

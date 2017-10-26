@@ -9,6 +9,7 @@ import java.sql.Date;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 public class BookFacadeTest {
     @Test
@@ -90,11 +91,11 @@ public class BookFacadeTest {
     private Publisher createPublisher() {
         PublisherFacade facade = new PublisherFacade();
         Publisher value = new Publisher();
-        value.setName("Publisher Test");
+        value.setName("Publisher Test" + (new Random()).nextDouble());
         value.setAddress("Address");
 
         PublisherType prevValue = new PublisherType();
-        prevValue.setTypeName("Publisher Type Name");
+        prevValue.setTypeName("Publisher Type Name" + (new Random()).nextDouble());
 
         value.setPublisherType(prevValue);
         value.setId(facade.add(value, TransactionType.AUTO_COMMIT));

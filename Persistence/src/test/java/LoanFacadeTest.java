@@ -3,12 +3,14 @@ import org.junit.Test;
 import team2.database_wrapper.enums.TransactionType;
 import team2.database_wrapper.facade.CustomerFacade;
 import team2.database_wrapper.facade.LoanFacade;
+import team2.database_wrapper.facade.ReminderFacade;
 import team2.domain.entities.*;
 
 import javax.naming.NamingException;
 import java.sql.Date;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Random;
 
 public class LoanFacadeTest {
     @Test
@@ -62,7 +64,7 @@ public class LoanFacadeTest {
         value.setAddress("Addresse Test");
 
         AccountRole prevPrevValue = new AccountRole();
-        prevPrevValue.setKey("Customer Account Role Key Test");
+        prevPrevValue.setKey("Customer Account Role Key Test" + (new Random()).nextInt());
         prevPrevValue.setRoleName("Account Role Name Test");
 
         Account prevValue = new Account();
@@ -81,8 +83,13 @@ public class LoanFacadeTest {
     }
 
     public Reminder createReminder() {
-        // @todo:
-        return null;
+        ReminderFacade facade = new ReminderFacade();
+        Reminder value = new Reminder();
+        value.setReminderDate(new Date(Calendar.getInstance().getTime().getTime()));
+        value.setReminderCount(0);
+        value.setId(facade.add(value, TransactionType.AUTO_COMMIT));
+
+        return value;
     }
 
     private void testUpdate(int id) {
