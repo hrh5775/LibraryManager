@@ -50,7 +50,6 @@ public class DvdFacadeTest {
         prevValue.setPublishedDate(new Date(Calendar.getInstance().getTime().getTime()));
         prevValue.setTitle("Title Test");
         prevValue.setStandardMediaId("standard media id" + (new Random()).nextDouble());
-
         prevValue.setGenre(MediaHelper.createGenre());
         prevValue.setMediaType(MediaHelper.createMediaType());
         prevValue.setPublisher(MediaHelper.createPublisher());

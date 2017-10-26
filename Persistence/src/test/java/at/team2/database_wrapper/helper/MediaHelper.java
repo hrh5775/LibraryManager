@@ -72,4 +72,22 @@ public class MediaHelper {
 
         return list;
     }
+
+    public static int createMedia(MediaFacade facade) {
+        Media value = new Media();
+        value.setAvailable(true);
+        value.setBaseIndex("base index Test");
+        value.setComment("Test");
+        value.setCover(new byte[1]);
+        value.setPublishedDate(new Date(Calendar.getInstance().getTime().getTime()));
+        value.setTitle("Title Test");
+        value.setStandardMediaId("standard media id" + (new Random()).nextDouble());
+        value.setGenre(MediaHelper.createGenre());
+        value.setMediaType(MediaHelper.createMediaType());
+        value.setPublisher(MediaHelper.createPublisher());
+        value.setCreatorPersons(MediaHelper.createCreators());
+        value.setId(facade.add(value, TransactionType.AUTO_COMMIT));
+
+        return value.getID();
+    }
 }

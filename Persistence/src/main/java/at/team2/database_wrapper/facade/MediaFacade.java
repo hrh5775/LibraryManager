@@ -26,7 +26,7 @@ public class MediaFacade extends BaseDatabaseFacade<Media> {
         super(session);
     }
 
-    private MediaEntity getEntityById(int id, boolean includeInactive) {
+    private MediaEntity getEntityById(int id) {
         EntityManager session = getCurrentSession();
         Query query = session.createQuery("from MediaEntity where id = :id");
         query.setParameter("id", id);
@@ -42,7 +42,7 @@ public class MediaFacade extends BaseDatabaseFacade<Media> {
 
     @Override
     public Media getById(int id) {
-        MediaEntity entity = getEntityById(id, false);
+        MediaEntity entity = getEntityById(id);
 
         if (entity != null) {
             ModelMapper mapper = MapperHelper.getMapper();
@@ -115,7 +115,7 @@ public class MediaFacade extends BaseDatabaseFacade<Media> {
             for(MediaCreatorPersonEntity item : mediaCreators) {
                 if(item.getId() <= 0) {
                     CreatorPersonFacade creatorPersonFacade = new CreatorPersonFacade(session);
-                    entity.setMediaTypeId(creatorPersonFacade.add(mapper.map(item, CreatorPerson.class), TransactionType.MANUAL_COMMIT));
+                    item.setId(creatorPersonFacade.add(mapper.map(item, CreatorPerson.class), TransactionType.MANUAL_COMMIT));
                 }
             }
         }
