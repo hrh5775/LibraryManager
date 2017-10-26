@@ -10,9 +10,9 @@ import java.util.List;
 public class Loan extends BaseDomainEntity<LoanProperty>  {
     private int _id;
     private Date _start;
-    private String _lastRenewalStart;
+    private Date _lastRenewalStart;
     private Date _end;
-    private byte _closed;
+    private boolean _closed;
     private Customer _customer;
     private MediaMember _mediaMember;
     private Reminder _reminder;
@@ -26,7 +26,7 @@ public class Loan extends BaseDomainEntity<LoanProperty>  {
         return _start;
     }
 
-    public String getLastRenewalStart() {
+    public Date getLastRenewalStart() {
         return _lastRenewalStart;
     }
 
@@ -34,7 +34,7 @@ public class Loan extends BaseDomainEntity<LoanProperty>  {
         return _end;
     }
 
-    public byte getClosed() {
+    public boolean getClosed() {
         return _closed;
     }
 
@@ -58,7 +58,7 @@ public class Loan extends BaseDomainEntity<LoanProperty>  {
         _start = start;
     }
 
-    public void setLastRenewalStart(String lastRenewalStart) {
+    public void setLastRenewalStart(Date lastRenewalStart) {
         _lastRenewalStart = lastRenewalStart;
     }
 
@@ -66,7 +66,7 @@ public class Loan extends BaseDomainEntity<LoanProperty>  {
         _end = end;
     }
 
-    public void setClosed(byte closed) {
+    public void setClosed(boolean closed) {
         _closed = closed;
     }
 

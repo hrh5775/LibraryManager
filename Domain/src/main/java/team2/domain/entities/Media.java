@@ -20,6 +20,7 @@ public class Media extends BaseDomainEntity<MediaProperty>  {
     private MediaType _mediaType;
     private Genre _genre;
     private Publisher _publisher;
+    private List<CreatorPerson> _creatorPersons;
 
     @Override
     public int getID() {
@@ -70,6 +71,10 @@ public class Media extends BaseDomainEntity<MediaProperty>  {
         return _publisher;
     }
 
+    public List<CreatorPerson> getCreatorPersons() {
+        return _creatorPersons;
+    }
+
     public void setId(int id) {
         _id = id;
     }
@@ -116,6 +121,10 @@ public class Media extends BaseDomainEntity<MediaProperty>  {
 
     public void setPublisher(Publisher publisher) {
         _publisher = publisher;
+    }
+
+    public void setCreatorPersons(List<CreatorPerson> creatorPersons) {
+        _creatorPersons = creatorPersons;
     }
 
     @Override

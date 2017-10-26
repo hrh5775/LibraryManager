@@ -89,6 +89,8 @@ public class AccountFacade extends BaseDatabaseFacade<Account> {
         // In the current state an account can't be reactivated.
         entity.setActive(true);
 
+        // an account role name can't be changed in this method
+
         session.merge(entity);
         StoreHelper.storeEntities(session, transactionType);
 

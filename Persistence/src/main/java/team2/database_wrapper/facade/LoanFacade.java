@@ -1,73 +1,65 @@
 package team2.database_wrapper.facade;
 
 import org.modelmapper.ModelMapper;
-import team2.database_wrapper.entities.BookMetaEntity;
+import team2.database_wrapper.entities.LoanEntity;
 import team2.database_wrapper.enums.TransactionType;
 import team2.database_wrapper.helper.MapperHelper;
 import team2.database_wrapper.helper.StoreHelper;
-import team2.domain.entities.Book;
+import team2.domain.entities.Loan;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.LinkedList;
 import java.util.List;
 
-public class BookFacade extends BaseDatabaseFacade<Book> {
-    private List<Book> listType = new LinkedList<>();
+public class LoanFacade extends BaseDatabaseFacade<Loan> {
+    private List<Loan> listType = new LinkedList<>();
 
-    public BookFacade() {
+    public LoanFacade() {
         super();
     }
 
-    public BookFacade(EntityManager session) {
+    public LoanFacade(EntityManager session) {
         super(session);
     }
 
-    private BookMetaEntity getEntityById(int id) {
+    @Override
+    public Loan getById(int id) {
         EntityManager session = getCurrentSession();
-        Query query = session.createQuery("from BookMetaEntity where id = :id");
+        Query query = session.createQuery("from LoanEntity where id = :id");
         query.setParameter("id", id);
         query.setMaxResults(1);
-        List<BookMetaEntity> entities = query.getResultList();
+        List<LoanEntity> entities = query.getResultList();
 
         if (entities.size() > 0) {
-            return entities.get(0);
-        }
+            LoanEntity entity = entities.get(0);
 
-        return null;
-    }
-
-    @Override
-    public Book getById(int id) {
-        BookMetaEntity entity = getEntityById(id);
-
-        if (entity != null) {
             ModelMapper mapper = MapperHelper.getMapper();
-            return mapper.map(entity, Book.class);
+            return mapper.map(entity, Loan.class);
         }
 
         return null;
     }
 
     @Override
-    public List<Book> getList() {
+    public List<Loan> getList() {
         EntityManager session = getCurrentSession();
-        Query query = session.createQuery("from BookMetaEntity");
-        List<BookMetaEntity> entities = query.getResultList();
+        Query query = session.createQuery("from LoanEntity");
+        List<LoanEntity> entities = query.getResultList();
         ModelMapper mapper = MapperHelper.getMapper();
 
         return mapper.map(entities, listType.getClass());
     }
 
     @Override
-    public int add(Book value, TransactionType transactionType) {
+    public int add(Loan value, TransactionType transactionType) {
         EntityManager session = getCurrentSession(transactionType);
         ModelMapper mapper = MapperHelper.getMapper();
-        BookMetaEntity entity = mapper.map(value, BookMetaEntity.class);
+        LoanEntity entity = mapper.map(value, LoanEntity.class);
 
-        MediaFacade facade = new MediaFacade(session);
-        entity.setMediaId(facade.add(value.getMedia(), TransactionType.MANUAL_COMMIT));
-
+        createReminder(entity, value, session);
+        // do not let the user create a closed loan
+        entity.setClosed(true);
         session.persist(entity);
         StoreHelper.storeEntities(session, transactionType);
 
@@ -75,28 +67,32 @@ public class BookFacade extends BaseDatabaseFacade<Book> {
     }
 
     @Override
-    public int update(Book value, TransactionType transactionType) {
+    public int update(Loan value, TransactionType transactionType) {
         EntityManager session = getCurrentSession(transactionType);
         ModelMapper mapper = MapperHelper.getMapper();
-        BookMetaEntity entity = mapper.map(value, BookMetaEntity.class);
+        LoanEntity entity = mapper.map(value, LoanEntity.class);
 
+        // the specific media and customer can't be changed in this method
+        createReminder(entity, value, session);
         session.merge(entity);
         StoreHelper.storeEntities(session, transactionType);
 
         return entity.getId();
     }
 
+    public void createReminder(LoanEntity entity, Loan value, EntityManager session) {
+        if(entity.getReminderId() <= 0) {
+            ReminderFacade reminderFacade = new ReminderFacade(session);
+            entity.setReminderId(reminderFacade.add(value.getReminder(), TransactionType.MANUAL_COMMIT));
+        }
+    }
+
     @Override
     public boolean delete(int id, TransactionType transactionType) {
         EntityManager session = getCurrentSession(transactionType);
-        BookMetaEntity entity = getEntityById(id);
-
-        Query query = session.createQuery("delete BookMetaEntity where id = :id");
+        Query query = session.createQuery("delete LoanEntity where id = :id");
         query.setParameter("id", id);
         query.executeUpdate();
-
-        MediaFacade facade = new MediaFacade(session);
-        facade.delete(entity.getMediaId(), TransactionType.MANUAL_COMMIT);
 
         return StoreHelper.storeEntities(session, transactionType);
     }

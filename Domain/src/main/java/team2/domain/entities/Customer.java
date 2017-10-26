@@ -96,7 +96,7 @@ public class Customer extends BaseDomainEntity<CustomerProperty>  {
         _dateOfExpiry = dateOfExpiry;
     }
 
-    public void setAccountByAccountId(Account account) {
+    public void setAccount(Account account) {
         _account = account;
     }
 
