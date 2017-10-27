@@ -43,7 +43,9 @@ public class DvdFacade extends BaseDatabaseFacade<Dvd> {
 
         if (entity != null) {
             ModelMapper mapper = MapperHelper.getMapper();
-            return mapper.map(entity, Dvd.class);
+            Dvd dvd = mapper.map(entity, Dvd.class);
+            dvd.setMedia(MapperHelper.map(entity.getMediaByMediaId()));
+            return dvd;
         }
 
         return null;

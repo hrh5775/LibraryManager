@@ -11,7 +11,6 @@ import at.team2.domain.entities.Media;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -26,7 +25,7 @@ public class MediaFacade extends BaseDatabaseFacade<Media> {
         super(session);
     }
 
-    private MediaEntity getEntityById(int id, boolean includeInactive) {
+    private MediaEntity getEntityById(int id) {
         EntityManager session = getCurrentSession();
         Query query = session.createQuery("from MediaEntity where id = :id");
         query.setParameter("id", id);
@@ -42,11 +41,10 @@ public class MediaFacade extends BaseDatabaseFacade<Media> {
 
     @Override
     public Media getById(int id) {
-        MediaEntity entity = getEntityById(id, false);
+        MediaEntity entity = getEntityById(id);
 
         if (entity != null) {
-            ModelMapper mapper = MapperHelper.getMapper();
-            return mapper.map(entity, Media.class);
+            return MapperHelper.map(entity);
         }
 
         return null;
@@ -57,9 +55,8 @@ public class MediaFacade extends BaseDatabaseFacade<Media> {
         EntityManager session = getCurrentSession();
         Query query = session.createQuery("from MediaEntity");
         List<MediaEntity> entities = query.getResultList();
-        ModelMapper mapper = MapperHelper.getMapper();
 
-        return mapper.map(entities, typeList.getClass());
+        return MapperHelper.map(entities);
     }
 
     @Override
@@ -73,6 +70,8 @@ public class MediaFacade extends BaseDatabaseFacade<Media> {
         createEntities(entity, value, session);
         session.persist(entity);
         StoreHelper.storeEntities(session, transactionType);
+
+        createCreatorPersonEntities(entity, value, session);
 
         return entity.getId();
     }
@@ -88,6 +87,8 @@ public class MediaFacade extends BaseDatabaseFacade<Media> {
         createEntities(entity, value, session);
         session.merge(entity);
         StoreHelper.storeEntities(session, transactionType);
+
+        createCreatorPersonEntities(entity, value, session);
 
         return entity.getId();
     }
@@ -107,16 +108,23 @@ public class MediaFacade extends BaseDatabaseFacade<Media> {
             MediaTypeFacade mediaTypeFacade = new MediaTypeFacade(session);
             entity.setMediaTypeId(mediaTypeFacade.add(value.getMediaType(), TransactionType.MANUAL_COMMIT));
         }
+    }
 
-        Collection<MediaCreatorPersonEntity> mediaCreators = entity.getMediaCreatorPeopleById();
-        ModelMapper mapper = MapperHelper.getMapper();
+    public void createCreatorPersonEntities(MediaEntity entity, Media value, EntityManager session) {
+        MediaCreatorPersonEntity tmpEntity;
+        List<CreatorPerson> creatorPersons = value.getCreatorPersons();
 
-        if(mediaCreators != null) {
-            for(MediaCreatorPersonEntity item : mediaCreators) {
-                if(item.getId() <= 0) {
+        if(creatorPersons != null) {
+            for(CreatorPerson item : creatorPersons) {
+                if(item.getID() <= 0) {
                     CreatorPersonFacade creatorPersonFacade = new CreatorPersonFacade(session);
-                    entity.setMediaTypeId(creatorPersonFacade.add(mapper.map(item, CreatorPerson.class), TransactionType.MANUAL_COMMIT));
+                    item.setId(creatorPersonFacade.add(item, TransactionType.MANUAL_COMMIT));
                 }
+
+                tmpEntity = new MediaCreatorPersonEntity();
+                tmpEntity.setCreatorPersonId(item.getID());
+                tmpEntity.setMediaId(entity.getId());
+                session.persist(tmpEntity);
             }
         }
     }
@@ -124,7 +132,12 @@ public class MediaFacade extends BaseDatabaseFacade<Media> {
     @Override
     public boolean delete(int id, TransactionType transactionType) {
         EntityManager session = getCurrentSession(transactionType);
-        Query query = session.createQuery("delete MediaEntity where id = :id");
+
+        Query query = session.createQuery("delete MediaCreatorPersonEntity where mediaId = :id");
+        query.setParameter("id", id);
+        query.executeUpdate();
+
+        query = session.createQuery("delete MediaEntity where id = :id");
         query.setParameter("id", id);
         query.executeUpdate();
 

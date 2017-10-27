@@ -29,22 +29,23 @@
         <properties>
             <!--<property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />-->
             <property name="javax.persistence.jdbc.driver" value="org.mariadb.jdbc.Driver" />
-            <!-- <property name="hibernate.hbm2ddl.auto" value="validate" /> -->
-            <!--<property name="dialect" value="org.hibernate.dialect.MySQL5Dialect" />-->
 
             <!-- requires the fhv vpn connection or a fhv wlan, lan connection -->
-            <property name="hibernate.connection.username" value="root" />
-            <property name="hibernate.connection.password" value="WS2017+fhv" />
-            <property name="hibernate.connection.url" value="jdbc:mysql://10.0.51.92:3306/Library" />
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://10.0.51.92:3306/Library" />
+            <!--<property name="javax.persistence.jdbc.url" value="jdbc:mysql://10.0.51.92:3306/Library_Test" />-->
+            <property name="javax.persistence.jdbc.user" value="root" />
+            <property name="javax.persistence.jdbc.password" value="WS2017+fhv" />
+            <property name="javax.persistence.query.timeout" value="5000" />
+
             <!-- force to use UTC instead of CEST
             for issue: The server time zone value 'CEST' is unrecognized or represents more than one time zone -->
-            <property name="hibernate.jdbc.time_zone" value="UTC"/>
-            <property name="hibernate.connection.autocommit" value="false"/>
-            <property name="hibernate.globally_quoted_identifiers" value="true"/>
+            <property name="hibernate.jdbc.time_zone" value="UTC" />
+            <property name="hibernate.connection.autocommit" value="false" />
+            <property name="hibernate.globally_quoted_identifiers" value="true" />
 
-            <property name="hibernate.connection.characterEncoding" value="utf8"/>
-            <property name="hibernate.connection.useUnicode" value="true"/>
-            <property name="hibernate.connection.charSet" value="UTF-8"/>
+            <property name="hibernate.connection.characterEncoding" value="utf8" />
+            <property name="hibernate.connection.useUnicode" value="true" />
+            <property name="hibernate.connection.charSet" value="UTF-8" />
 
             <property name="connection_pool_size" value="5" />
 
@@ -52,8 +53,12 @@
             <property name="hibernate.show_sql" value="true" />
             <property name="openjpa.Log" value="DefaultLevel=WARN, Runtime=INFO, Tool=INFO, SQL=TRACE"/>
             <property name="openjpa.ConnectionFactoryProperties" value="PrintParameters=true" />
-            <property name="hibernate.id.new_generator_mappings" value="true" />
-            <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
+            <property name="hibernate.id.new_generator_mappings" value="true"/>
+
+            <!-- other -->
+            <!-- <property name="hibernate.hbm2ddl.auto" value="validate"/> -->
+            <!--<property name="dialect" value="org.hibernate.dialect.MySQL5Dialect"/>-->
+            <!--<property name="hibernate.connection.driver_class" value="org.mariadb.jdbc.Driver"/>-->
         </properties>
     </persistence-unit>
 </persistence>

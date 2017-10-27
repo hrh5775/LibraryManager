@@ -1,6 +1,7 @@
 package at.team2.database_wrapper.facade;
 
 import at.team2.database_wrapper.enums.TransactionType;
+import at.team2.database_wrapper.helper.MediaHelper;
 import at.team2.domain.entities.*;
 import org.junit.Assert;
 import org.junit.Test;
@@ -77,8 +78,13 @@ public class LoanFacadeTest {
     }
 
     public MediaMember createMediaMember() {
-        // @todo:
-        return null;
+        MediaMemberFacade facade = new MediaMemberFacade();
+        MediaMember value = new MediaMember();
+        value.setExtendedIndex("Extension Index Test");
+        value.setMediaId(MediaHelper.createMedia(new MediaFacade()));
+
+        value.setId(facade.add(value, TransactionType.AUTO_COMMIT));
+        return value;
     }
 
     public Reminder createReminder() {

@@ -1,15 +1,15 @@
 package at.team2.database_wrapper.facade;
 
 import at.team2.database_wrapper.enums.TransactionType;
+import at.team2.database_wrapper.helper.MediaHelper;
+import at.team2.domain.entities.MediaMember;
 import org.junit.Assert;
 import org.junit.Test;
-import at.team2.domain.entities.AccountRole;
 
 import javax.naming.NamingException;
 import java.util.List;
-import java.util.Random;
 
-public class AccountRoleFacadeTest {
+public class MediaMemberFacadeTest {
     @Test
     public void testAll() throws NamingException {
         int id = testAdd();
@@ -19,25 +19,26 @@ public class AccountRoleFacadeTest {
         testDelete(id);
     }
 
-    private AccountRole testById(int id) {
-        AccountRoleFacade facade = new AccountRoleFacade();
-        AccountRole result = facade.getById(id);
+    private MediaMember testById(int id) {
+        MediaMemberFacade facade = new MediaMemberFacade();
+        MediaMember result = facade.getById(id);
         Assert.assertNotNull(result);
 
         return result;
     }
 
     private void testGetList() {
-        AccountRoleFacade facade = new AccountRoleFacade();
-        List<AccountRole> list = facade.getList();
+        MediaMemberFacade facade = new MediaMemberFacade();
+        List<MediaMember> list = facade.getList();
         Assert.assertTrue(list.size() > 0);
     }
 
     private int testAdd() {
-        AccountRoleFacade facade = new AccountRoleFacade();
-        AccountRole value = new AccountRole();
-        value.setKey("TEST_KEY" + (new Random()).nextDouble());
-        value.setRoleName("Test Role");
+        MediaMemberFacade facade = new MediaMemberFacade();
+        MediaMember value = new MediaMember();
+        value.setExtendedIndex("Extension Index Test");
+        value.setMediaId(MediaHelper.createMedia(new MediaFacade()));
+
         int id = facade.add(value, TransactionType.AUTO_COMMIT);
         Assert.assertTrue(id > 0);
         Assert.assertNotNull(facade.getById(id));
@@ -46,14 +47,14 @@ public class AccountRoleFacadeTest {
     }
 
     private void testUpdate(int id) {
-        AccountRoleFacade facade = new AccountRoleFacade();
-        AccountRole value = facade.getById(id);
-        value.setKey("TEST_KEY_2");
+        MediaMemberFacade facade = new MediaMemberFacade();
+        MediaMember value = facade.getById(id);
+        value.setExtendedIndex("Extension Index Test 2");
         Assert.assertTrue(facade.update(value, TransactionType.AUTO_COMMIT) > 0);
     }
 
     private void testDelete(int id) {
-        AccountRoleFacade facade = new AccountRoleFacade();
+        MediaMemberFacade facade = new MediaMemberFacade();
         Assert.assertTrue(facade.delete(id, TransactionType.AUTO_COMMIT));
         Assert.assertNull(facade.getById(id));
     }
