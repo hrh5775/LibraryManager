@@ -24,27 +24,37 @@ public class MapperHelper {
     }
 
     public static Media map(MediaEntity entity) {
-        ModelMapper mapper = MapperHelper.getMapper();
-        Media value = mapper.map(entity, Media.class);
-        Collection<MediaCreatorPersonEntity> list = entity.getMediaCreatorPeopleById();
-        List<CreatorPerson> creatorPersons = new LinkedList<>();
+        if(entity != null) {
+            ModelMapper mapper = MapperHelper.getMapper();
+            Media value = mapper.map(entity, Media.class);
+            Collection<MediaCreatorPersonEntity> list = entity.getMediaCreatorPeopleById();
+            List<CreatorPerson> creatorPersons = new LinkedList<>();
 
-        if(list != null) {
-            for(MediaCreatorPersonEntity item : list) {
-                creatorPersons.add(mapper.map(item.getCreatorPersonByCreatorPersonId(), CreatorPerson.class));
+            if(list != null) {
+                for(MediaCreatorPersonEntity item : list) {
+                    creatorPersons.add(mapper.map(item.getCreatorPersonByCreatorPersonId(), CreatorPerson.class));
+                }
+
+                value.setCreatorPersons(creatorPersons);
             }
+
+            return value;
         }
 
-        return value;
+        return null;
     }
 
     public static List<Media> map(List<MediaEntity> entities) {
-        List<Media> list = new LinkedList<>();
+        if(entities != null) {
+            List<Media> list = new LinkedList<>();
 
-        for(MediaEntity entity : entities) {
-            list.add(map(entity));
+            for(MediaEntity entity : entities) {
+                list.add(map(entity));
+            }
+
+            return list;
         }
 
-        return list;
+        return null;
     }
 }

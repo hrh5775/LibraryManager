@@ -45,7 +45,6 @@ public class BookFacade extends BaseDatabaseFacade<Book> {
             ModelMapper mapper = MapperHelper.getMapper();
             Book book = mapper.map(entity, Book.class);
             book.setMedia(MapperHelper.map(entity.getMediaByMediaId()));
-
             return book;
         }
 
