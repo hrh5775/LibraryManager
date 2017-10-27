@@ -16,6 +16,8 @@ import java.util.Random;
 public class BookFacadeTest {
     @Test
     public void testAll() throws NamingException {
+        testById(20);
+
         int id = testAdd();
         testById(id);
         testGetList();

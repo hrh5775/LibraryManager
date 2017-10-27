@@ -36,7 +36,7 @@ public class LoanConditionFacadeTest {
         LoanConditionFacade facade = new LoanConditionFacade();
         LoanCondition value = new LoanCondition();
         value.setLoanTerm(0);
-        value.setExtension(0);
+        value.setExtension(1);
         int id = facade.add(value, TransactionType.AUTO_COMMIT);
         Assert.assertTrue(id > 0);
         Assert.assertNotNull(facade.getById(id));
@@ -48,7 +48,7 @@ public class LoanConditionFacadeTest {
         LoanConditionFacade facade = new LoanConditionFacade();
         LoanCondition value = facade.getById(id);
         value.setLoanTerm(2);
-        value.setExtension(1);
+        value.setExtension(3);
         Assert.assertTrue(facade.update(value, TransactionType.AUTO_COMMIT) > 0);
     }
 

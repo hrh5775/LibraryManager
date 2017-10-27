@@ -7,6 +7,7 @@ import at.team2.domain.entities.AccountRole;
 
 import javax.naming.NamingException;
 import java.util.List;
+import java.util.Random;
 
 public class AccountRoleFacadeTest {
     @Test
@@ -35,7 +36,7 @@ public class AccountRoleFacadeTest {
     private int testAdd() {
         AccountRoleFacade facade = new AccountRoleFacade();
         AccountRole value = new AccountRole();
-        value.setKey("TEST_KEY");
+        value.setKey("TEST_KEY" + (new Random()).nextDouble());
         value.setRoleName("Test Role");
         int id = facade.add(value, TransactionType.AUTO_COMMIT);
         Assert.assertTrue(id > 0);
