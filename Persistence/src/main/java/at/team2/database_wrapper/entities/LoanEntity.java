@@ -10,14 +10,14 @@ import java.sql.Date;
 public class LoanEntity {
     private int id;
     private int customerId;
-    private int mediaId;
+    private int mediaMemberId;
     private Integer reminderId;
     private Date start;
     private Date lastRenewalStart;
     private Date end;
     private byte closed;
     private CustomerEntity customerByCustomerId;
-    private MediaMemberEntity mediaMemberByMediaId;
+    private MediaMemberEntity mediaMemberByMediaMemberId;
     private ReminderEntity reminderByReminderId;
 
     @Id
@@ -42,13 +42,13 @@ public class LoanEntity {
     }
 
     @Basic
-    @Column(name = "mediaId", nullable = false)
-    public int getMediaId() {
-        return mediaId;
+    @Column(name = "mediaMemberId", nullable = false)
+    public int getMediaMemberId() {
+        return mediaMemberId;
     }
 
-    public void setMediaId(int mediaId) {
-        this.mediaId = mediaId;
+    public void setMediaMemberId(int mediaMemberId) {
+        this.mediaMemberId = mediaMemberId;
     }
 
     @Basic
@@ -110,7 +110,7 @@ public class LoanEntity {
 
         if (id != that.id) return false;
         if (customerId != that.customerId) return false;
-        if (mediaId != that.mediaId) return false;
+        if (mediaMemberId != that.mediaMemberId) return false;
         if (closed != that.closed) return false;
         if (reminderId != null ? !reminderId.equals(that.reminderId) : that.reminderId != null) return false;
         if (start != null ? !start.equals(that.start) : that.start != null) return false;
@@ -125,7 +125,7 @@ public class LoanEntity {
     public int hashCode() {
         int result = id;
         result = 31 * result + customerId;
-        result = 31 * result + mediaId;
+        result = 31 * result + mediaMemberId;
         result = 31 * result + (reminderId != null ? reminderId.hashCode() : 0);
         result = 31 * result + (start != null ? start.hashCode() : 0);
         result = 31 * result + (lastRenewalStart != null ? lastRenewalStart.hashCode() : 0);
@@ -145,13 +145,13 @@ public class LoanEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "mediaId", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
-    public MediaMemberEntity getMediaMemberByMediaId() {
-        return mediaMemberByMediaId;
+    @JoinColumn(name = "mediaMemberId", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
+    public MediaMemberEntity getMediaMemberByMediaMemberId() {
+        return mediaMemberByMediaMemberId;
     }
 
-    public void setMediaMemberByMediaId(MediaMemberEntity mediaMemberByMediaId) {
-        this.mediaMemberByMediaId = mediaMemberByMediaId;
+    public void setMediaMemberByMediaMemberId(MediaMemberEntity mediaMemberByMediaMemberId) {
+        this.mediaMemberByMediaMemberId = mediaMemberByMediaMemberId;
     }
 
     @ManyToOne

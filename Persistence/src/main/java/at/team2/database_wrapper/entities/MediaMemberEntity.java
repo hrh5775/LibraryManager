@@ -66,7 +66,7 @@ public class MediaMemberEntity {
         return result;
     }
 
-    @OneToMany(mappedBy = "mediaMemberByMediaId")
+    @OneToMany(mappedBy = "mediaMemberByMediaMemberId")
     public Collection<LoanEntity> getLoansById() {
         return loansById;
     }
