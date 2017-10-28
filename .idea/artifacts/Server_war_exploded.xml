@@ -14,6 +14,7 @@
           <element id="archive" name="application-layer-1.0.jar">
             <element id="module-output" name="Application" />
           </element>
+          <element id="library" level="project" name="Maven: org.modelmapper:modelmapper:1.1.1" />
           <element id="archive" name="domain-layer-1.0.jar">
             <element id="module-output" name="Domain" />
           </element>
@@ -25,7 +26,7 @@
           <element id="archive" name="persistence-1.0.jar">
             <element id="module-output" name="Persistence" />
           </element>
-          <element id="library" level="project" name="Maven: mysql:mysql-connector-java:6.0.6" />
+          <element id="library" level="project" name="Maven: org.mariadb.jdbc:mariadb-java-client:2.1.2" />
           <element id="library" level="project" name="Maven: org.hibernate:hibernate-core:5.2.9.Final" />
           <element id="library" level="project" name="Maven: org.jboss.logging:jboss-logging:3.3.0.Final" />
           <element id="library" level="project" name="Maven: org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.0.Final" />

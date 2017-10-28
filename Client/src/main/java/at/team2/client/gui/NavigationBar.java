@@ -4,7 +4,9 @@ import at.team2.client.controls.sidebar.MenuSection;
 import at.team2.client.controls.sidebar.MenuSectionItem;
 import at.team2.client.controls.sidebar.Sidebar;
 import at.team2.client.pages.PageAction;
+import at.team2.client.pages.searchMedium.SearchMedium;
 import at.team2.client.singletons.HomeScreenSingleton;
+import at.team2.client.singletons.SearchMediumSingleton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import at.team2.client.helper.gui.PageHelper;
@@ -40,6 +42,16 @@ public class NavigationBar {
         menuSectionHome.setOnMouseClicked(event -> loadPage(HomeScreenSingleton.getInstance()));
         _sidebar.add(menuSectionHome);
         menuSectionArrayList.add(menuSectionHome);
+
+
+        MenuSection menuSectionSearchMedium = new MenuSection("Search Medium", "/search1600.png", null);
+        menuSectionSearchMedium.setAnimated(false);
+        menuSectionSearchMedium.setCollapsible(false);
+        menuSectionSearchMedium.setOnMouseClicked(event -> loadPage(SearchMediumSingleton.getInstance()));
+        _sidebar.add(menuSectionSearchMedium);
+        menuSectionArrayList.add(menuSectionSearchMedium);
+
+
 
         MenuSection menuSectionUserScreen = new MenuSection("User Profile", "/userM.png", toggleGroup);
         /*menuSectionItem = new MenuSectionItem("Section Management");
