@@ -68,7 +68,8 @@ public class MediaMemberFacade extends BaseDatabaseFacade<MediaMember> {
         ModelMapper mapper = MapperHelper.getMapper();
         MediaMemberEntity entity = mapper.map(value, MediaMemberEntity.class);
 
-        // an existing media has to be available
+        // An existing media has to be available, which can be created with the other facades (book, dvd, e.g.) in
+        // MANUAL_COMMIT mode, when necessary.
         // loans can't be created in this method
         createLoans(entity, session);
         session.persist(entity);

@@ -80,7 +80,7 @@ public class LoanFacade extends BaseDatabaseFacade<Loan> {
         return entity.getId();
     }
 
-    public void createReminder(LoanEntity entity, Loan value, EntityManager session) {
+    private void createReminder(LoanEntity entity, Loan value, EntityManager session) {
         if(entity.getReminderId() <= 0) {
             ReminderFacade reminderFacade = new ReminderFacade(session);
             entity.setReminderId(reminderFacade.add(value.getReminder(), TransactionType.MANUAL_COMMIT));
