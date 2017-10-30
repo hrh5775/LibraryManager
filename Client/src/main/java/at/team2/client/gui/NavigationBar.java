@@ -6,6 +6,7 @@ import at.team2.client.controls.sidebar.Sidebar;
 import at.team2.client.pages.PageAction;
 import at.team2.client.pages.searchMedium.SearchMedium;
 import at.team2.client.singletons.HomeScreenSingleton;
+import at.team2.client.singletons.LendMediumSingleton;
 import at.team2.client.singletons.SearchMediumSingleton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
@@ -50,6 +51,14 @@ public class NavigationBar {
         menuSectionSearchMedium.setOnMouseClicked(event -> loadPage(SearchMediumSingleton.getInstance()));
         _sidebar.add(menuSectionSearchMedium);
         menuSectionArrayList.add(menuSectionSearchMedium);
+
+        MenuSection menuSectionLendMedium = new MenuSection("Lend Medium","/Lend.png",null);
+        menuSectionLendMedium.setAnimated(false);
+        menuSectionLendMedium.setCollapsible(false);
+        menuSectionLendMedium.setOnMouseClicked(event -> loadPage(LendMediumSingleton.getInstance()));
+        _sidebar.add(menuSectionLendMedium);
+        menuSectionArrayList.add(menuSectionLendMedium);
+
 
 
 
