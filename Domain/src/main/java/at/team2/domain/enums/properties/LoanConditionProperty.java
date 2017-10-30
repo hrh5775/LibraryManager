@@ -2,6 +2,8 @@ package at.team2.domain.enums.properties;
 
 import at.team2.domain.interfaces.DomainEntityProperty;
 
-public class LoanConditionProperty implements DomainEntityProperty {
-    // @todo: implement
+public enum  LoanConditionProperty implements DomainEntityProperty {
+    ID,
+    LOAN_TERM,
+    EXTENSION
 }

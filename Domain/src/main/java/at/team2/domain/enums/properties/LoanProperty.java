@@ -2,6 +2,13 @@ package at.team2.domain.enums.properties;
 
 import at.team2.domain.interfaces.DomainEntityProperty;
 
-public class LoanProperty implements DomainEntityProperty {
-    // @todo: implement
+public enum  LoanProperty implements DomainEntityProperty {
+    ID,
+    START,
+    LAST_RENEWAL_START,
+    END,
+    CLOSED,
+    CUSTOMER,
+    MEDIA_MEMBER,
+    REMINDER
 }

@@ -2,6 +2,9 @@ package at.team2.domain.enums.properties;
 
 import at.team2.domain.interfaces.DomainEntityProperty;
 
-public class PublisherProperty implements DomainEntityProperty {
-    // @todo: implement
+public enum  PublisherProperty implements DomainEntityProperty {
+    ID,
+    NAME,
+    ADDRESS,
+    PUBLISHER_TYPE
 }
