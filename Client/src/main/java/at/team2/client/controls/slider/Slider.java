@@ -2,15 +2,12 @@ package at.team2.client.controls.slider;
 
 import at.team2.client.pages.PageAction;
 import javafx.scene.transform.Scale;
-import java.net.URL;
 
 public class Slider extends javafx.scene.control.Slider {
     private Scale _scale = null;
     private PageAction<Boolean, Scale> _scaleAction;
 
     public Slider() {
-        final URL Style = this.getClass().getResource("slider.css");
-        getStylesheets().add(Style.toString());
         setMaxWidth(100);
         setMin(0.5);
         setMax(2);
@@ -42,5 +39,10 @@ public class Slider extends javafx.scene.control.Slider {
         if(_scaleAction != null) {
             _scaleAction.doAction(_scale);
         }
+    }
+
+    @Override
+    public String getUserAgentStylesheet() {
+        return Slider.class.getResource("slider.css").toExternalForm();
     }
 }

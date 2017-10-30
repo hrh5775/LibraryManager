@@ -61,8 +61,6 @@ public class NumberField extends BigDecimalField {
     @Override
     public String getUserAgentStylesheet() {
         // workaround for jfxtras
-        // @todo
-        final String Style = this.getClass().getResource("BigDecimalField.css").toExternalForm();
-        return Style;
+        return BigDecimalField.class.getResource("/jfxtras/labs/internal/scene/control/" + BigDecimalField.class.getSimpleName() + ".css").toExternalForm();
     }
 }

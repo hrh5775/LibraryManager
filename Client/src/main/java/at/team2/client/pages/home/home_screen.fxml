@@ -2,13 +2,11 @@
 
 <?import javafx.scene.layout.*?>
 <?import at.team2.client.pages.login.Login?>
-<?import at.team2.client.pages.searchMedium.SearchMedium?>
 
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
            stylesheets="/at/team2/client/pages/home/home_screen.css">
     <children>
         <Login></Login>
-
     </children>
 </StackPane>
