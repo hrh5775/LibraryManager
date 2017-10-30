@@ -9,6 +9,7 @@ import at.team2.client.singletons.HomeScreenSingleton;
 import at.team2.client.singletons.LendMediumSingleton;
 import at.team2.client.singletons.SearchMediumSingleton;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.BorderPane;
 import at.team2.client.helper.gui.PageHelper;
 import at.team2.client.configuration.Configuration;
@@ -38,6 +39,7 @@ public class NavigationBar {
         ToggleGroup toggleGroup = new ToggleGroup();
 
         MenuSection menuSectionHome = new MenuSection("Home", "/homeM.png", null);
+        menuSectionHome.setTooltip(new Tooltip("Home"));
         menuSectionHome.setAnimated(false);
         menuSectionHome.setCollapsible(false);
         menuSectionHome.setOnMouseClicked(event -> loadPage(HomeScreenSingleton.getInstance()));
@@ -46,6 +48,7 @@ public class NavigationBar {
 
 
         MenuSection menuSectionSearchMedium = new MenuSection("Search Medium", "/search1600.png", null);
+        menuSectionSearchMedium.setTooltip(new Tooltip("Search Medium"));
         menuSectionSearchMedium.setAnimated(false);
         menuSectionSearchMedium.setCollapsible(false);
         menuSectionSearchMedium.setOnMouseClicked(event -> loadPage(SearchMediumSingleton.getInstance()));
@@ -53,16 +56,14 @@ public class NavigationBar {
         menuSectionArrayList.add(menuSectionSearchMedium);
 
         MenuSection menuSectionLendMedium = new MenuSection("Lend Medium","/Lend.png",null);
+        menuSectionLendMedium.setTooltip(new Tooltip("Lend Medium"));
         menuSectionLendMedium.setAnimated(false);
         menuSectionLendMedium.setCollapsible(false);
         menuSectionLendMedium.setOnMouseClicked(event -> loadPage(LendMediumSingleton.getInstance()));
         _sidebar.add(menuSectionLendMedium);
         menuSectionArrayList.add(menuSectionLendMedium);
 
-
-
-
-        MenuSection menuSectionUserScreen = new MenuSection("User Profile", "/userM.png", toggleGroup);
+        //MenuSection menuSectionUserScreen = new MenuSection("User Profile", "/userM.png", toggleGroup);
         /*menuSectionItem = new MenuSectionItem("Section Management");
         menuSectionItem.setOnAction(event -> {
         });
