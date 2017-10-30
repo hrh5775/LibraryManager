@@ -28,7 +28,7 @@ public class CreatorType extends BaseDomainEntity<CreatorTypeProperty>  {
     }
 
     @Override
-    public List<Pair<String, String>> validate() {
+    public List<Pair<CreatorTypeProperty, String>> validate() {
         // @todo: implement
         return new LinkedList<>();
     }

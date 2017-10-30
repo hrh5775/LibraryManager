@@ -37,7 +37,7 @@ public class Configuration extends BaseDomainEntity<ConfigurationProperty>  {
     }
 
     @Override
-    public List<Pair<String, String>> validate() {
+    public List<Pair<ConfigurationProperty, String>> validate() {
         // @todo: implement
         return new LinkedList<>();
     }

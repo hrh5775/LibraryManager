@@ -37,7 +37,7 @@ public class Dvd extends BaseDomainEntity<DvdProperty>  {
     }
 
     @Override
-    public List<Pair<String, String>> validate() {
+    public List<Pair<DvdProperty, String>> validate() {
         // @todo: implement
         return new LinkedList<>();
     }

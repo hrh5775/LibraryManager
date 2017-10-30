@@ -38,7 +38,7 @@ public class Reminder extends BaseDomainEntity<ReminderProperty>  {
     }
 
     @Override
-    public List<Pair<String, String>> validate() {
+    public List<Pair<ReminderProperty, String>> validate() {
         // @todo: implement
         return new LinkedList<>();
     }

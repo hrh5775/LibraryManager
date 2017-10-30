@@ -37,7 +37,7 @@ public class MediaMember extends BaseDomainEntity<MediaMemberProperty>  {
     }
 
     @Override
-    public List<Pair<String, String>> validate() {
+    public List<Pair<MediaMemberProperty, String>> validate() {
         // @todo: implement
         return new LinkedList<>();
     }

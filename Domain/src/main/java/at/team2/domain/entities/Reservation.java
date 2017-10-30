@@ -65,7 +65,7 @@ public class Reservation extends BaseDomainEntity<ReservationProperty>  {
     }
 
     @Override
-    public List<Pair<String, String>> validate() {
+    public List<Pair<ReservationProperty, String>> validate() {
         // @todo: implement
         return new LinkedList<>();
     }

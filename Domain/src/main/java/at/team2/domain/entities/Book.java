@@ -37,7 +37,7 @@ public class Book extends BaseDomainEntity<BookProperty>  {
     }
 
     @Override
-    public List<Pair<String, String>> validate() {
+    public List<Pair<BookProperty, String>> validate() {
         // @todo: implement
         return new LinkedList<>();
     }

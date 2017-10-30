@@ -74,7 +74,7 @@ public class Staff extends BaseDomainEntity<StaffProperty>  {
     }
 
     @Override
-    public List<Pair<String, String>> validate() {
+    public List<Pair<StaffProperty, String>> validate() {
         // @todo: implement
         return new LinkedList<>();
     }

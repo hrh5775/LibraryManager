@@ -128,7 +128,7 @@ public class Media extends BaseDomainEntity<MediaProperty>  {
     }
 
     @Override
-    public List<Pair<String, String>> validate() {
+    public List<Pair<MediaProperty, String>> validate() {
         // @todo: implement
         return new LinkedList<>();
     }

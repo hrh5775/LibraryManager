@@ -46,7 +46,7 @@ public class Account extends BaseDomainEntity<AccountProperty>  {
     }
 
     @Override
-    public List<Pair<String, String>> validate() {
+    public List<Pair<AccountProperty, String>> validate() {
         // @todo: implement
         return new LinkedList<>();
     }

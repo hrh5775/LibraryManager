@@ -11,5 +11,5 @@ public interface Validate<E> {
      *         value: a detailed error message for the user
      *         is never null
      */
-    public List<Pair<String, String>> validate();
+    public List<Pair<E, String>> validate();
 }

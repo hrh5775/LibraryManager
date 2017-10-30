@@ -37,7 +37,7 @@ public class MediaType extends BaseDomainEntity<MediaTypeProperty>  {
     }
 
     @Override
-    public List<Pair<String, String>> validate() {
+    public List<Pair<MediaTypeProperty, String>> validate() {
         // @todo: implement
         return new LinkedList<>();
     }

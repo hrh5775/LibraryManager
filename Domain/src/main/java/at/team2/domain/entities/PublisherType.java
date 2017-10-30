@@ -28,7 +28,7 @@ public class PublisherType extends BaseDomainEntity<PublisherTypeProperty>  {
     }
 
     @Override
-    public List<Pair<String, String>> validate() {
+    public List<Pair<PublisherTypeProperty, String>> validate() {
         // @todo: implement
         return new LinkedList<>();
     }

@@ -37,7 +37,7 @@ public class LoanCondition extends BaseDomainEntity<LoanConditionProperty>  {
     }
 
     @Override
-    public List<Pair<String, String>> validate() {
+    public List<Pair<LoanConditionProperty, String>> validate() {
         // @todo: implement
         return new LinkedList<>();
     }

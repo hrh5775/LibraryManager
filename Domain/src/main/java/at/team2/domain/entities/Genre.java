@@ -28,7 +28,7 @@ public class Genre extends BaseDomainEntity<GenreProperty>  {
     }
 
     @Override
-    public List<Pair<String, String>> validate() {
+    public List<Pair<GenreProperty, String>> validate() {
         // @todo: implement
         return new LinkedList<>();
     }

@@ -65,7 +65,7 @@ public class CreatorPerson extends BaseDomainEntity<CreatorPersonProperty>  {
     }
 
     @Override
-    public List<Pair<String, String>> validate() {
+    public List<Pair<CreatorPersonProperty, String>> validate() {
         // @todo: implement
         return new LinkedList<>();
     }

@@ -101,7 +101,7 @@ public class Customer extends BaseDomainEntity<CustomerProperty>  {
     }
 
     @Override
-    public List<Pair<String, String>> validate() {
+    public List<Pair<CustomerProperty, String>> validate() {
         // @todo: implement
         return new LinkedList<>();
     }
