@@ -2,7 +2,7 @@ package at.team2.domain.enums.properties;
 
 import at.team2.domain.interfaces.DomainEntityProperty;
 
-public enum  CustomerProperty implements DomainEntityProperty {
+public enum CustomerProperty implements DomainEntityProperty {
     ID,
     FIRST_NAME,
     LAST_NAME,

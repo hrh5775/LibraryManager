@@ -7,14 +7,15 @@ import org.modelmapper.ModelMapper;
 import at.team2.database_wrapper.helper.MapperHelper;
 import at.team2.database_wrapper.helper.StoreHelper;
 import at.team2.domain.entities.CreatorType;
+import org.modelmapper.TypeToken;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import java.util.LinkedList;
+import java.lang.reflect.Type;
 import java.util.List;
 
 public class CreatorTypeFacade extends BaseDatabaseFacade<CreatorType> {
-    private List<CreatorType> typeList = new LinkedList<>();
+    private static final Type type = new TypeToken<List<CreatorType>>() {}.getType();
 
     public CreatorTypeFacade() {
         super();
@@ -49,7 +50,7 @@ public class CreatorTypeFacade extends BaseDatabaseFacade<CreatorType> {
         List<CreatorTypeEntity> entities = query.getResultList();
         ModelMapper mapper = MapperHelper.getMapper();
 
-        return mapper.map(entities, typeList.getClass());
+        return mapper.map(entities, type);
     }
 
     @Override

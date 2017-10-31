@@ -7,14 +7,15 @@ import org.modelmapper.ModelMapper;
 import at.team2.database_wrapper.entities.ReminderEntity;
 import at.team2.database_wrapper.helper.StoreHelper;
 import at.team2.domain.entities.Reminder;
+import org.modelmapper.TypeToken;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import java.util.LinkedList;
+import java.lang.reflect.Type;
 import java.util.List;
 
 public class ReminderFacade extends BaseDatabaseFacade<Reminder> {
-    private static List<Reminder> listType = new LinkedList<>();
+    private static final Type type = new TypeToken<List<Reminder>>() {}.getType();
 
     public ReminderFacade() {
         super();
@@ -49,7 +50,7 @@ public class ReminderFacade extends BaseDatabaseFacade<Reminder> {
         List<ReminderEntity> entities = query.getResultList();
         ModelMapper mapper = MapperHelper.getMapper();
 
-        return mapper.map(entities, listType.getClass());
+        return mapper.map(entities, type);
     }
 
     @Override

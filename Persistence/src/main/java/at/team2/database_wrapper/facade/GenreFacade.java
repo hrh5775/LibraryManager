@@ -14,7 +14,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class GenreFacade extends BaseDatabaseFacade<Genre> {
-    private static List<Genre> listType = new LinkedList<>();
+    private static final List<Genre> listType = new LinkedList<>();
 
     public GenreFacade() {
         super();

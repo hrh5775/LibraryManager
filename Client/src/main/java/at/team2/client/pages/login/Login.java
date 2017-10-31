@@ -12,10 +12,8 @@ import javafx.scene.layout.Pane;
 public class Login extends BasePage<Void, NullType, NullType, NullType> {
     @FXML
     private LoadingIndicator _loadingIndicator;
-
     @FXML
     private Pane _mainPanel;
-
     private BooleanProperty _isLoading;
 
     @Override

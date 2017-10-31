@@ -9,14 +9,15 @@ import at.team2.database_wrapper.interfaces.BaseDatabaseFacade;
 import org.modelmapper.ModelMapper;
 import at.team2.domain.entities.CreatorPerson;
 import at.team2.domain.entities.Media;
+import org.modelmapper.TypeToken;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import java.util.LinkedList;
+import java.lang.reflect.Type;
 import java.util.List;
 
 public class MediaFacade extends BaseDatabaseFacade<Media> {
-    private List<Media> typeList = new LinkedList<>();
+    private static final Type type = new TypeToken<List<Media>>() {}.getType();
 
     protected MediaFacade() {
         super();

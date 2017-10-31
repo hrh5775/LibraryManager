@@ -7,14 +7,15 @@ import at.team2.database_wrapper.interfaces.BaseDatabaseFacade;
 import org.modelmapper.ModelMapper;
 import at.team2.database_wrapper.helper.StoreHelper;
 import at.team2.domain.entities.Configuration;
+import org.modelmapper.TypeToken;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import java.util.LinkedList;
+import java.lang.reflect.Type;
 import java.util.List;
 
 public class ConfigurationFacade extends BaseDatabaseFacade<Configuration> {
-    private List<Configuration> listType = new LinkedList<>();
+    private static final Type type = new TypeToken<List<Configuration>>() {}.getType();
 
     public ConfigurationFacade() {
         super();
@@ -66,7 +67,7 @@ public class ConfigurationFacade extends BaseDatabaseFacade<Configuration> {
         List<ConfigurationEntity> entities = query.getResultList();
         ModelMapper mapper = MapperHelper.getMapper();
 
-        return mapper.map(entities, listType.getClass());
+        return mapper.map(entities, type);
     }
 
     @Override

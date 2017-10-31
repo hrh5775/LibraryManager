@@ -9,15 +9,16 @@ import at.team2.database_wrapper.interfaces.BaseDatabaseFacade;
 import at.team2.domain.entities.Loan;
 import at.team2.domain.entities.MediaMember;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import java.lang.reflect.Type;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 public class MediaMemberFacade extends BaseDatabaseFacade<MediaMember> {
-    private List<MediaMember> typeList = new LinkedList<>();
+    private static final Type type = new TypeToken<List<MediaMember>>() {}.getType();
 
     public MediaMemberFacade() {
         super();
@@ -60,7 +61,7 @@ public class MediaMemberFacade extends BaseDatabaseFacade<MediaMember> {
         List<MediaMemberEntity> entities = query.getResultList();
         ModelMapper mapper = MapperHelper.getMapper();
 
-        return mapper.map(entities, typeList.getClass());
+        return mapper.map(entities, type);
     }
 
     @Override

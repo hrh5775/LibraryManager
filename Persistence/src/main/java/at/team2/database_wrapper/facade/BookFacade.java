@@ -7,14 +7,15 @@ import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.helper.MapperHelper;
 import at.team2.database_wrapper.helper.StoreHelper;
 import at.team2.domain.entities.Book;
+import org.modelmapper.TypeToken;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import java.util.LinkedList;
+import java.lang.reflect.Type;
 import java.util.List;
 
 public class BookFacade extends BaseDatabaseFacade<Book> {
-    private List<Book> listType = new LinkedList<>();
+    private static final Type type = new TypeToken<List<Book>>() {}.getType();
 
     public BookFacade() {
         super();
@@ -59,7 +60,7 @@ public class BookFacade extends BaseDatabaseFacade<Book> {
         List<BookMetaEntity> entities = query.getResultList();
         ModelMapper mapper = MapperHelper.getMapper();
 
-        return mapper.map(entities, listType.getClass());
+        return mapper.map(entities, type);
     }
 
     @Override

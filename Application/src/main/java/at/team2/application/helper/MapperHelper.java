@@ -10,6 +10,8 @@ public class MapperHelper {
             modelMapper = new ModelMapper();
             // http://modelmapper.org/user-manual/property-mapping/
             // https://www.programcreek.com/java-api-examples/index.php?api=org.modelmapper.ModelMapper
+
+            // @todo: set book, dvd mappings
         }
 
         return modelMapper;

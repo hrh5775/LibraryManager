@@ -7,14 +7,15 @@ import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.helper.MapperHelper;
 import at.team2.database_wrapper.helper.StoreHelper;
 import at.team2.domain.entities.PublisherType;
+import org.modelmapper.TypeToken;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import java.util.LinkedList;
+import java.lang.reflect.Type;
 import java.util.List;
 
 public class PublisherTypeFacade extends BaseDatabaseFacade<PublisherType> {
-    private static List<PublisherType> listType = new LinkedList<>();
+    private static final Type type = new TypeToken<List<PublisherType>>() {}.getType();
 
     public PublisherTypeFacade() {
         super();
@@ -49,7 +50,7 @@ public class PublisherTypeFacade extends BaseDatabaseFacade<PublisherType> {
         List<PublisherTypeEntity> entities = query.getResultList();
         ModelMapper mapper = MapperHelper.getMapper();
 
-        return mapper.map(entities, listType.getClass());
+        return mapper.map(entities, type);
     }
 
     @Override

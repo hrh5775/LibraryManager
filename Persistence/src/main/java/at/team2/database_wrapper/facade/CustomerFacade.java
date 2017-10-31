@@ -7,14 +7,15 @@ import at.team2.database_wrapper.entities.CustomerEntity;
 import at.team2.database_wrapper.helper.MapperHelper;
 import at.team2.database_wrapper.helper.StoreHelper;
 import at.team2.domain.entities.Customer;
+import org.modelmapper.TypeToken;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import java.util.LinkedList;
+import java.lang.reflect.Type;
 import java.util.List;
 
 public class CustomerFacade extends BaseDatabaseFacade<Customer> {
-    private List<Customer> typeList = new LinkedList<>();
+    private static final Type type = new TypeToken<List<Customer>>() {}.getType();
 
     public CustomerFacade() {
         super();
@@ -58,7 +59,7 @@ public class CustomerFacade extends BaseDatabaseFacade<Customer> {
         List<CustomerEntity> entities = query.getResultList();
         ModelMapper mapper = MapperHelper.getMapper();
 
-        return mapper.map(entities, typeList.getClass());
+        return mapper.map(entities, type);
     }
 
     @Override

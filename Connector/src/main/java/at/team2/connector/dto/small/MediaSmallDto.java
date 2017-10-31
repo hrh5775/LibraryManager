@@ -10,7 +10,8 @@ public class MediaSmallDto extends BaseDtoEntity {
     private String _title;
     private Date _publishedDate;
     private String _description;
-    private byte[] _cover;
+    // @todo: index
+    // @todo: Author
 //    private MediaType mediaType; // @todo: required?
 
     public int getMediaId() {
@@ -33,10 +34,6 @@ public class MediaSmallDto extends BaseDtoEntity {
         return _description;
     }
 
-    public byte[] getCover() {
-        return _cover;
-    }
-
     public void setMediaId(int mediaId) {
         _mediaId = mediaId;
     }
@@ -55,9 +52,5 @@ public class MediaSmallDto extends BaseDtoEntity {
 
     public void setDescription(String description) {
         _description = description;
-    }
-
-    public void setCover(byte[] cover) {
-        _cover = cover;
     }
 }

@@ -2,7 +2,7 @@ package at.team2.domain.enums.properties;
 
 import at.team2.domain.interfaces.DomainEntityProperty;
 
-public enum  MediaProperty implements DomainEntityProperty {
+public enum MediaProperty implements DomainEntityProperty {
     ID,
     STANDARD_MEDIA_ID,
     BASE_INDEX,

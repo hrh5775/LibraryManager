@@ -12,6 +12,10 @@ import jfxtras.labs.scene.control.BigDecimalField;
 import javax.lang.model.type.NullType;
 import java.io.IOException;
 import java.net.URL;
+import java.rmi.ConnectException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.UnmarshalException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -208,6 +212,30 @@ public abstract class BasePage<R, V, L, S> extends BorderPane implements BasePag
 
     protected void showTryAgainLaterErrorMessage() {
         AlertHelper.showTryAgainLaterErrorMessage(this);
+    }
+
+    protected void showRmiErrorMessage(Exception e) {
+        String headerText;
+        String contentText;
+
+        if(e instanceof ConnectException) {
+            headerText = "Failed to connect to the server";
+            contentText = "Please check your network connection and try again.";
+        } else if(e instanceof UnmarshalException) {
+            headerText = "Internal Error";
+            contentText = "Could not convert the data to the specified type.";
+        } else if(e instanceof RemoteException) {
+            headerText = "Internal Error";
+            contentText = e.getLocalizedMessage();
+        } else if(e instanceof NotBoundException) {
+            headerText = "Not Bound";
+            contentText = e.getLocalizedMessage();
+        } else {
+            headerText = "Unspecified Error";
+            contentText = e.getLocalizedMessage();
+        }
+
+        AlertHelper.showErrorMessage(headerText, contentText, this);
     }
 
     /**

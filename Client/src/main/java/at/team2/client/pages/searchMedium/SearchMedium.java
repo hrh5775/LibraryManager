@@ -1,5 +1,9 @@
 package at.team2.client.pages.searchMedium;
 
+import at.team2.connector.dto.small.MediaSmallDto;
+import at.team2.connector.helper.RmiHelper;
+import at.team2.connector.interfaces.RemoteObjectInf;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javax.lang.model.type.NullType;
@@ -12,7 +16,8 @@ public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
     private ListView<String> listView;
     @FXML
     private Button searchButton;
-
+    @FXML
+    private ObservableList<MediaSmallDto> _mediaList;
 
     @Override
     public void initialize() {
@@ -32,6 +37,13 @@ public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
 
     @Override
     public void load() {
+        try {
+            // @todo: perhaps use a cache
+            RemoteObjectInf remoteObject = RmiHelper.getSession();
+            _mediaList.setAll(remoteObject.getBookSmallList());
+        } catch (Exception e) {
+            showRmiErrorMessage(e);
+        }
     }
 
     @Override

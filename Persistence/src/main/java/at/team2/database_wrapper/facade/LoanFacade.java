@@ -7,14 +7,15 @@ import at.team2.database_wrapper.entities.LoanEntity;
 import at.team2.database_wrapper.helper.MapperHelper;
 import at.team2.database_wrapper.helper.StoreHelper;
 import at.team2.domain.entities.Loan;
+import org.modelmapper.TypeToken;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import java.util.LinkedList;
+import java.lang.reflect.Type;
 import java.util.List;
 
 public class LoanFacade extends BaseDatabaseFacade<Loan> {
-    private List<Loan> listType = new LinkedList<>();
+    private static final Type type = new TypeToken<List<Loan>>() {}.getType();
 
     public LoanFacade() {
         super();
@@ -49,7 +50,7 @@ public class LoanFacade extends BaseDatabaseFacade<Loan> {
         List<LoanEntity> entities = query.getResultList();
         ModelMapper mapper = MapperHelper.getMapper();
 
-        return mapper.map(entities, listType.getClass());
+        return mapper.map(entities, type);
     }
 
     @Override
