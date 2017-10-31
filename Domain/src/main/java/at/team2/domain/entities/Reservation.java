@@ -1,5 +1,6 @@
 package at.team2.domain.entities;
 
+import at.team2.domain.interfaces.BaseDomainEntity;
 import javafx.util.Pair;
 import at.team2.domain.enums.properties.ReservationProperty;
 
@@ -7,7 +8,7 @@ import java.sql.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Reservation extends BaseDomainEntity<ReservationProperty>  {
+public class Reservation extends BaseDomainEntity<ReservationProperty> {
     private int _id;
     private Date _reservationDate;
     private Date _informationDate;

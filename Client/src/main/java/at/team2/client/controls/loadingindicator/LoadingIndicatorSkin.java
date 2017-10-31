@@ -9,10 +9,12 @@ import java.util.List;
 
 public class LoadingIndicatorSkin implements Skin<LoadingIndicator> {
     private final LoadingIndicator _loadingIndicator;
-    private Group rootNode;
+    private Group _rootNodeGroup;
+    private Node _rootNode;
 
-    public LoadingIndicatorSkin(LoadingIndicator loadingIndicator) {
+    public LoadingIndicatorSkin(LoadingIndicator loadingIndicator, Node rootNode) {
         _loadingIndicator = loadingIndicator;
+        _rootNode = rootNode;
     }
 
     @Override
@@ -22,19 +24,17 @@ public class LoadingIndicatorSkin implements Skin<LoadingIndicator> {
 
     @Override
     public Node getNode() {
-        if (this.rootNode == null) {
-            this.rootNode = new Group();
+        if (_rootNodeGroup == null) {
+            _rootNodeGroup = new Group();
             redraw();
         }
 
-        return this.rootNode;
+        return _rootNode;
     }
     protected void redraw() {
         List<Node> rootChildren = new ArrayList<>();
-        rootChildren.add(_loadingIndicator._root);
-
-
-        this.rootNode.getChildren().setAll(rootChildren);
+        rootChildren.add(_rootNode);
+        _rootNodeGroup.getChildren().setAll(rootChildren);
     }
 
     @Override

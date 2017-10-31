@@ -1,12 +1,13 @@
 package at.team2.domain.entities;
 
 import at.team2.domain.enums.properties.MediaTypeProperty;
+import at.team2.domain.interfaces.BaseDomainEntity;
 import javafx.util.Pair;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class MediaType extends BaseDomainEntity<MediaTypeProperty>  {
+public class MediaType extends BaseDomainEntity<MediaTypeProperty> {
     private int _id;
     private String _name;
     private LoanCondition _loanCondition;

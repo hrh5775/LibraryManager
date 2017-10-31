@@ -1,12 +1,13 @@
 package at.team2.domain.entities;
 
 import at.team2.domain.enums.properties.MediaMemberProperty;
+import at.team2.domain.interfaces.BaseDomainEntity;
 import javafx.util.Pair;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class MediaMember extends BaseDomainEntity<MediaMemberProperty>  {
+public class MediaMember extends BaseDomainEntity<MediaMemberProperty> {
     private int _id;
     private int _mediaId;
     private String _extendedIndex;

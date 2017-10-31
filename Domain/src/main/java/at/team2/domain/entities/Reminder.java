@@ -1,5 +1,6 @@
 package at.team2.domain.entities;
 
+import at.team2.domain.interfaces.BaseDomainEntity;
 import javafx.util.Pair;
 import at.team2.domain.enums.properties.ReminderProperty;
 
@@ -7,7 +8,7 @@ import java.sql.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Reminder extends BaseDomainEntity<ReminderProperty>  {
+public class Reminder extends BaseDomainEntity<ReminderProperty> {
     private int _id;
     private Date _reminderDate;
     private Integer _reminderCount;

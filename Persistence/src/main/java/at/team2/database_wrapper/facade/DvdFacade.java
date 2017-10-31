@@ -1,6 +1,7 @@
 package at.team2.database_wrapper.facade;
 
 import at.team2.database_wrapper.enums.TransactionType;
+import at.team2.database_wrapper.interfaces.BaseDatabaseFacade;
 import org.modelmapper.ModelMapper;
 import at.team2.database_wrapper.entities.DvdMetaEntity;
 import at.team2.database_wrapper.helper.MapperHelper;

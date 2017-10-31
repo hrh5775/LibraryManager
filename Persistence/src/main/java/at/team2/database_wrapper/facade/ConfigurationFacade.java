@@ -3,6 +3,7 @@ package at.team2.database_wrapper.facade;
 import at.team2.database_wrapper.entities.ConfigurationEntity;
 import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.helper.MapperHelper;
+import at.team2.database_wrapper.interfaces.BaseDatabaseFacade;
 import org.modelmapper.ModelMapper;
 import at.team2.database_wrapper.helper.StoreHelper;
 import at.team2.domain.entities.Configuration;

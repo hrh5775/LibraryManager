@@ -1,12 +1,13 @@
 package at.team2.domain.entities;
 
+import at.team2.domain.interfaces.BaseDomainEntity;
 import javafx.util.Pair;
 import at.team2.domain.enums.properties.BookProperty;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class Book extends BaseDomainEntity<BookProperty>  {
+public class Book extends BaseDomainEntity<BookProperty> {
     private int _id;
     private Integer _edition;
     private Media _media;

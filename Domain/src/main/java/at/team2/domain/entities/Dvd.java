@@ -1,12 +1,13 @@
 package at.team2.domain.entities;
 
 import at.team2.domain.enums.properties.DvdProperty;
+import at.team2.domain.interfaces.BaseDomainEntity;
 import javafx.util.Pair;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class Dvd extends BaseDomainEntity<DvdProperty>  {
+public class Dvd extends BaseDomainEntity<DvdProperty> {
     private int _id;
     private Integer _playingTime;
     private Media _media;

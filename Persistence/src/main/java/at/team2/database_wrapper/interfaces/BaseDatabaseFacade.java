@@ -1,12 +1,13 @@
-package at.team2.database_wrapper.facade;
+package at.team2.database_wrapper.interfaces;
 
 import at.team2.database_wrapper.enums.TransactionType;
-import at.team2.database_wrapper.interfaces.Editeable;
-import at.team2.database_wrapper.interfaces.Session;
+import at.team2.database_wrapper.facade.SessionFactory;
+import at.team2.domain.interfaces.BaseDomainEntity;
+
 import javax.persistence.EntityManager;
 import java.util.List;
 
-public abstract class BaseDatabaseFacade<V> implements Session, Editeable<V> {
+public abstract class BaseDatabaseFacade<V extends BaseDomainEntity> implements Session, Editable<V> {
     private EntityManager _session;
 
     public BaseDatabaseFacade() {

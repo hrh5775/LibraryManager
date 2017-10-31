@@ -1,8 +1,4 @@
-package at.team2.domain.entities;
-
-import at.team2.domain.interfaces.DomainEntity;
-import at.team2.domain.interfaces.DomainEntityProperty;
-import at.team2.domain.interfaces.Validate;
+package at.team2.domain.interfaces;
 
 public abstract class BaseDomainEntity<P extends DomainEntityProperty> implements DomainEntity, Validate<P> {
     /*private EntityLogic _logic;

@@ -1,8 +1,12 @@
 package at.team2.application.interfaces;
 
+import at.team2.connector.interfaces.BaseDtoEntity;
+import at.team2.domain.interfaces.BaseDomainEntity;
+import at.team2.domain.interfaces.DomainEntityProperty;
+
 import java.util.List;
 
-public abstract class BaseApplicationFacade<D> implements Session {
+public abstract class BaseApplicationFacade<D extends BaseDomainEntity, T extends BaseDtoEntity, P extends DomainEntityProperty> implements Session, Editable<T, P> {
     /**
      * Get the entity by its ID
      * @param id

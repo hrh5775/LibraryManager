@@ -1,13 +1,14 @@
 package at.team2.domain.entities;
 
 import at.team2.domain.enums.properties.LoanProperty;
+import at.team2.domain.interfaces.BaseDomainEntity;
 import javafx.util.Pair;
 
 import java.sql.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Loan extends BaseDomainEntity<LoanProperty>  {
+public class Loan extends BaseDomainEntity<LoanProperty> {
     private int _id;
     private Date _start;
     private Date _lastRenewalStart;

@@ -1,12 +1,13 @@
 package at.team2.domain.entities;
 
+import at.team2.domain.interfaces.BaseDomainEntity;
 import javafx.util.Pair;
 import at.team2.domain.enums.properties.ConfigurationProperty;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class Configuration extends BaseDomainEntity<ConfigurationProperty>  {
+public class Configuration extends BaseDomainEntity<ConfigurationProperty> {
     private int _id;
     private String _identifier;
     private String _data;

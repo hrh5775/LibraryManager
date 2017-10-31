@@ -1,5 +1,6 @@
 package at.team2.database_wrapper.facade;
 
+import at.team2.database_wrapper.interfaces.BaseDatabaseFacade;
 import org.modelmapper.ModelMapper;
 import at.team2.database_wrapper.entities.MediaTypeEntity;
 import at.team2.database_wrapper.enums.TransactionType;

@@ -1,12 +1,13 @@
 package at.team2.domain.entities;
 
 import at.team2.domain.enums.properties.GenreProperty;
+import at.team2.domain.interfaces.BaseDomainEntity;
 import javafx.util.Pair;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class Genre extends BaseDomainEntity<GenreProperty>  {
+public class Genre extends BaseDomainEntity<GenreProperty> {
     private int _id;
     private String _name;
 

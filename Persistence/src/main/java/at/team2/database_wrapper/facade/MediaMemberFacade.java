@@ -5,6 +5,7 @@ import at.team2.database_wrapper.entities.MediaMemberEntity;
 import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.helper.MapperHelper;
 import at.team2.database_wrapper.helper.StoreHelper;
+import at.team2.database_wrapper.interfaces.BaseDatabaseFacade;
 import at.team2.domain.entities.Loan;
 import at.team2.domain.entities.MediaMember;
 import org.modelmapper.ModelMapper;

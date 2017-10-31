@@ -1,12 +1,13 @@
 package at.team2.domain.entities;
 
 import at.team2.domain.enums.properties.PublisherTypeProperty;
+import at.team2.domain.interfaces.BaseDomainEntity;
 import javafx.util.Pair;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class PublisherType extends BaseDomainEntity<PublisherTypeProperty>  {
+public class PublisherType extends BaseDomainEntity<PublisherTypeProperty> {
     private int _id;
     private String _typeName;
 

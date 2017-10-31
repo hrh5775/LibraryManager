@@ -1,12 +1,13 @@
 package at.team2.domain.entities;
 
+import at.team2.domain.interfaces.BaseDomainEntity;
 import javafx.util.Pair;
 import at.team2.domain.enums.properties.LoanConditionProperty;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class LoanCondition extends BaseDomainEntity<LoanConditionProperty>  {
+public class LoanCondition extends BaseDomainEntity<LoanConditionProperty> {
     private int _id;
     private int _loanTerm;
     private int _extension;

@@ -1,5 +1,6 @@
 package at.team2.domain.entities;
 
+import at.team2.domain.interfaces.BaseDomainEntity;
 import javafx.util.Pair;
 import at.team2.domain.enums.properties.StaffProperty;
 
@@ -7,7 +8,7 @@ import java.sql.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Staff extends BaseDomainEntity<StaffProperty>  {
+public class Staff extends BaseDomainEntity<StaffProperty> {
     private int _id;
     private String _firstName;
     private String _lastName;

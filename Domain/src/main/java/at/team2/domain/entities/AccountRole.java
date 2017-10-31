@@ -1,12 +1,13 @@
 package at.team2.domain.entities;
 
+import at.team2.domain.interfaces.BaseDomainEntity;
 import javafx.util.Pair;
 import at.team2.domain.enums.properties.AccountRoleProperty;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class AccountRole extends BaseDomainEntity<AccountRoleProperty>  {
+public class AccountRole extends BaseDomainEntity<AccountRoleProperty> {
     private int _id;
     private String _key;
     private String _roleName;

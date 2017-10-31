@@ -60,5 +60,6 @@
     <orderEntry type="library" name="Maven: org.jboss.spec.javax.xml.soap:jboss-saaj-api_1.3_spec:1.0.3.Final" level="project" />
     <orderEntry type="library" name="Maven: org.jboss.spec.javax.xml.ws:jboss-jaxws-api_2.2_spec:2.0.3.Final" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.persistence:javax.persistence:2.1.1" level="project" />
+    <orderEntry type="module" module-name="Connector" />
   </component>
 </module>
