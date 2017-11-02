@@ -31,7 +31,6 @@ public class AccountRoleFacade extends BaseDatabaseFacade<AccountRole> {
         EntityManager session = getCurrentSession();
         Query query = session.createQuery("from AccountRoleEntity where id = :id");
         query.setParameter("id", id);
-        query.setMaxResults(1);
         AccountRoleEntity entity = getFirstOrDefault(query);
 
         if(entity != null) {

@@ -2,7 +2,7 @@ package at.team2.application.facade;
 
 import at.team2.application.helper.MapperHelper;
 import at.team2.application.interfaces.BaseApplicationFacade;
-import at.team2.connector.dto.detailed.BookDetailedDto;
+import at.team2.common.dto.detailed.BookDetailedDto;
 import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.facade.BookFacade;
 import at.team2.domain.entities.Book;

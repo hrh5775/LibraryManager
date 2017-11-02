@@ -30,8 +30,6 @@ public class CreatorTypeFacade extends BaseDatabaseFacade<CreatorType> {
         EntityManager session = getCurrentSession();
         Query query = session.createQuery("from CreatorTypeEntity where id = :id");
         query.setParameter("id", id);
-        query.setMaxResults(1);
-
         CreatorTypeEntity entity = getFirstOrDefault(query);
 
         if(entity != null) {

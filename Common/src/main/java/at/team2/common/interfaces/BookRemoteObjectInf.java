@@ -1,6 +1,6 @@
-package at.team2.connector.interfaces;
+package at.team2.common.interfaces;
 
-import at.team2.connector.dto.small.BookSmallDto;
+import at.team2.common.dto.small.BookSmallDto;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

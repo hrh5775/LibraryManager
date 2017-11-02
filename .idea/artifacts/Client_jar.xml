@@ -3,7 +3,7 @@
     <output-path>$PROJECT_DIR$/out/artifacts/Client_jar</output-path>
     <root id="archive" name="Client.jar">
       <element id="module-output" name="Client" />
-      <element id="module-output" name="Connector" />
+      <element id="module-output" name="Common" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/teamdev/jxbrowser/jxbrowser/6.13/jxbrowser-6.13.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/itextpdf/kernel/7.0.2/kernel-7.0.2.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/itextpdf/sign/7.0.2/sign-7.0.2.jar" path-in-jar="/" />

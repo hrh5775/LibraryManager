@@ -29,7 +29,6 @@ public class BookFacade extends BaseDatabaseFacade<Book> {
         EntityManager session = getCurrentSession();
         Query query = session.createQuery("from BookMetaEntity where id = :id");
         query.setParameter("id", id);
-        query.setMaxResults(1);
 
         return getFirstOrDefault(query);
     }

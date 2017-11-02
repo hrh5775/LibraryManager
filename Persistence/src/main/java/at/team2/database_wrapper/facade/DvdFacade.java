@@ -29,7 +29,6 @@ public class DvdFacade extends BaseDatabaseFacade<Dvd> {
         EntityManager session = getCurrentSession();
         Query query = session.createQuery("from DvdMetaEntity where id = :id");
         query.setParameter("id", id);
-        query.setMaxResults(1);
 
         return getFirstOrDefault(query);
     }

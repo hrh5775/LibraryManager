@@ -1,6 +1,6 @@
-package at.team2.connector.dto.small;
+package at.team2.common.dto.small;
 
-import at.team2.connector.interfaces.BaseDtoEntity;
+import at.team2.common.interfaces.BaseDtoEntity;
 
 import java.sql.Date;
 

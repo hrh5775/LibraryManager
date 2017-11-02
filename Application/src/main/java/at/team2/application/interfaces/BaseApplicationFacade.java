@@ -1,6 +1,6 @@
 package at.team2.application.interfaces;
 
-import at.team2.connector.interfaces.BaseDtoEntity;
+import at.team2.common.interfaces.BaseDtoEntity;
 import at.team2.domain.interfaces.BaseDomainEntity;
 import at.team2.domain.interfaces.DomainEntityProperty;
 

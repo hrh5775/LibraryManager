@@ -30,7 +30,6 @@ public class ReminderFacade extends BaseDatabaseFacade<Reminder> {
         EntityManager session = getCurrentSession();
         Query query = session.createQuery("from ReminderEntity where id = :id");
         query.setParameter("id", id);
-        query.setMaxResults(1);
         ReminderEntity entity = getFirstOrDefault(query);
 
         if(entity != null) {

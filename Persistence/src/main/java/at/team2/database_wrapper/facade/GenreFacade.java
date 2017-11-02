@@ -29,7 +29,6 @@ public class GenreFacade extends BaseDatabaseFacade<Genre> {
         EntityManager session = getCurrentSession();
         Query query = session.createQuery("from GenreEntity where id = :id");
         query.setParameter("id", id);
-        query.setMaxResults(1);
         GenreEntity entity = getFirstOrDefault(query);
 
         if(entity != null) {

@@ -30,7 +30,6 @@ public class ConfigurationFacade extends BaseDatabaseFacade<Configuration> {
         EntityManager session = getCurrentSession();
         Query query = session.createQuery("from ConfigurationEntity where id = :id");
         query.setParameter("id", id);
-        query.setMaxResults(1);
         ConfigurationEntity entity = getFirstOrDefault(query);
 
         if(entity != null) {

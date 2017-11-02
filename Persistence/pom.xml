@@ -43,7 +43,7 @@
         </dependency>
         <!--<dependency>
             <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
+            <artifactId>mysql-common-java</artifactId>
             <version>6.0.6</version>
             <scope>compile</scope>
         </dependency>-->

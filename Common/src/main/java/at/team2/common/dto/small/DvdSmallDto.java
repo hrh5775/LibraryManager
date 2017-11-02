@@ -1,6 +1,6 @@
-package at.team2.connector.dto.small;
+package at.team2.common.dto.small;
 
-public class BookSmallDto extends MediaSmallDto {
+public class DvdSmallDto extends MediaSmallDto {
     private int _id;
 
     public int getId() {

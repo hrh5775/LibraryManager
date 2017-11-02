@@ -1,9 +1,9 @@
 package at.team2.client.pages.searchMedium;
 
-import at.team2.connector.dto.small.BookSmallDto;
-import at.team2.connector.dto.small.MediaSmallDto;
-import at.team2.connector.helper.RmiHelper;
-import at.team2.connector.interfaces.MainRemoteObjectInf;
+import at.team2.common.dto.small.BookSmallDto;
+import at.team2.common.dto.small.MediaSmallDto;
+import at.team2.common.helper.RmiHelper;
+import at.team2.common.interfaces.MainRemoteObjectInf;
 import com.sun.javafx.collections.ObservableListWrapper;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;

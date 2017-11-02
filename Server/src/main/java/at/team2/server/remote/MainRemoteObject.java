@@ -1,8 +1,8 @@
 package at.team2.server.remote;
 
-import at.team2.connector.configuration.ConnectionInfo;
-import at.team2.connector.interfaces.BookRemoteObjectInf;
-import at.team2.connector.interfaces.MainRemoteObjectInf;
+import at.team2.common.configuration.ConnectionInfo;
+import at.team2.common.interfaces.BookRemoteObjectInf;
+import at.team2.common.interfaces.MainRemoteObjectInf;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 

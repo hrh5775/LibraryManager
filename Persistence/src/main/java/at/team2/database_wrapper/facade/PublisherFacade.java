@@ -30,7 +30,6 @@ public class PublisherFacade extends BaseDatabaseFacade<Publisher> {
         EntityManager session = getCurrentSession();
         Query query = session.createQuery("from PublisherEntity where id = :id");
         query.setParameter("id", id);
-        query.setMaxResults(1);
         PublisherEntity entity = getFirstOrDefault(query);
 
         if(entity != null) {

@@ -1,8 +1,8 @@
 package at.team2.server.remote;
 
 import at.team2.application.helper.MapperHelper;
-import at.team2.connector.dto.small.BookSmallDto;
-import at.team2.connector.interfaces.BookRemoteObjectInf;
+import at.team2.common.dto.small.BookSmallDto;
+import at.team2.common.interfaces.BookRemoteObjectInf;
 import at.team2.database_wrapper.facade.BookFacade;
 import at.team2.domain.entities.Book;
 import org.modelmapper.ModelMapper;

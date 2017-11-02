@@ -30,7 +30,6 @@ public class LoanConditionFacade extends BaseDatabaseFacade<LoanCondition> {
         EntityManager session = getCurrentSession();
         Query query = session.createQuery("from LoanConditionEntity where id = :id");
         query.setParameter("id", id);
-        query.setMaxResults(1);
         LoanConditionEntity entity = getFirstOrDefault(query);
 
         if(entity != null) {

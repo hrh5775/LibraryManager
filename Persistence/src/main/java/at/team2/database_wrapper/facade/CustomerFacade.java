@@ -30,7 +30,6 @@ public class CustomerFacade extends BaseDatabaseFacade<Customer> {
         String includeInactiveQuery = includeInactive ? "" : " and accountByAccountId.active >= 1";
         Query query = session.createQuery("from CustomerEntity where id = :id" + includeInactiveQuery);
         query.setParameter("id", id);
-        query.setMaxResults(1);
 
         return getFirstOrDefault(query);
     }

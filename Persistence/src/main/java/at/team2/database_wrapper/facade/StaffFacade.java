@@ -30,7 +30,6 @@ public class StaffFacade extends BaseDatabaseFacade<Staff> {
         String includeInactiveQuery = includeInactive ? "" : " and accountByAccountId.active >= 1";
         Query query = session.createQuery("from StaffEntity where id = :id" + includeInactiveQuery);
         query.setParameter("id", id);
-        query.setMaxResults(1);
 
         return getFirstOrDefault(query);
     }

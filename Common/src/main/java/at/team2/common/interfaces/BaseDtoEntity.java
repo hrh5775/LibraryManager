@@ -1,4 +1,4 @@
-package at.team2.connector.interfaces;
+package at.team2.common.interfaces;
 
 import java.io.Serializable;
 

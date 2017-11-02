@@ -30,7 +30,6 @@ public class MediaTypeFacade extends BaseDatabaseFacade<MediaType> {
         EntityManager session = getCurrentSession();
         Query query = session.createQuery("from MediaTypeEntity where id = :id");
         query.setParameter("id", id);
-        query.setMaxResults(1);
         MediaTypeEntity entity = getFirstOrDefault(query);
 
         if(entity != null) {

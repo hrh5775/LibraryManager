@@ -1,4 +1,4 @@
-package at.team2.connector.configuration;
+package at.team2.common.configuration;
 
 public class ConnectionInfo {
     public static final String hostname = "localhost";

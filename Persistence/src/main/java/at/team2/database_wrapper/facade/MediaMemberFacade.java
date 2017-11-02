@@ -32,7 +32,6 @@ public class MediaMemberFacade extends BaseDatabaseFacade<MediaMember> {
         EntityManager session = getCurrentSession();
         Query query = session.createQuery("from MediaMemberEntity where id = :id");
         query.setParameter("id", id);
-        query.setMaxResults(1);
 
         return getFirstOrDefault(query);
     }

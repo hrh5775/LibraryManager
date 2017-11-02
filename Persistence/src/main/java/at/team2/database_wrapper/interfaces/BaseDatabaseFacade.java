@@ -22,6 +22,7 @@ public abstract class BaseDatabaseFacade<V extends BaseDomainEntity> implements 
     public abstract V getById(int id);
 
     protected <T> T getFirstOrDefault(Query query) {
+        query.setMaxResults(1);
         List<T> entities = query.getResultList();
 
         if (entities.size() > 0) {

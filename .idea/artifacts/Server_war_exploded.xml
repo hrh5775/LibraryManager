@@ -65,7 +65,7 @@
           <element id="library" level="project" name="Maven: org.jboss.spec.javax.xml.ws:jboss-jaxws-api_2.2_spec:2.0.3.Final" />
           <element id="library" level="project" name="Maven: org.eclipse.persistence:javax.persistence:2.1.1" />
           <element id="archive" name="connector-1.0.jar">
-            <element id="module-output" name="Connector" />
+            <element id="module-output" name="Common" />
           </element>
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.9.0.pr3" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.9.0.pr3" />

@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Application/Application.iml" filepath="$PROJECT_DIR$/Application/Application.iml" />
       <module fileurl="file://$PROJECT_DIR$/Client/Client.iml" filepath="$PROJECT_DIR$/Client/Client.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Connector/Connector.iml" filepath="$PROJECT_DIR$/Connector/Connector.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Common/Common.iml" filepath="$PROJECT_DIR$/Common/Common.iml" />
       <module fileurl="file://$PROJECT_DIR$/Domain/Domain.iml" filepath="$PROJECT_DIR$/Domain/Domain.iml" />
       <module fileurl="file://$PROJECT_DIR$/LibraryManager.iml" filepath="$PROJECT_DIR$/LibraryManager.iml" />
       <module fileurl="file://$PROJECT_DIR$/Persistence/Persistence.iml" filepath="$PROJECT_DIR$/Persistence/Persistence.iml" />
