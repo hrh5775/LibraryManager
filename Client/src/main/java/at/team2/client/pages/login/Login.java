@@ -2,7 +2,6 @@ package at.team2.client.pages.login;
 
 import at.team2.client.controls.loadingindicator.LoadingIndicator;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javax.lang.model.type.NullType;
@@ -14,6 +13,7 @@ public class Login extends BasePage<Void, NullType, NullType, NullType> {
     private LoadingIndicator _loadingIndicator;
     @FXML
     private Pane _mainPanel;
+    @FXML
     private BooleanProperty _isLoading;
 
     @Override
@@ -25,7 +25,7 @@ public class Login extends BasePage<Void, NullType, NullType, NullType> {
         Parent parent = loadView(Login.class.getResource("login.fxml"));
         setCenter(parent);
 
-        _isLoading = new SimpleBooleanProperty(false);
+        _isLoading.setValue(false);
         _loadingIndicator.visibleProperty().bind(_isLoading);
         _mainPanel.visibleProperty().bind(_isLoading.not());
     }

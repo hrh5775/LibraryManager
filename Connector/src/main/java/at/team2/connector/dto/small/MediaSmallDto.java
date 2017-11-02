@@ -10,9 +10,9 @@ public class MediaSmallDto extends BaseDtoEntity {
     private String _title;
     private Date _publishedDate;
     private String _description;
-    // @todo: index
-    // @todo: Author
-//    private MediaType mediaType; // @todo: required?
+    private String _baseIndex;
+    private PublisherSmallDto _publisher;
+    private MediaTypeSmallDto _mediaType;
 
     public int getMediaId() {
         return _mediaId;
@@ -34,6 +34,18 @@ public class MediaSmallDto extends BaseDtoEntity {
         return _description;
     }
 
+    public String getBaseIndex() {
+        return _baseIndex;
+    }
+
+    public PublisherSmallDto getPublisher() {
+        return _publisher;
+    }
+
+    public MediaTypeSmallDto getMediaType() {
+        return _mediaType;
+    }
+
     public void setMediaId(int mediaId) {
         _mediaId = mediaId;
     }
@@ -52,5 +64,17 @@ public class MediaSmallDto extends BaseDtoEntity {
 
     public void setDescription(String description) {
         _description = description;
+    }
+
+    public void setBaseIndex(String baseIndex) {
+        _baseIndex = baseIndex;
+    }
+
+    public void setPublisher(PublisherSmallDto publisher) {
+        _publisher = publisher;
+    }
+
+    public void setMediaType(MediaTypeSmallDto mediaType) {
+        _mediaType = mediaType;
     }
 }

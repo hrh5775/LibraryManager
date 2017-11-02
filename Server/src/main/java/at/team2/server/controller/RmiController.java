@@ -1,8 +1,8 @@
 package at.team2.server.controller;
 
 import at.team2.connector.configuration.ConnectionInfo;
-import at.team2.connector.interfaces.RemoteObjectInf;
-import at.team2.server.remote.RemoteObject;
+import at.team2.connector.interfaces.MainRemoteObjectInf;
+import at.team2.server.remote.MainRemoteObject;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -32,13 +32,13 @@ public class RmiController {
         }
 
 
-        String codebase = RemoteObjectInf.class.getProtectionDomain().getCodeSource().getLocation().toExternalForm();
+        String codebase = MainRemoteObjectInf.class.getProtectionDomain().getCodeSource().getLocation().toExternalForm();
 
         System.setProperty("java.rmi.server.hostname", ConnectionInfo.hostname);
         System.setProperty("java.rmi.server.codebase", codebase);
 
         Registry registry = LocateRegistry.getRegistry(ConnectionInfo.port);
-        RemoteObject obj = new RemoteObject();
+        MainRemoteObject obj = new MainRemoteObject();
         registry.rebind(ConnectionInfo.url, obj);
 
         System.out.println("Server started successfully");

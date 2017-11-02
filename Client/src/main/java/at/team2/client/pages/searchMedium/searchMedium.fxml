@@ -2,17 +2,23 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
 
-<?import javafx.collections.ObservableList?>
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="72.0" prefWidth="364.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
+<?import javafx.beans.property.SimpleBooleanProperty?>
+<?import javafx.beans.property.SimpleListProperty?>
+
+<GridPane prefWidth="364.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
     <fx:define>
-        <ObservableList fx:id="_mediaList" />
+        <!--<FXCollections fx:factory="observableArrayList" fx:id="_mediaList" />-->
+        <SimpleListProperty fx:id="_mediaList" />
+        <SimpleBooleanProperty fx:id="_listViewVisible" />
     </fx:define>
 
     <columnConstraints>
@@ -25,14 +31,22 @@
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
     </rowConstraints>
     <children>
-        <TextField />
-        <Button fx:id="searchButton" mnemonicParsing="false" text="Search" GridPane.columnIndex="1" />
-        <CheckBox mnemonicParsing="false" text="Books" GridPane.rowIndex="1" />
-        <CheckBox mnemonicParsing="false" text="DVD" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-        <ListView fx:id="listView" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
+        <TextField GridPane.rowIndex="0" GridPane.columnIndex="0" />
+        <Button fx:id="searchButton" onAction="#search" mnemonicParsing="false" text="Search" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+        <CheckBox mnemonicParsing="false" text="Books" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+        <CheckBox mnemonicParsing="false" text="DVD" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+        <TableView fx:id="_tableView" editable="false" GridPane.vgrow="ALWAYS" prefWidth="200.0" GridPane.rowIndex="3" GridPane.columnIndex="0" GridPane.columnSpan="2">
             <placeholder>
                 <Label text="Nothing found" />
             </placeholder>
-      </ListView>
-   </children>
+
+            <columns>
+                <TableColumn text="Title">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="id" />
+                    </cellValueFactory>
+                </TableColumn>
+            </columns>
+        </TableView>
+    </children>
 </GridPane>

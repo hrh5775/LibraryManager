@@ -1,23 +1,26 @@
 package at.team2.client.pages.searchMedium;
 
+import at.team2.connector.dto.small.BookSmallDto;
 import at.team2.connector.dto.small.MediaSmallDto;
 import at.team2.connector.helper.RmiHelper;
-import at.team2.connector.interfaces.RemoteObjectInf;
-import javafx.collections.ObservableList;
+import at.team2.connector.interfaces.MainRemoteObjectInf;
+import com.sun.javafx.collections.ObservableListWrapper;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ListProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javax.lang.model.type.NullType;
 import at.team2.client.pages.BasePage;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
+import javafx.scene.control.TableView;
+import java.util.List;
 
 public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
     @FXML
-    private ListView<String> listView;
+    private ListProperty<MediaSmallDto> _mediaList;
     @FXML
-    private Button searchButton;
+    private BooleanProperty _listViewVisible;
     @FXML
-    private ObservableList<MediaSmallDto> _mediaList;
+    private TableView _tableView;
 
     @Override
     public void initialize() {
@@ -27,20 +30,18 @@ public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
     public void initializeView() {
         Parent parent = loadView(SearchMedium.class.getResource("searchMedium.fxml"));
         setCenter(parent);
-        listView.setVisible(false);
-
-        searchButton.setOnAction((event) -> {
-            // Button was clicked, do something...
-            listView.setVisible(true);
-        });
+        _listViewVisible.setValue(false);
+        _tableView.visibleProperty().bind(_listViewVisible);
+        _tableView.itemsProperty().bind(_mediaList);
     }
 
     @Override
     public void load() {
         try {
             // @todo: perhaps use a cache
-            RemoteObjectInf remoteObject = RmiHelper.getSession();
-            _mediaList.setAll(remoteObject.getBookSmallList());
+            MainRemoteObjectInf remoteObject = RmiHelper.getSession();
+            List<BookSmallDto> tmp = remoteObject.getBookRemoteObject().getBookSmallList();
+            _mediaList.set(new ObservableListWrapper<>((List<MediaSmallDto>)(List<?>) tmp));
         } catch (Exception e) {
             showRmiErrorMessage(e);
         }
@@ -57,5 +58,10 @@ public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
 
     @Override
     public void dispose() {
+    }
+
+    @FXML
+    private void search() {
+        _listViewVisible.setValue(true);
     }
 }
