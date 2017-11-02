@@ -31,13 +31,8 @@ public class AccountFacade extends BaseDatabaseFacade<Account> {
         Query query = session.createQuery("from AccountEntity where id = :id" + includeInactiveQuery);
         query.setParameter("id", id);
         query.setMaxResults(1);
-        List<AccountEntity> entities = query.getResultList();
 
-        if (entities.size() > 0) {
-            return entities.get(0);
-        }
-
-        return null;
+        return getFirstOrDefault(query);
     }
 
     @Override

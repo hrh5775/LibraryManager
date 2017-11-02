@@ -31,11 +31,9 @@ public class ReminderFacade extends BaseDatabaseFacade<Reminder> {
         Query query = session.createQuery("from ReminderEntity where id = :id");
         query.setParameter("id", id);
         query.setMaxResults(1);
-        List<ReminderEntity> entities = query.getResultList();
+        ReminderEntity entity = getFirstOrDefault(query);
 
-        if (entities.size() > 0) {
-            ReminderEntity entity = entities.get(0);
-
+        if(entity != null) {
             ModelMapper mapper = MapperHelper.getMapper();
             return mapper.map(entity, Reminder.class);
         }

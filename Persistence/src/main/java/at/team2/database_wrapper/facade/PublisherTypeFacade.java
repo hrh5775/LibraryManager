@@ -31,11 +31,9 @@ public class PublisherTypeFacade extends BaseDatabaseFacade<PublisherType> {
         Query query = session.createQuery("from PublisherTypeEntity where id = :id");
         query.setParameter("id", id);
         query.setMaxResults(1);
-        List<PublisherTypeEntity> entities = query.getResultList();
+        PublisherTypeEntity entity = getFirstOrDefault(query);
 
-        if (entities.size() > 0) {
-            PublisherTypeEntity entity = entities.get(0);
-
+        if(entity != null) {
             ModelMapper mapper = MapperHelper.getMapper();
             return mapper.map(entity, PublisherType.class);
         }

@@ -31,13 +31,8 @@ public class StaffFacade extends BaseDatabaseFacade<Staff> {
         Query query = session.createQuery("from StaffEntity where id = :id" + includeInactiveQuery);
         query.setParameter("id", id);
         query.setMaxResults(1);
-        List<StaffEntity> entities = query.getResultList();
 
-        if (entities.size() > 0) {
-            return entities.get(0);
-        }
-
-        return null;
+        return getFirstOrDefault(query);
     }
 
     @Override

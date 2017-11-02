@@ -31,11 +31,10 @@ public class CreatorTypeFacade extends BaseDatabaseFacade<CreatorType> {
         Query query = session.createQuery("from CreatorTypeEntity where id = :id");
         query.setParameter("id", id);
         query.setMaxResults(1);
-        List<CreatorTypeEntity> entities = query.getResultList();
 
-        if (entities.size() > 0) {
-            CreatorTypeEntity entity = entities.get(0);
+        CreatorTypeEntity entity = getFirstOrDefault(query);
 
+        if(entity != null) {
             ModelMapper mapper = MapperHelper.getMapper();
             return mapper.map(entity, CreatorType.class);
         }

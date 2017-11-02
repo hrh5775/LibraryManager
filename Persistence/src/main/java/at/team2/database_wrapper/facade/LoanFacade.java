@@ -31,11 +31,9 @@ public class LoanFacade extends BaseDatabaseFacade<Loan> {
         Query query = session.createQuery("from LoanEntity where id = :id");
         query.setParameter("id", id);
         query.setMaxResults(1);
-        List<LoanEntity> entities = query.getResultList();
+        LoanEntity entity = getFirstOrDefault(query);
 
-        if (entities.size() > 0) {
-            LoanEntity entity = entities.get(0);
-
+        if(entity != null) {
             ModelMapper mapper = MapperHelper.getMapper();
             return mapper.map(entity, Loan.class);
         }

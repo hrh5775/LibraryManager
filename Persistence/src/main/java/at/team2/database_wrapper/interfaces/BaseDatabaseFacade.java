@@ -5,6 +5,7 @@ import at.team2.database_wrapper.facade.SessionFactory;
 import at.team2.domain.interfaces.BaseDomainEntity;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.List;
 
 public abstract class BaseDatabaseFacade<V extends BaseDomainEntity> implements Session, Editable<V> {
@@ -19,6 +20,17 @@ public abstract class BaseDatabaseFacade<V extends BaseDomainEntity> implements 
     }
 
     public abstract V getById(int id);
+
+    protected <T> T getFirstOrDefault(Query query) {
+        List<T> entities = query.getResultList();
+
+        if (entities.size() > 0) {
+            return entities.get(0);
+        }
+
+        return null;
+    }
+
     public abstract List<V> getList();
 
     @Override

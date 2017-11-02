@@ -31,13 +31,8 @@ public class CustomerFacade extends BaseDatabaseFacade<Customer> {
         Query query = session.createQuery("from CustomerEntity where id = :id" + includeInactiveQuery);
         query.setParameter("id", id);
         query.setMaxResults(1);
-        List<CustomerEntity> entities = query.getResultList();
 
-        if (entities.size() > 0) {
-            return entities.get(0);
-        }
-
-        return null;
+        return getFirstOrDefault(query);
     }
 
     @Override

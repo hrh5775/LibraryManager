@@ -30,11 +30,9 @@ public class GenreFacade extends BaseDatabaseFacade<Genre> {
         Query query = session.createQuery("from GenreEntity where id = :id");
         query.setParameter("id", id);
         query.setMaxResults(1);
-        List<GenreEntity> entities = query.getResultList();
+        GenreEntity entity = getFirstOrDefault(query);
 
-        if (entities.size() > 0) {
-            GenreEntity entity = entities.get(0);
-
+        if(entity != null) {
             ModelMapper mapper = MapperHelper.getMapper();
             return mapper.map(entity, Genre.class);
         }

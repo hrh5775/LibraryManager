@@ -30,13 +30,8 @@ public class DvdFacade extends BaseDatabaseFacade<Dvd> {
         Query query = session.createQuery("from DvdMetaEntity where id = :id");
         query.setParameter("id", id);
         query.setMaxResults(1);
-        List<DvdMetaEntity> entities = query.getResultList();
 
-        if (entities.size() > 0) {
-            return entities.get(0);
-        }
-
-        return null;
+        return getFirstOrDefault(query);
     }
 
     @Override

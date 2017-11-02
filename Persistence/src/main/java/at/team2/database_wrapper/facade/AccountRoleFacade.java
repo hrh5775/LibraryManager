@@ -32,12 +32,10 @@ public class AccountRoleFacade extends BaseDatabaseFacade<AccountRole> {
         Query query = session.createQuery("from AccountRoleEntity where id = :id");
         query.setParameter("id", id);
         query.setMaxResults(1);
-        List<AccountRoleEntity> entities = query.getResultList();
+        AccountRoleEntity entity = getFirstOrDefault(query);
 
-        if (entities.size() > 0) {
-            AccountRoleEntity entity = entities.get(0);
+        if(entity != null) {
             ModelMapper mapper = MapperHelper.getMapper();
-
             return mapper.map(entity, AccountRole.class);
         }
 
