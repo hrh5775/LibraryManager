@@ -116,7 +116,7 @@ public abstract class BaseDatabaseFacade<V extends BaseDomainEntity, P extends D
                         break;
                 }
 
-                builder.append(modifiedColumnIdentifier + match + parameterStart + " :" + columnIdentifier + " " + parameterEnd);
+                builder.append(modifiedColumnIdentifier + " " + match + " " + parameterStart + " :" + columnIdentifier + " " + parameterEnd);
 
                 if(i < filterItems.size() -1) {
                     builder.append(" and ");

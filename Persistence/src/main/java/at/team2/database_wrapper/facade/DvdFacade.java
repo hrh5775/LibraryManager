@@ -76,7 +76,11 @@ public class DvdFacade extends BaseDatabaseFacade<Dvd, DvdProperty> {
     @Override
     public List<Dvd> filter(List<FilterItem<DvdProperty>> filterItems) {
         // @todo: implement
-        return null;
+        Query query = getByFilter("from DvdMetaEntity where ", getCurrentSession(), filterItems);
+        List<DvdMetaEntity> entities = query.getResultList();
+        ModelMapper mapper = MapperHelper.getMapper();
+
+        return mapper.map(entities, type);
     }
 
     @Override
