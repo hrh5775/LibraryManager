@@ -41,7 +41,8 @@ public abstract class BaseDatabaseFacade<V extends BaseDomainEntity, P extends D
     protected Query getByFilter(String queryString, EntityManager session, List<FilterItem<P>> filterItems) {
         StringBuilder builder = new StringBuilder();
         String columnIdentifier;
-        String modifiedColumnIdentifier = null;
+        String hibernateColumnIdentifier;
+        String modifiedColumnIdentifier;
         String parameter;
         String match = null;
         String parameterStart = null;
@@ -56,6 +57,9 @@ public abstract class BaseDatabaseFacade<V extends BaseDomainEntity, P extends D
             columnIdentifier = getColumnNameForProperty((P) filterItem.getProperty());
 
             if(columnIdentifier != null || !columnIdentifier.trim().isEmpty()) {
+                hibernateColumnIdentifier = columnIdentifier.replace(".", "");
+                modifiedColumnIdentifier = columnIdentifier;
+
                 if(!(filterItem.getParameter() instanceof Integer)) {
                     parameter = filterItem.getParameter().toString();
 
@@ -68,9 +72,9 @@ public abstract class BaseDatabaseFacade<V extends BaseDomainEntity, P extends D
                             break;
                     }
 
-                    parameterList.add(new Pair<>(columnIdentifier, parameter));
+                    parameterList.add(new Pair<>(hibernateColumnIdentifier, parameter));
                 } else {
-                    parameterList.add(new Pair<>(columnIdentifier, filterItem.getProperty()));
+                    parameterList.add(new Pair<>(hibernateColumnIdentifier, filterItem.getProperty()));
                 }
 
                 switch (filterItems.get(i).getMatchType()) {
@@ -116,7 +120,7 @@ public abstract class BaseDatabaseFacade<V extends BaseDomainEntity, P extends D
                         break;
                 }
 
-                builder.append(modifiedColumnIdentifier + " " + match + " " + parameterStart + " :" + columnIdentifier + " " + parameterEnd);
+                builder.append(modifiedColumnIdentifier + " " + match + " " + parameterStart + " :" + hibernateColumnIdentifier + " " + parameterEnd);
 
                 if(i < filterItems.size() -1) {
                     builder.append(" and ");
