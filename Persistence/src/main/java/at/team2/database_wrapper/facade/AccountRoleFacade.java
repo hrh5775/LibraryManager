@@ -1,8 +1,10 @@
 package at.team2.database_wrapper.facade;
 
+import at.team2.database_wrapper.common.FilterItem;
 import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.interfaces.BaseDatabaseFacade;
 import at.team2.domain.entities.Account;
+import at.team2.domain.enums.properties.AccountRoleProperty;
 import org.modelmapper.ModelMapper;
 import at.team2.database_wrapper.entities.AccountRoleEntity;
 import at.team2.database_wrapper.helper.MapperHelper;
@@ -15,7 +17,7 @@ import javax.persistence.Query;
 import java.lang.reflect.Type;
 import java.util.List;
 
-public class AccountRoleFacade extends BaseDatabaseFacade<AccountRole> {
+public class AccountRoleFacade extends BaseDatabaseFacade<AccountRole, AccountRoleProperty> {
     private static final Type type = new TypeToken<List<Account>>() {}.getType();
 
     public AccountRoleFacade() {
@@ -44,11 +46,31 @@ public class AccountRoleFacade extends BaseDatabaseFacade<AccountRole> {
     @Override
     public List<AccountRole> getList() {
         EntityManager session = getCurrentSession();
-        Query query = session.createQuery("from AccountRoleEntity ");
+        Query query = session.createQuery("from AccountRoleEntity");
         List<AccountRoleEntity> entities = query.getResultList();
         ModelMapper mapper = MapperHelper.getMapper();
 
         return mapper.map(entities, type);
+    }
+
+    @Override
+    protected String getColumnNameForProperty(AccountRoleProperty property) {
+        switch (property) {
+            case ID:
+                return "id";
+            case KEY:
+                return "key";
+            case ROLE_NAME:
+                return "roleName";
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<AccountRole> filter(List<FilterItem<AccountRoleProperty>> filterItems) {
+        // @todo: implement
+        return null;
     }
 
     @Override

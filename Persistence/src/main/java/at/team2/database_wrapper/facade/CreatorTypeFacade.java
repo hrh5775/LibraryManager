@@ -1,8 +1,10 @@
 package at.team2.database_wrapper.facade;
 
+import at.team2.database_wrapper.common.FilterItem;
 import at.team2.database_wrapper.entities.CreatorTypeEntity;
 import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.interfaces.BaseDatabaseFacade;
+import at.team2.domain.enums.properties.CreatorTypeProperty;
 import org.modelmapper.ModelMapper;
 import at.team2.database_wrapper.helper.MapperHelper;
 import at.team2.database_wrapper.helper.StoreHelper;
@@ -14,7 +16,7 @@ import javax.persistence.Query;
 import java.lang.reflect.Type;
 import java.util.List;
 
-public class CreatorTypeFacade extends BaseDatabaseFacade<CreatorType> {
+public class CreatorTypeFacade extends BaseDatabaseFacade<CreatorType, CreatorTypeProperty> {
     private static final Type type = new TypeToken<List<CreatorType>>() {}.getType();
 
     public CreatorTypeFacade() {
@@ -43,11 +45,29 @@ public class CreatorTypeFacade extends BaseDatabaseFacade<CreatorType> {
     @Override
     public List<CreatorType> getList() {
         EntityManager session = getCurrentSession();
-        Query query = session.createQuery("from CreatorTypeEntity ");
+        Query query = session.createQuery("from CreatorTypeEntity");
         List<CreatorTypeEntity> entities = query.getResultList();
         ModelMapper mapper = MapperHelper.getMapper();
 
         return mapper.map(entities, type);
+    }
+
+    @Override
+    protected String getColumnNameForProperty(CreatorTypeProperty property) {
+        switch (property) {
+            case ID:
+                return "id";
+            case TYPE_NAME:
+                return "typeName";
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<CreatorType> filter(List<FilterItem<CreatorTypeProperty>> filterItems) {
+        // @todo: implement
+        return null;
     }
 
     @Override

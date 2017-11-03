@@ -1,7 +1,9 @@
 package at.team2.database_wrapper.facade;
 
+import at.team2.database_wrapper.common.FilterItem;
 import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.interfaces.BaseDatabaseFacade;
+import at.team2.domain.enums.properties.DvdProperty;
 import org.modelmapper.ModelMapper;
 import at.team2.database_wrapper.entities.DvdMetaEntity;
 import at.team2.database_wrapper.helper.MapperHelper;
@@ -14,7 +16,7 @@ import javax.persistence.Query;
 import java.lang.reflect.Type;
 import java.util.List;
 
-public class DvdFacade extends BaseDatabaseFacade<Dvd> {
+public class DvdFacade extends BaseDatabaseFacade<Dvd, DvdProperty> {
     private static final Type type = new TypeToken<List<Dvd>>() {}.getType();
 
     public DvdFacade() {
@@ -55,6 +57,26 @@ public class DvdFacade extends BaseDatabaseFacade<Dvd> {
         ModelMapper mapper = MapperHelper.getMapper();
 
         return mapper.map(entities, type);
+    }
+
+    @Override
+    protected String getColumnNameForProperty(DvdProperty property) {
+        switch (property) {
+            case ID:
+                return "id";
+            case MEDIA:
+                return "mediaByMediaId.title";
+            case PLAYING_TIME:
+                return "playingTime";
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<Dvd> filter(List<FilterItem<DvdProperty>> filterItems) {
+        // @todo: implement
+        return null;
     }
 
     @Override

@@ -1,7 +1,9 @@
 package at.team2.database_wrapper.facade;
 
+import at.team2.database_wrapper.common.FilterItem;
 import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.interfaces.BaseDatabaseFacade;
+import at.team2.domain.enums.properties.StaffProperty;
 import org.modelmapper.ModelMapper;
 import at.team2.database_wrapper.entities.StaffEntity;
 import at.team2.database_wrapper.helper.MapperHelper;
@@ -14,7 +16,7 @@ import javax.persistence.Query;
 import java.lang.reflect.Type;
 import java.util.List;
 
-public class StaffFacade extends BaseDatabaseFacade<Staff> {
+public class StaffFacade extends BaseDatabaseFacade<Staff, StaffProperty> {
     private static final Type type = new TypeToken<List<Staff>>() {}.getType();
 
     public StaffFacade() {
@@ -49,11 +51,39 @@ public class StaffFacade extends BaseDatabaseFacade<Staff> {
     @Override
     public List<Staff> getList() {
         EntityManager session = getCurrentSession();
-        Query query = session.createQuery("from StaffEntity ");
+        Query query = session.createQuery("from StaffEntity");
         List<StaffEntity> entities = query.getResultList();
         ModelMapper mapper = MapperHelper.getMapper();
 
         return mapper.map(entities, type);
+    }
+
+    @Override
+    protected String getColumnNameForProperty(StaffProperty property) {
+        switch (property) {
+            case ID:
+                return "id";
+            case ACCOUNT:
+                return "accountByAccountId.userName";
+            case ADDRESS:
+                return "address";
+            case BIRTH_DATE:
+                return "birthDate";
+            case EMAIL:
+                return "email";
+            case FIRST_NAME:
+                return "firstName";
+            case LAST_NAME:
+                return "lastName";
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<Staff> filter(List<FilterItem<StaffProperty>> filterItems) {
+        // @todo: implement
+        return null;
     }
 
     @Override

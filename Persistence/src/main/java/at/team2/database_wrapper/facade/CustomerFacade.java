@@ -1,7 +1,9 @@
 package at.team2.database_wrapper.facade;
 
+import at.team2.database_wrapper.common.FilterItem;
 import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.interfaces.BaseDatabaseFacade;
+import at.team2.domain.enums.properties.CustomerProperty;
 import org.modelmapper.ModelMapper;
 import at.team2.database_wrapper.entities.CustomerEntity;
 import at.team2.database_wrapper.helper.MapperHelper;
@@ -14,7 +16,7 @@ import javax.persistence.Query;
 import java.lang.reflect.Type;
 import java.util.List;
 
-public class CustomerFacade extends BaseDatabaseFacade<Customer> {
+public class CustomerFacade extends BaseDatabaseFacade<Customer, CustomerProperty> {
     private static final Type type = new TypeToken<List<Customer>>() {}.getType();
 
     public CustomerFacade() {
@@ -49,11 +51,45 @@ public class CustomerFacade extends BaseDatabaseFacade<Customer> {
     @Override
     public List<Customer> getList() {
         EntityManager session = getCurrentSession();
-        Query query = session.createQuery("from CustomerEntity ");
+        Query query = session.createQuery("from CustomerEntity");
         List<CustomerEntity> entities = query.getResultList();
         ModelMapper mapper = MapperHelper.getMapper();
 
         return mapper.map(entities, type);
+    }
+
+    @Override
+    protected String getColumnNameForProperty(CustomerProperty property) {
+        switch (property) {
+            case ID:
+                return "id";
+            case ACCOUNT:
+                return "accountByAccountId.userName";
+            case ADDRESS:
+                return "address";
+            case BANK_ACCOUNT_NUMBER:
+                return "bankAccountNumber";
+            case BIRTH_DATE:
+                return "birthDate";
+            case DATE_OF_EXPIRY:
+                return "dateOfExpiry";
+            case EMAIL:
+                return "email";
+            case FIRST_NAME:
+                return "firstName";
+            case LAST_NAME:
+                return "lastName";
+            case PHONE_NUMBER:
+                return "phoneNumber";
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<Customer> filter(List<FilterItem<CustomerProperty>> filterItems) {
+        // @todo: implement
+        return null;
     }
 
     @Override

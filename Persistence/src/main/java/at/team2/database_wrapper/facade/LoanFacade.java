@@ -1,7 +1,9 @@
 package at.team2.database_wrapper.facade;
 
+import at.team2.database_wrapper.common.FilterItem;
 import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.interfaces.BaseDatabaseFacade;
+import at.team2.domain.enums.properties.LoanProperty;
 import org.modelmapper.ModelMapper;
 import at.team2.database_wrapper.entities.LoanEntity;
 import at.team2.database_wrapper.helper.MapperHelper;
@@ -14,7 +16,7 @@ import javax.persistence.Query;
 import java.lang.reflect.Type;
 import java.util.List;
 
-public class LoanFacade extends BaseDatabaseFacade<Loan> {
+public class LoanFacade extends BaseDatabaseFacade<Loan, LoanProperty> {
     private static final Type type = new TypeToken<List<Loan>>() {}.getType();
 
     public LoanFacade() {
@@ -48,6 +50,36 @@ public class LoanFacade extends BaseDatabaseFacade<Loan> {
         ModelMapper mapper = MapperHelper.getMapper();
 
         return mapper.map(entities, type);
+    }
+
+    @Override
+    protected String getColumnNameForProperty(LoanProperty property) {
+        switch (property) {
+            case ID:
+                return "id";
+            case CLOSED:
+                return "closed";
+            case CUSTOMER:
+                return "concat(customerByCustomerId.firstName, ' ', customerByCustomerId.lastName)";
+            case END:
+                return "end";
+            case LAST_RENEWAL_START:
+                return "lastRenewalStart";
+            case MEDIA_MEMBER:
+                return "mediaMemberByMediaMemberId.mediaByMediaId.title";
+            case START:
+                return "start";
+            case REMINDER:
+                return "reminderByReminderId.reminderDate";
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<Loan> filter(List<FilterItem<LoanProperty>> filterItems) {
+        // @todo: implement
+        return null;
     }
 
     @Override

@@ -1,9 +1,11 @@
 package at.team2.database_wrapper.facade;
 
+import at.team2.database_wrapper.common.FilterItem;
 import at.team2.database_wrapper.entities.ConfigurationEntity;
 import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.helper.MapperHelper;
 import at.team2.database_wrapper.interfaces.BaseDatabaseFacade;
+import at.team2.domain.enums.properties.ConfigurationProperty;
 import org.modelmapper.ModelMapper;
 import at.team2.database_wrapper.helper.StoreHelper;
 import at.team2.domain.entities.Configuration;
@@ -14,7 +16,7 @@ import javax.persistence.Query;
 import java.lang.reflect.Type;
 import java.util.List;
 
-public class ConfigurationFacade extends BaseDatabaseFacade<Configuration> {
+public class ConfigurationFacade extends BaseDatabaseFacade<Configuration, ConfigurationProperty> {
     private static final Type type = new TypeToken<List<Configuration>>() {}.getType();
 
     public ConfigurationFacade() {
@@ -65,6 +67,26 @@ public class ConfigurationFacade extends BaseDatabaseFacade<Configuration> {
         ModelMapper mapper = MapperHelper.getMapper();
 
         return mapper.map(entities, type);
+    }
+
+    @Override
+    protected String getColumnNameForProperty(ConfigurationProperty property) {
+        switch (property) {
+            case ID:
+                return "id";
+            case DATA:
+                return "data";
+            case IDENTIFIER:
+                return "identifier";
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<Configuration> filter(List<FilterItem<ConfigurationProperty>> filterItems) {
+        // @todo: implement
+        return null;
     }
 
     @Override

@@ -1,9 +1,11 @@
 package at.team2.database_wrapper.facade;
 
+import at.team2.database_wrapper.common.FilterItem;
 import at.team2.database_wrapper.entities.GenreEntity;
 import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.helper.MapperHelper;
 import at.team2.database_wrapper.interfaces.BaseDatabaseFacade;
+import at.team2.domain.enums.properties.GenreProperty;
 import org.modelmapper.ModelMapper;
 import at.team2.database_wrapper.helper.StoreHelper;
 import at.team2.domain.entities.Genre;
@@ -13,7 +15,7 @@ import javax.persistence.Query;
 import java.util.LinkedList;
 import java.util.List;
 
-public class GenreFacade extends BaseDatabaseFacade<Genre> {
+public class GenreFacade extends BaseDatabaseFacade<Genre, GenreProperty> {
     private static final List<Genre> listType = new LinkedList<>();
 
     public GenreFacade() {
@@ -42,11 +44,29 @@ public class GenreFacade extends BaseDatabaseFacade<Genre> {
     @Override
     public List<Genre> getList() {
         EntityManager session = getCurrentSession();
-        Query query = session.createQuery("from GenreEntity ");
+        Query query = session.createQuery("from GenreEntity");
         List<GenreEntity> entities = query.getResultList();
         ModelMapper mapper = MapperHelper.getMapper();
 
         return mapper.map(entities, listType.getClass());
+    }
+
+    @Override
+    protected String getColumnNameForProperty(GenreProperty property) {
+        switch (property) {
+            case ID:
+                return "id";
+            case NAME:
+                return "name";
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<Genre> filter(List<FilterItem<GenreProperty>> filterItems) {
+        // @todo: implement
+        return null;
     }
 
     @Override

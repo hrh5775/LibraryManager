@@ -1,8 +1,10 @@
 package at.team2.database_wrapper.facade;
 
+import at.team2.database_wrapper.common.FilterItem;
 import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.helper.MapperHelper;
 import at.team2.database_wrapper.interfaces.BaseDatabaseFacade;
+import at.team2.domain.enums.properties.AccountProperty;
 import org.modelmapper.ModelMapper;
 import at.team2.database_wrapper.entities.AccountEntity;
 import at.team2.database_wrapper.helper.StoreHelper;
@@ -14,7 +16,7 @@ import javax.persistence.Query;
 import java.lang.reflect.Type;
 import java.util.List;
 
-public class AccountFacade extends BaseDatabaseFacade<Account> {
+public class AccountFacade extends BaseDatabaseFacade<Account, AccountProperty> {
     private static final Type type = new TypeToken<List<Account>>() {}.getType();
 
     protected AccountFacade() {
@@ -27,7 +29,7 @@ public class AccountFacade extends BaseDatabaseFacade<Account> {
 
     private AccountEntity getEntityById(int id, boolean includeInactive) {
         EntityManager session = getCurrentSession();
-        String includeInactiveQuery = includeInactive ? "" : " and active >= 1";
+        String includeInactiveQuery = includeInactive ? "" : " and active";
         Query query = session.createQuery("from AccountEntity where id = :id" + includeInactiveQuery);
         query.setParameter("id", id);
 
@@ -54,6 +56,28 @@ public class AccountFacade extends BaseDatabaseFacade<Account> {
         ModelMapper mapper = MapperHelper.getMapper();
 
         return mapper.map(entities, type);
+    }
+
+    @Override
+    protected String getColumnNameForProperty(AccountProperty property) {
+        switch (property) {
+            case ID:
+                return "id";
+            case ACCOUNT_ROLE:
+                return "accountRoleByAccountRoleId.roleName";
+            case PASSWORT:
+                return "password";
+            case USER_NAME:
+                return "userName";
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<Account> filter(List<FilterItem<AccountProperty>> filterItems) {
+        // @todo: implement
+        return null;
     }
 
     @Override

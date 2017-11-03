@@ -1,6 +1,8 @@
 package at.team2.database_wrapper.facade;
 
+import at.team2.database_wrapper.common.FilterItem;
 import at.team2.database_wrapper.interfaces.BaseDatabaseFacade;
+import at.team2.domain.enums.properties.BookProperty;
 import org.modelmapper.ModelMapper;
 import at.team2.database_wrapper.entities.BookMetaEntity;
 import at.team2.database_wrapper.enums.TransactionType;
@@ -14,7 +16,7 @@ import javax.persistence.Query;
 import java.lang.reflect.Type;
 import java.util.List;
 
-public class BookFacade extends BaseDatabaseFacade<Book> {
+public class BookFacade extends BaseDatabaseFacade<Book, BookProperty> {
     private static final Type type = new TypeToken<List<Book>>() {}.getType();
 
     public BookFacade() {
@@ -51,6 +53,30 @@ public class BookFacade extends BaseDatabaseFacade<Book> {
     public List<Book> getList() {
         EntityManager session = getCurrentSession();
         Query query = session.createQuery("from BookMetaEntity");
+        List<BookMetaEntity> entities = query.getResultList();
+        ModelMapper mapper = MapperHelper.getMapper();
+
+        return mapper.map(entities, type);
+    }
+
+    @Override
+    protected String getColumnNameForProperty(BookProperty property) {
+        switch (property) {
+            case ID:
+                return "id";
+            case MEDIA:
+                return "mediaByMediaId.title";
+            case EDITION:
+                return "edition";
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<Book> filter(List<FilterItem<BookProperty>> filterItems) {
+        // @todo: implement
+        Query query = getByFilter("from BookMetaEntity where ", getCurrentSession(), filterItems);
         List<BookMetaEntity> entities = query.getResultList();
         ModelMapper mapper = MapperHelper.getMapper();
 

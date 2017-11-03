@@ -1,5 +1,6 @@
 package at.team2.database_wrapper.facade;
 
+import at.team2.database_wrapper.common.FilterItem;
 import at.team2.database_wrapper.entities.LoanEntity;
 import at.team2.database_wrapper.entities.MediaMemberEntity;
 import at.team2.database_wrapper.enums.TransactionType;
@@ -8,6 +9,7 @@ import at.team2.database_wrapper.helper.StoreHelper;
 import at.team2.database_wrapper.interfaces.BaseDatabaseFacade;
 import at.team2.domain.entities.Loan;
 import at.team2.domain.entities.MediaMember;
+import at.team2.domain.enums.properties.MediaMemberProperty;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 
@@ -17,7 +19,7 @@ import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.List;
 
-public class MediaMemberFacade extends BaseDatabaseFacade<MediaMember> {
+public class MediaMemberFacade extends BaseDatabaseFacade<MediaMember, MediaMemberProperty> {
     private static final Type type = new TypeToken<List<MediaMember>>() {}.getType();
 
     public MediaMemberFacade() {
@@ -51,11 +53,31 @@ public class MediaMemberFacade extends BaseDatabaseFacade<MediaMember> {
     @Override
     public List<MediaMember> getList() {
         EntityManager session = getCurrentSession();
-        Query query = session.createQuery("from MediaMemberEntity ");
+        Query query = session.createQuery("from MediaMemberEntity");
         List<MediaMemberEntity> entities = query.getResultList();
         ModelMapper mapper = MapperHelper.getMapper();
 
         return mapper.map(entities, type);
+    }
+
+    @Override
+    protected String getColumnNameForProperty(MediaMemberProperty property) {
+        switch (property) {
+            case ID:
+                return "id";
+            case EXTENDED_INDEX:
+                return "extendedIndex";
+            case MEDIA:
+                return "mediaByMediaId.title";
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<MediaMember> filter(List<FilterItem<MediaMemberProperty>> filterItems) {
+        // @todo: implement
+        return null;
     }
 
     @Override
