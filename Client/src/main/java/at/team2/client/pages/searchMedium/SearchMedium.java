@@ -2,6 +2,7 @@ package at.team2.client.pages.searchMedium;
 
 import at.team2.common.dto.small.BookSmallDto;
 import at.team2.common.dto.small.MediaSmallDto;
+import at.team2.common.dto.small.PublisherSmallDto;
 import at.team2.common.helper.RmiHelper;
 import at.team2.common.interfaces.MainRemoteObjectInf;
 import com.sun.javafx.collections.ObservableListWrapper;
@@ -40,8 +41,8 @@ public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
         try {
             // @todo: perhaps use a cache
             MainRemoteObjectInf remoteObject = RmiHelper.getSession();
-            List<BookSmallDto> tmp = remoteObject.getBookRemoteObject().getBookSmallList();
-            _mediaList.set(new ObservableListWrapper<>((List<MediaSmallDto>)(List<?>) tmp));
+            List<BookSmallDto> list = remoteObject.getBookRemoteObject().getBookSmallList();
+            _mediaList.set(new ObservableListWrapper<>((List<MediaSmallDto>)(List<?>) list));
         } catch (Exception e) {
             showRmiErrorMessage(e);
         }
