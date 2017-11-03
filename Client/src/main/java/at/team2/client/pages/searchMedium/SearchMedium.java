@@ -37,14 +37,6 @@ public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
 
     @Override
     public void load() {
-        try {
-            // @todo: perhaps use a cache
-            MainRemoteObjectInf remoteObject = RmiHelper.getSession();
-            List<BookSmallDto> tmp = remoteObject.getBookRemoteObject().getBookSmallList();
-            _mediaList.set(new ObservableListWrapper<>((List<MediaSmallDto>)(List<?>) tmp));
-        } catch (Exception e) {
-            showRmiErrorMessage(e);
-        }
     }
 
     @Override
@@ -62,6 +54,15 @@ public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
 
     @FXML
     private void search() {
+        try {
+            // @todo: perhaps use a cache
+            MainRemoteObjectInf remoteObject = RmiHelper.getSession();
+            List<BookSmallDto> list = remoteObject.getBookRemoteObject().getBookSmallList();
+            _mediaList.set(new ObservableListWrapper<>((List<MediaSmallDto>)(List<?>) list));
+        } catch (Exception e) {
+            showRmiErrorMessage(e);
+        }
+
         _listViewVisible.setValue(true);
     }
 }

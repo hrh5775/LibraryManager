@@ -4,8 +4,9 @@ import at.team2.common.interfaces.BaseDtoEntity;
 
 import java.sql.Date;
 
-public class MediaSmallDto extends BaseDtoEntity {
+public abstract class MediaSmallDto extends BaseDtoEntity {
     private int _mediaId;
+    private String _standardMediaId;
     private boolean _available;
     private String _title;
     private Date _publishedDate;
@@ -16,6 +17,10 @@ public class MediaSmallDto extends BaseDtoEntity {
 
     public int getMediaId() {
         return _mediaId;
+    }
+
+    public String getStandardMediaId() {
+        return _standardMediaId;
     }
 
     public boolean getAvailable() {
@@ -48,6 +53,10 @@ public class MediaSmallDto extends BaseDtoEntity {
 
     public void setMediaId(int mediaId) {
         _mediaId = mediaId;
+    }
+
+    public void setStandardMediaId(String standardMediaId) {
+        _standardMediaId = standardMediaId;
     }
 
     public void setAvailable(boolean available) {

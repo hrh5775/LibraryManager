@@ -1,11 +1,13 @@
 package at.team2.database_wrapper.facade;
 
+import at.team2.database_wrapper.common.FilterItem;
 import at.team2.database_wrapper.entities.MediaCreatorPersonEntity;
 import at.team2.database_wrapper.entities.MediaEntity;
 import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.helper.MapperHelper;
 import at.team2.database_wrapper.helper.StoreHelper;
 import at.team2.database_wrapper.interfaces.BaseDatabaseFacade;
+import at.team2.domain.enums.properties.MediaProperty;
 import org.modelmapper.ModelMapper;
 import at.team2.domain.entities.CreatorPerson;
 import at.team2.domain.entities.Media;
@@ -16,7 +18,7 @@ import javax.persistence.Query;
 import java.lang.reflect.Type;
 import java.util.List;
 
-public class MediaFacade extends BaseDatabaseFacade<Media> {
+public class MediaFacade extends BaseDatabaseFacade<Media, MediaProperty> {
     private static final Type type = new TypeToken<List<Media>>() {}.getType();
 
     protected MediaFacade() {
@@ -53,6 +55,46 @@ public class MediaFacade extends BaseDatabaseFacade<Media> {
         List<MediaEntity> entities = query.getResultList();
 
         return MapperHelper.map(entities);
+    }
+
+    @Override
+    protected String getColumnNameForProperty(MediaProperty property) {
+        switch (property) {
+            case ID:
+                return "id";
+            case AVAILABLE:
+                return "available";
+            case BASE_INDEX:
+                return "baseIndex";
+            case COMMENT:
+                return "comment";
+            case COVER:
+                return "cover";
+            case CREATOR_PERSONS:
+                return "mediaCreatorPeopleById";
+            case GENRE:
+                return "genreByGenreId.name";
+            case TITLE:
+                return "title";
+            case PUBLISHER:
+                return "publisherByPublisherId.name";
+            case MEDIA_TYPE:
+                return "mediaTypeByMediaTypeId.name";
+            case DESCRIPTION:
+                return "description";
+            case PUBLISHED_DATE:
+                return "publishedDate";
+            case STANDARD_MEDIA_ID:
+                return "standardMediaId";
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<Media> filter(List<FilterItem<MediaProperty>> filterItems) {
+        // @todo: implement
+        return null;
     }
 
     @Override

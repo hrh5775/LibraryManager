@@ -1,7 +1,9 @@
 package at.team2.database_wrapper.facade;
 
+import at.team2.database_wrapper.common.FilterItem;
 import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.interfaces.BaseDatabaseFacade;
+import at.team2.domain.enums.properties.CreatorPersonProperty;
 import org.modelmapper.ModelMapper;
 import at.team2.database_wrapper.entities.CreatorPersonEntity;
 import at.team2.database_wrapper.helper.MapperHelper;
@@ -14,7 +16,7 @@ import javax.persistence.Query;
 import java.lang.reflect.Type;
 import java.util.List;
 
-public class CreatorPersonFacade extends BaseDatabaseFacade<CreatorPerson> {
+public class CreatorPersonFacade extends BaseDatabaseFacade<CreatorPerson, CreatorPersonProperty> {
     private static final Type type = new TypeToken<List<CreatorPerson>>() {}.getType();
 
     public CreatorPersonFacade() {
@@ -48,11 +50,37 @@ public class CreatorPersonFacade extends BaseDatabaseFacade<CreatorPerson> {
     @Override
     public List<CreatorPerson> getList() {
         EntityManager session = getCurrentSession();
-        Query query = session.createQuery("from CreatorPersonEntity ");
+        Query query = session.createQuery("from CreatorPersonEntity");
         List<CreatorPersonEntity> entities = query.getResultList();
         ModelMapper mapper = MapperHelper.getMapper();
 
         return mapper.map(entities, type);
+    }
+
+    @Override
+    protected String getColumnNameForProperty(CreatorPersonProperty property) {
+        switch (property) {
+            case ID:
+                return "id";
+            case ACADEMIC_TITLE:
+                return "academicTitle";
+            case BIRTH_DATE:
+                return "birthDate";
+            case CREATOR_TYPE:
+                return "creatorTypeByCreatorTypeId.typeName";
+            case FIRST_NAME:
+                return "firstName";
+            case LAST_NAME:
+                return "lastName";
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<CreatorPerson> filter(List<FilterItem<CreatorPersonProperty>> filterItems) {
+        // @todo: implement
+        return null;
     }
 
     @Override

@@ -1,8 +1,12 @@
 package at.team2.database_wrapper.facade;
 
+import at.team2.database_wrapper.common.FilterItem;
+import at.team2.database_wrapper.enums.CaseType;
+import at.team2.database_wrapper.enums.MatchType;
 import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.domain.entities.Dvd;
 import at.team2.domain.entities.Media;
+import at.team2.domain.enums.properties.DvdProperty;
 import org.junit.Assert;
 import org.junit.Test;
 import at.team2.database_wrapper.helper.MediaHelper;
@@ -10,6 +14,7 @@ import at.team2.database_wrapper.helper.MediaHelper;
 import javax.naming.NamingException;
 import java.sql.Date;
 import java.util.Calendar;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -74,5 +79,14 @@ public class DvdFacadeTest {
         DvdFacade facade = new DvdFacade();
         Assert.assertTrue(facade.delete(id, TransactionType.AUTO_COMMIT));
         Assert.assertNull(facade.getById(id));
+    }
+
+    @Test
+    public void filter() {
+        DvdFacade facade = new DvdFacade();
+        List<FilterItem<DvdProperty>> filterItems = new LinkedList<>();
+        filterItems.add(new FilterItem<>("Sonne", DvdProperty.MEDIA, MatchType.CONTAINS, CaseType.IGNORE_CASE));
+        List<Dvd> list = facade.filter(filterItems);
+        System.out.println("test");
     }
 }

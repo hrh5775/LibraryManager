@@ -1,7 +1,9 @@
 package at.team2.database_wrapper.facade;
 
+import at.team2.database_wrapper.common.FilterItem;
 import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.interfaces.BaseDatabaseFacade;
+import at.team2.domain.enums.properties.LoanConditionProperty;
 import org.modelmapper.ModelMapper;
 import at.team2.database_wrapper.entities.LoanConditionEntity;
 import at.team2.database_wrapper.helper.MapperHelper;
@@ -14,7 +16,7 @@ import javax.persistence.Query;
 import java.lang.reflect.Type;
 import java.util.List;
 
-public class LoanConditionFacade extends BaseDatabaseFacade<LoanCondition> {
+public class LoanConditionFacade extends BaseDatabaseFacade<LoanCondition, LoanConditionProperty> {
     private static final Type type = new TypeToken<List<LoanCondition>>() {}.getType();
 
     public LoanConditionFacade() {
@@ -43,11 +45,31 @@ public class LoanConditionFacade extends BaseDatabaseFacade<LoanCondition> {
     @Override
     public List<LoanCondition> getList() {
         EntityManager session = getCurrentSession();
-        Query query = session.createQuery("from LoanConditionEntity ");
+        Query query = session.createQuery("from LoanConditionEntity");
         List<LoanConditionEntity> entities = query.getResultList();
         ModelMapper mapper = MapperHelper.getMapper();
 
         return mapper.map(entities, type);
+    }
+
+    @Override
+    protected String getColumnNameForProperty(LoanConditionProperty property) {
+        switch (property) {
+            case ID:
+                return "id";
+            case EXTENSION:
+                return "extension";
+            case LOAN_TERM:
+                return "loanTerm";
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<LoanCondition> filter(List<FilterItem<LoanConditionProperty>> filterItems) {
+        // @todo: implement
+        return null;
     }
 
     @Override

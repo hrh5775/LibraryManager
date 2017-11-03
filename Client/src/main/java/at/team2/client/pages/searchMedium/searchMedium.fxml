@@ -41,9 +41,14 @@
             </placeholder>
 
             <columns>
-                <TableColumn text="Title">
+                <TableColumn text="Id">
                     <cellValueFactory>
                         <PropertyValueFactory property="id" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Title">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="title" />
                     </cellValueFactory>
                 </TableColumn>
             </columns>

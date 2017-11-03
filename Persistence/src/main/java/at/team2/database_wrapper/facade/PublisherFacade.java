@@ -1,8 +1,10 @@
 package at.team2.database_wrapper.facade;
 
+import at.team2.database_wrapper.common.FilterItem;
 import at.team2.database_wrapper.entities.PublisherEntity;
 import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.interfaces.BaseDatabaseFacade;
+import at.team2.domain.enums.properties.PublisherProperty;
 import org.modelmapper.ModelMapper;
 import at.team2.database_wrapper.helper.MapperHelper;
 import at.team2.database_wrapper.helper.StoreHelper;
@@ -14,7 +16,7 @@ import javax.persistence.Query;
 import java.lang.reflect.Type;
 import java.util.List;
 
-public class PublisherFacade extends BaseDatabaseFacade<Publisher> {
+public class PublisherFacade extends BaseDatabaseFacade<Publisher, PublisherProperty> {
     private static final Type type = new TypeToken<List<Publisher>>() {}.getType();
 
     public PublisherFacade() {
@@ -48,6 +50,28 @@ public class PublisherFacade extends BaseDatabaseFacade<Publisher> {
         ModelMapper mapper = MapperHelper.getMapper();
 
         return mapper.map(entities, type);
+    }
+
+    @Override
+    protected String getColumnNameForProperty(PublisherProperty property) {
+        switch (property) {
+            case ID:
+                return "id";
+            case ADDRESS:
+                return "address";
+            case NAME:
+                return "name";
+            case PUBLISHER_TYPE:
+                return "publisherTypeByPublisherTypeId.typeName";
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<Publisher> filter(List<FilterItem<PublisherProperty>> filterItems) {
+        // @todo: implement
+        return null;
     }
 
     @Override

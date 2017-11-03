@@ -1,6 +1,8 @@
 package at.team2.database_wrapper.facade;
 
+import at.team2.database_wrapper.common.FilterItem;
 import at.team2.database_wrapper.interfaces.BaseDatabaseFacade;
+import at.team2.domain.enums.properties.MediaTypeProperty;
 import org.modelmapper.ModelMapper;
 import at.team2.database_wrapper.entities.MediaTypeEntity;
 import at.team2.database_wrapper.enums.TransactionType;
@@ -14,7 +16,7 @@ import javax.persistence.Query;
 import java.lang.reflect.Type;
 import java.util.List;
 
-public class MediaTypeFacade extends BaseDatabaseFacade<MediaType> {
+public class MediaTypeFacade extends BaseDatabaseFacade<MediaType, MediaTypeProperty> {
     private static final Type type = new TypeToken<List<MediaType>>() {}.getType();
 
     public MediaTypeFacade() {
@@ -43,11 +45,31 @@ public class MediaTypeFacade extends BaseDatabaseFacade<MediaType> {
     @Override
     public List<MediaType> getList() {
         EntityManager session = getCurrentSession();
-        Query query = session.createQuery("from MediaTypeEntity ");
+        Query query = session.createQuery("from MediaTypeEntity");
         List<MediaTypeEntity> entities = query.getResultList();
         ModelMapper mapper = MapperHelper.getMapper();
 
         return mapper.map(entities, type);
+    }
+
+    @Override
+    protected String getColumnNameForProperty(MediaTypeProperty property) {
+        switch (property) {
+            case ID:
+                return "id";
+            case LOAN_CONDITION:
+                return "loanConditionByLoanConditionId.loanTerm";
+            case NAME:
+                return "name";
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<MediaType> filter(List<FilterItem<MediaTypeProperty>> filterItems) {
+        // @todo: implement
+        return null;
     }
 
     @Override
