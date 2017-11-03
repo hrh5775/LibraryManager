@@ -27,7 +27,7 @@ public class RmiController {
 
         // wait for the process to start
         try {
-            Thread.sleep(500);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
         }
 
