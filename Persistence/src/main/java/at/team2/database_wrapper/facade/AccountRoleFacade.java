@@ -1,6 +1,6 @@
 package at.team2.database_wrapper.facade;
 
-import at.team2.database_wrapper.common.FilterItem;
+import at.team2.database_wrapper.common.FilterConnector;
 import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.interfaces.BaseDatabaseFacade;
 import at.team2.domain.entities.Account;
@@ -68,9 +68,12 @@ public class AccountRoleFacade extends BaseDatabaseFacade<AccountRole, AccountRo
     }
 
     @Override
-    public List<AccountRole> filter(List<FilterItem<AccountRoleProperty>> filterItems) {
-        // @todo: implement
-        return null;
+    public List<AccountRole> filter(FilterConnector<AccountRoleProperty, AccountRoleProperty> filterConnector) {
+        Query query = getByFilter("from AccountRoleEntity where", getCurrentSession(), filterConnector);
+        List<AccountRoleEntity> entities = query.getResultList();
+        ModelMapper mapper = MapperHelper.getMapper();
+
+        return mapper.map(entities, type);
     }
 
     @Override

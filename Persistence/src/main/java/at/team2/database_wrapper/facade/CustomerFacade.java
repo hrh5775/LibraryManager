@@ -1,6 +1,6 @@
 package at.team2.database_wrapper.facade;
 
-import at.team2.database_wrapper.common.FilterItem;
+import at.team2.database_wrapper.common.FilterConnector;
 import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.interfaces.BaseDatabaseFacade;
 import at.team2.domain.enums.properties.CustomerProperty;
@@ -87,9 +87,12 @@ public class CustomerFacade extends BaseDatabaseFacade<Customer, CustomerPropert
     }
 
     @Override
-    public List<Customer> filter(List<FilterItem<CustomerProperty>> filterItems) {
-        // @todo: implement
-        return null;
+    public List<Customer> filter(FilterConnector<CustomerProperty, CustomerProperty> filterConnector) {
+        Query query = getByFilter("from CustomerEntity where", getCurrentSession(), filterConnector);
+        List<CustomerEntity> entities = query.getResultList();
+        ModelMapper mapper = MapperHelper.getMapper();
+
+        return mapper.map(entities, type);
     }
 
     @Override

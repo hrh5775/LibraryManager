@@ -1,6 +1,6 @@
 package at.team2.database_wrapper.facade;
 
-import at.team2.database_wrapper.common.FilterItem;
+import at.team2.database_wrapper.common.FilterConnector;
 import at.team2.database_wrapper.entities.PublisherEntity;
 import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.interfaces.BaseDatabaseFacade;
@@ -69,9 +69,12 @@ public class PublisherFacade extends BaseDatabaseFacade<Publisher, PublisherProp
     }
 
     @Override
-    public List<Publisher> filter(List<FilterItem<PublisherProperty>> filterItems) {
-        // @todo: implement
-        return null;
+    public List<Publisher> filter(FilterConnector<PublisherProperty, PublisherProperty> filterConnector) {
+        Query query = getByFilter("from PublisherEntity where", getCurrentSession(), filterConnector);
+        List<PublisherEntity> entities = query.getResultList();
+        ModelMapper mapper = MapperHelper.getMapper();
+
+        return mapper.map(entities, type);
     }
 
     @Override

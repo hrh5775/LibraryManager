@@ -1,6 +1,8 @@
 package at.team2.database_wrapper.interfaces;
 
-import at.team2.database_wrapper.common.FilterItem;
+import at.team2.database_wrapper.common.FilterConnector;
+import at.team2.database_wrapper.common.Filter;
+import at.team2.database_wrapper.common.HibernateParameter;
 import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.facade.SessionFactory;
 import at.team2.domain.interfaces.BaseDomainEntity;
@@ -12,7 +14,7 @@ import javax.persistence.Query;
 import java.util.LinkedList;
 import java.util.List;
 
-public abstract class BaseDatabaseFacade<V extends BaseDomainEntity, P extends DomainEntityProperty> implements Session, Editable<V>, Filterable<V, P> {
+public abstract class BaseDatabaseFacade<V extends BaseDomainEntity, P extends DomainEntityProperty> implements Session, Editable<V>, Filterable<V, P, P> {
     private EntityManager _session;
 
     public BaseDatabaseFacade() {
@@ -38,99 +40,142 @@ public abstract class BaseDatabaseFacade<V extends BaseDomainEntity, P extends D
 
     public abstract List<V> getList();
 
-    protected Query getByFilter(String queryString, EntityManager session, List<FilterItem<P>> filterItems) {
-        StringBuilder builder = new StringBuilder();
-        String columnIdentifier;
-        String modifiedColumnIdentifier = null;
-        String parameter;
-        String match = null;
-        String parameterStart = null;
-        String parameterEnd = null;
-        FilterItem filterItem;
-        List<Pair<String, Object>> parameterList = new LinkedList<>();
+    protected Query getByFilter(String queryString, EntityManager session, FilterConnector<P, P> filterConnector) {
+        Pair<StringBuilder, List<HibernateParameter>> filterExpression = getFilterExpression(filterConnector);
+        Query query = session.createQuery(queryString + " " + filterExpression.getKey());
 
-        builder.append(queryString + " ");
-
-        for(int i = 0; i < filterItems.size(); i++) {
-            filterItem = filterItems.get(i);
-            columnIdentifier = getColumnNameForProperty((P) filterItem.getProperty());
-
-            if(columnIdentifier != null || !columnIdentifier.trim().isEmpty()) {
-                if(!(filterItem.getParameter() instanceof Integer)) {
-                    parameter = filterItem.getParameter().toString();
-
-                    switch (filterItems.get(i).getCaseType()) {
-                        case NORMAL:
-                            break;
-                        case IGNORE_CASE:
-                            parameter = parameter.toUpperCase();
-                            modifiedColumnIdentifier = "upper(" + columnIdentifier + ")";
-                            break;
-                    }
-
-                    parameterList.add(new Pair<>(columnIdentifier, parameter));
-                } else {
-                    parameterList.add(new Pair<>(columnIdentifier, filterItem.getProperty()));
-                }
-
-                switch (filterItems.get(i).getMatchType()) {
-                    case EQUALS:
-                        parameterStart = "";
-                        parameterEnd = "";
-                        match = "=";
-                        break;
-                    case LESS_THAN:
-                        parameterStart = "";
-                        parameterEnd = "";
-                        match = "<";
-                        break;
-                    case LESS_OR_EQUAL_THAN:
-                        parameterStart = "";
-                        parameterEnd = "";
-                        match = "<=";
-                        break;
-                    case GREATER_THAN:
-                        parameterStart = "";
-                        parameterEnd = "";
-                        match = ">";
-                        break;
-                    case GREATER_OR_EQUAL_THAN:
-                        parameterStart = "";
-                        parameterEnd = "";
-                        match = ">=";
-                        break;
-                    case CONTAINS:
-                        parameterStart = "";
-                        parameterEnd = "";
-                        match = "in";
-                        break;
-                    case STARTS:
-                        parameterStart = "";
-                        parameterEnd = "%";
-                        match = "=";
-                        break;
-                    case ENDS:
-                        parameterStart = "%";
-                        parameterEnd = "";
-                        match = "=";
-                        break;
-                }
-
-                builder.append(modifiedColumnIdentifier + " " + match + " " + parameterStart + " :" + columnIdentifier + " " + parameterEnd);
-
-                if(i < filterItems.size() -1) {
-                    builder.append(" and ");
-                }
+        for(HibernateParameter item : filterExpression.getValue()) {
+            if(!item.getPreValue().isEmpty() || !item.getPostValue().isEmpty()) {
+                query.setParameter(item.getIdentifier(), item.getPreValue() + item.getValue() + item.getPostValue());
+            } else {
+                query.setParameter(item.getIdentifier(), item.getValue());
             }
         }
 
-        Query query = session.createQuery(builder.toString());
+        return query;
+    }
 
-        for(Pair<String, Object> item : parameterList) {
-            query.setParameter(item.getKey(), item.getValue());
+    private Pair<StringBuilder, List<HibernateParameter>> getFilterExpression(FilterConnector<P, P> filterConnector) {
+        Pair<StringBuilder, List<HibernateParameter>> result = new Pair<>(new StringBuilder(), new LinkedList<>());
+        Pair<StringBuilder, List<HibernateParameter>> tmp;
+
+        if(filterConnector.getLeftFilter() != null) {
+            tmp = createFilterExpression(filterConnector.getLeftFilter());
+        } else {
+            tmp = getFilterExpression(filterConnector.getLeftFilterConnector());
         }
 
-        return query;
+        result.getKey().append(tmp.getKey());
+        result.getValue().addAll(tmp.getValue());
+
+        if(filterConnector.getConnectorType() != null) {
+            switch (filterConnector.getConnectorType()) {
+                case OR:
+                    result.getKey().append(" or ");
+                    break;
+                case AND:
+                    result.getKey().append(" and ");
+                    break;
+            }
+
+            if(filterConnector.getRightFilter() != null) {
+                tmp = createFilterExpression(filterConnector.getRightFilter());
+
+            } else {
+                tmp = getFilterExpression(filterConnector.getLeftFilterConnector());
+            }
+
+            result.getKey().append(tmp.getKey());
+            result.getValue().addAll(tmp.getValue());
+        }
+
+        return result;
+    }
+
+    private Pair<StringBuilder, List<HibernateParameter>> createFilterExpression(Filter<P> filter) {
+        String columnIdentifier;
+        String hibernateColumnIdentifier;
+        String modifiedColumnIdentifier;
+        Object parameter;
+        Object modifiedParameter;
+        String match = null;
+        List<HibernateParameter> parameterList = new LinkedList<>();
+        String parameterStart = null;
+        String parameterEnd = null;
+
+        StringBuilder builder = new StringBuilder("(");
+
+        columnIdentifier = getColumnNameForProperty(filter.getProperty());
+        parameter = filter.getParameter();
+
+        if(columnIdentifier != null || !columnIdentifier.trim().isEmpty()) {
+            hibernateColumnIdentifier = columnIdentifier.replace(".", "");
+            modifiedColumnIdentifier = columnIdentifier;
+
+            if(!(parameter instanceof Integer)) {
+                modifiedParameter = parameter.toString();
+
+                switch (filter.getCaseType()) {
+                    case NORMAL:
+                        break;
+                    case IGNORE_CASE:
+                        modifiedParameter = ((String)modifiedParameter).toLowerCase();
+                        modifiedColumnIdentifier = "lower(" + columnIdentifier + ")";
+                        break;
+                }
+            } else {
+                modifiedParameter = parameter;
+            }
+
+            switch (filter.getMatchType()) {
+                case EQUALS:
+                    parameterStart = "";
+                    parameterEnd = "";
+                    match = "=";
+                    break;
+                case LESS_THAN:
+                    parameterStart = "";
+                    parameterEnd = "";
+                    match = "<";
+                    break;
+                case LESS_OR_EQUAL_THAN:
+                    parameterStart = "";
+                    parameterEnd = "";
+                    match = "<=";
+                    break;
+                case GREATER_THAN:
+                    parameterStart = "";
+                    parameterEnd = "";
+                    match = ">";
+                    break;
+                case GREATER_OR_EQUAL_THAN:
+                    parameterStart = "";
+                    parameterEnd = "";
+                    match = ">=";
+                    break;
+                case CONTAINS:
+                    parameterStart = "%";
+                    parameterEnd = "%";
+                    match = "like";
+                    break;
+                case STARTS:
+                    parameterStart = "";
+                    parameterEnd = "%";
+                    match = "like";
+                    break;
+                case ENDS:
+                    parameterStart = "%";
+                    parameterEnd = "";
+                    match = "like";
+                    break;
+            }
+
+            parameterList.add(new HibernateParameter(hibernateColumnIdentifier, modifiedParameter, parameterStart, parameterEnd));
+            builder.append(modifiedColumnIdentifier + " " + match + " " + " :" + hibernateColumnIdentifier);
+        }
+
+        builder.append(")");
+        return new Pair<>(builder, parameterList);
     }
 
     protected abstract String getColumnNameForProperty(P property);

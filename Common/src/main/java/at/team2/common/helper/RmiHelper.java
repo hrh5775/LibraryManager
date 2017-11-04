@@ -9,11 +9,16 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 public class RmiHelper {
-    public static MainRemoteObjectInf getSession() throws RemoteException, NotBoundException {
+    public static Registry getRegistry() throws RemoteException {
         System.setProperty("java.rmi.server.hostname", ConnectionInfo.hostname);
-        Registry registry = LocateRegistry.getRegistry(ConnectionInfo.hostname, ConnectionInfo.port);
-        MainRemoteObjectInf obj = (MainRemoteObjectInf) registry.lookup(ConnectionInfo.url);
+        return LocateRegistry.getRegistry(ConnectionInfo.hostname, ConnectionInfo.port);
+    }
 
-        return obj;
+    public static MainRemoteObjectInf getSession() throws RemoteException, NotBoundException {
+        return getSession(getRegistry());
+    }
+
+    public static MainRemoteObjectInf getSession(Registry registry) throws RemoteException, NotBoundException {
+        return (MainRemoteObjectInf) registry.lookup(ConnectionInfo.url);
     }
 }

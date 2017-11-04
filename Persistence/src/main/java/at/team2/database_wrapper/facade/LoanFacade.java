@@ -1,6 +1,6 @@
 package at.team2.database_wrapper.facade;
 
-import at.team2.database_wrapper.common.FilterItem;
+import at.team2.database_wrapper.common.FilterConnector;
 import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.interfaces.BaseDatabaseFacade;
 import at.team2.domain.enums.properties.LoanProperty;
@@ -77,9 +77,12 @@ public class LoanFacade extends BaseDatabaseFacade<Loan, LoanProperty> {
     }
 
     @Override
-    public List<Loan> filter(List<FilterItem<LoanProperty>> filterItems) {
-        // @todo: implement
-        return null;
+    public List<Loan> filter(FilterConnector<LoanProperty, LoanProperty> filterConnector) {
+        Query query = getByFilter("from LoanEntity where", getCurrentSession(), filterConnector);
+        List<LoanEntity> entities = query.getResultList();
+        ModelMapper mapper = MapperHelper.getMapper();
+
+        return mapper.map(entities, type);
     }
 
     @Override

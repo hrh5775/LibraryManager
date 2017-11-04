@@ -1,6 +1,6 @@
 package at.team2.database_wrapper.facade;
 
-import at.team2.database_wrapper.common.FilterItem;
+import at.team2.database_wrapper.common.FilterConnector;
 import at.team2.database_wrapper.interfaces.BaseDatabaseFacade;
 import at.team2.domain.enums.properties.BookProperty;
 import org.modelmapper.ModelMapper;
@@ -74,9 +74,8 @@ public class BookFacade extends BaseDatabaseFacade<Book, BookProperty> {
     }
 
     @Override
-    public List<Book> filter(List<FilterItem<BookProperty>> filterItems) {
-        // @todo: implement
-        Query query = getByFilter("from BookMetaEntity where ", getCurrentSession(), filterItems);
+    public List<Book> filter(FilterConnector<BookProperty, BookProperty> filterConnector) {
+        Query query = getByFilter("from BookMetaEntity where", getCurrentSession(), filterConnector);
         List<BookMetaEntity> entities = query.getResultList();
         ModelMapper mapper = MapperHelper.getMapper();
 

@@ -1,6 +1,6 @@
 package at.team2.database_wrapper.facade;
 
-import at.team2.database_wrapper.common.FilterItem;
+import at.team2.database_wrapper.common.FilterConnector;
 import at.team2.database_wrapper.interfaces.BaseDatabaseFacade;
 import at.team2.domain.enums.properties.PublisherTypeProperty;
 import org.modelmapper.ModelMapper;
@@ -65,9 +65,12 @@ public class PublisherTypeFacade extends BaseDatabaseFacade<PublisherType, Publi
     }
 
     @Override
-    public List<PublisherType> filter(List<FilterItem<PublisherTypeProperty>> filterItems) {
-        // @todo: implement
-        return null;
+    public List<PublisherType> filter(FilterConnector<PublisherTypeProperty, PublisherTypeProperty> filterConnector) {
+        Query query = getByFilter("from PublisherTypeEntity where", getCurrentSession(), filterConnector);
+        List<PublisherTypeEntity> entities = query.getResultList();
+        ModelMapper mapper = MapperHelper.getMapper();
+
+        return mapper.map(entities, type);
     }
 
     @Override
