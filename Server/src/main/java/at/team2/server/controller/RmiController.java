@@ -1,18 +1,21 @@
 package at.team2.server.controller;
 
 import at.team2.common.configuration.ConnectionInfo;
+import at.team2.common.helper.RmiHelper;
 import at.team2.common.interfaces.MainRemoteObjectInf;
 import at.team2.server.remote.MainRemoteObject;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 public class RmiController {
-    public static void main(String[] args) throws MalformedURLException, RemoteException, URISyntaxException {
+    public static void main(String[] args) throws MalformedURLException, RemoteException, URISyntaxException, NotBoundException {
+        // this command can also be started from a command line
         new Thread(() -> {
             ProcessBuilder processBuilder = new ProcessBuilder("rmiregistry", ConnectionInfo.port + "", "-J-Djava.rmi.server.useCodebaseOnly=false");
             try {
@@ -27,17 +30,15 @@ public class RmiController {
 
         // wait for the process to start
         try {
-            Thread.sleep(500);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
         }
 
 
         String codebase = MainRemoteObjectInf.class.getProtectionDomain().getCodeSource().getLocation().toExternalForm();
 
-        System.setProperty("java.rmi.server.hostname", ConnectionInfo.hostname);
         System.setProperty("java.rmi.server.codebase", codebase);
-
-        Registry registry = LocateRegistry.getRegistry(ConnectionInfo.port);
+        Registry registry = RmiHelper.getRegistry();
         MainRemoteObject obj = new MainRemoteObject();
         registry.rebind(ConnectionInfo.url, obj);
 
