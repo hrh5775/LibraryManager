@@ -4,13 +4,13 @@ import at.team2.database_wrapper.enums.CaseType;
 import at.team2.database_wrapper.enums.MatchType;
 import at.team2.domain.interfaces.DomainEntityProperty;
 
-public class FilterItem<D extends DomainEntityProperty> {
+public class Filter<D extends DomainEntityProperty> {
     private Object _parameter;
     private D _property;
     private MatchType _matchType;
     private CaseType _caseType;
 
-    public FilterItem(Object parameter, D property, MatchType matchType, CaseType caseType) {
+    public Filter(Object parameter, D property, MatchType matchType, CaseType caseType) {
         _parameter = parameter;
         _property = property;
         _matchType = matchType;

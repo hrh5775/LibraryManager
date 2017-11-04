@@ -1,6 +1,6 @@
 package at.team2.database_wrapper.facade;
 
-import at.team2.database_wrapper.common.FilterItem;
+import at.team2.database_wrapper.common.FilterConnector;
 import at.team2.database_wrapper.entities.CreatorTypeEntity;
 import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.interfaces.BaseDatabaseFacade;
@@ -65,9 +65,12 @@ public class CreatorTypeFacade extends BaseDatabaseFacade<CreatorType, CreatorTy
     }
 
     @Override
-    public List<CreatorType> filter(List<FilterItem<CreatorTypeProperty>> filterItems) {
-        // @todo: implement
-        return null;
+    public List<CreatorType> filter(FilterConnector<CreatorTypeProperty, CreatorTypeProperty> filterConnector) {
+        Query query = getByFilter("from CreatorTypeEntity where", getCurrentSession(), filterConnector);
+        List<CreatorTypeEntity> entities = query.getResultList();
+        ModelMapper mapper = MapperHelper.getMapper();
+
+        return mapper.map(entities, type);
     }
 
     @Override

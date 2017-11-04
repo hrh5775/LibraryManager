@@ -1,6 +1,6 @@
 package at.team2.database_wrapper.facade;
 
-import at.team2.database_wrapper.common.FilterItem;
+import at.team2.database_wrapper.common.FilterConnector;
 import at.team2.database_wrapper.entities.MediaCreatorPersonEntity;
 import at.team2.database_wrapper.entities.MediaEntity;
 import at.team2.database_wrapper.enums.TransactionType;
@@ -92,9 +92,12 @@ public class MediaFacade extends BaseDatabaseFacade<Media, MediaProperty> {
     }
 
     @Override
-    public List<Media> filter(List<FilterItem<MediaProperty>> filterItems) {
-        // @todo: implement
-        return null;
+    public List<Media> filter(FilterConnector<MediaProperty, MediaProperty> filterConnector) {
+        Query query = getByFilter("from MediaEntity where", getCurrentSession(), filterConnector);
+        List<MediaEntity> entities = query.getResultList();
+        ModelMapper mapper = MapperHelper.getMapper();
+
+        return mapper.map(entities, type);
     }
 
     @Override

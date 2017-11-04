@@ -1,6 +1,6 @@
 package at.team2.database_wrapper.facade;
 
-import at.team2.database_wrapper.common.FilterItem;
+import at.team2.database_wrapper.common.FilterConnector;
 import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.helper.MapperHelper;
 import at.team2.database_wrapper.interfaces.BaseDatabaseFacade;
@@ -67,9 +67,12 @@ public class ReminderFacade extends BaseDatabaseFacade<Reminder, ReminderPropert
     }
 
     @Override
-    public List<Reminder> filter(List<FilterItem<ReminderProperty>> filterItems) {
-        // @todo: implement
-        return null;
+    public List<Reminder> filter(FilterConnector<ReminderProperty, ReminderProperty> filterConnector) {
+        Query query = getByFilter("from ReminderEntity where", getCurrentSession(), filterConnector);
+        List<ReminderEntity> entities = query.getResultList();
+        ModelMapper mapper = MapperHelper.getMapper();
+
+        return mapper.map(entities, type);
     }
 
     @Override

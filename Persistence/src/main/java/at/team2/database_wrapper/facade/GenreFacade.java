@@ -1,6 +1,6 @@
 package at.team2.database_wrapper.facade;
 
-import at.team2.database_wrapper.common.FilterItem;
+import at.team2.database_wrapper.common.FilterConnector;
 import at.team2.database_wrapper.entities.GenreEntity;
 import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.helper.MapperHelper;
@@ -9,14 +9,15 @@ import at.team2.domain.enums.properties.GenreProperty;
 import org.modelmapper.ModelMapper;
 import at.team2.database_wrapper.helper.StoreHelper;
 import at.team2.domain.entities.Genre;
+import org.modelmapper.TypeToken;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import java.util.LinkedList;
+import java.lang.reflect.Type;
 import java.util.List;
 
 public class GenreFacade extends BaseDatabaseFacade<Genre, GenreProperty> {
-    private static final List<Genre> listType = new LinkedList<>();
+    private static final Type type = new TypeToken<List<Genre>>() {}.getType();
 
     public GenreFacade() {
         super();
@@ -48,7 +49,7 @@ public class GenreFacade extends BaseDatabaseFacade<Genre, GenreProperty> {
         List<GenreEntity> entities = query.getResultList();
         ModelMapper mapper = MapperHelper.getMapper();
 
-        return mapper.map(entities, listType.getClass());
+        return mapper.map(entities, type);
     }
 
     @Override
@@ -64,9 +65,12 @@ public class GenreFacade extends BaseDatabaseFacade<Genre, GenreProperty> {
     }
 
     @Override
-    public List<Genre> filter(List<FilterItem<GenreProperty>> filterItems) {
-        // @todo: implement
-        return null;
+    public List<Genre> filter(FilterConnector<GenreProperty, GenreProperty> filterConnector) {
+        Query query = getByFilter("from GenreEntity where", getCurrentSession(), filterConnector);
+        List<GenreEntity> entities = query.getResultList();
+        ModelMapper mapper = MapperHelper.getMapper();
+
+        return mapper.map(entities, type);
     }
 
     @Override

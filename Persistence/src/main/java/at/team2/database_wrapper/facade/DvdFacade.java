@@ -1,6 +1,6 @@
 package at.team2.database_wrapper.facade;
 
-import at.team2.database_wrapper.common.FilterItem;
+import at.team2.database_wrapper.common.FilterConnector;
 import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.interfaces.BaseDatabaseFacade;
 import at.team2.domain.enums.properties.DvdProperty;
@@ -74,9 +74,8 @@ public class DvdFacade extends BaseDatabaseFacade<Dvd, DvdProperty> {
     }
 
     @Override
-    public List<Dvd> filter(List<FilterItem<DvdProperty>> filterItems) {
-        // @todo: implement
-        Query query = getByFilter("from DvdMetaEntity where ", getCurrentSession(), filterItems);
+    public List<Dvd> filter(FilterConnector<DvdProperty, DvdProperty> filterConnector) {
+        Query query = getByFilter("from DvdMetaEntity where", getCurrentSession(), filterConnector);
         List<DvdMetaEntity> entities = query.getResultList();
         ModelMapper mapper = MapperHelper.getMapper();
 

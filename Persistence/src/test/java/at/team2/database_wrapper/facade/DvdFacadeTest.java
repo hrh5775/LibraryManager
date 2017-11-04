@@ -1,6 +1,7 @@
 package at.team2.database_wrapper.facade;
 
-import at.team2.database_wrapper.common.FilterItem;
+import at.team2.database_wrapper.common.Filter;
+import at.team2.database_wrapper.common.FilterConnector;
 import at.team2.database_wrapper.enums.CaseType;
 import at.team2.database_wrapper.enums.MatchType;
 import at.team2.database_wrapper.enums.TransactionType;
@@ -14,7 +15,6 @@ import at.team2.database_wrapper.helper.MediaHelper;
 import javax.naming.NamingException;
 import java.sql.Date;
 import java.util.Calendar;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -83,10 +83,12 @@ public class DvdFacadeTest {
 
     @Test
     public void filter() {
+        // @todo: This is the only filter test that we currently provide. Please add more filter tests to the other facade tests.
+        testAdd();
         DvdFacade facade = new DvdFacade();
-        List<FilterItem<DvdProperty>> filterItems = new LinkedList<>();
-        filterItems.add(new FilterItem<>("Sonne", DvdProperty.MEDIA, MatchType.CONTAINS, CaseType.IGNORE_CASE));
-        List<Dvd> list = facade.filter(filterItems);
-        System.out.println("test");
+        Filter<DvdProperty> filter = new Filter<>("test", DvdProperty.MEDIA, MatchType.CONTAINS, CaseType.IGNORE_CASE);
+        FilterConnector<DvdProperty, DvdProperty> filterConnector = new FilterConnector<>(filter);
+        List<Dvd> list = facade.filter(filterConnector);
+        Assert.assertTrue(list.size() > 0);
     }
 }

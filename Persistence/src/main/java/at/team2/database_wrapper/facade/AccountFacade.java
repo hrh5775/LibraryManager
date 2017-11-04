@@ -1,6 +1,6 @@
 package at.team2.database_wrapper.facade;
 
-import at.team2.database_wrapper.common.FilterItem;
+import at.team2.database_wrapper.common.FilterConnector;
 import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.helper.MapperHelper;
 import at.team2.database_wrapper.interfaces.BaseDatabaseFacade;
@@ -51,7 +51,7 @@ public class AccountFacade extends BaseDatabaseFacade<Account, AccountProperty> 
     @Override
     public List<Account> getList() {
         EntityManager session = getCurrentSession();
-        Query query = session.createQuery("from AccountEntity where active");
+        Query query = session.createQuery("from AccountEntity where active = true");
         List<AccountEntity> entities = query.getResultList();
         ModelMapper mapper = MapperHelper.getMapper();
 
@@ -75,9 +75,12 @@ public class AccountFacade extends BaseDatabaseFacade<Account, AccountProperty> 
     }
 
     @Override
-    public List<Account> filter(List<FilterItem<AccountProperty>> filterItems) {
-        // @todo: implement
-        return null;
+    public List<Account> filter(FilterConnector<AccountProperty, AccountProperty> filterConnector) {
+        Query query = getByFilter("from AccountEntity where active = true and", getCurrentSession(), filterConnector);
+        List<AccountEntity> entities = query.getResultList();
+        ModelMapper mapper = MapperHelper.getMapper();
+
+        return mapper.map(entities, type);
     }
 
     @Override
