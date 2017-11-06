@@ -2,40 +2,33 @@ package at.team2.common.dto.small;
 
 import at.team2.common.interfaces.BaseDtoEntity;
 
-public class MediaMemberDto extends BaseDtoEntity
-{
+public class MediaMemberDto extends BaseDtoEntity {
     private int _id;
     private int _mediaId;
     private String _extendedIndex;
 
-    public int get_id()
-    {
+    public int getId() {
         return _id;
     }
 
-    public void set_id(int _id)
-    {
-        this._id = _id;
+    public void setId(int id) {
+        _id = id;
     }
 
-    public int get_mediaId()
-    {
+    public int getMediaId() {
         return _mediaId;
     }
 
-    public void set_mediaId(int _mediaId)
-    {
-        this._mediaId = _mediaId;
+    public void setMediaId(int mediaId) {
+        _mediaId = mediaId;
     }
 
-    public String get_extendedIndex()
-    {
+    public String getExtendedIndex() {
         return _extendedIndex;
     }
 
-    public void set_extendedIndex(String _extendedIndex)
+    public void setExtendedIndex(String extendedIndex)
     {
-        this._extendedIndex = _extendedIndex;
+        _extendedIndex = extendedIndex;
     }
-
 }

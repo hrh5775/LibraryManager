@@ -1,37 +1,31 @@
 package at.team2.common.dto.small;
 
-public class CustomerSmallDto
-{
+public class CustomerSmallDto {
     private int _id;
     private String _firstName;
     private String _lastName;
-    public int get_id()
-    {
+
+    public int getId() {
         return _id;
     }
 
-    public void set_id(int _id)
-    {
-        this._id = _id;
+    public void setId(int id) {
+        _id = id;
     }
 
-    public String get_firstName()
-    {
+    public String getFirstName() {
         return _firstName;
     }
 
-    public void set_firstName(String _firstName)
-    {
-        this._firstName = _firstName;
+    public void setFirstName(String firstName) {
+        _firstName = firstName;
     }
 
-    public String get_lastName()
-    {
+    public String getLastName() {
         return _lastName;
     }
 
-    public void set_lastName(String _lastName)
-    {
-        this._lastName = _lastName;
+    public void setLastName(String lastName) {
+        _lastName = lastName;
     }
 }

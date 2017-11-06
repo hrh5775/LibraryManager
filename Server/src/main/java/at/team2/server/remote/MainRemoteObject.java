@@ -32,21 +32,20 @@ public class MainRemoteObject extends UnicastRemoteObject implements MainRemoteO
     }
 
     @Override
-    public CustomerRemoteObjectInf getCustomerRemoteObject() throws RemoteException
-    {
-        if(_customerRemoteObjectInf == null){
+    public CustomerRemoteObjectInf getCustomerRemoteObject() throws RemoteException {
+        if(_customerRemoteObjectInf == null) {
             _customerRemoteObjectInf = new CustomerRemoteObject();
         }
 
         return _customerRemoteObjectInf;
     }
 
-    @Override public LoanRemoteObjectInf getLoanRemoteObject() throws RemoteException
-    {
-        if(_loanRemoteObjectInf == null)
-        {
+    @Override
+    public LoanRemoteObjectInf getLoanRemoteObject() throws RemoteException {
+        if(_loanRemoteObjectInf == null) {
             _loanRemoteObjectInf = new LoanRemoteObject();
         }
+
         return _loanRemoteObjectInf;
     }
 }

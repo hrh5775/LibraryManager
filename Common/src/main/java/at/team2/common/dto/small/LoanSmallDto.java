@@ -1,88 +1,71 @@
 package at.team2.common.dto.small;
 
-
 import java.sql.Date;
 
 import at.team2.common.interfaces.BaseDtoEntity;
 
-public class LoanSmallDto extends BaseDtoEntity
-{
+public class LoanSmallDto extends BaseDtoEntity {
     private int _id;
     private Date _start;
     private Date _lastRenewalStart;
     private Date _end;
     private boolean _closed;
-    private int _customerid;
+    private int _customerId;
     private int _mediaMemberid;
 
-    public int get_id()
-    {
+    public int getId() {
         return _id;
     }
 
-    public void set_id(int _id)
-    {
-        this._id = _id;
+    public void setId(int id) {
+        _id = id;
     }
 
-    public Date get_start()
-    {
+    public Date getStart() {
         return _start;
     }
 
-    public void set_start(Date _start)
-    {
-        this._start = _start;
+    public void setStart(Date start) {
+        _start = start;
     }
 
-    public Date get_lastRenewalStart()
-    {
+    public Date getLastRenewalStart() {
         return _lastRenewalStart;
     }
 
-    public void set_lastRenewalStart(Date _lastRenewalStart)
-    {
-        this._lastRenewalStart = _lastRenewalStart;
+    public void setLastRenewalStart(Date lastRenewalStart) {
+        _lastRenewalStart = lastRenewalStart;
     }
 
-    public Date get_end()
-    {
+    public Date getEnd() {
         return _end;
     }
 
-    public void set_end(Date _end)
-    {
-        this._end = _end;
+    public void setEnd(Date end) {
+        _end = end;
     }
 
-    public boolean is_closed()
-    {
+    public boolean isClosed() {
         return _closed;
     }
 
-    public void set_closed(boolean _closed)
-    {
-        this._closed = _closed;
+    public void setClosed(boolean closed) {
+        _closed = closed;
     }
 
-    public int get_customerid()
-    {
-        return _customerid;
+    public int getCustomerid() {
+        return _customerId;
     }
 
-    public void set_customerid(int _customerid)
-    {
-        this._customerid = _customerid;
+    public void setCustomerid(int customerid) {
+        _customerId = customerid;
     }
 
-    public int get_mediaMemberid()
-    {
+    public int getMediaMemberid() {
         return _mediaMemberid;
     }
 
-    public void set_mediaMemberid(int _mediaMemberid)
-    {
-        this._mediaMemberid = _mediaMemberid;
+    public void setMediaMemberid(int mediaMemberid) {
+        _mediaMemberid = mediaMemberid;
     }
-
 }
