@@ -11,7 +11,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javax.lang.model.type.NullType;
@@ -19,11 +18,7 @@ import at.team2.client.pages.BasePage;
 import javafx.scene.Scene;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import jfxtras.scene.control.ImageViewButton;
-
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -49,21 +44,45 @@ public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
         _listViewVisible.setValue(false);
         _tableView.visibleProperty().bind(_listViewVisible);
         _tableView.itemsProperty().bind(_mediaList);
-
-        _tableView.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent ee) {
-
-                MediaSmallDto msdto = (MediaSmallDto) _tableView.getSelectionModel().getSelectedItem();
-                System.out.println( "BookSmallDto Index:" + msdto.getBaseIndex() );
-
-                showDetail( msdto );
-
-            }
-        });
     }
 
-    public void showDetail( MediaSmallDto msdto ) {
+    @Override
+    public void load() {
+    }
+
+    @Override
+    public void reload() {
+    }
+
+    @Override
+    public void exit() {
+    }
+
+    @Override
+    public void dispose() {
+    }
+
+    @FXML
+    private void search() {
+        try {
+            // @todo: perhaps use a cache
+            MainRemoteObjectInf remoteObject = RmiHelper.getSession();
+            List<BookSmallDto> list = remoteObject.getBookRemoteObject().getBookSmallList();
+            _mediaList.set(new ObservableListWrapper<>((List<MediaSmallDto>)(List<?>) list));
+        } catch (Exception e) {
+            showRmiErrorMessage(e);
+        }
+
+        _listViewVisible.setValue(true);
+    }
+
+    @FXML
+    private void mediaItemClicked() {
+        MediaSmallDto msdto = (MediaSmallDto) _tableView.getSelectionModel().getSelectedItem();
+        showDetail(msdto);
+    }
+
+    private void showDetail( MediaSmallDto msdto ) {
         FXMLLoader fxmlLoader = new FXMLLoader();
         URL url = SearchMedium.class.getResource("./showDetail/showDetail.fxml");
         fxmlLoader.setLocation( url );
@@ -100,46 +119,5 @@ public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
         //txtAreaPublisherPersons
 
         ShowDetail.stage = stage;
-    }
-
-
-    @Override
-    public void load() {
-
-    }
-
-    @Override
-    public void reload() {
-
-    }
-
-    @Override
-    public void exit() {
-    }
-
-    @Override
-    public void dispose() {
-    }
-
-    @FXML
-    private void search() {
-        try {
-            // @todo: perhaps use a cache
-            MainRemoteObjectInf remoteObject = RmiHelper.getSession();
-            List<BookSmallDto> list = remoteObject.getBookRemoteObject().getBookSmallList();
-            _mediaList.set(new ObservableListWrapper<>((List<MediaSmallDto>)(List<?>) list));
-        } catch (Exception e) {
-            showRmiErrorMessage(e);
-        }
-
-        _listViewVisible.setValue(true);
-    }
-
-    public static void main( String[] args ){
-
-
-        URL url = SearchMedium.class.getResource("./showDetail/showDetail.fxml");
-        File fl = new File( url.getPath() );
-        System.out.println( fl.exists() );
     }
 }

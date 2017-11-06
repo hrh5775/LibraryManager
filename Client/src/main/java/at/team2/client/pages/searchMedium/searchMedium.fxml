@@ -14,29 +14,38 @@
 <?import javafx.beans.property.SimpleBooleanProperty?>
 <?import javafx.beans.property.SimpleListProperty?>
 
-<GridPane prefWidth="364.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
-    <fx:define>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.geometry.Insets?>
+<GridPane xmlns="http://javafx.com/javafx"
+          xmlns:fx="http://javafx.com/fxml">
 
-        <!--<FXCollections fx:factory="observableArrayList" fx:id="_mediaList" />-->
+    <fx:define>
         <SimpleListProperty fx:id="_mediaList" />
         <SimpleBooleanProperty fx:id="_listViewVisible" />
     </fx:define>
 
     <columnConstraints>
-        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        <ColumnConstraints hgrow="SOMETIMES" />
+        <ColumnConstraints hgrow="SOMETIMES" />
     </columnConstraints>
     <rowConstraints>
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints vgrow="SOMETIMES" />
+        <RowConstraints vgrow="SOMETIMES" />
+        <RowConstraints vgrow="SOMETIMES" />
     </rowConstraints>
     <children>
         <TextField GridPane.rowIndex="0" GridPane.columnIndex="0" />
         <Button fx:id="searchButton" onAction="#search" mnemonicParsing="false" text="Search" GridPane.rowIndex="0" GridPane.columnIndex="1" />
         <CheckBox mnemonicParsing="false" text="Books" GridPane.rowIndex="1" GridPane.columnIndex="0" />
         <CheckBox mnemonicParsing="false" text="DVD" GridPane.rowIndex="1" GridPane.columnIndex="1" />
-        <TableView fx:id="_tableView" editable="false" GridPane.vgrow="ALWAYS" prefWidth="200.0" GridPane.rowIndex="3" GridPane.columnIndex="0" GridPane.columnSpan="2">
+
+        <HBox>
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            </padding>
+        </HBox>
+
+        <TableView fx:id="_tableView" onMouseClicked="#mediaItemClicked" editable="false" GridPane.vgrow="ALWAYS" GridPane.rowIndex="3" GridPane.columnIndex="0" GridPane.columnSpan="2">
             <placeholder>
                 <Label text="Nothing found" />
             </placeholder>
