@@ -5,7 +5,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -14,32 +13,43 @@
 <?import javafx.beans.property.SimpleBooleanProperty?>
 <?import javafx.beans.property.SimpleListProperty?>
 
+<?import javafx.scene.layout.HBox?>
+<?import javafx.geometry.Insets?>
 <GridPane xmlns="http://javafx.com/javafx"
           xmlns:fx="http://javafx.com/fxml"
           stylesheets="/at/team2/client/pages/searchMedium/searchMedium.css">
+
     <fx:define>
         <SimpleListProperty fx:id="_mediaList" />
         <SimpleBooleanProperty fx:id="_listViewVisible" value="false" />
     </fx:define>
 
     <columnConstraints>
-        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        <ColumnConstraints hgrow="SOMETIMES" />
+        <ColumnConstraints hgrow="SOMETIMES" />
+      <ColumnConstraints hgrow="SOMETIMES" />
     </columnConstraints>
     <rowConstraints>
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        <RowConstraints vgrow="SOMETIMES" />
+        <RowConstraints vgrow="SOMETIMES" />
+        <RowConstraints vgrow="SOMETIMES" />
       <RowConstraints />
     </rowConstraints>
 
     <children>
         <TextField fx:id="_searchField" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-        <Button fx:id="searchButton" mnemonicParsing="false" onAction="#search" text="Search" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-        <CheckBox mnemonicParsing="false" text="Books" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-        <CheckBox mnemonicParsing="false" text="DVD" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-        <TableView fx:id="_tableView" editable="false" prefWidth="200.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="3" GridPane.vgrow="ALWAYS">
+        <Button fx:id="searchButton" mnemonicParsing="false" onAction="#search" text="Search" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+
+        <CheckBox mnemonicParsing="false" text="Books" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+        <CheckBox mnemonicParsing="false" text="DVD" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+
+        <HBox GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.columnSpan="2">
+            <padding>
+                <Insets bottom="5.0" top="5.0" />
+            </padding>
+        </HBox>
+
+        <TableView fx:id="_tableView" editable="false" GridPane.rowIndex="3" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.vgrow="ALWAYS">
             <placeholder>
                 <Label text="Nothing found" />
             </placeholder>
@@ -57,6 +67,5 @@
                 </TableColumn>
             </columns>
         </TableView>
-      <TextArea prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="3" />
     </children>
 </GridPane>
