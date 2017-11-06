@@ -5,7 +5,6 @@ import java.rmi.RemoteException;
 
 import at.team2.common.dto.small.CustomerSmallDto;
 
-public interface CustomerRemoteObjectInf extends Remote
-{
-    public CustomerSmallDto getCustomerSmallbyId(int id) throws RemoteException;
+public interface CustomerRemoteObjectInf extends Remote {
+    public CustomerSmallDto getCustomerSmallById(int id) throws RemoteException;
 }

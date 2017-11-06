@@ -97,7 +97,7 @@ public class LendMedium extends BasePage<Void,NullType,NullType,NullType> {
         try
         {
             MainRemoteObjectInf mainremote = RmiHelper.getSession();
-            CustomerSmallDto foundcustomer = mainremote.getCustomerRemoteObject().getCustomerSmallbyId(Integer.parseInt(_lendCustIdfld.getText()));
+            CustomerSmallDto foundcustomer = mainremote.getCustomerRemoteObject().getCustomerSmallById(Integer.parseInt(_lendCustIdfld.getText()));
             if(foundcustomer != null)
             {
                 _lendFirstNamelbl.setText(foundcustomer.get_firstName());

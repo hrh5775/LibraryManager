@@ -12,14 +12,12 @@ import at.team2.domain.entities.Customer;
 
 public class CustomerRemoteObject extends UnicastRemoteObject implements CustomerRemoteObjectInf
 {
-    protected CustomerRemoteObject() throws RemoteException
-    {
+    protected CustomerRemoteObject() throws RemoteException {
         super(0);
     }
 
     @Override
-    public CustomerSmallDto getCustomerSmallbyId(int id) throws RemoteException
-    {
+    public CustomerSmallDto getCustomerSmallById(int id) throws RemoteException {
         CustomerApplicationFacade facade = CustomerApplicationFacade.getInstance();
         ModelMapper mapper = MapperHelper.getMapper();
         Customer customer = facade.getById(id);
