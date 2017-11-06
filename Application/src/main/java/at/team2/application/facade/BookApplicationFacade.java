@@ -3,6 +3,10 @@ package at.team2.application.facade;
 import at.team2.application.helper.MapperHelper;
 import at.team2.application.interfaces.BaseApplicationFacade;
 import at.team2.common.dto.detailed.BookDetailedDto;
+import at.team2.database_wrapper.common.Filter;
+import at.team2.database_wrapper.common.FilterConnector;
+import at.team2.database_wrapper.enums.CaseType;
+import at.team2.database_wrapper.enums.MatchType;
 import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.facade.BookFacade;
 import at.team2.domain.entities.Book;
@@ -26,6 +30,12 @@ public class BookApplicationFacade extends BaseApplicationFacade<Book, BookDetai
     }
 
     private BookApplicationFacade() {
+    }
+
+    public List<Book> search(String searchString){
+
+        FilterConnector<BookProperty, BookProperty> connector = new FilterConnector<BookProperty, BookProperty>(new Filter<>(searchString, BookProperty.MEDIA, MatchType.CONTAINS, CaseType.IGNORE_CASE));
+        return _facade.filter(connector);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package at.team2.server.remote;
 
+import at.team2.application.facade.BookApplicationFacade;
 import at.team2.application.helper.MapperHelper;
 import at.team2.common.dto.small.BookSmallDto;
 import at.team2.common.interfaces.BookRemoteObjectInf;
@@ -35,4 +36,13 @@ public class BookRemoteObject extends UnicastRemoteObject implements BookRemoteO
 
         return mapper.map(facade.getList(), type);
     }
+
+    public List<BookSmallDto> getBookSmallList(String searchString){
+        BookApplicationFacade facade =  BookApplicationFacade.getInstance();
+        ModelMapper mapper = MapperHelper.getMapper();
+        Type type = new TypeToken<List<BookSmallDto>>() {}.getType();
+
+        return mapper.map(facade.search(searchString), type);
+    }
+
 }

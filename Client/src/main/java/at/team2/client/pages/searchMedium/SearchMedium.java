@@ -12,6 +12,8 @@ import javafx.scene.Parent;
 import javax.lang.model.type.NullType;
 import at.team2.client.pages.BasePage;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+
 import java.util.List;
 
 public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
@@ -21,6 +23,8 @@ public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
     private BooleanProperty _listViewVisible;
     @FXML
     private TableView _tableView;
+    @FXML
+    private TextField _searchField;
 
     @Override
     public void initialize() {
@@ -57,7 +61,8 @@ public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
         try {
             // @todo: perhaps use a cache
             MainRemoteObjectInf remoteObject = RmiHelper.getSession();
-            List<BookSmallDto> list = remoteObject.getBookRemoteObject().getBookSmallList();
+           // List<BookSmallDto> list = remoteObject.getBookRemoteObject().getBookSmallList();
+            List<BookSmallDto> list = remoteObject.getBookRemoteObject().getBookSmallList(_searchField.getText());
             _mediaList.set(new ObservableListWrapper<>((List<MediaSmallDto>)(List<?>) list));
         } catch (Exception e) {
             showRmiErrorMessage(e);

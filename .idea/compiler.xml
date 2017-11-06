@@ -9,7 +9,6 @@
         <module name="Application" />
         <module name="client" />
         <module name="Client" />
-        <module name="Connector" />
         <module name="connector" />
         <module name="Domain" />
         <module name="Hibernate" />
