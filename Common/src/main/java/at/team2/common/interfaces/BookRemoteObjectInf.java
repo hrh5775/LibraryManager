@@ -9,4 +9,5 @@ import java.util.List;
 public interface BookRemoteObjectInf extends Remote {
     public BookSmallDto getBookSmallById(int id) throws RemoteException;
     public List<BookSmallDto> getBookSmallList() throws RemoteException;
+    public List<BookSmallDto> getBookSmallList(String searchString) throws RemoteException;
 }
