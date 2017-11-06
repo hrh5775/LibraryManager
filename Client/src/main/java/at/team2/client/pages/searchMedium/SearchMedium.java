@@ -34,7 +34,6 @@ public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
     public void initializeView() {
         Parent parent = loadView(SearchMedium.class.getResource("searchMedium.fxml"));
         setCenter(parent);
-        _listViewVisible.setValue(false);
         _tableView.visibleProperty().bind(_listViewVisible);
         _tableView.itemsProperty().bind(_mediaList);
     }
@@ -61,7 +60,6 @@ public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
         try {
             // @todo: perhaps use a cache
             MainRemoteObjectInf remoteObject = RmiHelper.getSession();
-           // List<BookSmallDto> list = remoteObject.getBookRemoteObject().getBookSmallList();
             List<BookSmallDto> list = remoteObject.getBookRemoteObject().getBookSmallList(_searchField.getText());
             _mediaList.set(new ObservableListWrapper<>((List<MediaSmallDto>)(List<?>) list));
         } catch (Exception e) {
