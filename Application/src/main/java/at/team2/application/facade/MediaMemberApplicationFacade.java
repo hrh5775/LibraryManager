@@ -14,77 +14,70 @@ import at.team2.domain.entities.MediaMember;
 import at.team2.domain.enums.properties.MediaMemberProperty;
 import javafx.util.Pair;
 
-public class MediaMemberApplicationFacade extends BaseApplicationFacade<MediaMember,MediaMemberDto,MediaMemberProperty>
-{
+public class MediaMemberApplicationFacade extends BaseApplicationFacade<MediaMember,MediaMemberDto,MediaMemberProperty> {
     private static MediaMemberApplicationFacade _instance;
-    private MediaMemberFacade _facade;
+    private MediaMemberFacade _facade = new MediaMemberFacade();
 
-    private MediaMemberApplicationFacade()
-    {
-
+    private MediaMemberApplicationFacade() {
     }
 
-    public static MediaMemberApplicationFacade get_instance()
-    {
-        if(_instance == null)
-        {
+    public static MediaMemberApplicationFacade getInstance() {
+        if(_instance == null) {
             _instance = new MediaMemberApplicationFacade();
         }
+
         return _instance;
     }
 
     @Override
-    public MediaMember getById(int id)
-    {
+    public MediaMember getById(int id) {
         return _facade.getById(id);
     }
 
     @Override
-    public List<MediaMember> getList()
-    {
+    public List<MediaMember> getList() {
         return _facade.getList();
     }
 
     @Override
-    public Pair<Integer, List<Pair<MediaMemberProperty, String>>> add(MediaMemberDto value)
-    {
+    public void closeSession() {
+        _facade.closeSession();
+    }
+
+    @Override
+    public Pair<Integer, List<Pair<MediaMemberProperty, String>>> add(MediaMemberDto value) {
         ModelMapper mapper = MapperHelper.getMapper();
-        MediaMember entity = mapper.map(value,MediaMember.class);
-        List<Pair<MediaMemberProperty,String>> list = entity.validate();
-        if(list.size() == 0)
-        {
+        MediaMember entity = mapper.map(value, MediaMember.class);
+        List<Pair<MediaMemberProperty, String>> list = entity.validate();
+
+        if(list.size() == 0) {
             return new Pair<>(_facade.add(entity, TransactionType.AUTO_COMMIT),list);
         }
-        return new Pair<>(0,new LinkedList<>());
+
+        return new Pair<>(0, new LinkedList<>());
     }
 
     @Override
-    public Pair<Integer, List<Pair<MediaMemberProperty, String>>> update(MediaMemberDto value)
-    {
+    public Pair<Integer, List<Pair<MediaMemberProperty, String>>> update(MediaMemberDto value) {
         ModelMapper mapper = MapperHelper.getMapper();
         MediaMember entity = mapper.map(value,MediaMember.class);
-        List<Pair<MediaMemberProperty,String>> list = entity.validate();
-        if(list.size() == 0)
-        {
+        List<Pair<MediaMemberProperty, String>> list = entity.validate();
+
+        if(list.size() == 0) {
             return new Pair<>(_facade.update(entity, TransactionType.AUTO_COMMIT),list);
         }
-        return new Pair<>(0,new LinkedList<>());
+
+        return new Pair<>(0, new LinkedList<>());
     }
 
     @Override
-    public Pair<Boolean, List<Pair<MediaMemberProperty, String>>> delete(int id)
-    {
-       List<Pair<MediaMemberProperty,String>> list = _facade.getById(id).validate();
-       if(list.size() == 0)
-       {
-           return new Pair<>(_facade.delete(id,TransactionType.AUTO_COMMIT),list);
+    public Pair<Boolean, List<Pair<MediaMemberProperty, String>>> delete(int id) {
+       List<Pair<MediaMemberProperty, String>> list = _facade.getById(id).validate();
+
+       if(list.size() == 0) {
+           return new Pair<>(_facade.delete(id, TransactionType.AUTO_COMMIT), list);
        }
-       return new Pair<>(false,new LinkedList<>());
-    }
 
-    @Override
-    public void closeSession()
-    {
-
+       return new Pair<>(false, new LinkedList<>());
     }
 }
