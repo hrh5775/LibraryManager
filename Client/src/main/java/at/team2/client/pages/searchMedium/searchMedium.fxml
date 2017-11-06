@@ -16,6 +16,7 @@
 
 <GridPane prefWidth="364.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
     <fx:define>
+
         <!--<FXCollections fx:factory="observableArrayList" fx:id="_mediaList" />-->
         <SimpleListProperty fx:id="_mediaList" />
         <SimpleBooleanProperty fx:id="_listViewVisible" />
