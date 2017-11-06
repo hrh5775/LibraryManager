@@ -4,8 +4,10 @@ import at.team2.application.facade.CustomerApplicationFacade;
 import org.modelmapper.ModelMapper;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.List;
 
 import at.team2.application.helper.MapperHelper;
+import at.team2.common.dto.small.BookSmallDto;
 import at.team2.common.dto.small.CustomerSmallDto;
 import at.team2.common.interfaces.CustomerRemoteObjectInf;
 import at.team2.domain.entities.Customer;
