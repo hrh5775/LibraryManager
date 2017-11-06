@@ -20,7 +20,7 @@
       stylesheets="/at/team2/client/pages/lendMedium/lendMedium.css">
 
     <fx:define>
-        <SimpleListProperty fx:id="_MediaList" />
+        <SimpleListProperty fx:id="_mediaList" />
     </fx:define>
 
     <children>

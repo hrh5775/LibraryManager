@@ -1,16 +1,10 @@
 package at.team2.client.pages.lendMedium;
 
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
-import java.util.List;
-
 import javax.lang.model.type.NullType;
-
 import at.team2.client.pages.BasePage;
 import at.team2.common.dto.small.BookSmallDto;
 import at.team2.common.dto.small.CustomerSmallDto;
 import at.team2.common.helper.RmiHelper;
-import at.team2.common.interfaces.CustomerRemoteObjectInf;
 import at.team2.common.interfaces.MainRemoteObjectInf;
 import javafx.beans.property.ListProperty;
 import javafx.fxml.FXML;
@@ -26,7 +20,7 @@ public class LendMedium extends BasePage<Void,NullType,NullType,NullType> {
     @FXML
     private Label _lendTitellbl;
     @FXML
-    private ListProperty<BookSmallDto> _MediaList;
+    private ListProperty<BookSmallDto> _mediaList;
     @FXML
     private TableView _lenditemsTbl;
     @FXML
@@ -45,7 +39,7 @@ public class LendMedium extends BasePage<Void,NullType,NullType,NullType> {
     public void initializeView() {
         Parent parent = loadView(LendMedium.class.getResource("lendMedium.fxml"));
         setCenter(parent);
-        _lenditemsTbl.itemsProperty().bind(_MediaList);
+        _lenditemsTbl.itemsProperty().bind(_mediaList);
     }
 
     @Override
@@ -92,7 +86,7 @@ public class LendMedium extends BasePage<Void,NullType,NullType,NullType> {
     {
         if(_currentMedia != null)
         {
-            _MediaList.add(_currentMedia);
+            _mediaList.add(_currentMedia);
             _currentMedia = null;
         }
 
