@@ -39,18 +39,18 @@ public class BookApplicationFacade extends BaseApplicationFacade<Book, BookDetai
     }
 
     @Override
-    public Book getByID(int id) {
-        return _instance.getByID(id);
+    public Book getById(int id) {
+        return _facade.getById(id);
     }
 
     @Override
     public List<Book> getList() {
-        return _instance.getList();
+        return _facade.getList();
     }
 
     @Override
     public void closeSession() {
-        _instance.closeSession();
+        _facade.closeSession();
     }
 
     @Override
@@ -81,7 +81,7 @@ public class BookApplicationFacade extends BaseApplicationFacade<Book, BookDetai
 
     @Override
     public Pair<Boolean, List<Pair<BookProperty, String>>> delete(int id) {
-        List<Pair<BookProperty, String>> list = _instance.getByID(id).validate();
+        List<Pair<BookProperty, String>> list = _facade.getById(id).validate();
 
         if(list.size() == 0) {
             return new Pair<>(_facade.delete(id, TransactionType.AUTO_COMMIT), list);

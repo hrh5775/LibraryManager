@@ -4,7 +4,6 @@ import at.team2.application.facade.BookApplicationFacade;
 import at.team2.application.helper.MapperHelper;
 import at.team2.common.dto.small.BookSmallDto;
 import at.team2.common.interfaces.BookRemoteObjectInf;
-import at.team2.database_wrapper.facade.BookFacade;
 import at.team2.domain.entities.Book;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -21,7 +20,7 @@ public class BookRemoteObject extends UnicastRemoteObject implements BookRemoteO
 
     @Override
     public BookSmallDto getBookSmallById(int id) throws RemoteException {
-        BookFacade facade = new BookFacade();
+        BookApplicationFacade facade = BookApplicationFacade.getInstance();
         ModelMapper mapper = MapperHelper.getMapper();
         Book book = facade.getById(id);
 
@@ -30,7 +29,7 @@ public class BookRemoteObject extends UnicastRemoteObject implements BookRemoteO
 
     @Override
     public List<BookSmallDto> getBookSmallList() {
-        BookFacade facade = new BookFacade();
+        BookApplicationFacade facade = BookApplicationFacade.getInstance();
         ModelMapper mapper = MapperHelper.getMapper();
         Type type = new TypeToken<List<BookSmallDto>>() {}.getType();
 
@@ -44,5 +43,4 @@ public class BookRemoteObject extends UnicastRemoteObject implements BookRemoteO
 
         return mapper.map(facade.search(searchString), type);
     }
-
 }

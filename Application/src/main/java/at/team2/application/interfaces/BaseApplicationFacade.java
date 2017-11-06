@@ -8,11 +8,11 @@ import java.util.List;
 
 public abstract class BaseApplicationFacade<D extends BaseDomainEntity, T extends BaseDtoEntity, P extends DomainEntityProperty> implements Session, Editable<T, P> {
     /**
-     * Get the entity by its ID
+     * Get the entity by its Id
      * @param id
      * @return
      */
-    public abstract D getByID(int id);
+    public abstract D getById(int id);
 
     /**
      * Gets a list of all entities
