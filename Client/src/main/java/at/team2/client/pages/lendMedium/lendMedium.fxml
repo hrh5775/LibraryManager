@@ -97,7 +97,7 @@
         </GridPane>
         <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="200.0">
             <children>
-                <Button fx:id="_lendconfirmbtn" mnemonicParsing="false" text="Lend" />
+                <Button fx:id="_lendconfirmbtn" onAction="#lendBooksToCustomer" mnemonicParsing="false" text="Lend" />
             </children>
             <VBox.margin>
                 <Insets bottom="5.0" right="5.0" />

@@ -34,7 +34,7 @@ public class BookApplicationFacade extends BaseApplicationFacade<Book, BookDetai
 
     public List<Book> search(String searchString){
 
-        FilterConnector<BookProperty, BookProperty> connector = new FilterConnector<BookProperty, BookProperty>(new Filter<>(searchString, BookProperty.MEDIA, MatchType.CONTAINS, CaseType.IGNORE_CASE));
+        FilterConnector<BookProperty, BookProperty> connector = new FilterConnector<>(new Filter<>(searchString, BookProperty.MEDIA, MatchType.CONTAINS, CaseType.IGNORE_CASE));
         return _facade.filter(connector);
     }
 

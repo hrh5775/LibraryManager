@@ -7,4 +7,5 @@ public interface MainRemoteObjectInf extends Remote {
     public int getVersion() throws RemoteException;
     public BookRemoteObjectInf getBookRemoteObject() throws RemoteException;
     public CustomerRemoteObjectInf getCustomerRemoteObject() throws RemoteException;
+    public LoanRemoteObjectInf getLoanRemoteObject() throws RemoteException;
 }
