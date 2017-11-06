@@ -41,9 +41,7 @@ public class MapperHelper {
                         map().setBaseIndex(source.getMedia().getBaseIndex());
                         map().getPublisher().setId(source.getMedia().getPublisher().getID());
                         map().getPublisher().setName(source.getMedia().getPublisher().getName());
-                        skip().getPublisher().setMediaId(source.getMedia().getID());
                         map().getMediaType().setId(source.getMedia().getMediaType().getID());
-                        skip().getMediaType().setMediaId(source.getMedia().getID());
                     }
                 });
 //
@@ -59,9 +57,7 @@ public class MapperHelper {
                         map().setBaseIndex(source.getMedia().getBaseIndex());
                         map().getPublisher().setId(source.getMedia().getPublisher().getID());
                         map().getPublisher().setName(source.getMedia().getPublisher().getName());
-                        skip().getPublisher().setMediaId(source.getMedia().getID());
                         map().getMediaType().setId(source.getMedia().getMediaType().getID());
-                        skip().getMediaType().setMediaId(source.getMedia().getID());
                     }
                 });
             } catch (Exception e) {
