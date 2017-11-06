@@ -21,11 +21,11 @@ import java.util.List;
 public class MediaFacade extends BaseDatabaseFacade<Media, MediaProperty> {
     private static final Type type = new TypeToken<List<Media>>() {}.getType();
 
-    protected MediaFacade() {
+    public MediaFacade() {
         super();
     }
 
-    protected MediaFacade(EntityManager session) {
+    public MediaFacade(EntityManager session) {
         super(session);
     }
 

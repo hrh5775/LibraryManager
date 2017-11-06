@@ -14,6 +14,7 @@
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.beans.property.SimpleListProperty?>
 <?import at.team2.client.controls.numberfield.NumberField?>
+<?import javafx.beans.property.SimpleBooleanProperty?>
 
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
@@ -21,6 +22,8 @@
 
     <fx:define>
         <SimpleListProperty fx:id="_mediaList" />
+        <SimpleBooleanProperty fx:id="_lendConfirmDisabled" />
+        <SimpleBooleanProperty fx:id="_lendAddButtonDisabled" />
     </fx:define>
 
     <children>
@@ -54,7 +57,8 @@
 
             <children>
                 <Label text="Title:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
-                <Button fx:id="_lendAddbtn" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" text="Add" onAction="#addBookToList" GridPane.rowIndex="0" GridPane.columnIndex="2" />
+                <Label fx:id="_lendTitellbl" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+                <Button fx:id="_lendAddButton" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" text="Add" onAction="#addBookToList" GridPane.rowIndex="0" GridPane.columnIndex="2" />
 
                 <Label text="ID:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
                 <NumberField fx:id="_mediaIdNumberField" GridPane.rowIndex="1" GridPane.columnIndex="1" />
@@ -87,7 +91,7 @@
                     </padding>
                 </HBox>
 
-                <Button fx:id="_lendconfirmbtn" onAction="#lendBooksToCustomer" mnemonicParsing="false" text="Lend" GridPane.rowIndex="8" GridPane.columnIndex="2" />
+                <Button fx:id="_lendConfirmButton" onAction="#lendBooksToCustomer" mnemonicParsing="false" text="Lend" GridPane.rowIndex="8" GridPane.columnIndex="2" />
             </children>
         </GridPane>
     </children>

@@ -115,7 +115,7 @@ public class LoanFacade extends BaseDatabaseFacade<Loan, LoanProperty> {
     }
 
     private void createReminder(LoanEntity entity, Loan value, EntityManager session) {
-        if(entity.getReminderId() <= 0) {
+        if(entity.getReminderId() != null && value.getReminder() != null && entity.getReminderId() <= 0) {
             ReminderFacade reminderFacade = new ReminderFacade(session);
             entity.setReminderId(reminderFacade.add(value.getReminder(), TransactionType.MANUAL_COMMIT));
         }

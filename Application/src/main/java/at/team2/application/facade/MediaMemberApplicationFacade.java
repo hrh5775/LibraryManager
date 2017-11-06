@@ -14,7 +14,7 @@ import at.team2.domain.entities.MediaMember;
 import at.team2.domain.enums.properties.MediaMemberProperty;
 import javafx.util.Pair;
 
-public class MediaMemberApplicationFacade extends BaseApplicationFacade<MediaMember,MediaMemberDto,MediaMemberProperty> {
+public class MediaMemberApplicationFacade extends BaseApplicationFacade<MediaMember, MediaMemberDto, MediaMemberProperty> {
     private static MediaMemberApplicationFacade _instance;
     private MediaMemberFacade _facade = new MediaMemberFacade();
 
