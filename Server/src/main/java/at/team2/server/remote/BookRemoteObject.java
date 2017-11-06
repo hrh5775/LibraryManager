@@ -22,9 +22,13 @@ public class BookRemoteObject extends UnicastRemoteObject implements BookRemoteO
     public BookSmallDto getBookSmallById(int id) throws RemoteException {
         BookApplicationFacade facade = BookApplicationFacade.getInstance();
         ModelMapper mapper = MapperHelper.getMapper();
-        Book book = facade.getById(id);
+        Book entity = facade.getById(id);
 
-        return mapper.map(book, BookSmallDto.class);
+        if(entity != null) {
+            return mapper.map(entity, BookSmallDto.class);
+        }
+
+        return null;
     }
 
     @Override

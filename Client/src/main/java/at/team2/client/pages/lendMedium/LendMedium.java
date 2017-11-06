@@ -6,33 +6,36 @@ import java.sql.Date;
 import java.time.LocalDate;
 import javax.lang.model.type.NullType;
 
+import at.team2.client.controls.numberfield.NumberField;
 import at.team2.client.pages.BasePage;
 import at.team2.common.dto.small.BookSmallDto;
 import at.team2.common.dto.small.CustomerSmallDto;
 import at.team2.common.dto.small.LoanSmallDto;
+import at.team2.common.dto.small.MediaSmallDto;
 import at.team2.common.helper.RmiHelper;
 import at.team2.common.interfaces.LoanRemoteObjectInf;
 import at.team2.common.interfaces.MainRemoteObjectInf;
 import javafx.beans.property.ListProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 
 public class LendMedium extends BasePage<Void, NullType, NullType, NullType> {
     //todo: Add some input validation to all of this
     //todo: Test and make sure this actually works
     @FXML
-    private TextField _lendIDfld;
+    private NumberField _mediaIdNumberField;
     @FXML
     private Label _lendTitellbl;
     @FXML
-    private ListProperty<BookSmallDto> _mediaList;
+    private ListProperty<MediaSmallDto> _mediaList;
     @FXML
     private TableView _lenditemsTbl;
     @FXML
-    private TextField _lendCustIdfld;
+    private NumberField _customerIdNumberField;
     @FXML
     private Label _lendFirstNamelbl;
     @FXML
@@ -48,7 +51,10 @@ public class LendMedium extends BasePage<Void, NullType, NullType, NullType> {
     public void initializeView() {
         Parent parent = loadView(LendMedium.class.getResource("lendMedium.fxml"));
         setCenter(parent);
+
         _lenditemsTbl.itemsProperty().bind(_mediaList);
+        ObservableList<MediaSmallDto> list = FXCollections.observableArrayList();
+        _mediaList.set(list);
     }
 
     @Override
@@ -71,12 +77,12 @@ public class LendMedium extends BasePage<Void, NullType, NullType, NullType> {
     private void findBookByID() {
         try {
             MainRemoteObjectInf mainremote = RmiHelper.getSession();
-            BookSmallDto foundbook = mainremote.getBookRemoteObject().getBookSmallById(Integer.parseInt(_lendIDfld.getText()));
+            BookSmallDto foundbook = mainremote.getBookRemoteObject().getBookSmallById(Integer.parseInt(_mediaIdNumberField.getText()));
 
             if (foundbook != null) {
                 _lendTitellbl.setText(foundbook.getTitle());
                 _currentMedia = foundbook;
-                _lendIDfld.setText("");
+                _mediaIdNumberField.setText("0");
             } else {
                 _lendTitellbl.setText("Medium not found");
             }
@@ -88,7 +94,9 @@ public class LendMedium extends BasePage<Void, NullType, NullType, NullType> {
     @FXML
     private void addBookToList() {
         if (_currentMedia != null) {
-            _mediaList.add(_currentMedia);
+            ObservableList list = _mediaList.get();
+            list.add(_currentMedia);
+            _mediaList.set(list);
             _currentMedia = null;
         }
 
@@ -99,14 +107,14 @@ public class LendMedium extends BasePage<Void, NullType, NullType, NullType> {
     private void getCustomerByID() {
         try {
             MainRemoteObjectInf remoteObject = RmiHelper.getSession();
-            int customerId = Integer.parseInt(_lendCustIdfld.getText());
+            int customerId = Integer.parseInt(_customerIdNumberField.getText());
             CustomerSmallDto foundCustomer = remoteObject.getCustomerRemoteObject().getCustomerSmallById(customerId);
 
             if (foundCustomer != null) {
                 _lendFirstNamelbl.setText(foundCustomer.getFirstName());
                 _lendNamelbl.setText(foundCustomer.getLastName());
                 _currentCustomer = foundCustomer;
-                _lendCustIdfld.setText("");
+                _customerIdNumberField.setText("0");
             } else {
                 _lendFirstNamelbl.setText("Customer not found");
             }

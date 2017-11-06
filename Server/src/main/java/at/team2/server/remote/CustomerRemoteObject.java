@@ -18,7 +18,12 @@ public class CustomerRemoteObject extends UnicastRemoteObject implements Custome
     public CustomerSmallDto getCustomerSmallById(int id) throws RemoteException {
         CustomerApplicationFacade facade = CustomerApplicationFacade.getInstance();
         ModelMapper mapper = MapperHelper.getMapper();
-        Customer customer = facade.getById(id);
-        return mapper.map(customer, CustomerSmallDto.class);
+        Customer entity = facade.getById(id);
+
+        if(entity != null) {
+            return mapper.map(entity, CustomerSmallDto.class);
+        }
+
+        return null;
     }
 }

@@ -1,6 +1,8 @@
 package at.team2.common.dto.small;
 
-public class CustomerSmallDto {
+import at.team2.common.interfaces.BaseDtoEntity;
+
+public class CustomerSmallDto extends BaseDtoEntity {
     private int _id;
     private String _firstName;
     private String _lastName;

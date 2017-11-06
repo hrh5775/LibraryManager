@@ -13,7 +13,7 @@ public class LoanRemoteObject extends UnicastRemoteObject implements LoanRemoteO
     }
 
     @Override
-    public void addLoan(LoanSmallDto loan) {
+    public void addLoan(LoanSmallDto loan) throws RemoteException {
         LoanApplicationFacade facade = LoanApplicationFacade.getInstance();
         facade.add(loan);
     }
