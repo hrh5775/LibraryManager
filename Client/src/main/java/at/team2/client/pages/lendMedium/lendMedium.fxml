@@ -12,13 +12,17 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
-
 <?import javafx.scene.control.cell.PropertyValueFactory?>
 <?import javafx.beans.property.SimpleListProperty?>
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="504.0" prefWidth="403.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      stylesheets="/at/team2/client/pages/lendMedium/lendMedium.css">
+
     <fx:define>
         <SimpleListProperty fx:id="_MediaList" />
     </fx:define>
+
     <children>
         <TableView fx:id="_lenditemsTbl" prefHeight="196.0" prefWidth="403.0">
             <columns>
@@ -38,7 +42,7 @@
             <children>
                 <Label prefHeight="21.0" prefWidth="47.0" text="Title:" />
                 <Label fx:id="_lendTitellbl" prefHeight="21.0" prefWidth="280.0" text="..." />
-                <Button fx:id="_lendAddbtn" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" text="Add" onAction="#AddBooktoList" />
+                <Button fx:id="_lendAddbtn" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" text="Add" onAction="#addBookToList" />
             </children>
             <padding>
                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -48,7 +52,7 @@
             <children>
                 <Label prefHeight="31.0" prefWidth="20.0" text="ID:" />
                 <TextField fx:id="_lendIDfld" prefHeight="31.0" prefWidth="307.0" />
-                <Button fx:id="_lendIDconfirmbtn" mnemonicParsing="false" onAction="#FindBookByID" text="OK" />
+                <Button fx:id="_lendIDconfirmbtn" mnemonicParsing="false" onAction="#findBookByID" text="OK" />
             </children>
             <VBox.margin>
                 <Insets left="10.0" right="10.0" top="10.0" />
@@ -66,7 +70,7 @@
             <children>
                 <Label prefHeight="31.0" prefWidth="93.0" text="Customer-ID:" />
                 <TextField fx:id="_lendCustIdfld" prefHeight="31.0" prefWidth="233.0" />
-                <Button fx:id="_lendCustIDconfirmbtn" mnemonicParsing="false" text="OK" onAction="#GetCustomerByID"/>
+                <Button fx:id="_lendCustIDconfirmbtn" mnemonicParsing="false" text="OK" onAction="#getCustomerByID"/>
             </children>
             <padding>
                 <Insets left="10.0" />

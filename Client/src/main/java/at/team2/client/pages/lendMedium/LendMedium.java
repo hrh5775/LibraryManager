@@ -65,7 +65,7 @@ public class LendMedium extends BasePage<Void,NullType,NullType,NullType> {
     }
 
     @FXML
-    private void FindBookByID()
+    private void findBookByID()
     {
         try
         {
@@ -88,7 +88,7 @@ public class LendMedium extends BasePage<Void,NullType,NullType,NullType> {
 
     }
     @FXML
-    private void AddBooktoList()
+    private void addBookToList()
     {
         if(_currentMedia != null)
         {
@@ -98,7 +98,7 @@ public class LendMedium extends BasePage<Void,NullType,NullType,NullType> {
 
     }
     @FXML
-    private void GetCustomerByID()
+    private void getCustomerByID()
     {
         try
         {
@@ -119,6 +119,5 @@ public class LendMedium extends BasePage<Void,NullType,NullType,NullType> {
         {
             showRmiErrorMessage(e);
         }
-
     }
 }
