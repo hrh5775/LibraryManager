@@ -12,6 +12,8 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
+<?import javafx.beans.property.SimpleBooleanProperty?>
+<?import javafx.beans.property.SimpleListProperty?>
 <GridPane prefWidth="364.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1">
     <fx:define>
         <!--<FXCollections fx:factory="observableArrayList" fx:id="_mediaList" />-->
