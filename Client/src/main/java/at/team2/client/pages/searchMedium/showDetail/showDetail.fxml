@@ -13,67 +13,67 @@
 <?import javafx.scene.layout.RowConstraints?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="750.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.team2.client.pages.searchMedium.showDetail.ShowDetail">
-   <children>
-      <GridPane id="publisherPersonArea" layoutX="6.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="700.0" prefWidth="800.0" snapToPixel="false">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="800.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        </rowConstraints>
-         <children>
-            <ImageView id="imgCover" fx:id="imgCover" fitHeight="128.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER">
-               <image>
-                  <Image url="@../../../../../../../resources/Buecherwurm.jpg" />
-               </image>
-            </ImageView>
-            <GridPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="100.0" prefWidth="800.0" scaleShape="false" snapToPixel="false" GridPane.rowIndex="1">
-                <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="167.66668701171875" minWidth="10.0" prefWidth="78.3333740234375" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="275.0" minWidth="10.0" prefWidth="221.6666259765625" />
-              </columnConstraints>
-              <rowConstraints>
+    <children>
+        <GridPane id="publisherPersonArea" layoutX="6.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="700.0" prefWidth="800.0" snapToPixel="false">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="800.0" />
+            </columnConstraints>
+            <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <Label text="Media Type:" />
-                  <Label text="Index:" GridPane.rowIndex="1" />
-                  <Label text="Available:" GridPane.rowIndex="2" />
-                  <Label text="Title:" GridPane.rowIndex="3" />
-                  <Label text="Genre:" GridPane.rowIndex="4" />
-                  <Label text="Published: " GridPane.rowIndex="5" />
-                  <Label id="txtMediaType" fx:id="txtMediaType" text="Label" GridPane.columnIndex="1" />
-                  <Label id="txtIndex" fx:id="txtIndex" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <Label id="txtAvailable" fx:id="txtAvailable" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <Label id="txtTitle" fx:id="txtTitle" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <Label id="txtGenre" fx:id="txtGenre" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                  <Label id="txtPublished" fx:id="txtPublished" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-               </children>
-               <GridPane.margin>
-                  <Insets left="5.0" />
-               </GridPane.margin>
-            </GridPane>
-            <TableView prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3">
-              <columns>
-                <TableColumn prefWidth="75.0" text="C1" />
-                <TableColumn prefWidth="75.0" text="C2" />
-              </columns>
-            </TableView>
-            <TextArea id="txtfldDescription" fx:id="txtfldDescription" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="181.0" prefWidth="780.0" text="Here comes the description..." wrapText="true" GridPane.rowIndex="3" />
-            <TextArea id="txtAreaPublisherPersons" fx:id="txtAreaPublisherPersons" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="180.0" prefWidth="780.0" text="Here come actors" GridPane.rowIndex="2">
-               <padding>
-                  <Insets bottom="5.0" />
-               </padding>
-            </TextArea>
-         </children>
-      </GridPane>
-   </children>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <ImageView id="imgCover" fx:id="imgCover" fitHeight="128.0" fitWidth="180.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="CENTER">
+                    <image>
+                        <Image url="@../../../../../../../resources/Buecherwurm.jpg" />
+                    </image>
+                </ImageView>
+                <GridPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="100.0" prefWidth="800.0" scaleShape="false" snapToPixel="false" GridPane.rowIndex="1">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="167.66668701171875" minWidth="10.0" prefWidth="78.3333740234375" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="275.0" minWidth="10.0" prefWidth="221.6666259765625" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <Label text="Media Type:" />
+                        <Label text="Index:" GridPane.rowIndex="1" />
+                        <Label text="Available:" GridPane.rowIndex="2" />
+                        <Label text="Title:" GridPane.rowIndex="3" />
+                        <Label text="Genre:" GridPane.rowIndex="4" />
+                        <Label text="Published: " GridPane.rowIndex="5" />
+                        <Label id="txtMediaType" fx:id="txtMediaType" text="Label" GridPane.columnIndex="1" />
+                        <Label id="txtIndex" fx:id="txtIndex" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label id="txtAvailable" fx:id="txtAvailable" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Label id="txtTitle" fx:id="txtTitle" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Label id="txtGenre" fx:id="txtGenre" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <Label id="txtPublished" fx:id="txtPublished" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                    </children>
+                    <GridPane.margin>
+                        <Insets left="5.0" />
+                    </GridPane.margin>
+                </GridPane>
+                <TableView prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3">
+                    <columns>
+                        <TableColumn prefWidth="75.0" text="C1" />
+                        <TableColumn prefWidth="75.0" text="C2" />
+                    </columns>
+                </TableView>
+                <TextArea id="txtfldDescription" fx:id="txtfldDescription" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="181.0" prefWidth="780.0" text="Here comes the description..." wrapText="true" GridPane.rowIndex="3" />
+                <TextArea id="txtAreaPublisherPersons" fx:id="txtAreaPublisherPersons" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="180.0" prefWidth="780.0" text="Here come actors" GridPane.rowIndex="2">
+                    <padding>
+                        <Insets bottom="5.0" />
+                    </padding>
+                </TextArea>
+            </children>
+        </GridPane>
+    </children>
 </AnchorPane>
