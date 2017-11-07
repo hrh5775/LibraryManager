@@ -1,11 +1,16 @@
 package at.team2.client.pages.searchMedium;
 
 import at.team2.client.pages.searchMedium.showDetail.ShowDetail;
-import at.team2.common.dto.detailed.BookDetailedDto;
+import at.team2.common.dto.detailed.MediaDetailedDto;
+import at.team2.common.dto.small.BookSmallDto;
+import at.team2.common.dto.small.DvdSmallDto;
 import at.team2.common.dto.small.MediaSmallDto;
 import at.team2.common.helper.RmiHelper;
 import at.team2.common.interfaces.MainRemoteObjectInf;
 import com.sun.javafx.collections.ObservableListWrapper;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableView;
@@ -36,6 +41,10 @@ public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
     private CheckBox _bookChecked;
     @FXML
     private CheckBox _dvdChecked;
+    @FXML
+    private SimpleBooleanProperty _isDvdChecked;
+    @FXML
+    private SimpleBooleanProperty _isBookChecked;
 
     @Override
     public void initialize() {
@@ -48,6 +57,12 @@ public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
         _listViewVisible.setValue(false);
         _tableView.visibleProperty().bind(_listViewVisible);
         _tableView.itemsProperty().bind(_mediaList);
+
+        _dvdChecked.selectedProperty().bindBidirectional(_isDvdChecked);
+        _bookChecked.selectedProperty().bindBidirectional(_isBookChecked);
+
+        _isDvdChecked.addListener((observable, oldValue, newValue) -> search());
+        _isBookChecked.addListener((observable, oldValue, newValue) -> search());
     }
 
     @Override
@@ -96,19 +111,31 @@ public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
             Object entity = _tableView.getSelectionModel().getSelectedItem();
 
             if(entity != null) {
-                showDetail(((MediaSmallDto) entity).getMediaId());
+                int id = -1;
+
+                if(entity instanceof BookSmallDto) {
+                    id = ((BookSmallDto) entity).getId();
+                } else if(entity instanceof DvdSmallDto) {
+                    id = ((DvdSmallDto) entity).getId();
+                }
+
+                showDetail(id);
             }
         }
     }
 
-    private void showDetail(int mediaId) {
+    private void showDetail(int id) {
         Stage dialog = new Stage();
         FXMLLoader loader = new FXMLLoader(ShowDetail.class.getResource("showDetail.fxml"));
 
         try {
             // @todo: perhaps use a cache
             MainRemoteObjectInf remoteObject = RmiHelper.getSession();
-            BookDetailedDto entity = remoteObject.getBookRemoteObject().getBookDetailedById(mediaId);
+            MediaDetailedDto entity = remoteObject.getBookRemoteObject().getBookDetailedById(id);
+
+            if(entity == null) {
+                entity = remoteObject.getDvdRemoteObject().getDvdDetailedById(id);
+            }
 
             _listViewVisible.setValue(true);
             loader.setController(new ShowDetail(entity));

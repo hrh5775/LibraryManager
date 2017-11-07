@@ -28,5 +28,23 @@ public class BookSmallDtoTest {
 
         Assert.assertEquals(entity.getMedia().getMediaType().getID(), result.getMediaType().getId());
         Assert.assertEquals(entity.getMedia().getMediaType().getName(), result.getMediaType().getName());
+
+
+        // test the conversion back
+        Book resultBack = mapper.map(result, Book.class);
+        Assert.assertEquals(resultBack.getID(), result.getId());
+        Assert.assertEquals(resultBack.getMedia().getID(), result.getMediaId());
+        Assert.assertEquals(resultBack.getMedia().getAvailable(), result.getAvailable());
+        Assert.assertEquals(resultBack.getMedia().getBaseIndex(), result.getBaseIndex());
+        Assert.assertEquals(resultBack.getMedia().getDescription(), result.getDescription());
+        Assert.assertEquals(resultBack.getMedia().getTitle(), result.getTitle());
+        Assert.assertEquals(resultBack.getMedia().getStandardMediaId(), result.getStandardMediaId());
+        Assert.assertEquals(resultBack.getMedia().getPublishedDate(), result.getPublishedDate());
+
+        Assert.assertEquals(resultBack.getMedia().getPublisher().getID(), result.getPublisher().getId());
+        Assert.assertEquals(resultBack.getMedia().getPublisher().getName(), result.getPublisher().getName());
+
+        Assert.assertEquals(resultBack.getMedia().getMediaType().getID(), result.getMediaType().getId());
+        Assert.assertEquals(resultBack.getMedia().getMediaType().getName(), result.getMediaType().getName());
     }
 }

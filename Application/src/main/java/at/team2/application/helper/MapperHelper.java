@@ -56,6 +56,22 @@ public class MapperHelper {
                     }
                 });
 
+                mapper.addMappings(new PropertyMap<BookSmallDto, Book>() {
+                    @Override
+                    protected void configure() {
+                        map().setId(source.getId());
+                        map().getMedia().setId(source.getMediaId());
+                        map().getMedia().setAvailable(source.getAvailable());
+                        map().getMedia().setTitle(source.getTitle());
+                        map().getMedia().setPublishedDate(source.getPublishedDate());
+                        map().getMedia().setDescription(source.getDescription());
+                        map().getMedia().setBaseIndex(source.getBaseIndex());
+                        map().getMedia().getPublisher().setId(source.getPublisher().getId());
+                        map().getMedia().getPublisher().setName(source.getPublisher().getName());
+                        map().getMedia().getMediaType().setId(source.getMediaType().getId());
+                    }
+                });
+
                 mapper.addMappings(new PropertyMap<Dvd, DvdSmallDto>() {
                     @Override
                     protected void configure() {
@@ -72,32 +88,19 @@ public class MapperHelper {
                     }
                 });
 
-                mapper.addMappings(new PropertyMap<CreatorPerson, CreatorPersonSmallDto>() {
+                mapper.addMappings(new PropertyMap<DvdSmallDto, Dvd>() {
                     @Override
                     protected void configure() {
-                        map().setId(source.getID());
-                        map().setFirstName(source.getFirstName());
-                        map().setLastName(source.getLastName());
-                    }
-                });
-
-                mapper.addConverter(new AbstractConverter<Media, List<CreatorPersonSmallDto>>() {
-                    @Override
-                    protected List<CreatorPersonSmallDto> convert(Media media) {
-                        List<CreatorPerson> list = media.getCreatorPersons();
-                        List<CreatorPersonSmallDto> resultList = new ArrayList<>(list.size());
-                        CreatorPersonSmallDto tmp;
-
-                        for(CreatorPerson item : list) {
-                            tmp = new CreatorPersonSmallDto();
-                            tmp.setId(item.getID());
-                            tmp.setFirstName(item.getFirstName());
-                            tmp.setLastName(item.getLastName());
-
-                            resultList.add(tmp);
-                        }
-
-                        return resultList;
+                        map().setId(source.getId());
+                        map().getMedia().setId(source.getId());
+                        map().getMedia().setAvailable(source.getAvailable());
+                        map().getMedia().setTitle(source.getTitle());
+                        map().getMedia().setPublishedDate(source.getPublishedDate());
+                        map().getMedia().setDescription(source.getDescription());
+                        map().getMedia().setBaseIndex(source.getBaseIndex());
+                        map().getMedia().getPublisher().setId(source.getPublisher().getId());
+                        map().getMedia().getPublisher().setName(source.getPublisher().getName());
+                        map().getMedia().getMediaType().setId(source.getMediaType().getId());
                     }
                 });
 
@@ -124,6 +127,29 @@ public class MapperHelper {
                     }
                 });
 
+                mapper.addMappings(new PropertyMap<DvdDetailedDto, Dvd>() {
+                    @Override
+                    protected void configure() {
+                        map().setId(source.getId());
+                        map().setPlayingTime(source.getPlayingTime());
+                        map().getMedia().setCover(source.getCover());
+                        map().getMedia().getGenre().setId(source.getGenre().getId());
+                        map().getMedia().getGenre().setName(source.getGenre().getName());
+
+                        // somehow we can't convert creatorPersons
+
+                        map().getMedia().setId(source.getId());
+                        map().getMedia().setAvailable(source.getAvailable());
+                        map().getMedia().setTitle(source.getTitle());
+                        map().getMedia().setPublishedDate(source.getPublishedDate());
+                        map().getMedia().setDescription(source.getDescription());
+                        map().getMedia().setBaseIndex(source.getBaseIndex());
+                        map().getMedia().getPublisher().setId(source.getPublisher().getId());
+                        map().getMedia().getPublisher().setName(source.getPublisher().getName());
+                        map().getMedia().getMediaType().setId(source.getMediaType().getId());
+                    }
+                });
+
                 mapper.addMappings(new PropertyMap<Book, BookDetailedDto>() {
                     @Override
                     protected void configure() {
@@ -144,6 +170,29 @@ public class MapperHelper {
                         map().getPublisher().setId(source.getMedia().getPublisher().getID());
                         map().getPublisher().setName(source.getMedia().getPublisher().getName());
                         map().getMediaType().setId(source.getMedia().getMediaType().getID());
+                    }
+                });
+
+                mapper.addMappings(new PropertyMap<BookDetailedDto, Book>() {
+                    @Override
+                    protected void configure() {
+                        map().setId(source.getId());
+                        map().setEdition(source.getEdition());
+                        map().getMedia().setCover(source.getCover());
+                        map().getMedia().getGenre().setId(source.getGenre().getId());
+                        map().getMedia().getGenre().setName(source.getGenre().getName());
+
+                        // somehow we can't convert creatorPersons
+
+                        map().getMedia().setId(source.getId());
+                        map().getMedia().setAvailable(source.getAvailable());
+                        map().getMedia().setTitle(source.getTitle());
+                        map().getMedia().setPublishedDate(source.getPublishedDate());
+                        map().getMedia().setDescription(source.getDescription());
+                        map().getMedia().setBaseIndex(source.getBaseIndex());
+                        map().getMedia().getPublisher().setId(source.getPublisher().getId());
+                        map().getMedia().getPublisher().setName(source.getPublisher().getName());
+                        map().getMedia().getMediaType().setId(source.getMediaType().getId());
                     }
                 });
             } catch (Exception e) {

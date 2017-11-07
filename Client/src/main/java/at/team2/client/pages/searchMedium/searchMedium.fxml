@@ -29,6 +29,8 @@
     <fx:define>
         <SimpleListProperty fx:id="_mediaList" />
         <SimpleBooleanProperty fx:id="_listViewVisible" />
+        <SimpleBooleanProperty fx:id="_isDvdChecked" />
+        <SimpleBooleanProperty fx:id="_isBookChecked" />
     </fx:define>
 
     <columnConstraints>
@@ -46,8 +48,16 @@
         <TextField fx:id="_searchField" GridPane.rowIndex="0" GridPane.columnIndex="0" />
         <Button fx:id="searchButton" mnemonicParsing="false" text="Search" onAction="#search" GridPane.rowIndex="0" GridPane.columnIndex="1" />
 
-        <CheckBox fx:id="_bookChecked" mnemonicParsing="false" text="Books" GridPane.rowIndex="1" GridPane.columnIndex="0" />
-        <CheckBox fx:id="_dvdChecked" mnemonicParsing="false" text="DVD" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+        <HBox GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.columnSpan="2">
+            <children>
+                <CheckBox fx:id="_bookChecked" mnemonicParsing="false" text="Books">
+                    <padding>
+                        <Insets right="30" />
+                    </padding>
+                </CheckBox>
+                <CheckBox fx:id="_dvdChecked" mnemonicParsing="false" text="DVD" />
+            </children>
+        </HBox>
 
         <HBox GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.columnSpan="2">
             <padding>

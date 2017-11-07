@@ -25,6 +25,8 @@ public class ShowDetail {
     private TextArea _description;
     @FXML
     private TextArea _publishersPersons;
+    @FXML
+    private TextArea _comment;
 
     private MediaDetailedDto _media;
 
@@ -44,17 +46,10 @@ public class ShowDetail {
         _index.setText(_media.getBaseIndex());
         _available.setText(_media.getAvailable() ? "true" : "false");
         _title.setText(_media.getTitle());
-
-        // @todo: check the mapping
-        if(_media.getGenre() != null) {
-            _genre.setText(_media.getGenre().getName());
-        }
-
-        if(_media.getPublishedDate() != null) {
-            _published.setText(_media.getPublishedDate().toLocalDate().toString());
-        }
-
+        _genre.setText(_media.getGenre().getName());
+        _published.setText(_media.getPublishedDate().toLocalDate().toString());
         _description.setText(_media.getDescription());
+        _comment.setText(_media.getComment());
 
         if(_media.getCreatorPersons() != null) {
             StringBuilder builder = new StringBuilder();

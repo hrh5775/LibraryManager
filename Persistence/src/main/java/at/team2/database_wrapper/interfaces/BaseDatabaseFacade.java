@@ -41,17 +41,8 @@ public abstract class BaseDatabaseFacade<V extends BaseDomainEntity, P extends D
     public abstract List<V> getList();
 
     protected Query getByFilter(String queryString, EntityManager session, FilterConnector<P, P> filterConnector) {
-        Query query = null;
-        Pair<StringBuilder, List<HibernateParameter>> filterExpression = null;
-
-        try {
-
-            filterExpression = getFilterExpression(filterConnector);
-
-            query = session.createQuery(queryString + " " + filterExpression.getKey());
-        } catch (Exception e) {
-            System.out.println(e);
-        }
+        Pair<StringBuilder, List<HibernateParameter>> filterExpression = getFilterExpression(filterConnector);
+        Query query = session.createQuery(queryString + " " + filterExpression.getKey());
 
         for(HibernateParameter item : filterExpression.getValue()) {
             if(!item.getPreValue().isEmpty() || !item.getPostValue().isEmpty()) {

@@ -4,6 +4,7 @@ import at.team2.application.helper.DvdHelper;
 import at.team2.application.helper.MapperHelper;
 import at.team2.common.dto.detailed.DvdDetailedDto;
 import at.team2.common.dto.small.CreatorPersonSmallDto;
+import at.team2.domain.entities.CreatorPerson;
 import at.team2.domain.entities.Dvd;
 import org.junit.Assert;
 import org.junit.Test;
@@ -52,5 +53,42 @@ public class DvdDetailedDtoTest {
 
         Assert.assertEquals(entity.getMedia().getMediaType().getID(), result.getMediaType().getId());
         Assert.assertEquals(entity.getMedia().getMediaType().getName(), result.getMediaType().getName());
+
+
+        // test the conversion back
+        Dvd resultBack = mapper.map(entity, Dvd.class);
+        // @todo: use implicit conversion when possible
+        Type typeResultBack = new TypeToken<List<CreatorPerson>>() {}.getType();
+        resultBack.getMedia().setCreatorPersons(mapper.map(entity.getMedia().getCreatorPersons(), typeResultBack));
+
+        Assert.assertEquals(resultBack.getID(), result.getId());
+        Assert.assertEquals(resultBack.getPlayingTime(), result.getPlayingTime());
+        Assert.assertEquals(resultBack.getMedia().getCover().length, result.getCover().length);
+        Assert.assertEquals(resultBack.getMedia().getGenre().getID(), result.getGenre().getId());
+        Assert.assertEquals(resultBack.getMedia().getGenre().getName(), result.getGenre().getName());
+        Assert.assertEquals(resultBack.getMedia().getPublisher().getID(), result.getPublisher().getId());
+        Assert.assertEquals(resultBack.getMedia().getPublisher().getName(), result.getPublisher().getName());
+
+        Assert.assertEquals(resultBack.getMedia().getCreatorPersons().size(), result.getCreatorPersons().size());
+
+        for(int i = 0; i < resultBack.getMedia().getCreatorPersons().size(); i++) {
+            Assert.assertEquals(resultBack.getMedia().getCreatorPersons().get(i).getID(), result.getCreatorPersons().get(i).getId());
+            Assert.assertEquals(resultBack.getMedia().getCreatorPersons().get(i).getFirstName(), result.getCreatorPersons().get(i).getFirstName());
+            Assert.assertEquals(resultBack.getMedia().getCreatorPersons().get(i).getLastName(), result.getCreatorPersons().get(i).getLastName());
+        }
+
+        Assert.assertEquals(resultBack.getMedia().getID(), result.getMediaId());
+        Assert.assertEquals(resultBack.getMedia().getAvailable(), result.getAvailable());
+        Assert.assertEquals(resultBack.getMedia().getBaseIndex(), result.getBaseIndex());
+        Assert.assertEquals(resultBack.getMedia().getDescription(), result.getDescription());
+        Assert.assertEquals(resultBack.getMedia().getTitle(), result.getTitle());
+        Assert.assertEquals(resultBack.getMedia().getStandardMediaId(), result.getStandardMediaId());
+        Assert.assertEquals(resultBack.getMedia().getPublishedDate(), result.getPublishedDate());
+
+        Assert.assertEquals(resultBack.getMedia().getPublisher().getID(), result.getPublisher().getId());
+        Assert.assertEquals(resultBack.getMedia().getPublisher().getName(), result.getPublisher().getName());
+
+        Assert.assertEquals(resultBack.getMedia().getMediaType().getID(), result.getMediaType().getId());
+        Assert.assertEquals(resultBack.getMedia().getMediaType().getName(), result.getMediaType().getName());
     }
 }
