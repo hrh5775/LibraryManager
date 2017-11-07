@@ -82,26 +82,28 @@ public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
 
     @FXML
     private void search() {
-        try {
-            // @todo: perhaps use a cache
-            MainRemoteObjectInf remoteObject = RmiHelper.getSession();
+        if(!_searchField.getText().isEmpty()) {
+            try {
+                // @todo: perhaps use a cache
+                MainRemoteObjectInf remoteObject = RmiHelper.getSession();
 
-            List<MediaSmallDto> list = new LinkedList<>();
+                List<MediaSmallDto> list = new LinkedList<>();
 
-            if(_bookChecked.isSelected() || (_dvdChecked.isSelected() && _bookChecked.isSelected()) || (!_dvdChecked.isSelected() && !_bookChecked.isSelected())) {
-                list.addAll(remoteObject.getBookRemoteObject().getBookSmallList(_searchField.getText()));
+                if(_bookChecked.isSelected() || (_dvdChecked.isSelected() && _bookChecked.isSelected()) || (!_dvdChecked.isSelected() && !_bookChecked.isSelected())) {
+                    list.addAll(remoteObject.getBookRemoteObject().getBookSmallList(_searchField.getText()));
+                }
+
+                if(_dvdChecked.isSelected() || (_dvdChecked.isSelected() && _bookChecked.isSelected()) || (!_dvdChecked.isSelected() && !_bookChecked.isSelected())) {
+                    list.addAll(remoteObject.getDvdRemoteObject().getDvdSmallList(_searchField.getText())); //List<MediaSmallDto>)(List<?>)
+                }
+
+                _mediaList.set(new ObservableListWrapper<>(list));
+            } catch (Exception e) {
+                showRmiErrorMessage(e);
             }
 
-            if(_dvdChecked.isSelected() || (_dvdChecked.isSelected() && _bookChecked.isSelected()) || (!_dvdChecked.isSelected() && !_bookChecked.isSelected())) {
-                list.addAll(remoteObject.getDvdRemoteObject().getDvdSmallList(_searchField.getText())); //List<MediaSmallDto>)(List<?>)
-            }
-
-            _mediaList.set(new ObservableListWrapper<>(list));
-        } catch (Exception e) {
-            showRmiErrorMessage(e);
+            _listViewVisible.setValue(true);
         }
-
-        _listViewVisible.setValue(true);
     }
 
     @FXML
