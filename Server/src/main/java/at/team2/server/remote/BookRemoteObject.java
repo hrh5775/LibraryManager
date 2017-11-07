@@ -2,7 +2,9 @@ package at.team2.server.remote;
 
 import at.team2.application.facade.BookApplicationFacade;
 import at.team2.application.helper.MapperHelper;
+import at.team2.common.dto.detailed.BookDetailedDto;
 import at.team2.common.dto.small.BookSmallDto;
+import at.team2.common.dto.small.CreatorPersonSmallDto;
 import at.team2.common.interfaces.BookRemoteObjectInf;
 import at.team2.domain.entities.Book;
 import org.modelmapper.ModelMapper;
@@ -14,6 +16,9 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
 public class BookRemoteObject extends UnicastRemoteObject implements BookRemoteObjectInf {
+    private static Type typeSmall = new TypeToken<List<BookSmallDto>>() {}.getType();
+    private static Type typeCreatorPersonSmall = new TypeToken<List<CreatorPersonSmallDto>>() {}.getType();
+
     public BookRemoteObject() throws RemoteException {
         super(0);
     }
@@ -22,25 +27,42 @@ public class BookRemoteObject extends UnicastRemoteObject implements BookRemoteO
     public BookSmallDto getBookSmallById(int id) throws RemoteException {
         BookApplicationFacade facade = BookApplicationFacade.getInstance();
         ModelMapper mapper = MapperHelper.getMapper();
-        Book book = facade.getById(id);
+        Book entity = facade.getById(id);
 
-        return mapper.map(book, BookSmallDto.class);
+        if(entity != null) {
+            return mapper.map(entity, BookSmallDto.class);
+        }
+
+        return null;
     }
 
     @Override
     public List<BookSmallDto> getBookSmallList() {
         BookApplicationFacade facade = BookApplicationFacade.getInstance();
         ModelMapper mapper = MapperHelper.getMapper();
-        Type type = new TypeToken<List<BookSmallDto>>() {}.getType();
 
-        return mapper.map(facade.getList(), type);
+        return mapper.map(facade.getList(), typeSmall);
     }
 
     public List<BookSmallDto> getBookSmallList(String searchString){
         BookApplicationFacade facade =  BookApplicationFacade.getInstance();
         ModelMapper mapper = MapperHelper.getMapper();
-        Type type = new TypeToken<List<BookSmallDto>>() {}.getType();
 
-        return mapper.map(facade.search(searchString), type);
+        return mapper.map(facade.search(searchString), typeSmall);
+    }
+
+    @Override
+    public BookDetailedDto getBookDetailedById(int id) throws RemoteException {
+        BookApplicationFacade facade = BookApplicationFacade.getInstance();
+        ModelMapper mapper = MapperHelper.getMapper();
+        Book entity = facade.getById(id);
+
+        if(entity != null) {
+            BookDetailedDto result = mapper.map(entity, BookDetailedDto.class);
+            result.setCreatorPersons(mapper.map(entity.getMedia().getCreatorPersons(), typeCreatorPersonSmall));
+            return result;
+        }
+
+        return null;
     }
 }

@@ -1,5 +1,6 @@
 package at.team2.common.interfaces;
 
+import at.team2.common.dto.detailed.BookDetailedDto;
 import at.team2.common.dto.small.BookSmallDto;
 
 import java.rmi.Remote;
@@ -10,4 +11,6 @@ public interface BookRemoteObjectInf extends Remote {
     public BookSmallDto getBookSmallById(int id) throws RemoteException;
     public List<BookSmallDto> getBookSmallList() throws RemoteException;
     public List<BookSmallDto> getBookSmallList(String searchString) throws RemoteException;
+
+    public BookDetailedDto getBookDetailedById(int id) throws RemoteException;
 }

@@ -6,6 +6,7 @@ import at.team2.common.dto.detailed.BookDetailedDto;
 import at.team2.database_wrapper.common.Filter;
 import at.team2.database_wrapper.common.FilterConnector;
 import at.team2.database_wrapper.enums.CaseType;
+import at.team2.database_wrapper.enums.ConnectorType;
 import at.team2.database_wrapper.enums.MatchType;
 import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.facade.BookFacade;
@@ -33,8 +34,41 @@ public class BookApplicationFacade extends BaseApplicationFacade<Book, BookDetai
     }
 
     public List<Book> search(String searchString){
+        FilterConnector<BookProperty, BookProperty> connector = new FilterConnector<>(
+                new FilterConnector<>(
+                        new FilterConnector<>(
+                                new Filter<>(searchString, BookProperty.MEDIA__STANDARD_MEDIA_ID, MatchType.CONTAINS, CaseType.IGNORE_CASE),
+                                ConnectorType.OR,
+                                new Filter<>(searchString, BookProperty.MEDIA__TITLE, MatchType.CONTAINS, CaseType.IGNORE_CASE)
+                        ),
+                        ConnectorType.OR,
+                        new FilterConnector<>(
+                                new Filter<>(searchString, BookProperty.MEDIA__DESCRIPTION, MatchType.CONTAINS, CaseType.IGNORE_CASE),
+                                ConnectorType.OR,
+                                new Filter<>(searchString, BookProperty.MEDIA__PUBLISHER, MatchType.CONTAINS, CaseType.IGNORE_CASE)
+                        )
+                    ),
+                ConnectorType.OR,
+                new FilterConnector<>(
+                    new Filter<>(searchString, BookProperty.MEDIA__PUBLISHER_TYPE, MatchType.CONTAINS, CaseType.IGNORE_CASE),
+                    ConnectorType.OR,
+                    new Filter<>(searchString, BookProperty.MEDIA__GENRE, MatchType.CONTAINS, CaseType.IGNORE_CASE)
+                )
+                /*new FilterConnector<>(
+                        new FilterConnector<>(
+                                new Filter<>(searchString, BookProperty.MEDIA__PUBLISHER_TYPE, MatchType.CONTAINS, CaseType.IGNORE_CASE),
+                                ConnectorType.OR,
+                                new Filter<>(searchString, BookProperty.MEDIA__CREATOR_PERSON_FIRST_NAME, MatchType.CONTAINS, CaseType.IGNORE_CASE)
+                        ),
+                        ConnectorType.OR,
+                        new FilterConnector<>(
+                                new Filter<>(searchString, BookProperty.MEDIA__CREATOR_PERSON_LAST_NAME, MatchType.CONTAINS, CaseType.IGNORE_CASE),
+                                ConnectorType.OR,
+                                new Filter<>(searchString, BookProperty.MEDIA__CREATOR_TYPE, MatchType.CONTAINS, CaseType.IGNORE_CASE)
+                        )
+                    )*/
+            );
 
-        FilterConnector<BookProperty, BookProperty> connector = new FilterConnector<BookProperty, BookProperty>(new Filter<>(searchString, BookProperty.MEDIA, MatchType.CONTAINS, CaseType.IGNORE_CASE));
         return _facade.filter(connector);
     }
 

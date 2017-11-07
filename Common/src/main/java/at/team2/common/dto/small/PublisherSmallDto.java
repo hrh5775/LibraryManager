@@ -1,6 +1,8 @@
 package at.team2.common.dto.small;
 
-public class PublisherSmallDto extends MediaSmallDto {
+import at.team2.common.interfaces.BaseDtoEntity;
+
+public class PublisherSmallDto extends BaseDtoEntity {
     private int _id;
     private String _name;
 

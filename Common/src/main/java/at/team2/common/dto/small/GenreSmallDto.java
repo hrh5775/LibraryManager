@@ -2,7 +2,7 @@ package at.team2.common.dto.small;
 
 import at.team2.common.interfaces.BaseDtoEntity;
 
-public class MediaTypeSmallDto extends BaseDtoEntity {
+public class GenreSmallDto extends BaseDtoEntity {
     private int _id;
     private String _name;
 
@@ -20,10 +20,5 @@ public class MediaTypeSmallDto extends BaseDtoEntity {
 
     public void setName(String name) {
         _name = name;
-    }
-
-    @Override
-    public String toString() {
-        return _name;
     }
 }

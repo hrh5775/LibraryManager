@@ -41,8 +41,17 @@ public abstract class BaseDatabaseFacade<V extends BaseDomainEntity, P extends D
     public abstract List<V> getList();
 
     protected Query getByFilter(String queryString, EntityManager session, FilterConnector<P, P> filterConnector) {
-        Pair<StringBuilder, List<HibernateParameter>> filterExpression = getFilterExpression(filterConnector);
-        Query query = session.createQuery(queryString + " " + filterExpression.getKey());
+        Query query = null;
+        Pair<StringBuilder, List<HibernateParameter>> filterExpression = null;
+
+        try {
+
+            filterExpression = getFilterExpression(filterConnector);
+
+            query = session.createQuery(queryString + " " + filterExpression.getKey());
+        } catch (Exception e) {
+            System.out.println(e);
+        }
 
         for(HibernateParameter item : filterExpression.getValue()) {
             if(!item.getPreValue().isEmpty() || !item.getPostValue().isEmpty()) {
@@ -82,7 +91,7 @@ public abstract class BaseDatabaseFacade<V extends BaseDomainEntity, P extends D
                 tmp = createFilterExpression(filterConnector.getRightFilter());
 
             } else {
-                tmp = getFilterExpression(filterConnector.getLeftFilterConnector());
+                tmp = getFilterExpression(filterConnector.getRightFilterConnector());
             }
 
             result.getKey().append(tmp.getKey());
@@ -108,7 +117,7 @@ public abstract class BaseDatabaseFacade<V extends BaseDomainEntity, P extends D
         columnIdentifier = getColumnNameForProperty(filter.getProperty());
         parameter = filter.getParameter();
 
-        if(columnIdentifier != null || !columnIdentifier.trim().isEmpty()) {
+        if(columnIdentifier != null && !columnIdentifier.trim().isEmpty()) {
             hibernateColumnIdentifier = columnIdentifier.replace(".", "");
             modifiedColumnIdentifier = columnIdentifier;
 
