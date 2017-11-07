@@ -110,32 +110,26 @@ public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
             Object entity = _tableView.getSelectionModel().getSelectedItem();
 
             if(entity != null) {
-                int id = -1;
-
-                if(entity instanceof BookSmallDto) {
-                    id = ((BookSmallDto) entity).getId();
-                } else if(entity instanceof DvdSmallDto) {
-                    id = ((DvdSmallDto) entity).getId();
-                }
-
-                showDetail(id);
+                showDetail((MediaSmallDto) entity);
             }
         }
     }
 
-    private void showDetail(int id) {
+    private void showDetail(MediaSmallDto media) {
         Stage dialog = new Stage();
         FXMLLoader loader = new FXMLLoader(ShowDetail.class.getResource("showDetail.fxml"));
 
         try {
             // @todo: perhaps use a cache
             MainRemoteObjectInf remoteObject = RmiHelper.getSession();
-            MediaDetailedDto entity = remoteObject.getBookRemoteObject().getBookDetailedById(id);
+            MediaDetailedDto entity = null;
 
-            if(entity == null) {
-                entity = remoteObject.getDvdRemoteObject().getDvdDetailedById(id);
+            if(media instanceof BookSmallDto) {
+                entity = remoteObject.getBookRemoteObject().getBookDetailedById(((BookSmallDto) media).getId());
+            } else if(media instanceof DvdSmallDto) {
+                entity = remoteObject.getDvdRemoteObject().getDvdDetailedById(((DvdSmallDto) media).getId());
             }
-
+            
             _listViewVisible.setValue(true);
             loader.setController(new ShowDetail(entity));
 
