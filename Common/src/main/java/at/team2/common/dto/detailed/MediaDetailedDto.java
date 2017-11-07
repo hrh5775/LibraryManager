@@ -10,7 +10,7 @@ import java.sql.Date;
 import java.util.List;
 
 public class MediaDetailedDto extends BaseDtoEntity {
-    private int _id;
+    private int _mediaId;
     private String _standardMediaId;
     private String _baseIndex;
     private boolean _available;
@@ -24,8 +24,8 @@ public class MediaDetailedDto extends BaseDtoEntity {
     private PublisherSmallDto _publisher;
     private List<CreatorPersonSmallDto> _creatorPersons;
 
-    public int getId() {
-        return _id;
+    public int getMediaId() {
+        return _mediaId;
     }
 
     public String getStandardMediaId() {
@@ -76,8 +76,8 @@ public class MediaDetailedDto extends BaseDtoEntity {
         return _creatorPersons;
     }
 
-    public void setId(int id) {
-        _id = id;
+    public void setMediaId(int id) {
+        _mediaId = id;
     }
 
     public void setStandardMediaId(String standardMediaId) {

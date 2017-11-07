@@ -1,11 +1,16 @@
 package at.team2.application.helper;
 
+import at.team2.common.dto.detailed.DvdDetailedDto;
 import at.team2.common.dto.small.*;
 import at.team2.domain.entities.Book;
 import at.team2.domain.entities.Dvd;
 import at.team2.domain.entities.Media;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
+import org.modelmapper.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.List;
 
 public class MapperHelper {
     private static ModelMapper mapper;
@@ -44,11 +49,35 @@ public class MapperHelper {
                         map().getMediaType().setId(source.getMedia().getMediaType().getID());
                     }
                 });
-//
+
                 mapper.addMappings(new PropertyMap<Dvd, DvdSmallDto>() {
                     @Override
                     protected void configure() {
                         map().setId(source.getID());
+                        map().setMediaId(source.getMedia().getID());
+                        map().setAvailable(source.getMedia().getAvailable());
+                        map().setTitle(source.getMedia().getTitle());
+                        map().setPublishedDate(source.getMedia().getPublishedDate());
+                        map().setDescription(source.getMedia().getDescription());
+                        map().setBaseIndex(source.getMedia().getBaseIndex());
+                        map().getPublisher().setId(source.getMedia().getPublisher().getID());
+                        map().getPublisher().setName(source.getMedia().getPublisher().getName());
+                        map().getMediaType().setId(source.getMedia().getMediaType().getID());
+                    }
+                });
+
+                mapper.addMappings(new PropertyMap<Dvd, DvdDetailedDto>() {
+                    @Override
+                    protected void configure() {
+                        map().setId(source.getID());
+                        map().setPlayingTime(source.getPlayingTime());
+                        map().setCover(source.getMedia().getCover());
+                        map().getGenre().setId(source.getMedia().getGenre().getID());
+                        map().getGenre().setName(source.getMedia().getGenre().getName());
+
+                        Type type = new TypeToken<List<CreatorPersonSmallDto>>() {}.getType();
+                        map(source.getMedia().getCreatorPersons(), type); // how to convert a list type with missing mapping
+
                         map().setMediaId(source.getMedia().getID());
                         map().setAvailable(source.getMedia().getAvailable());
                         map().setTitle(source.getMedia().getTitle());
@@ -66,14 +95,5 @@ public class MapperHelper {
         }
 
         return mapper;
-    }
-
-    private static void convertMedia(Media source, MediaSmallDto destination) {
-        destination.setMediaId(source.getID());
-        destination.setAvailable(source.getAvailable());
-        destination.setTitle(source.getTitle());
-        destination.setPublishedDate(source.getPublishedDate());
-        destination.setDescription(source.getDescription());
-        destination.setBaseIndex(source.getBaseIndex());
     }
 }
