@@ -15,6 +15,8 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
 public class BookRemoteObject extends UnicastRemoteObject implements BookRemoteObjectInf {
+    private static Type typeSmall = new TypeToken<List<BookSmallDto>>() {}.getType();
+
     public BookRemoteObject() throws RemoteException {
         super(0);
     }
@@ -36,17 +38,15 @@ public class BookRemoteObject extends UnicastRemoteObject implements BookRemoteO
     public List<BookSmallDto> getBookSmallList() {
         BookApplicationFacade facade = BookApplicationFacade.getInstance();
         ModelMapper mapper = MapperHelper.getMapper();
-        Type type = new TypeToken<List<BookSmallDto>>() {}.getType();
 
-        return mapper.map(facade.getList(), type);
+        return mapper.map(facade.getList(), typeSmall);
     }
 
     public List<BookSmallDto> getBookSmallList(String searchString){
         BookApplicationFacade facade =  BookApplicationFacade.getInstance();
         ModelMapper mapper = MapperHelper.getMapper();
-        Type type = new TypeToken<List<BookSmallDto>>() {}.getType();
 
-        return mapper.map(facade.search(searchString), type);
+        return mapper.map(facade.search(searchString), typeSmall);
     }
 
     @Override

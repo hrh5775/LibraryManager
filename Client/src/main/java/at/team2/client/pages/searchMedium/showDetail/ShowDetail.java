@@ -1,5 +1,7 @@
 package at.team2.client.pages.searchMedium.showDetail;
 
+import at.team2.common.dto.detailed.BookDetailedDto;
+import at.team2.common.dto.detailed.DvdDetailedDto;
 import at.team2.common.dto.detailed.MediaDetailedDto;
 import at.team2.common.dto.small.CreatorPersonSmallDto;
 import javafx.fxml.FXML;
@@ -32,6 +34,12 @@ public class ShowDetail {
 
     @FXML
     public void initialize() {
+        if(_media instanceof BookDetailedDto) {
+            // cast the object to the specified type
+        } else if(_media instanceof DvdDetailedDto) {
+            // cast the object to the specified type
+        }
+
         _mediaType.setText(_media.getMediaType().getName());
         _index.setText(_media.getBaseIndex());
         _available.setText(_media.getAvailable() ? "true" : "false");

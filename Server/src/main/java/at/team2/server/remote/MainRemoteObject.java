@@ -1,15 +1,14 @@
 package at.team2.server.remote;
 
 import at.team2.common.configuration.ConnectionInfo;
-import at.team2.common.interfaces.BookRemoteObjectInf;
-import at.team2.common.interfaces.CustomerRemoteObjectInf;
-import at.team2.common.interfaces.LoanRemoteObjectInf;
-import at.team2.common.interfaces.MainRemoteObjectInf;
+import at.team2.common.interfaces.*;
+
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 public class MainRemoteObject extends UnicastRemoteObject implements MainRemoteObjectInf {
     private BookRemoteObjectInf _bookRemoteObjectInf;
+    private DvdRemoteObjectInf _dvdRemoteObjectInf;
     private CustomerRemoteObjectInf _customerRemoteObjectInf;
     private LoanRemoteObjectInf _loanRemoteObjectInf;
 
@@ -30,6 +29,16 @@ public class MainRemoteObject extends UnicastRemoteObject implements MainRemoteO
 
         return _bookRemoteObjectInf;
     }
+
+    @Override
+    public DvdRemoteObjectInf getDvdRemoteObject() throws RemoteException {
+        if(_dvdRemoteObjectInf == null) {
+            _dvdRemoteObjectInf = new DvdRemoteObject();
+        }
+
+        return _dvdRemoteObjectInf;
+    }
+
 
     @Override
     public CustomerRemoteObjectInf getCustomerRemoteObject() throws RemoteException {

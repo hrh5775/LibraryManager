@@ -99,7 +99,7 @@ public class LendMedium extends BasePage<Void, NullType, NullType, NullType> {
                     _currentMedia = entity;
                     _mediaIdNumberField.setText("0");
                 } else {
-                    _lendTitellbl.setText("Medium not found");
+                    showErrorMessage("Medium not found", "");
                 }
             }
         } catch (Exception e) {
@@ -140,7 +140,7 @@ public class LendMedium extends BasePage<Void, NullType, NullType, NullType> {
                     _currentCustomer = foundCustomer;
                     _customerIdNumberField.setText("0");
                 } else {
-                    _lendFirstNamelbl.setText("Customer not found");
+                    showErrorMessage("Customer not found", "");
                 }
             }
         } catch(Exception e) {

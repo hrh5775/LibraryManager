@@ -2,13 +2,12 @@ package at.team2.client.pages.searchMedium;
 
 import at.team2.client.pages.searchMedium.showDetail.ShowDetail;
 import at.team2.common.dto.detailed.BookDetailedDto;
-import at.team2.common.dto.small.BookSmallDto;
 import at.team2.common.dto.small.MediaSmallDto;
 import at.team2.common.helper.RmiHelper;
 import at.team2.common.interfaces.MainRemoteObjectInf;
 import com.sun.javafx.collections.ObservableListWrapper;
-import javafx.beans.value.ObservableObjectValue;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableView;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
@@ -17,9 +16,11 @@ import javafx.scene.Parent;
 import javax.lang.model.type.NullType;
 import at.team2.client.pages.BasePage;
 import javafx.scene.Scene;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 
 public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
@@ -30,7 +31,11 @@ public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
     @FXML
     private TableView _tableView;
     @FXML
-    ObservableObjectValue<TableView.TableViewSelectionModel> _selectedItem;
+    private TextField _searchField;
+    @FXML
+    private CheckBox _bookChecked;
+    @FXML
+    private CheckBox _dvdChecked;
 
     @Override
     public void initialize() {
@@ -66,8 +71,18 @@ public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
         try {
             // @todo: perhaps use a cache
             MainRemoteObjectInf remoteObject = RmiHelper.getSession();
-            List<BookSmallDto> list = remoteObject.getBookRemoteObject().getBookSmallList();
-            _mediaList.set(new ObservableListWrapper<>((List<MediaSmallDto>)(List<?>) list));
+
+            List<MediaSmallDto> list = new LinkedList<>();
+
+            if(_bookChecked.isSelected() || (_dvdChecked.isSelected() && _bookChecked.isSelected()) || (!_dvdChecked.isSelected() && !_bookChecked.isSelected())) {
+                list.addAll(remoteObject.getBookRemoteObject().getBookSmallList(_searchField.getText()));
+            }
+
+            if(_dvdChecked.isSelected() || (_dvdChecked.isSelected() && _bookChecked.isSelected()) || (!_dvdChecked.isSelected() && !_bookChecked.isSelected())) {
+                list.addAll(remoteObject.getDvdRemoteObject().getDvdSmallList(_searchField.getText())); //List<MediaSmallDto>)(List<?>)
+            }
+
+            _mediaList.set(new ObservableListWrapper<>(list));
         } catch (Exception e) {
             showRmiErrorMessage(e);
         }

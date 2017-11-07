@@ -23,7 +23,8 @@
 
 <GridPane xmlns="http://javafx.com/javafx"
           xmlns:fx="http://javafx.com/fxml"
-          stylesheets="/at/team2/client/pages/searchMedium/searchMedium.css">
+          stylesheets="/at/team2/client/pages/searchMedium/searchMedium.css"
+          prefWidth="Infinity" prefHeight="Infinity">
 
     <fx:define>
         <SimpleListProperty fx:id="_mediaList" />
@@ -33,21 +34,20 @@
     <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" />
         <ColumnConstraints hgrow="SOMETIMES" />
-      <ColumnConstraints hgrow="SOMETIMES" />
     </columnConstraints>
     <rowConstraints>
         <RowConstraints vgrow="SOMETIMES" />
         <RowConstraints vgrow="SOMETIMES" />
         <RowConstraints vgrow="SOMETIMES" />
-      <RowConstraints />
+        <RowConstraints />
     </rowConstraints>
 
     <children>
-        <TextField fx:id="_searchField" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-        <Button fx:id="searchButton" mnemonicParsing="false" onAction="#search" text="Search" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+        <TextField fx:id="_searchField" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+        <Button fx:id="searchButton" mnemonicParsing="false" text="Search" onAction="#search" GridPane.rowIndex="0" GridPane.columnIndex="1" />
 
-        <CheckBox mnemonicParsing="false" text="Books" GridPane.rowIndex="1" GridPane.columnIndex="0" />
-        <CheckBox mnemonicParsing="false" text="DVD" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+        <CheckBox fx:id="_bookChecked" mnemonicParsing="false" text="Books" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+        <CheckBox fx:id="_dvdChecked" mnemonicParsing="false" text="DVD" GridPane.rowIndex="1" GridPane.columnIndex="1" />
 
         <HBox GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.columnSpan="2">
             <padding>
@@ -55,20 +55,45 @@
             </padding>
         </HBox>
 
-        <TableView fx:id="_tableView" onMouseClicked="#mediaItemClicked" editable="false" GridPane.rowIndex="3" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.vgrow="ALWAYS">
+        <TableView fx:id="_tableView" onMouseClicked="#mediaItemClicked" editable="false" GridPane.rowIndex="3" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.vgrow="ALWAYS" GridPane.fillWidth="true">
             <placeholder>
                 <Label text="Nothing found" />
             </placeholder>
 
             <columns>
-                <TableColumn text="Id">
+                <TableColumn text="ID" prefWidth="40">
                     <cellValueFactory>
                         <PropertyValueFactory property="id" />
                     </cellValueFactory>
                 </TableColumn>
-                <TableColumn text="Title">
+                <TableColumn text="Title" prefWidth="350">
                     <cellValueFactory>
                         <PropertyValueFactory property="title" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn text="ISBN/Ident." prefWidth="250">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="standardMediaId" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Available" prefWidth="100">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="available" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Published" prefWidth="100">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="publishedDate" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Index" prefWidth="200">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="baseIndex" />
+                    </cellValueFactory>
+                </TableColumn>
+                <TableColumn text="Type" prefWidth="100">
+                    <cellValueFactory>
+                        <PropertyValueFactory property="mediaType" />
                     </cellValueFactory>
                 </TableColumn>
             </columns>

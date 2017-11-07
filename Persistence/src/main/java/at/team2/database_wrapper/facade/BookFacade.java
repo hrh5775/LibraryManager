@@ -68,6 +68,24 @@ public class BookFacade extends BaseDatabaseFacade<Book, BookProperty> {
                 return "mediaByMediaId.title";
             case EDITION:
                 return "edition";
+            case MEDIA__TITLE:
+                return "mediaByMediaId.title";
+            case MEDIA__PUBLISHER:
+                return "mediaByMediaId.publisherByPublisherId.name";
+            case MEDIA__DESCRIPTION:
+                return "mediaByMediaId.description";
+            case MEDIA__CREATOR_TYPE:
+                return "CreatorPersonEntity.creatorTypeByCreatorTypeId.typeName";
+            case MEDIA__PUBLISHER_TYPE:
+                return "mediaByMediaId.publisherByPublisherId.publisherTypeByPublisherTypeId.typeName";
+            case MEDIA__STANDARD_MEDIA_ID:
+                return "mediaByMediaId.standardMediaId";
+            case MEDIA__CREATOR_PERSON_LAST_NAME:
+                return "CreatorPersonEntity.firstName";
+            case MEDIA__CREATOR_PERSON_FIRST_NAME:
+                return "CreatorPersonEntity.lastName";
+            case MEDIA__GENRE:
+                return "mediaByMediaId.genreByGenreId.name";
         }
 
         return null;
