@@ -46,13 +46,13 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>com.teamdev.jxbrowser</groupId>
             <artifactId>jxbrowser-cross-platform</artifactId>
             <version>6.13</version>
             <type>pom</type>
             <scope>compile</scope>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.jfxtras</groupId>
             <artifactId>jfxtras-all</artifactId>
