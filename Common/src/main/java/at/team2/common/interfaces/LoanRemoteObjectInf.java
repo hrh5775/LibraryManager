@@ -4,8 +4,8 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 import at.team2.common.dto.small.CustomerSmallDto;
-import at.team2.common.dto.small.MediaSmallDto;
+import at.team2.common.dto.small.MediaMemberSmallDto;
 
 public interface LoanRemoteObjectInf extends Remote {
-    public int loanMedia(MediaSmallDto loan, CustomerSmallDto customer) throws RemoteException;
+    public int loanMediaMember(MediaMemberSmallDto loan, CustomerSmallDto customer) throws RemoteException;
 }

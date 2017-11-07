@@ -73,7 +73,7 @@ public class MediaHelper {
         return list;
     }
 
-    public static int createMedia(MediaFacade facade) {
+    public static Media createMedia(MediaFacade facade) {
         Media value = new Media();
         value.setAvailable(true);
         value.setBaseIndex("base index Test");
@@ -88,6 +88,6 @@ public class MediaHelper {
         value.setCreatorPersons(MediaHelper.createCreators());
         value.setId(facade.add(value, TransactionType.AUTO_COMMIT));
 
-        return value.getID();
+        return value;
     }
 }

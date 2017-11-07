@@ -93,7 +93,7 @@ public class LoanFacade extends BaseDatabaseFacade<Loan, LoanProperty> {
 
         createReminder(entity, value, session);
         // do not let the user create a closed loan
-        entity.setClosed(true);
+        entity.setClosed(false);
         session.persist(entity);
         StoreHelper.storeEntities(session, transactionType);
 

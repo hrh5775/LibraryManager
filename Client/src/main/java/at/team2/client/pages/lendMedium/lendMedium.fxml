@@ -34,9 +34,9 @@
                     <PropertyValueFactory property="id" />
                 </cellValueFactory>
                 </TableColumn>
-                <TableColumn fx:id="_lendTitelclm" text="Title" >
+                <TableColumn fx:id="_lendTitelclm" text="Title" prefWidth="350">
                     <cellValueFactory>
-                        <PropertyValueFactory property="title" />
+                        <PropertyValueFactory property="media" />
                     </cellValueFactory>
                 </TableColumn>
             </columns>
@@ -58,11 +58,11 @@
             <children>
                 <Label text="Title:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
                 <Label fx:id="_lendTitellbl" GridPane.rowIndex="0" GridPane.columnIndex="1" />
-                <Button fx:id="_lendAddButton" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" text="Add" onAction="#addBookToList" GridPane.rowIndex="0" GridPane.columnIndex="2" />
+                <Button fx:id="_lendAddButton" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" text="Add" onAction="#addMediaMemberToList" GridPane.rowIndex="0" GridPane.columnIndex="2" />
 
                 <Label text="ID:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
                 <NumberField fx:id="_mediaIdNumberField" GridPane.rowIndex="1" GridPane.columnIndex="1" />
-                <Button fx:id="_lendIDconfirmbtn" mnemonicParsing="false" onAction="#findBookByID" text="OK" GridPane.rowIndex="1" GridPane.columnIndex="2" />
+                <Button fx:id="_lendIDconfirmbtn" mnemonicParsing="false" onAction="#findMediaMemberById" text="OK" GridPane.rowIndex="1" GridPane.columnIndex="2" />
 
                 <Separator GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.columnSpan="3">
                     <padding>
@@ -72,7 +72,7 @@
 
                 <Label text="Customer-ID:" GridPane.rowIndex="3" GridPane.columnIndex="0" />
                 <NumberField fx:id="_customerIdNumberField" GridPane.rowIndex="3" GridPane.columnIndex="1" />
-                <Button fx:id="_lendCustIDconfirmbtn" mnemonicParsing="false" text="OK" onAction="#getCustomerByID" GridPane.rowIndex="3" GridPane.columnIndex="2" />
+                <Button fx:id="_lendCustIDconfirmbtn" mnemonicParsing="false" text="OK" onAction="#getCustomerById" GridPane.rowIndex="3" GridPane.columnIndex="2" />
 
                 <HBox GridPane.rowIndex="4" GridPane.columnIndex="0" GridPane.columnSpan="3">
                     <padding>
@@ -91,7 +91,7 @@
                     </padding>
                 </HBox>
 
-                <Button fx:id="_lendConfirmButton" onAction="#lendBooksToCustomer" mnemonicParsing="false" text="Lend" GridPane.rowIndex="8" GridPane.columnIndex="2" />
+                <Button fx:id="_lendConfirmButton" onAction="#lendMediaMembersToCustomer" mnemonicParsing="false" text="Lend" GridPane.rowIndex="8" GridPane.columnIndex="2" />
             </children>
         </GridPane>
     </children>

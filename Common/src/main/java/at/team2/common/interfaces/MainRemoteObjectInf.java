@@ -9,4 +9,5 @@ public interface MainRemoteObjectInf extends Remote {
     public DvdRemoteObjectInf getDvdRemoteObject() throws RemoteException;
     public CustomerRemoteObjectInf getCustomerRemoteObject() throws RemoteException;
     public LoanRemoteObjectInf getLoanRemoteObject() throws RemoteException;
+    public MediaMemberRemoteObjectInf getMediaMemberRemoteObject() throws RemoteException;
 }

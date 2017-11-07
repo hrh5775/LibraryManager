@@ -2,7 +2,7 @@ package at.team2.application.facade;
 
 import at.team2.common.dto.detailed.LoanDetailedDto;
 import at.team2.common.dto.small.CustomerSmallDto;
-import at.team2.common.dto.small.MediaSmallDto;
+import at.team2.common.dto.small.MediaMemberSmallDto;
 import at.team2.database_wrapper.facade.*;
 import at.team2.domain.entities.*;
 import org.modelmapper.ModelMapper;
@@ -23,7 +23,6 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
     private LoanFacade _facade = new LoanFacade();
     private MediaMemberFacade _mediaMemberFacade = new MediaMemberFacade();
     private CustomerFacade _customerFacade = new CustomerFacade();
-    private MediaFacade _mediaFacade = new MediaFacade();
 
     private LoanApplicationFacade() {
     }
@@ -88,13 +87,13 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
         return new Pair<>(false, new LinkedList<>());
     }
 
-    public int loanMedia(MediaSmallDto media, CustomerSmallDto customer) {
+    public int loanMediaMember(MediaMemberSmallDto mediaMember, CustomerSmallDto customer) {
         // get a list of available media members => books, dvds, for the specified media
-        MediaMember mediaMemberEntity = _mediaMemberFacade.getNotLoanedMediaMember(media.getMediaId());
+        MediaMember mediaMemberEntity = _mediaMemberFacade.getNotLoanedMediaMember(mediaMember.getId());
         Customer customerEntity = _customerFacade.getById(customer.getId());
 
         if(mediaMemberEntity != null && customerEntity != null) {
-            Media mediaEntity = _mediaFacade.getById(mediaMemberEntity.getMediaId());
+            Media mediaEntity = mediaMemberEntity.getMedia();
             int loanTerm = mediaEntity.getMediaType().getLoanCondition().getLoanTerm();
 
             Loan loan = new Loan();

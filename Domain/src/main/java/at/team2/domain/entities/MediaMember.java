@@ -9,7 +9,7 @@ import java.util.List;
 
 public class MediaMember extends BaseDomainEntity<MediaMemberProperty> {
     private int _id;
-    private int _mediaId;
+    private Media _media;
     private String _extendedIndex;
 
     @Override
@@ -17,8 +17,8 @@ public class MediaMember extends BaseDomainEntity<MediaMemberProperty> {
         return _id;
     }
 
-    public int getMediaId() {
-        return _mediaId;
+    public Media getMedia() {
+        return _media;
     }
 
     public String getExtendedIndex() {
@@ -29,8 +29,8 @@ public class MediaMember extends BaseDomainEntity<MediaMemberProperty> {
         _id = id;
     }
 
-    public void setMediaId(int mediaId) {
-        _mediaId = mediaId;
+    public void setMedia(Media media) {
+        _media = media;
     }
 
     public void setExtendedIndex(String extendedIndex) {

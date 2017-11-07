@@ -2,9 +2,9 @@ package at.team2.common.dto.small;
 
 import at.team2.common.interfaces.BaseDtoEntity;
 
-public class MediaMemberDto extends BaseDtoEntity {
+public class MediaMemberSmallDto extends BaseDtoEntity {
     private int _id;
-    private int _mediaId;
+    private MediaSmallDto _media;
     private String _extendedIndex;
 
     public int getId() {
@@ -15,12 +15,12 @@ public class MediaMemberDto extends BaseDtoEntity {
         _id = id;
     }
 
-    public int getMediaId() {
-        return _mediaId;
+    public MediaSmallDto getMedia() {
+        return _media;
     }
 
-    public void setMediaId(int mediaId) {
-        _mediaId = mediaId;
+    public void setMedia(MediaSmallDto media) {
+        _media = media;
     }
 
     public String getExtendedIndex() {

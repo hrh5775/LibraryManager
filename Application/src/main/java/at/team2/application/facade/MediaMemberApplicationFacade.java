@@ -7,14 +7,14 @@ import java.util.List;
 
 import at.team2.application.helper.MapperHelper;
 import at.team2.application.interfaces.BaseApplicationFacade;
-import at.team2.common.dto.small.MediaMemberDto;
+import at.team2.common.dto.small.MediaMemberSmallDto;
 import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.facade.MediaMemberFacade;
 import at.team2.domain.entities.MediaMember;
 import at.team2.domain.enums.properties.MediaMemberProperty;
 import javafx.util.Pair;
 
-public class MediaMemberApplicationFacade extends BaseApplicationFacade<MediaMember, MediaMemberDto, MediaMemberProperty> {
+public class MediaMemberApplicationFacade extends BaseApplicationFacade<MediaMember, MediaMemberSmallDto, MediaMemberProperty> {
     private static MediaMemberApplicationFacade _instance;
     private MediaMemberFacade _facade = new MediaMemberFacade();
 
@@ -45,7 +45,7 @@ public class MediaMemberApplicationFacade extends BaseApplicationFacade<MediaMem
     }
 
     @Override
-    public Pair<Integer, List<Pair<MediaMemberProperty, String>>> add(MediaMemberDto value) {
+    public Pair<Integer, List<Pair<MediaMemberProperty, String>>> add(MediaMemberSmallDto value) {
         ModelMapper mapper = MapperHelper.getMapper();
         MediaMember entity = mapper.map(value, MediaMember.class);
         List<Pair<MediaMemberProperty, String>> list = entity.validate();
@@ -58,7 +58,7 @@ public class MediaMemberApplicationFacade extends BaseApplicationFacade<MediaMem
     }
 
     @Override
-    public Pair<Integer, List<Pair<MediaMemberProperty, String>>> update(MediaMemberDto value) {
+    public Pair<Integer, List<Pair<MediaMemberProperty, String>>> update(MediaMemberSmallDto value) {
         ModelMapper mapper = MapperHelper.getMapper();
         MediaMember entity = mapper.map(value,MediaMember.class);
         List<Pair<MediaMemberProperty, String>> list = entity.validate();

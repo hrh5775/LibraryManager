@@ -9,8 +9,6 @@ import at.team2.common.helper.RmiHelper;
 import at.team2.common.interfaces.MainRemoteObjectInf;
 import com.sun.javafx.collections.ObservableListWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableView;
@@ -61,6 +59,7 @@ public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
         _dvdChecked.selectedProperty().bindBidirectional(_isDvdChecked);
         _bookChecked.selectedProperty().bindBidirectional(_isBookChecked);
 
+        _isDvdChecked.addListener((observable, oldValue, newValue) -> search());
         _isDvdChecked.addListener((observable, oldValue, newValue) -> search());
         _isBookChecked.addListener((observable, oldValue, newValue) -> search());
     }
