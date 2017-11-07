@@ -4,6 +4,7 @@ import at.team2.application.facade.BookApplicationFacade;
 import at.team2.application.helper.MapperHelper;
 import at.team2.common.dto.detailed.BookDetailedDto;
 import at.team2.common.dto.small.BookSmallDto;
+import at.team2.common.dto.small.CreatorPersonSmallDto;
 import at.team2.common.interfaces.BookRemoteObjectInf;
 import at.team2.domain.entities.Book;
 import org.modelmapper.ModelMapper;
@@ -16,6 +17,7 @@ import java.util.List;
 
 public class BookRemoteObject extends UnicastRemoteObject implements BookRemoteObjectInf {
     private static Type typeSmall = new TypeToken<List<BookSmallDto>>() {}.getType();
+    private static Type typeCreatorPersonSmall = new TypeToken<List<CreatorPersonSmallDto>>() {}.getType();
 
     public BookRemoteObject() throws RemoteException {
         super(0);
@@ -56,7 +58,9 @@ public class BookRemoteObject extends UnicastRemoteObject implements BookRemoteO
         Book entity = facade.getById(id);
 
         if(entity != null) {
-            return mapper.map(entity, BookDetailedDto.class);
+            BookDetailedDto result = mapper.map(entity, BookDetailedDto.class);
+            result.setCreatorPersons(mapper.map(entity.getMedia().getCreatorPersons(), typeCreatorPersonSmall));
+            return result;
         }
 
         return null;

@@ -3,6 +3,7 @@ package at.team2.server.remote;
 import at.team2.application.facade.DvdApplicationFacade;
 import at.team2.application.helper.MapperHelper;
 import at.team2.common.dto.detailed.DvdDetailedDto;
+import at.team2.common.dto.small.CreatorPersonSmallDto;
 import at.team2.common.dto.small.DvdSmallDto;
 import at.team2.common.interfaces.DvdRemoteObjectInf;
 import at.team2.domain.entities.Dvd;
@@ -16,6 +17,8 @@ import java.util.List;
 
 public class DvdRemoteObject extends UnicastRemoteObject implements DvdRemoteObjectInf {
     private static Type typeSmall = new TypeToken<List<DvdSmallDto>>() {}.getType();
+    private static Type typeCreatorPersonSmall = new TypeToken<List<CreatorPersonSmallDto>>() {}.getType();
+
 
     public DvdRemoteObject() throws RemoteException {
         super(0);
@@ -56,7 +59,9 @@ public class DvdRemoteObject extends UnicastRemoteObject implements DvdRemoteObj
         Dvd entity = facade.getById(id);
 
         if(entity != null) {
-            return mapper.map(entity, DvdDetailedDto.class);
+            DvdDetailedDto result = mapper.map(entity, DvdDetailedDto.class);
+            result.setCreatorPersons(mapper.map(entity.getMedia().getCreatorPersons(), typeCreatorPersonSmall));
+            return result;
         }
 
         return null;
