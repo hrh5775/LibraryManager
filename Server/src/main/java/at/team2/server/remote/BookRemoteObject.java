@@ -2,6 +2,7 @@ package at.team2.server.remote;
 
 import at.team2.application.facade.BookApplicationFacade;
 import at.team2.application.helper.MapperHelper;
+import at.team2.common.dto.detailed.BookDetailedDto;
 import at.team2.common.dto.small.BookSmallDto;
 import at.team2.common.interfaces.BookRemoteObjectInf;
 import at.team2.domain.entities.Book;
@@ -22,9 +23,13 @@ public class BookRemoteObject extends UnicastRemoteObject implements BookRemoteO
     public BookSmallDto getBookSmallById(int id) throws RemoteException {
         BookApplicationFacade facade = BookApplicationFacade.getInstance();
         ModelMapper mapper = MapperHelper.getMapper();
-        Book book = facade.getById(id);
+        Book entity = facade.getById(id);
 
-        return mapper.map(book, BookSmallDto.class);
+        if(entity != null) {
+            return mapper.map(entity, BookSmallDto.class);
+        }
+
+        return null;
     }
 
     @Override
@@ -42,5 +47,18 @@ public class BookRemoteObject extends UnicastRemoteObject implements BookRemoteO
         Type type = new TypeToken<List<BookSmallDto>>() {}.getType();
 
         return mapper.map(facade.search(searchString), type);
+    }
+
+    @Override
+    public BookDetailedDto getBookDetailedById(int id) throws RemoteException {
+        BookApplicationFacade facade = BookApplicationFacade.getInstance();
+        ModelMapper mapper = MapperHelper.getMapper();
+        Book entity = facade.getById(id);
+
+        if(entity != null) {
+            return mapper.map(entity, BookDetailedDto.class);
+        }
+
+        return null;
     }
 }

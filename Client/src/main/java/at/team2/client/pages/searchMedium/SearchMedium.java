@@ -1,13 +1,14 @@
 package at.team2.client.pages.searchMedium;
 
 import at.team2.client.pages.searchMedium.showDetail.ShowDetail;
+import at.team2.common.dto.detailed.BookDetailedDto;
 import at.team2.common.dto.small.BookSmallDto;
 import at.team2.common.dto.small.MediaSmallDto;
 import at.team2.common.helper.RmiHelper;
 import at.team2.common.interfaces.MainRemoteObjectInf;
 import com.sun.javafx.collections.ObservableListWrapper;
+import javafx.beans.value.ObservableObjectValue;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
@@ -16,11 +17,9 @@ import javafx.scene.Parent;
 import javax.lang.model.type.NullType;
 import at.team2.client.pages.BasePage;
 import javafx.scene.Scene;
-import javafx.scene.control.TextArea;
-import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import java.io.IOException;
-import java.net.URL;
 import java.util.List;
 
 public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
@@ -30,7 +29,8 @@ public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
     private BooleanProperty _listViewVisible;
     @FXML
     private TableView _tableView;
-
+    @FXML
+    ObservableObjectValue<TableView.TableViewSelectionModel> _selectedItem;
 
     @Override
     public void initialize() {
@@ -40,7 +40,6 @@ public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
     public void initializeView() {
         Parent parent = loadView(SearchMedium.class.getResource("searchMedium.fxml"));
         setCenter(parent);
-        //TextField rehearsalConductor = (TextField) stage.getScene().lookup("#rehearsalConductor");
         _listViewVisible.setValue(false);
         _tableView.visibleProperty().bind(_listViewVisible);
         _tableView.itemsProperty().bind(_mediaList);
@@ -77,47 +76,37 @@ public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
     }
 
     @FXML
-    private void mediaItemClicked() {
-        MediaSmallDto msdto = (MediaSmallDto) _tableView.getSelectionModel().getSelectedItem();
-        showDetail(msdto);
+    private void mediaItemClicked(MouseEvent mouseEvent) {
+        if(mouseEvent.getClickCount() == 2) {
+            Object entity = _tableView.getSelectionModel().getSelectedItem();
+
+            if(entity != null) {
+                showDetail(((MediaSmallDto) entity).getMediaId());
+            }
+        }
     }
 
-    private void showDetail( MediaSmallDto msdto ) {
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        URL url = SearchMedium.class.getResource("./showDetail/showDetail.fxml");
-        fxmlLoader.setLocation( url );
-        Scene scene = null;
+    private void showDetail(int mediaId) {
+        Stage dialog = new Stage();
+        FXMLLoader loader = new FXMLLoader(ShowDetail.class.getResource("showDetail.fxml"));
+
         try {
-            scene = new Scene(fxmlLoader.load());
-        } catch (IOException e) {
-            e.printStackTrace();
+            // @todo: perhaps use a cache
+            MainRemoteObjectInf remoteObject = RmiHelper.getSession();
+            BookDetailedDto entity = remoteObject.getBookRemoteObject().getBookDetailedById(mediaId);
+
+            _listViewVisible.setValue(true);
+            loader.setController(new ShowDetail(entity));
+
+            try {
+                dialog.setScene(new Scene(loader.load()));
+                dialog.setAlwaysOnTop(true);
+                dialog.showAndWait();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            showRmiErrorMessage(e);
         }
-        Stage stage = new Stage();
-        stage.setTitle("Media Detail");
-        stage.setScene(scene);
-        stage.setResizable(false);
-        stage.show();
-
-        ImageView imgCover = ( ImageView ) stage.getScene().lookup( "#imgCover");
-        Label txtMediaType = ( Label ) stage.getScene().lookup("#txtMediaType");
-        Label txtIndex = ( Label ) stage.getScene().lookup("#txtIndex");
-        Label txtAvailable = ( Label ) stage.getScene().lookup("#txtAvailable");
-        Label txtTitle = ( Label ) stage.getScene().lookup("#txtTitle");
-        Label txtGenre = ( Label ) stage.getScene().lookup("#txtGenre");
-        Label txtPublished = ( Label ) stage.getScene().lookup("#txtPublished");
-        TextArea txtfldDescription = ( TextArea ) stage.getScene().lookup("#txtfldDescription");
-        TextArea txtAreaPublisherPersons = ( TextArea ) stage.getScene().lookup( "#txtAreaPublisherPersons");
-
-        //imgCover.setImage( msdto.);
-        txtMediaType.setText( msdto.getMediaType().getName() );
-        txtIndex.setText( msdto.getBaseIndex() );
-        txtAvailable.setText( (msdto.getAvailable())? "Yes" : "No" );
-        txtTitle.setText( msdto.getTitle() );
-        //txtGenre.setText( msdto.g);
-        txtPublished.setText( msdto.getPublishedDate().toString() );
-        txtfldDescription.setText( msdto.getDescription() );
-        //txtAreaPublisherPersons
-
-        ShowDetail.stage = stage;
     }
 }
