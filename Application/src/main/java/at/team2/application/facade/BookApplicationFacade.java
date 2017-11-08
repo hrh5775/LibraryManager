@@ -50,23 +50,18 @@ public class BookApplicationFacade extends BaseApplicationFacade<Book, BookDetai
                     ),
                 ConnectorType.OR,
                 new FilterConnector<>(
-                    new Filter<>(searchString, BookProperty.MEDIA__PUBLISHER_TYPE, MatchType.CONTAINS, CaseType.IGNORE_CASE),
-                    ConnectorType.OR,
-                    new Filter<>(searchString, BookProperty.MEDIA__GENRE, MatchType.CONTAINS, CaseType.IGNORE_CASE)
-                )
-                /*new FilterConnector<>(
                         new FilterConnector<>(
                                 new Filter<>(searchString, BookProperty.MEDIA__PUBLISHER_TYPE, MatchType.CONTAINS, CaseType.IGNORE_CASE),
                                 ConnectorType.OR,
-                                new Filter<>(searchString, BookProperty.MEDIA__CREATOR_PERSON_FIRST_NAME, MatchType.CONTAINS, CaseType.IGNORE_CASE)
+                                new Filter<>(searchString, BookProperty.MEDIA__CREATOR_PERSON, MatchType.CONTAINS, CaseType.IGNORE_CASE)
                         ),
                         ConnectorType.OR,
                         new FilterConnector<>(
-                                new Filter<>(searchString, BookProperty.MEDIA__CREATOR_PERSON_LAST_NAME, MatchType.CONTAINS, CaseType.IGNORE_CASE),
+                                new Filter<>(searchString, BookProperty.MEDIA__CREATOR_TYPE, MatchType.CONTAINS, CaseType.IGNORE_CASE),
                                 ConnectorType.OR,
-                                new Filter<>(searchString, BookProperty.MEDIA__CREATOR_TYPE, MatchType.CONTAINS, CaseType.IGNORE_CASE)
+                                new Filter<>(searchString, BookProperty.MEDIA__GENRE, MatchType.CONTAINS, CaseType.IGNORE_CASE)
                         )
-                    )*/
+                    )
             );
 
         return _facade.filter(connector);

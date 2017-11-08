@@ -75,15 +75,13 @@ public class BookFacade extends BaseDatabaseFacade<Book, BookProperty> {
             case MEDIA__DESCRIPTION:
                 return "mediaByMediaId.description";
             case MEDIA__CREATOR_TYPE:
-                return "CreatorPersonEntity.creatorTypeByCreatorTypeId.typeName";
+                return "(select group_concat(creatorPersonByCreatorPersonId.creatorTypeByCreatorTypeId.typeName) from MediaCreatorPersonEntity where mediaId = book.mediaId)";
             case MEDIA__PUBLISHER_TYPE:
                 return "mediaByMediaId.publisherByPublisherId.publisherTypeByPublisherTypeId.typeName";
             case MEDIA__STANDARD_MEDIA_ID:
                 return "mediaByMediaId.standardMediaId";
-            case MEDIA__CREATOR_PERSON_LAST_NAME:
-                return "CreatorPersonEntity.firstName";
-            case MEDIA__CREATOR_PERSON_FIRST_NAME:
-                return "CreatorPersonEntity.lastName";
+            case MEDIA__CREATOR_PERSON:
+                return "(select group_concat(concat(creatorPersonByCreatorPersonId.firstName, ' ', creatorPersonByCreatorPersonId.lastName)) from MediaCreatorPersonEntity where mediaId = book.mediaId)";
             case MEDIA__GENRE:
                 return "mediaByMediaId.genreByGenreId.name";
         }
@@ -93,7 +91,7 @@ public class BookFacade extends BaseDatabaseFacade<Book, BookProperty> {
 
     @Override
     public List<Book> filter(FilterConnector<BookProperty, BookProperty> filterConnector) {
-        Query query = getByFilter("from BookMetaEntity where", getCurrentSession(), filterConnector);
+        Query query = getByFilter("from BookMetaEntity as book where", getCurrentSession(), filterConnector);
         List<BookMetaEntity> entities = query.getResultList();
         ModelMapper mapper = MapperHelper.getMapper();
 

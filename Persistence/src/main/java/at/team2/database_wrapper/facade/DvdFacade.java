@@ -75,15 +75,13 @@ public class DvdFacade extends BaseDatabaseFacade<Dvd, DvdProperty> {
             case MEDIA__DESCRIPTION:
                 return "mediaByMediaId.description";
             case MEDIA__CREATOR_TYPE:
-                return "CreatorPersonEntity.creatorTypeByCreatorTypeId.typeName";
+                return "(select group_concat(creatorPersonByCreatorPersonId.creatorTypeByCreatorTypeId.typeName) from MediaCreatorPersonEntity where mediaId = dvd.mediaId)";
             case MEDIA__PUBLISHER_TYPE:
                 return "mediaByMediaId.publisherByPublisherId.publisherTypeByPublisherTypeId.typeName";
             case MEDIA__STANDARD_MEDIA_ID:
                 return "mediaByMediaId.standardMediaId";
-            case MEDIA__CREATOR_PERSON_LAST_NAME:
-                return "CreatorPersonEntity.firstName";
-            case MEDIA__CREATOR_PERSON_FIRST_NAME:
-                return "CreatorPersonEntity.lastName";
+            case MEDIA__CREATOR_PERSON:
+                return "(select group_concat(concat(creatorPersonByCreatorPersonId.firstName, ' ', creatorPersonByCreatorPersonId.lastName)) from MediaCreatorPersonEntity where mediaId = dvd.mediaId)";
             case MEDIA__GENRE:
                 return "mediaByMediaId.genreByGenreId.name";
         }
@@ -93,7 +91,7 @@ public class DvdFacade extends BaseDatabaseFacade<Dvd, DvdProperty> {
 
     @Override
     public List<Dvd> filter(FilterConnector<DvdProperty, DvdProperty> filterConnector) {
-        Query query = getByFilter("from DvdMetaEntity where", getCurrentSession(), filterConnector);
+        Query query = getByFilter("from DvdMetaEntity as dvd where", getCurrentSession(), filterConnector);
         List<DvdMetaEntity> entities = query.getResultList();
         ModelMapper mapper = MapperHelper.getMapper();
 

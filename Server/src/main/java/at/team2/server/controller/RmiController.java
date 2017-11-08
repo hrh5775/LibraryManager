@@ -42,7 +42,7 @@ public class RmiController {
         MainRemoteObject obj = new MainRemoteObject();
         registry.rebind(ConnectionInfo.url, obj);
 
-        System.out.println("Server started successfully");
+        System.out.println("Server has started successfully");
         // https://docs.oracle.com/javase/7/docs/technotes/guides/rmi/hello/hello-world.html
         // https://stackoverflow.com/questions/23794997/java-rmi-codebase-not-working
         // rmiregistry 1099 -J-Djava.rmi.server.useCodebaseOnly=false

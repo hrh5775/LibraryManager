@@ -13,6 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 public abstract class BaseDatabaseFacade<V extends BaseDomainEntity, P extends DomainEntityProperty> implements Session, Editable<V>, Filterable<V, P, P> {
     private EntityManager _session;
@@ -109,7 +110,7 @@ public abstract class BaseDatabaseFacade<V extends BaseDomainEntity, P extends D
         parameter = filter.getParameter();
 
         if(columnIdentifier != null && !columnIdentifier.trim().isEmpty()) {
-            hibernateColumnIdentifier = columnIdentifier.replace(".", "");
+            hibernateColumnIdentifier = "abc" + (new Random()).nextInt(999999999); //columnIdentifier.replace(".", "");
             modifiedColumnIdentifier = columnIdentifier;
 
             if(!(parameter instanceof Integer)) {
