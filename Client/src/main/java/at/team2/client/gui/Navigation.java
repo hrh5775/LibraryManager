@@ -79,8 +79,8 @@ public class Navigation {
         ToggleGroup toggleGroup = new ToggleGroup();*/
 
         if(account != null) {
-            MenuSection menuSectionLogout = new MenuSection("Logout" + account.getUserName(),"/logout.jpg",null);
-            menuSectionLogout.setTooltip(new Tooltip("Logout" + account.getUserName()));
+            MenuSection menuSectionLogout = new MenuSection("Logout: " + account.getUserName(),"/logout.jpg",null);
+            menuSectionLogout.setTooltip(new Tooltip("Logout: " + account.getUserName()));
             menuSectionLogout.setAnimated(false);
             menuSectionLogout.setCollapsible(false);
             menuSectionLogout.setOnMouseClicked(event -> {
