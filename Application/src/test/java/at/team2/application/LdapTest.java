@@ -1,11 +1,11 @@
-package at.team2.server;
+package at.team2.application;
 
 import org.junit.Test;
 import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.SearchResult;
 import javax.naming.ldap.LdapContext;
-import at.team2.server.helper.LdapHelper;
+import at.team2.application.helper.LdapHelper;
 
 public class LdapTest {
     @Test

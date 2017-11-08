@@ -1,5 +1,6 @@
 package at.team2.application.facade;
 
+import at.team2.application.helper.LdapHelper;
 import at.team2.application.helper.MapperHelper;
 import at.team2.application.interfaces.BaseApplicationFacade;
 import at.team2.common.dto.detailed.AccountDetailedDto;
@@ -10,8 +11,10 @@ import at.team2.database_wrapper.enums.ConnectorType;
 import at.team2.database_wrapper.enums.MatchType;
 import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.facade.AccountFacade;
+import at.team2.database_wrapper.facade.ConfigurationFacade;
 import at.team2.domain.entities.*;
 import at.team2.domain.enums.properties.AccountProperty;
+import at.team2.domain.enums.properties.ConfigurationProperty;
 import javafx.util.Pair;
 import org.modelmapper.ModelMapper;
 import java.util.LinkedList;
@@ -20,6 +23,7 @@ import java.util.List;
 public class AccountApplicationFacade extends BaseApplicationFacade<Account, AccountDetailedDto, AccountProperty> {
     private static AccountApplicationFacade _instance;
     private AccountFacade _facade;
+    private ConfigurationFacade _configurationFacade;
 
     private AccountApplicationFacade() {
     }
@@ -28,6 +32,7 @@ public class AccountApplicationFacade extends BaseApplicationFacade<Account, Acc
         if(_instance == null) {
             _instance = new AccountApplicationFacade();
             _instance._facade = new AccountFacade();
+            _instance._configurationFacade = new ConfigurationFacade(_instance._facade.getCurrentSession());
         }
 
         return _instance;
@@ -95,6 +100,38 @@ public class AccountApplicationFacade extends BaseApplicationFacade<Account, Acc
 
         if(list.size() > 0) {
             return list.get(0);
+        }
+
+        // try to login with ldap
+        FilterConnector<ConfigurationProperty, ConfigurationProperty> ldapAdServerConnector = new FilterConnector<>(
+                new Filter<>("LDAP_AD_SERVER", ConfigurationProperty.IDENTIFIER, MatchType.EQUALS, CaseType.NORMAL));
+        List<Configuration> ldapAdServerList = _configurationFacade.filter(ldapAdServerConnector);
+
+        FilterConnector<ConfigurationProperty, ConfigurationProperty> additionalDNInformationConnector = new FilterConnector<>(
+                new Filter<>("LDAP_ADDITIONAL_DN_INFORMATION", ConfigurationProperty.IDENTIFIER, MatchType.EQUALS, CaseType.NORMAL));
+        List<Configuration> additionalDNInformationList = _configurationFacade.filter(additionalDNInformationConnector);
+
+        if(ldapAdServerList.size() > 0 && additionalDNInformationList.size() > 0) {
+            String ldapAdServer = ldapAdServerList.get(0).getData();
+            String additionalDNInformation = additionalDNInformationList.get(0).getData();
+
+            String fullDNInformation = "uid=" + userName + (additionalDNInformation != null && !additionalDNInformation.isEmpty() ?
+                    "," + additionalDNInformation : "");
+
+            if(LdapHelper.hasValidCredentials(ldapAdServer, true, fullDNInformation, password)) {
+                Account account = new Account();
+                account.setId(0);
+                account.setUserName(userName);
+                account.setPassword(password);
+
+                AccountRole role = new AccountRole();
+                role.setId(0);
+                role.setKey("");
+                role.setRoleName("");
+                account.setAccountRole(role);
+
+                return account;
+            }
         }
 
         return null;
