@@ -51,15 +51,20 @@ public abstract class BasePage<R, V, L, S> extends BorderPane implements BasePag
 
         initializeView();
 
-        Thread thread = new Thread(() -> {
+        startBackgroundTask(() -> {
             load();
 
             if(_load != null) {
                 _load.doAction(null);
             }
         });
+    }
 
+    protected Thread startBackgroundTask(Runnable runnable) {
+        Thread thread = new Thread(runnable);
+        thread.start();
         _tasks.add(thread);
+        return thread;
     }
 
     /**
@@ -268,6 +273,18 @@ public abstract class BasePage<R, V, L, S> extends BorderPane implements BasePag
                     Thread.sleep(1000);
                 }
             }
+        }
+    }
+
+    protected void stopTask(Thread task) throws InterruptedException {
+        task.interrupt();
+
+        while(task.isAlive()) {
+            Thread.sleep(1000);
+        }
+
+        if(_tasks != null) {
+            _tasks.remove(task);
         }
     }
 

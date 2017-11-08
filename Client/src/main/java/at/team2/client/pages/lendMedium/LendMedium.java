@@ -4,6 +4,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import javax.lang.model.type.NullType;
 
+import at.team2.client.controls.loadingindicator.LoadingIndicator;
 import at.team2.client.controls.numberfield.NumberField;
 import at.team2.client.pages.BasePage;
 import at.team2.common.dto.small.CustomerSmallDto;
@@ -11,6 +12,8 @@ import at.team2.common.dto.small.MediaMemberSmallDto;
 import at.team2.common.helper.RmiHelper;
 import at.team2.common.interfaces.LoanRemoteObjectInf;
 import at.team2.common.interfaces.MainRemoteObjectInf;
+import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
@@ -20,8 +23,15 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.Pane;
 
 public class LendMedium extends BasePage<Void, NullType, NullType, NullType> {
+    @FXML
+    private LoadingIndicator _loadingIndicator;
+    @FXML
+    private Pane _mainPanel;
+    @FXML
+    private BooleanProperty _isLoading;
     @FXML
     private NumberField _mediaIdNumberField;
     @FXML
@@ -43,9 +53,11 @@ public class LendMedium extends BasePage<Void, NullType, NullType, NullType> {
     @FXML
     private Button _lendAddButton;
     @FXML
+
     private SimpleBooleanProperty _lendAddButtonDisabled;
     private MediaMemberSmallDto _currentMedia;
     private CustomerSmallDto _currentCustomer;
+    private Thread _lendTask;
 
     @Override
     public void initialize() {
@@ -55,6 +67,10 @@ public class LendMedium extends BasePage<Void, NullType, NullType, NullType> {
     public void initializeView() {
         Parent parent = loadView(LendMedium.class.getResource("lendMedium.fxml"));
         setCenter(parent);
+
+        _isLoading.setValue(false);
+        _loadingIndicator.visibleProperty().bind(_isLoading);
+        _mainPanel.visibleProperty().bind(_isLoading.not());
 
         _lenditemsTbl.itemsProperty().bind(_mediaList);
         _lendConfirmButton.disableProperty().bind(_lendConfirmDisabled);
@@ -157,31 +173,48 @@ public class LendMedium extends BasePage<Void, NullType, NullType, NullType> {
     @FXML
     private void lendMediaMembersToCustomer() throws RemoteException, NotBoundException {
         if(_mediaList.size() > 0 && _currentCustomer != null) {
-            try {
-                MainRemoteObjectInf remoteObject = RmiHelper.getSession();
-                LoanRemoteObjectInf loanRemoteObject = remoteObject.getLoanRemoteObject();
+            _isLoading.setValue(true);
 
-                int count = 0;
+            _lendTask = startBackgroundTask(() -> {
+                try {
+                    MainRemoteObjectInf remoteObject = RmiHelper.getSession();
+                    LoanRemoteObjectInf loanRemoteObject = remoteObject.getLoanRemoteObject();
 
-                for(MediaMemberSmallDto item : _mediaList.get()) {
-                    if(loanRemoteObject.loanMediaMember(item, _currentCustomer) <= 0) {
-                        showErrorMessage("Loan failed for", item.getMedia().getTitle());
-                    } else {
-                        count++;
+                    int count = 0;
+
+                    for (MediaMemberSmallDto item : _mediaList.get()) {
+                        if (loanRemoteObject.loanMediaMember(item, _currentCustomer) <= 0) {
+                            Platform.runLater(() -> showErrorMessage("Loan failed for", item.getMedia().getTitle()));
+                        } else {
+                            count++;
+                        }
                     }
-                }
 
-                ObservableList list = _mediaList.get();
-                list.clear();
-                _mediaList.set(list);
-                this.reload();
+                    ObservableList list = _mediaList.get();
+                    list.clear();
+                    _mediaList.set(list);
+                    this.reload();
 
-                if(count > 0) {
-                    showSuccessMessage("All loans added", "");
+                    if (count > 0) {
+                        Platform.runLater(() -> showSuccessMessage("All loans added", ""));
+                    }
+                } catch (Exception e) {
+                    Platform.runLater(() -> showRmiErrorMessage(e));
+                } finally {
+                    Platform.runLater(() -> _isLoading.setValue(false));
                 }
-            } catch (Exception e) {
-                showRmiErrorMessage(e);
-            }
+            });
+        }
+    }
+
+    @FXML
+    private void cancel() {
+        try {
+            stopTask(_lendTask);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            _isLoading.setValue(false);
         }
     }
 

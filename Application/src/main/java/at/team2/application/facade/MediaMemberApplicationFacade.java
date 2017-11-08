@@ -16,7 +16,7 @@ import javafx.util.Pair;
 
 public class MediaMemberApplicationFacade extends BaseApplicationFacade<MediaMember, MediaMemberSmallDto, MediaMemberProperty> {
     private static MediaMemberApplicationFacade _instance;
-    private MediaMemberFacade _facade = new MediaMemberFacade();
+    private MediaMemberFacade _facade;
 
     private MediaMemberApplicationFacade() {
     }
@@ -24,6 +24,7 @@ public class MediaMemberApplicationFacade extends BaseApplicationFacade<MediaMem
     public static MediaMemberApplicationFacade getInstance() {
         if(_instance == null) {
             _instance = new MediaMemberApplicationFacade();
+            _instance._facade = new MediaMemberFacade();
         }
 
         return _instance;

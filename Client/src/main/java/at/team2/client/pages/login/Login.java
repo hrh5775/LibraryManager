@@ -1,11 +1,19 @@
 package at.team2.client.pages.login;
 
+import at.team2.client.common.AccountManager;
 import at.team2.client.controls.loadingindicator.LoadingIndicator;
+import at.team2.client.gui.Navigation;
+import at.team2.common.dto.detailed.AccountDetailedDto;
+import at.team2.common.helper.RmiHelper;
+import at.team2.common.interfaces.MainRemoteObjectInf;
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javax.lang.model.type.NullType;
 import at.team2.client.pages.BasePage;
+import javafx.scene.control.TextInputControl;
 import javafx.scene.layout.Pane;
 
 public class Login extends BasePage<Void, NullType, NullType, NullType> {
@@ -15,6 +23,16 @@ public class Login extends BasePage<Void, NullType, NullType, NullType> {
     private Pane _mainPanel;
     @FXML
     private BooleanProperty _isLoading;
+    @FXML
+    private TextInputControl _userNameInput;
+    @FXML
+    private TextInputControl _passwordInput;
+    @FXML
+    private SimpleStringProperty _userName;
+    @FXML
+    private SimpleStringProperty _password;
+
+    private Thread _loginTask;
 
     @Override
     public void initialize() {
@@ -28,6 +46,9 @@ public class Login extends BasePage<Void, NullType, NullType, NullType> {
         _isLoading.setValue(false);
         _loadingIndicator.visibleProperty().bind(_isLoading);
         _mainPanel.visibleProperty().bind(_isLoading.not());
+
+        _userNameInput.textProperty().bindBidirectional(_userName);
+        _passwordInput.textProperty().bindBidirectional(_password);
     }
 
     @Override
@@ -49,6 +70,41 @@ public class Login extends BasePage<Void, NullType, NullType, NullType> {
 
     @FXML
     private void login() {
-        _isLoading.setValue(true);
+        if(_userName.getValue() != null && _password.getValue() != null &&
+                !_userName.getValue().isEmpty() && !_password.getValue().isEmpty()) {
+            _isLoading.setValue(true);
+
+            _loginTask = startBackgroundTask(() -> {
+                try {
+                    MainRemoteObjectInf remoteObject = RmiHelper.getSession();
+                    AccountDetailedDto entity = remoteObject.getAccountRemoteObject().login(_userName.getValue(), _password.getValue());
+
+                    if (entity != null) {
+                        _userName.setValue("");
+                        _password.setValue("");
+
+                        AccountManager.getInstance().setAccount(entity);
+                        Platform.runLater(() -> Navigation.getInstance().loadStartPage());
+                    } else {
+                        Platform.runLater(() -> showErrorMessage("Credentials are incorrect", ""));
+                    }
+                } catch (Exception e) {
+                    Platform.runLater(() -> showRmiErrorMessage(e));
+                } finally {
+                    Platform.runLater(() -> _isLoading.setValue(false));
+                }
+            });
+        }
+    }
+
+    @FXML
+    private void cancel() {
+        try {
+            stopTask(_loginTask);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            _isLoading.setValue(false);
+        }
     }
 }

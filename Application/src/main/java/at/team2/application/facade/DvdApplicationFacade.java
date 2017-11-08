@@ -20,11 +20,12 @@ import java.util.List;
 
 public class DvdApplicationFacade extends BaseApplicationFacade<Dvd, DvdDetailedDto, DvdProperty> {
     private static DvdApplicationFacade _instance;
-    private DvdFacade _facade = new DvdFacade();
+    private DvdFacade _facade;
 
     public static DvdApplicationFacade getInstance() {
         if(_instance == null) {
             _instance = new DvdApplicationFacade();
+            _instance._facade = new DvdFacade();
         }
 
         return _instance;

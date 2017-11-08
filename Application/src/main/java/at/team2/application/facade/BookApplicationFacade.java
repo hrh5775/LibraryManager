@@ -20,11 +20,12 @@ import java.util.List;
 
 public class BookApplicationFacade extends BaseApplicationFacade<Book, BookDetailedDto, BookProperty> {
     private static BookApplicationFacade _instance;
-    private BookFacade _facade = new BookFacade();
+    private BookFacade _facade;
 
     public static BookApplicationFacade getInstance() {
         if(_instance == null) {
             _instance = new BookApplicationFacade();
+            _instance._facade = new BookFacade();
         }
 
         return _instance;

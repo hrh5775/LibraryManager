@@ -15,11 +15,12 @@ import java.util.List;
 
 public class CustomerApplicationFacade extends BaseApplicationFacade<Customer, CustomerDetailedDto, CustomerProperty> {
     private static CustomerApplicationFacade _instance;
-    private CustomerFacade _facade = new CustomerFacade();
+    private CustomerFacade _facade;
 
     public static CustomerApplicationFacade getInstance() {
         if(_instance == null) {
             _instance = new CustomerApplicationFacade();
+            _instance._facade = new CustomerFacade();
         }
 
         return _instance;

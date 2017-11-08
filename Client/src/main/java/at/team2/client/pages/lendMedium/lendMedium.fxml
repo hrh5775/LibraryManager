@@ -15,84 +15,93 @@
 <?import javafx.beans.property.SimpleListProperty?>
 <?import at.team2.client.controls.numberfield.NumberField?>
 <?import javafx.beans.property.SimpleBooleanProperty?>
+<?import javafx.scene.layout.StackPane?>
+<?import at.team2.client.controls.loadingindicator.LoadingIndicator?>
 
-<VBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
-      stylesheets="/at/team2/client/pages/lendMedium/lendMedium.css">
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           stylesheets="/at/team2/client/pages/lendMedium/lendMedium.css">
 
     <fx:define>
+        <SimpleBooleanProperty fx:id="_isLoading" value="false" />
         <SimpleListProperty fx:id="_mediaList" />
         <SimpleBooleanProperty fx:id="_lendConfirmDisabled" />
         <SimpleBooleanProperty fx:id="_lendAddButtonDisabled" />
     </fx:define>
 
     <children>
-        <TableView fx:id="_lenditemsTbl">
-            <columns>
-                <TableColumn fx:id="_lendIDclm" text="ID" >
-                <cellValueFactory>
-                    <PropertyValueFactory property="id" />
-                </cellValueFactory>
-                </TableColumn>
-                <TableColumn fx:id="_lendTitelclm" text="Title" prefWidth="350">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="media" />
-                    </cellValueFactory>
-                </TableColumn>
-            </columns>
-        </TableView>
-
-        <GridPane>
-            <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" />
-                <ColumnConstraints hgrow="SOMETIMES" />
-                <ColumnConstraints hgrow="SOMETIMES" />
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints vgrow="SOMETIMES" />
-                <RowConstraints vgrow="SOMETIMES" />
-                <RowConstraints vgrow="SOMETIMES" />
-                <RowConstraints />
-            </rowConstraints>
-
+        <VBox fx:id="_mainPanel">
             <children>
-                <Label text="Title:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
-                <Label fx:id="_lendTitellbl" GridPane.rowIndex="0" GridPane.columnIndex="1" />
-                <Button fx:id="_lendAddButton" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" text="Add" onAction="#addMediaMemberToList" GridPane.rowIndex="0" GridPane.columnIndex="2" />
+                <TableView fx:id="_lenditemsTbl">
+                    <columns>
+                        <TableColumn fx:id="_lendIDclm" text="ID" >
+                        <cellValueFactory>
+                            <PropertyValueFactory property="id" />
+                        </cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="_lendTitelclm" text="Title" prefWidth="350">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="media" />
+                            </cellValueFactory>
+                        </TableColumn>
+                    </columns>
+                </TableView>
 
-                <Label text="ID:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
-                <NumberField fx:id="_mediaIdNumberField" GridPane.rowIndex="1" GridPane.columnIndex="1" />
-                <Button fx:id="_lendIDconfirmbtn" mnemonicParsing="false" onAction="#findMediaMemberById" text="OK" GridPane.rowIndex="1" GridPane.columnIndex="2" />
+                <GridPane>
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" />
+                        <ColumnConstraints hgrow="SOMETIMES" />
+                        <ColumnConstraints hgrow="SOMETIMES" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints vgrow="SOMETIMES" />
+                        <RowConstraints vgrow="SOMETIMES" />
+                        <RowConstraints vgrow="SOMETIMES" />
+                        <RowConstraints />
+                    </rowConstraints>
 
-                <Separator GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.columnSpan="3">
-                    <padding>
-                        <Insets bottom="15.0" top="15.0" />
-                    </padding>
-                </Separator>
+                    <children>
+                        <Label text="Title:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
+                        <Label fx:id="_lendTitellbl" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+                        <Button fx:id="_lendAddButton" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" text="Add" onAction="#addMediaMemberToList" defaultButton="true" GridPane.rowIndex="0" GridPane.columnIndex="2" />
 
-                <Label text="Customer-ID:" GridPane.rowIndex="3" GridPane.columnIndex="0" />
-                <NumberField fx:id="_customerIdNumberField" GridPane.rowIndex="3" GridPane.columnIndex="1" />
-                <Button fx:id="_lendCustIDconfirmbtn" mnemonicParsing="false" text="OK" onAction="#getCustomerById" GridPane.rowIndex="3" GridPane.columnIndex="2" />
+                        <Label text="ID:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+                        <NumberField fx:id="_mediaIdNumberField" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+                        <Button fx:id="_lendIDconfirmbtn" mnemonicParsing="false" onAction="#findMediaMemberById" defaultButton="true" text="OK" GridPane.rowIndex="1" GridPane.columnIndex="2" />
 
-                <HBox GridPane.rowIndex="4" GridPane.columnIndex="0" GridPane.columnSpan="3">
-                    <padding>
-                        <Insets bottom="15.0" top="15.0" />
-                    </padding>
-                </HBox>
+                        <Separator GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.columnSpan="3">
+                            <padding>
+                                <Insets bottom="15.0" top="15.0" />
+                            </padding>
+                        </Separator>
 
-                <Label text="First Name:" GridPane.rowIndex="5" GridPane.columnIndex="0" />
-                <Label fx:id="_lendFirstNamelbl" GridPane.rowIndex="5" GridPane.columnIndex="1" />
-                <Label text="Last Name:" GridPane.rowIndex="6" GridPane.columnIndex="0" />
-                <Label fx:id="_lendNamelbl" GridPane.rowIndex="6" GridPane.columnIndex="1" />
+                        <Label text="Customer-ID:" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+                        <NumberField fx:id="_customerIdNumberField" GridPane.rowIndex="3" GridPane.columnIndex="1" />
+                        <Button fx:id="_lendCustIDconfirmbtn" mnemonicParsing="false" text="OK" onAction="#getCustomerById" defaultButton="true" GridPane.rowIndex="3" GridPane.columnIndex="2" />
 
-                <HBox GridPane.rowIndex="7" GridPane.columnIndex="0" GridPane.columnSpan="3">
-                    <padding>
-                        <Insets bottom="5.0" top="5.0" />
-                    </padding>
-                </HBox>
+                        <HBox GridPane.rowIndex="4" GridPane.columnIndex="0" GridPane.columnSpan="3">
+                            <padding>
+                                <Insets bottom="15.0" top="15.0" />
+                            </padding>
+                        </HBox>
 
-                <Button fx:id="_lendConfirmButton" onAction="#lendMediaMembersToCustomer" mnemonicParsing="false" text="Lend" GridPane.rowIndex="8" GridPane.columnIndex="2" />
+                        <Label text="First Name:" GridPane.rowIndex="5" GridPane.columnIndex="0" />
+                        <Label fx:id="_lendFirstNamelbl" GridPane.rowIndex="5" GridPane.columnIndex="1" />
+                        <Label text="Last Name:" GridPane.rowIndex="6" GridPane.columnIndex="0" />
+                        <Label fx:id="_lendNamelbl" GridPane.rowIndex="6" GridPane.columnIndex="1" />
+
+                        <HBox GridPane.rowIndex="7" GridPane.columnIndex="0" GridPane.columnSpan="3">
+                            <padding>
+                                <Insets bottom="5.0" top="5.0" />
+                            </padding>
+                        </HBox>
+
+                        <Button fx:id="_lendConfirmButton" onAction="#lendMediaMembersToCustomer" defaultButton="true" mnemonicParsing="false" text="Lend" GridPane.rowIndex="8" GridPane.columnIndex="2" />
+                    </children>
+                </GridPane>
             </children>
-        </GridPane>
+        </VBox>
+
+        <LoadingIndicator fx:id="_loadingIndicator" onCancel="#cancel" />
     </children>
-</VBox>
+</StackPane>

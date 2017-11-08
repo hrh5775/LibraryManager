@@ -20,9 +20,9 @@ import javafx.util.Pair;
 
 public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetailedDto, LoanProperty> {
     private static LoanApplicationFacade _instance;
-    private LoanFacade _facade = new LoanFacade();
-    private MediaMemberFacade _mediaMemberFacade = new MediaMemberFacade();
-    private CustomerFacade _customerFacade = new CustomerFacade();
+    private LoanFacade _facade;
+    private MediaMemberFacade _mediaMemberFacade;
+    private CustomerFacade _customerFacade;
 
     private LoanApplicationFacade() {
     }
@@ -30,6 +30,9 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
     public static LoanApplicationFacade getInstance() {
         if(_instance == null) {
             _instance = new LoanApplicationFacade();
+            _instance._facade = new LoanFacade();
+            _instance._mediaMemberFacade = new MediaMemberFacade(_instance._facade.getCurrentSession());
+            _instance._customerFacade = new CustomerFacade(_instance._facade.getCurrentSession());
         }
 
         return _instance;
