@@ -34,7 +34,7 @@ public class DvdApplicationFacade extends BaseApplicationFacade<Dvd, DvdDetailed
     }
 
     public List<Dvd> search(String searchString){
-        String[] items = searchString.split(" ");
+        /*String[] items = searchString.split(" ");
         FilterConnector<DvdProperty, DvdProperty> connector = null;
         FilterConnector<DvdProperty, DvdProperty> tmpConnector;
         FilterConnector<DvdProperty, DvdProperty> lastConnector = null;
@@ -48,9 +48,9 @@ public class DvdApplicationFacade extends BaseApplicationFacade<Dvd, DvdDetailed
                 lastConnector.setRightFilterConnector(ConnectorType.AND, tmpConnector);
                 lastConnector = tmpConnector;
             }
-        }
+        }*/
 
-        return _facade.filter(connector);
+        return _facade.filter(getFilterConnector(searchString));
     }
 
     private FilterConnector<DvdProperty, DvdProperty> getFilterConnector(String searchString) {

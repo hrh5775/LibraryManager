@@ -34,7 +34,7 @@ public class BookApplicationFacade extends BaseApplicationFacade<Book, BookDetai
     }
 
     public List<Book> search(String searchString){
-        String[] items = searchString.split(" ");
+        /*String[] items = searchString.split(" ");
         FilterConnector<BookProperty, BookProperty> connector = null;
         FilterConnector<BookProperty, BookProperty> tmpConnector;
         FilterConnector<BookProperty, BookProperty> lastConnector = null;
@@ -48,9 +48,9 @@ public class BookApplicationFacade extends BaseApplicationFacade<Book, BookDetai
                 lastConnector.setRightFilterConnector(ConnectorType.AND, tmpConnector);
                 lastConnector = tmpConnector;
             }
-        }
+        }*/
 
-        return _facade.filter(connector);
+        return _facade.filter(getFilterConnector(searchString));
     }
 
     private FilterConnector<BookProperty, BookProperty> getFilterConnector(String searchString) {
