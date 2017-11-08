@@ -34,6 +34,26 @@ public class BookApplicationFacade extends BaseApplicationFacade<Book, BookDetai
     }
 
     public List<Book> search(String searchString){
+        String[] items = searchString.split(" ");
+        FilterConnector<BookProperty, BookProperty> connector = null;
+        FilterConnector<BookProperty, BookProperty> tmpConnector;
+        FilterConnector<BookProperty, BookProperty> lastConnector = null;
+
+        for(int i = 0; i < items.length; i++) {
+            if(connector == null) {
+                connector = getFilterConnector(items[i]);
+                lastConnector = connector;
+            } else {
+                tmpConnector =  getFilterConnector(items[i]);
+                lastConnector.setRightFilterConnector(ConnectorType.AND, tmpConnector);
+                lastConnector = tmpConnector;
+            }
+        }
+
+        return _facade.filter(connector);
+    }
+
+    private FilterConnector<BookProperty, BookProperty> getFilterConnector(String searchString) {
         FilterConnector<BookProperty, BookProperty> connector = new FilterConnector<>(
                 new FilterConnector<>(
                         new FilterConnector<>(
@@ -47,7 +67,7 @@ public class BookApplicationFacade extends BaseApplicationFacade<Book, BookDetai
                                 ConnectorType.OR,
                                 new Filter<>(searchString, BookProperty.MEDIA__PUBLISHER, MatchType.CONTAINS, CaseType.IGNORE_CASE)
                         )
-                    ),
+                ),
                 ConnectorType.OR,
                 new FilterConnector<>(
                         new FilterConnector<>(
@@ -61,10 +81,10 @@ public class BookApplicationFacade extends BaseApplicationFacade<Book, BookDetai
                                 ConnectorType.OR,
                                 new Filter<>(searchString, BookProperty.MEDIA__GENRE, MatchType.CONTAINS, CaseType.IGNORE_CASE)
                         )
-                    )
-            );
+                )
+        );
 
-        return _facade.filter(connector);
+        return connector;
     }
 
     @Override
