@@ -1,5 +1,9 @@
 package at.team2.application.facade;
 
+import at.team2.application.SessionManager;
+import at.team2.application.enums.Role;
+import at.team2.application.helper.RoleHelper;
+import at.team2.common.dto.detailed.AccountDetailedDto;
 import org.modelmapper.ModelMapper;
 
 import java.util.LinkedList;
@@ -14,7 +18,7 @@ import at.team2.domain.entities.MediaMember;
 import at.team2.domain.enums.properties.MediaMemberProperty;
 import javafx.util.Pair;
 
-public class MediaMemberApplicationFacade extends BaseApplicationFacade<MediaMember, MediaMemberSmallDto, MediaMemberProperty> {
+public class MediaMemberApplicationFacade extends BaseApplicationFacade<MediaMember, MediaMemberSmallDto, AccountDetailedDto, MediaMemberProperty> {
     private static MediaMemberApplicationFacade _instance;
     private MediaMemberFacade _facade;
 
@@ -46,39 +50,69 @@ public class MediaMemberApplicationFacade extends BaseApplicationFacade<MediaMem
     }
 
     @Override
-    public Pair<Integer, List<Pair<MediaMemberProperty, String>>> add(MediaMemberSmallDto value) {
-        ModelMapper mapper = MapperHelper.getMapper();
-        MediaMember entity = mapper.map(value, MediaMember.class);
-        List<Pair<MediaMemberProperty, String>> list = entity.validate();
+    public Pair<Integer, List<Pair<MediaMemberProperty, String>>> add(MediaMemberSmallDto value, AccountDetailedDto updater) {
+        if(SessionManager.getInstance().isSessionAvailable(updater) &&
+                (RoleHelper.hasRole(updater, Role.ADMIN) ||
+                RoleHelper.hasRole(updater, Role.DATENPFLEGER) ||
+                RoleHelper.hasRole(updater, Role.OPERATOR) ||
+                RoleHelper.hasRole(updater, Role.BIBLIOTHEKAR))) {
+            ModelMapper mapper = MapperHelper.getMapper();
+            MediaMember entity = mapper.map(value, MediaMember.class);
+            List<Pair<MediaMemberProperty, String>> list = entity.validate();
 
-        if(list.size() == 0) {
-            return new Pair<>(_facade.add(entity, TransactionType.AUTO_COMMIT),list);
+            if (list.size() == 0) {
+                return new Pair<>(_facade.add(entity, TransactionType.AUTO_COMMIT), list);
+            }
+
+            return new Pair<>(0, new LinkedList<>());
+        } else {
+            List<Pair<MediaMemberProperty, String>> list = new LinkedList<>();
+            list.add(new Pair<>(MediaMemberProperty.ID, "permission denied"));
+            return new Pair<>(0, list);
         }
-
-        return new Pair<>(0, new LinkedList<>());
     }
 
     @Override
-    public Pair<Integer, List<Pair<MediaMemberProperty, String>>> update(MediaMemberSmallDto value) {
-        ModelMapper mapper = MapperHelper.getMapper();
-        MediaMember entity = mapper.map(value,MediaMember.class);
-        List<Pair<MediaMemberProperty, String>> list = entity.validate();
+    public Pair<Integer, List<Pair<MediaMemberProperty, String>>> update(MediaMemberSmallDto value, AccountDetailedDto updater) {
+        if(SessionManager.getInstance().isSessionAvailable(updater) &&
+                (RoleHelper.hasRole(updater, Role.ADMIN) ||
+                RoleHelper.hasRole(updater, Role.DATENPFLEGER) ||
+                RoleHelper.hasRole(updater, Role.OPERATOR) ||
+                RoleHelper.hasRole(updater, Role.BIBLIOTHEKAR))) {
+            ModelMapper mapper = MapperHelper.getMapper();
+            MediaMember entity = mapper.map(value, MediaMember.class);
+            List<Pair<MediaMemberProperty, String>> list = entity.validate();
 
-        if(list.size() == 0) {
-            return new Pair<>(_facade.update(entity, TransactionType.AUTO_COMMIT),list);
+            if (list.size() == 0) {
+                return new Pair<>(_facade.update(entity, TransactionType.AUTO_COMMIT), list);
+            }
+
+            return new Pair<>(0, new LinkedList<>());
+        } else {
+            List<Pair<MediaMemberProperty, String>> list = new LinkedList<>();
+            list.add(new Pair<>(MediaMemberProperty.ID, "permission denied"));
+            return new Pair<>(0, list);
         }
-
-        return new Pair<>(0, new LinkedList<>());
     }
 
     @Override
-    public Pair<Boolean, List<Pair<MediaMemberProperty, String>>> delete(int id) {
-       List<Pair<MediaMemberProperty, String>> list = _facade.getById(id).validate();
+    public Pair<Boolean, List<Pair<MediaMemberProperty, String>>> delete(int id, AccountDetailedDto updater) {
+        if(SessionManager.getInstance().isSessionAvailable(updater) &&
+                (RoleHelper.hasRole(updater, Role.ADMIN) ||
+                RoleHelper.hasRole(updater, Role.DATENPFLEGER) ||
+                RoleHelper.hasRole(updater, Role.OPERATOR) ||
+                RoleHelper.hasRole(updater, Role.BIBLIOTHEKAR))) {
+            List<Pair<MediaMemberProperty, String>> list = _facade.getById(id).validate();
 
-       if(list.size() == 0) {
-           return new Pair<>(_facade.delete(id, TransactionType.AUTO_COMMIT), list);
-       }
+            if (list.size() == 0) {
+                return new Pair<>(_facade.delete(id, TransactionType.AUTO_COMMIT), list);
+            }
 
-       return new Pair<>(false, new LinkedList<>());
+            return new Pair<>(false, new LinkedList<>());
+        } else {
+            List<Pair<MediaMemberProperty, String>> list = new LinkedList<>();
+            list.add(new Pair<>(MediaMemberProperty.ID, "permission denied"));
+            return new Pair<>(false, list);
+        }
     }
 }

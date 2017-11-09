@@ -6,7 +6,7 @@ import at.team2.domain.interfaces.DomainEntityProperty;
 
 import java.util.List;
 
-public abstract class BaseApplicationFacade<D extends BaseDomainEntity, T extends BaseDtoEntity, P extends DomainEntityProperty> implements Session, Editable<T, P> {
+public abstract class BaseApplicationFacade<D extends BaseDomainEntity, T extends BaseDtoEntity, U extends BaseDtoEntity, P extends DomainEntityProperty> implements Session, Editable<T, U, P> {
     /**
      * Get the entity by its Id
      * @param id

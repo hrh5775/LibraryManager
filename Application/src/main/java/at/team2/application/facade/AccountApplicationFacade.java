@@ -1,7 +1,10 @@
 package at.team2.application.facade;
 
+import at.team2.application.SessionManager;
+import at.team2.application.enums.Role;
 import at.team2.application.helper.LdapHelper;
 import at.team2.application.helper.MapperHelper;
+import at.team2.application.helper.RoleHelper;
 import at.team2.application.interfaces.BaseApplicationFacade;
 import at.team2.common.dto.detailed.AccountDetailedDto;
 import at.team2.database_wrapper.common.Filter;
@@ -20,7 +23,7 @@ import org.modelmapper.ModelMapper;
 import java.util.LinkedList;
 import java.util.List;
 
-public class AccountApplicationFacade extends BaseApplicationFacade<Account, AccountDetailedDto, AccountProperty> {
+public class AccountApplicationFacade extends BaseApplicationFacade<Account, AccountDetailedDto, AccountDetailedDto, AccountProperty> {
     private static AccountApplicationFacade _instance;
     private AccountFacade _facade;
     private ConfigurationFacade _configurationFacade;
@@ -54,40 +57,61 @@ public class AccountApplicationFacade extends BaseApplicationFacade<Account, Acc
     }
 
     @Override
-    public Pair<Integer, List<Pair<AccountProperty, String>>> add(AccountDetailedDto value) {
-        ModelMapper mapper = MapperHelper.getMapper();
-        Account entity = mapper.map(value, Account.class);
-        List<Pair<AccountProperty, String>> list = entity.validate();
+    public Pair<Integer, List<Pair<AccountProperty, String>>> add(AccountDetailedDto value, AccountDetailedDto updater) {
+        if(SessionManager.getInstance().isSessionAvailable(updater) &&
+                (RoleHelper.hasRole(updater, Role.ADMIN))) {
+            ModelMapper mapper = MapperHelper.getMapper();
+            Account entity = mapper.map(value, Account.class);
+            List<Pair<AccountProperty, String>> list = entity.validate();
 
-        if(list.size() == 0) {
-            return new Pair<>(_facade.add(entity, TransactionType.AUTO_COMMIT),list);
+            if (list.size() == 0) {
+                return new Pair<>(_facade.add(entity, TransactionType.AUTO_COMMIT), list);
+            }
+
+            return new Pair<>(0, new LinkedList<>());
+        } else {
+            List<Pair<AccountProperty, String>> list = new LinkedList<>();
+            list.add(new Pair<>(AccountProperty.ID, "permission denied"));
+            return new Pair<>(0, list);
         }
-
-        return new Pair<>(0, new LinkedList<>());
     }
 
     @Override
-    public Pair<Integer, List<Pair<AccountProperty, String>>> update(AccountDetailedDto value) {
-        ModelMapper mapper = MapperHelper.getMapper();
-        Account entity = mapper.map(value, Account.class);
-        List<Pair<AccountProperty,String>> list = entity.validate();
+    public Pair<Integer, List<Pair<AccountProperty, String>>> update(AccountDetailedDto value, AccountDetailedDto updater) {
+        if(SessionManager.getInstance().isSessionAvailable(updater) &&
+                (RoleHelper.hasRole(updater, Role.ADMIN))) {
+            ModelMapper mapper = MapperHelper.getMapper();
+            Account entity = mapper.map(value, Account.class);
+            List<Pair<AccountProperty,String>> list = entity.validate();
 
-        if(list.size() == 0) {
-            return new Pair<>(_facade.update(entity, TransactionType.AUTO_COMMIT),list);
+            if(list.size() == 0) {
+                return new Pair<>(_facade.update(entity, TransactionType.AUTO_COMMIT), list);
+            }
+
+            return new Pair<>(0, new LinkedList<>());
+        } else {
+            List<Pair<AccountProperty, String>> list = new LinkedList<>();
+            list.add(new Pair<>(AccountProperty.ID, "permission denied"));
+            return new Pair<>(0, list);
         }
-
-        return new Pair<>(0, new LinkedList<>());
     }
 
     @Override
-    public Pair<Boolean, List<Pair<AccountProperty, String>>> delete(int id) {
-        List<Pair<AccountProperty,String>> list = _facade.getById(id).validate();
+    public Pair<Boolean, List<Pair<AccountProperty, String>>> delete(int id, AccountDetailedDto updater) {
+        if(SessionManager.getInstance().isSessionAvailable(updater) &&
+                (RoleHelper.hasRole(updater, Role.ADMIN))) {
+            List<Pair<AccountProperty, String>> list = _facade.getById(id).validate();
 
-        if(list.size() == 0) {
-            return new Pair<>(_facade.delete(id, TransactionType.AUTO_COMMIT), list);
+            if (list.size() == 0) {
+                return new Pair<>(_facade.delete(id, TransactionType.AUTO_COMMIT), list);
+            }
+
+            return new Pair<>(false, new LinkedList<>());
+        } else {
+            List<Pair<AccountProperty, String>> list = new LinkedList<>();
+            list.add(new Pair<>(AccountProperty.ID, "permission denied"));
+            return new Pair<>(false, list);
         }
-
-        return new Pair<>(false, new LinkedList<>());
     }
 
     public Account login(String userName, String password) {
@@ -99,7 +123,10 @@ public class AccountApplicationFacade extends BaseApplicationFacade<Account, Acc
         List<Account> list = _facade.filter(connector);
 
         if(list.size() > 0) {
-            return list.get(0);
+            Account tmp = list.get(0);
+            AccountDetailedDto accountDto = MapperHelper.getMapper().map(tmp, AccountDetailedDto.class);
+            SessionManager.getInstance().addAccount(accountDto);
+            return tmp;
         }
 
         // try to login with ldap
@@ -130,6 +157,8 @@ public class AccountApplicationFacade extends BaseApplicationFacade<Account, Acc
                 role.setRoleName("");
                 account.setAccountRole(role);
 
+                AccountDetailedDto accountDto = MapperHelper.getMapper().map(account, AccountDetailedDto.class);
+                SessionManager.getInstance().addAccount(accountDto);
                 return account;
             }
         }

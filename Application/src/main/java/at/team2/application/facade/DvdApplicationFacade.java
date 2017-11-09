@@ -1,7 +1,11 @@
 package at.team2.application.facade;
 
+import at.team2.application.SessionManager;
+import at.team2.application.enums.Role;
 import at.team2.application.helper.MapperHelper;
+import at.team2.application.helper.RoleHelper;
 import at.team2.application.interfaces.BaseApplicationFacade;
+import at.team2.common.dto.detailed.AccountDetailedDto;
 import at.team2.common.dto.detailed.DvdDetailedDto;
 import at.team2.database_wrapper.common.Filter;
 import at.team2.database_wrapper.common.FilterConnector;
@@ -18,7 +22,7 @@ import org.modelmapper.ModelMapper;
 import java.util.LinkedList;
 import java.util.List;
 
-public class DvdApplicationFacade extends BaseApplicationFacade<Dvd, DvdDetailedDto, DvdProperty> {
+public class DvdApplicationFacade extends BaseApplicationFacade<Dvd, DvdDetailedDto, AccountDetailedDto, DvdProperty> {
     private static DvdApplicationFacade _instance;
     private DvdFacade _facade;
 
@@ -32,6 +36,88 @@ public class DvdApplicationFacade extends BaseApplicationFacade<Dvd, DvdDetailed
     }
 
     private DvdApplicationFacade() {
+    }
+
+    @Override
+    public Dvd getById(int id) {
+        return _facade.getById(id);
+    }
+
+    @Override
+    public List<Dvd> getList() {
+        return _facade.getList();
+    }
+
+    @Override
+    public void closeSession() {
+        _facade.closeSession();
+    }
+
+    @Override
+    public Pair<Integer, List<Pair<DvdProperty, String>>> add(DvdDetailedDto value, AccountDetailedDto updater) {
+        if(SessionManager.getInstance().isSessionAvailable(updater) &&
+                (RoleHelper.hasRole(updater, Role.ADMIN) ||
+                RoleHelper.hasRole(updater, Role.DATENPFLEGER) ||
+                RoleHelper.hasRole(updater, Role.OPERATOR) ||
+                RoleHelper.hasRole(updater, Role.BIBLIOTHEKAR))) {
+            ModelMapper mapper = MapperHelper.getMapper();
+            Dvd entity = mapper.map(value, Dvd.class);
+            List<Pair<DvdProperty, String>> list = entity.validate();
+
+            if (list.size() == 0) {
+                return new Pair<>(_facade.add(entity, TransactionType.AUTO_COMMIT), list);
+            }
+
+            return new Pair<>(0, new LinkedList<>());
+        } else {
+            List<Pair<DvdProperty, String>> list = new LinkedList<>();
+            list.add(new Pair<>(DvdProperty.ID, "permission denied"));
+            return new Pair<>(0, list);
+        }
+    }
+
+    @Override
+    public Pair<Integer, List<Pair<DvdProperty, String>>> update(DvdDetailedDto value, AccountDetailedDto updater) {
+        if(SessionManager.getInstance().isSessionAvailable(updater) &&
+                (RoleHelper.hasRole(updater, Role.ADMIN) ||
+                RoleHelper.hasRole(updater, Role.DATENPFLEGER) ||
+                RoleHelper.hasRole(updater, Role.OPERATOR) ||
+                RoleHelper.hasRole(updater, Role.BIBLIOTHEKAR))) {
+            ModelMapper mapper = MapperHelper.getMapper();
+            Dvd entity = mapper.map(value, Dvd.class);
+            List<Pair<DvdProperty, String>> list = entity.validate();
+
+            if (list.size() == 0) {
+                return new Pair<>(_facade.update(entity, TransactionType.AUTO_COMMIT), list);
+            }
+
+            return new Pair<>(0, new LinkedList<>());
+        } else {
+            List<Pair<DvdProperty, String>> list = new LinkedList<>();
+            list.add(new Pair<>(DvdProperty.ID, "permission denied"));
+            return new Pair<>(0, list);
+        }
+    }
+
+    @Override
+    public Pair<Boolean, List<Pair<DvdProperty, String>>> delete(int id, AccountDetailedDto updater) {
+        if(SessionManager.getInstance().isSessionAvailable(updater) &&
+                (RoleHelper.hasRole(updater, Role.ADMIN) ||
+                RoleHelper.hasRole(updater, Role.DATENPFLEGER) ||
+                RoleHelper.hasRole(updater, Role.OPERATOR) ||
+                RoleHelper.hasRole(updater, Role.BIBLIOTHEKAR))) {
+            List<Pair<DvdProperty, String>> list = _facade.getById(id).validate();
+
+            if (list.size() == 0) {
+                return new Pair<>(_facade.delete(id, TransactionType.AUTO_COMMIT), list);
+            }
+
+            return new Pair<>(false, new LinkedList<>());
+        } else {
+            List<Pair<DvdProperty, String>> list = new LinkedList<>();
+            list.add(new Pair<>(DvdProperty.ID, "permission denied"));
+            return new Pair<>(false, list);
+        }
     }
 
     public List<Dvd> search(String searchString){
@@ -86,57 +172,5 @@ public class DvdApplicationFacade extends BaseApplicationFacade<Dvd, DvdDetailed
         );
 
         return connector;
-    }
-
-    @Override
-    public Dvd getById(int id) {
-        return _facade.getById(id);
-    }
-
-    @Override
-    public List<Dvd> getList() {
-        return _facade.getList();
-    }
-
-    @Override
-    public void closeSession() {
-        _facade.closeSession();
-    }
-
-    @Override
-    public Pair<Integer, List<Pair<DvdProperty, String>>> add(DvdDetailedDto value) {
-        ModelMapper mapper = MapperHelper.getMapper();
-        Dvd entity = mapper.map(value, Dvd.class);
-        List<Pair<DvdProperty, String>> list = entity.validate();
-
-        if(list.size() == 0) {
-            return new Pair<>(_facade.add(entity, TransactionType.AUTO_COMMIT), list);
-        }
-
-        return new Pair<>(0, new LinkedList<>());
-    }
-
-    @Override
-    public Pair<Integer, List<Pair<DvdProperty, String>>> update(DvdDetailedDto value) {
-        ModelMapper mapper = MapperHelper.getMapper();
-        Dvd entity = mapper.map(value, Dvd.class);
-        List<Pair<DvdProperty, String>> list = entity.validate();
-
-        if(list.size() == 0) {
-            return new Pair<>(_facade.update(entity, TransactionType.AUTO_COMMIT), list);
-        }
-
-        return new Pair<>(0, new LinkedList<>());
-    }
-
-    @Override
-    public Pair<Boolean, List<Pair<DvdProperty, String>>> delete(int id) {
-        List<Pair<DvdProperty, String>> list = _facade.getById(id).validate();
-
-        if(list.size() == 0) {
-            return new Pair<>(_facade.delete(id, TransactionType.AUTO_COMMIT), list);
-        }
-
-        return new Pair<>(false, new LinkedList<>());
     }
 }

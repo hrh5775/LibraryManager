@@ -1,7 +1,11 @@
 package at.team2.application.facade;
 
+import at.team2.application.SessionManager;
+import at.team2.application.enums.Role;
 import at.team2.application.helper.MapperHelper;
+import at.team2.application.helper.RoleHelper;
 import at.team2.application.interfaces.BaseApplicationFacade;
+import at.team2.common.dto.detailed.AccountDetailedDto;
 import at.team2.common.dto.detailed.BookDetailedDto;
 import at.team2.database_wrapper.common.Filter;
 import at.team2.database_wrapper.common.FilterConnector;
@@ -18,7 +22,7 @@ import org.modelmapper.ModelMapper;
 import java.util.LinkedList;
 import java.util.List;
 
-public class BookApplicationFacade extends BaseApplicationFacade<Book, BookDetailedDto, BookProperty> {
+public class BookApplicationFacade extends BaseApplicationFacade<Book, BookDetailedDto, AccountDetailedDto, BookProperty> {
     private static BookApplicationFacade _instance;
     private BookFacade _facade;
 
@@ -32,6 +36,88 @@ public class BookApplicationFacade extends BaseApplicationFacade<Book, BookDetai
     }
 
     private BookApplicationFacade() {
+    }
+
+    @Override
+    public Book getById(int id) {
+        return _facade.getById(id);
+    }
+
+    @Override
+    public List<Book> getList() {
+        return _facade.getList();
+    }
+
+    @Override
+    public void closeSession() {
+        _facade.closeSession();
+    }
+
+    @Override
+    public Pair<Integer, List<Pair<BookProperty, String>>> add(BookDetailedDto value, AccountDetailedDto updater) {
+        if(SessionManager.getInstance().isSessionAvailable(updater) &&
+                (RoleHelper.hasRole(updater, Role.ADMIN) ||
+                RoleHelper.hasRole(updater, Role.DATENPFLEGER) ||
+                RoleHelper.hasRole(updater, Role.OPERATOR) ||
+                RoleHelper.hasRole(updater, Role.BIBLIOTHEKAR))) {
+            ModelMapper mapper = MapperHelper.getMapper();
+            Book entity = mapper.map(value, Book.class);
+            List<Pair<BookProperty, String>> list = entity.validate();
+
+            if (list.size() == 0) {
+                return new Pair<>(_facade.add(entity, TransactionType.AUTO_COMMIT), list);
+            }
+
+            return new Pair<>(0, new LinkedList<>());
+        } else {
+            List<Pair<BookProperty, String>> list = new LinkedList<>();
+            list.add(new Pair<>(BookProperty.ID, "permission denied"));
+            return new Pair<>(0, list);
+        }
+    }
+
+    @Override
+    public Pair<Integer, List<Pair<BookProperty, String>>> update(BookDetailedDto value, AccountDetailedDto updater) {
+        if(SessionManager.getInstance().isSessionAvailable(updater) &&
+                (RoleHelper.hasRole(updater, Role.ADMIN) ||
+                RoleHelper.hasRole(updater, Role.DATENPFLEGER) ||
+                RoleHelper.hasRole(updater, Role.OPERATOR) ||
+                RoleHelper.hasRole(updater, Role.BIBLIOTHEKAR))) {
+            ModelMapper mapper = MapperHelper.getMapper();
+            Book entity = mapper.map(value, Book.class);
+            List<Pair<BookProperty, String>> list = entity.validate();
+
+            if (list.size() == 0) {
+                return new Pair<>(_facade.update(entity, TransactionType.AUTO_COMMIT), list);
+            }
+
+            return new Pair<>(0, new LinkedList<>());
+        } else {
+            List<Pair<BookProperty, String>> list = new LinkedList<>();
+            list.add(new Pair<>(BookProperty.ID, "permission denied"));
+            return new Pair<>(0, list);
+        }
+    }
+
+    @Override
+    public Pair<Boolean, List<Pair<BookProperty, String>>> delete(int id, AccountDetailedDto updater) {
+        if(SessionManager.getInstance().isSessionAvailable(updater) &&
+                (RoleHelper.hasRole(updater, Role.ADMIN) ||
+                RoleHelper.hasRole(updater, Role.DATENPFLEGER) ||
+                RoleHelper.hasRole(updater, Role.OPERATOR) ||
+                RoleHelper.hasRole(updater, Role.BIBLIOTHEKAR))) {
+            List<Pair<BookProperty, String>> list = _facade.getById(id).validate();
+
+            if (list.size() == 0) {
+                return new Pair<>(_facade.delete(id, TransactionType.AUTO_COMMIT), list);
+            }
+
+            return new Pair<>(false, new LinkedList<>());
+        } else {
+            List<Pair<BookProperty, String>> list = new LinkedList<>();
+            list.add(new Pair<>(BookProperty.ID, "permission denied"));
+            return new Pair<>(false, list);
+        }
     }
 
     public List<Book> search(String searchString){
@@ -86,57 +172,5 @@ public class BookApplicationFacade extends BaseApplicationFacade<Book, BookDetai
         );
 
         return connector;
-    }
-
-    @Override
-    public Book getById(int id) {
-        return _facade.getById(id);
-    }
-
-    @Override
-    public List<Book> getList() {
-        return _facade.getList();
-    }
-
-    @Override
-    public void closeSession() {
-        _facade.closeSession();
-    }
-
-    @Override
-    public Pair<Integer, List<Pair<BookProperty, String>>> add(BookDetailedDto value) {
-        ModelMapper mapper = MapperHelper.getMapper();
-        Book entity = mapper.map(value, Book.class);
-        List<Pair<BookProperty, String>> list = entity.validate();
-
-        if(list.size() == 0) {
-            return new Pair<>(_facade.add(entity, TransactionType.AUTO_COMMIT), list);
-        }
-
-        return new Pair<>(0, new LinkedList<>());
-    }
-
-    @Override
-    public Pair<Integer, List<Pair<BookProperty, String>>> update(BookDetailedDto value) {
-        ModelMapper mapper = MapperHelper.getMapper();
-        Book entity = mapper.map(value, Book.class);
-        List<Pair<BookProperty, String>> list = entity.validate();
-
-        if(list.size() == 0) {
-            return new Pair<>(_facade.update(entity, TransactionType.AUTO_COMMIT), list);
-        }
-
-        return new Pair<>(0, new LinkedList<>());
-    }
-
-    @Override
-    public Pair<Boolean, List<Pair<BookProperty, String>>> delete(int id) {
-        List<Pair<BookProperty, String>> list = _facade.getById(id).validate();
-
-        if(list.size() == 0) {
-            return new Pair<>(_facade.delete(id, TransactionType.AUTO_COMMIT), list);
-        }
-
-        return new Pair<>(false, new LinkedList<>());
     }
 }

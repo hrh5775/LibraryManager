@@ -45,8 +45,6 @@ public class Navigation {
         _pagePane = pagePane;
         _sidebar = new Sidebar();
 
-        initializeNavigationBar();
-
         // load the default site
         loadPage(HomeScreenSingleton.getInstance());
     }
@@ -64,7 +62,6 @@ public class Navigation {
     }
 
     public void loadStartPage() {
-        initializeNavigationBar();
         loadPage(SearchMediumSingleton.getInstance());
     }
 
@@ -119,7 +116,6 @@ public class Navigation {
                     addLoanItem(menuSectionArrayList);
                     break;
                 case "DATENPFLEGER":
-                    addLoanItem(menuSectionArrayList);
                     break;
                 case "AUSLEIHE":
                     addLoanItem(menuSectionArrayList);
@@ -127,7 +123,6 @@ public class Navigation {
                 case "BIBLIOTHEKSBENUTZER":
                     break;
                 case "OPERATOR":
-                    addLoanItem(menuSectionArrayList);
                     break;
             }
 
@@ -172,6 +167,7 @@ public class Navigation {
 
     private boolean loadPage(BasePage page) {
         if(PageHelper.load(page)) {
+            initializeNavigationBar();
             addInitializedPageListItem(page);
             setCurrentPage(page);
 

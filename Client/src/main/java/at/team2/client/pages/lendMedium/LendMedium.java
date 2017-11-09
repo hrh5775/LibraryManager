@@ -4,9 +4,11 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import javax.lang.model.type.NullType;
 
+import at.team2.client.common.AccountManager;
 import at.team2.client.controls.loadingindicator.LoadingIndicator;
 import at.team2.client.controls.numberfield.NumberField;
 import at.team2.client.pages.BasePage;
+import at.team2.common.dto.detailed.AccountDetailedDto;
 import at.team2.common.dto.small.CustomerSmallDto;
 import at.team2.common.dto.small.MediaMemberSmallDto;
 import at.team2.common.helper.RmiHelper;
@@ -181,9 +183,10 @@ public class LendMedium extends BasePage<Void, NullType, NullType, NullType> {
                     LoanRemoteObjectInf loanRemoteObject = remoteObject.getLoanRemoteObject();
 
                     int count = 0;
+                    AccountDetailedDto account = AccountManager.getInstance().getAccount();
 
                     for (MediaMemberSmallDto item : _mediaList.get()) {
-                        if (loanRemoteObject.loanMediaMember(item, _currentCustomer) <= 0) {
+                        if (loanRemoteObject.loanMediaMember(item, _currentCustomer, account) <= 0) {
                             Platform.runLater(() -> showErrorMessage("Loan failed for", item.getMedia().getTitle()));
                         } else {
                             count++;

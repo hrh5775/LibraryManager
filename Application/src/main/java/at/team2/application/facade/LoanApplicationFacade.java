@@ -1,5 +1,9 @@
 package at.team2.application.facade;
 
+import at.team2.application.SessionManager;
+import at.team2.application.enums.Role;
+import at.team2.application.helper.RoleHelper;
+import at.team2.common.dto.detailed.AccountDetailedDto;
 import at.team2.common.dto.detailed.LoanDetailedDto;
 import at.team2.common.dto.small.CustomerSmallDto;
 import at.team2.common.dto.small.MediaMemberSmallDto;
@@ -18,7 +22,7 @@ import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.domain.enums.properties.LoanProperty;
 import javafx.util.Pair;
 
-public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetailedDto, LoanProperty> {
+public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetailedDto, AccountDetailedDto, LoanProperty> {
     private static LoanApplicationFacade _instance;
     private LoanFacade _facade;
     private MediaMemberFacade _mediaMemberFacade;
@@ -54,59 +58,93 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
     }
 
     @Override
-    public Pair<Integer, List<Pair<LoanProperty, String>>> add(LoanDetailedDto value) {
-        ModelMapper mapper = MapperHelper.getMapper();
-        Loan entity = mapper.map(value, Loan.class);
-        List<Pair<LoanProperty, String>> list = entity.validate();
+    public Pair<Integer, List<Pair<LoanProperty, String>>> add(LoanDetailedDto value, AccountDetailedDto updater) {
+        if(SessionManager.getInstance().isSessionAvailable(updater) &&
+                (RoleHelper.hasRole(updater, Role.ADMIN) ||
+                RoleHelper.hasRole(updater, Role.BIBLIOTHEKAR) ||
+                RoleHelper.hasRole(updater, Role.AUSLEIHE))) {
+            ModelMapper mapper = MapperHelper.getMapper();
+            Loan entity = mapper.map(value, Loan.class);
+            List<Pair<LoanProperty, String>> list = entity.validate();
 
-        if(list.size() == 0) {
-            return new Pair<>(_facade.add(entity, TransactionType.AUTO_COMMIT),list);
+            if (list.size() == 0) {
+                return new Pair<>(_facade.add(entity, TransactionType.AUTO_COMMIT), list);
+            }
+
+            return new Pair<>(0, new LinkedList<>());
+        } else {
+            List<Pair<LoanProperty, String>> list = new LinkedList<>();
+            list.add(new Pair<>(LoanProperty.ID, "permission denied"));
+            return new Pair<>(0, list);
         }
-
-        return new Pair<>(0, new LinkedList<>());
     }
 
     @Override
-    public Pair<Integer, List<Pair<LoanProperty, String>>> update(LoanDetailedDto value) {
-        ModelMapper mapper = MapperHelper.getMapper();
-        Loan entity = mapper.map(value, Loan.class);
-        List<Pair<LoanProperty,String>> list = entity.validate();
+    public Pair<Integer, List<Pair<LoanProperty, String>>> update(LoanDetailedDto value, AccountDetailedDto updater) {
+        if(SessionManager.getInstance().isSessionAvailable(updater) &&
+                (RoleHelper.hasRole(updater, Role.ADMIN) ||
+                RoleHelper.hasRole(updater, Role.BIBLIOTHEKAR) ||
+                RoleHelper.hasRole(updater, Role.AUSLEIHE))) {
+            ModelMapper mapper = MapperHelper.getMapper();
+            Loan entity = mapper.map(value, Loan.class);
+            List<Pair<LoanProperty, String>> list = entity.validate();
 
-        if(list.size() == 0) {
-            return new Pair<>(_facade.update(entity, TransactionType.AUTO_COMMIT),list);
+            if (list.size() == 0) {
+                return new Pair<>(_facade.update(entity, TransactionType.AUTO_COMMIT), list);
+            }
+
+            return new Pair<>(0, new LinkedList<>());
+        } else {
+            List<Pair<LoanProperty, String>> list = new LinkedList<>();
+            list.add(new Pair<>(LoanProperty.ID, "permission denied"));
+            return new Pair<>(0, list);
         }
-
-        return new Pair<>(0, new LinkedList<>());
     }
 
     @Override
-    public Pair<Boolean, List<Pair<LoanProperty, String>>> delete(int id) {
-        List<Pair<LoanProperty,String>> list = _facade.getById(id).validate();
+    public Pair<Boolean, List<Pair<LoanProperty, String>>> delete(int id, AccountDetailedDto updater) {
+        if(SessionManager.getInstance().isSessionAvailable(updater) &&
+                (RoleHelper.hasRole(updater, Role.ADMIN) ||
+                RoleHelper.hasRole(updater, Role.BIBLIOTHEKAR) ||
+                RoleHelper.hasRole(updater, Role.AUSLEIHE))) {
+            List<Pair<LoanProperty, String>> list = _facade.getById(id).validate();
 
-        if(list.size() == 0) {
-            return new Pair<>(_facade.delete(id, TransactionType.AUTO_COMMIT), list);
+            if (list.size() == 0) {
+                return new Pair<>(_facade.delete(id, TransactionType.AUTO_COMMIT), list);
+            }
+
+            return new Pair<>(false, new LinkedList<>());
+        } else {
+            List<Pair<LoanProperty, String>> list = new LinkedList<>();
+            list.add(new Pair<>(LoanProperty.ID, "permission denied"));
+            return new Pair<>(false, list);
         }
-
-        return new Pair<>(false, new LinkedList<>());
     }
 
-    public int loanMediaMember(MediaMemberSmallDto mediaMember, CustomerSmallDto customer) {
-        // get a list of available media members => books, dvds, for the specified media
-        MediaMember mediaMemberEntity = _mediaMemberFacade.getNotLoanedMediaMember(mediaMember.getId());
-        Customer customerEntity = _customerFacade.getById(customer.getId());
+    public int loanMediaMember(MediaMemberSmallDto mediaMember, CustomerSmallDto customer, AccountDetailedDto updater) {
+        if(SessionManager.getInstance().isSessionAvailable(updater) &&
+                (RoleHelper.hasRole(updater, Role.ADMIN) ||
+                RoleHelper.hasRole(updater, Role.BIBLIOTHEKAR) ||
+                RoleHelper.hasRole(updater, Role.AUSLEIHE))) {
+            // get a list of available media members => books, dvds, for the specified media
+            MediaMember mediaMemberEntity = _mediaMemberFacade.getNotLoanedMediaMember(mediaMember.getId());
+            Customer customerEntity = _customerFacade.getById(customer.getId());
 
-        if(mediaMemberEntity != null && customerEntity != null) {
-            Media mediaEntity = mediaMemberEntity.getMedia();
-            int loanTerm = mediaEntity.getMediaType().getLoanCondition().getLoanTerm();
+            if (mediaMemberEntity != null && customerEntity != null) {
+                Media mediaEntity = mediaMemberEntity.getMedia();
+                int loanTerm = mediaEntity.getMediaType().getLoanCondition().getLoanTerm();
 
-            Loan loan = new Loan();
-            loan.setCustomer(customerEntity);
-            loan.setMediaMember(mediaMemberEntity);
-            loan.setStart(new Date(Calendar.getInstance().getTime().getTime()));
-            loan.setEnd(new Date(Calendar.getInstance().getTime().getTime() + (loanTerm * 24 * 3600 * 1000)));
-            return _facade.add(loan, TransactionType.AUTO_COMMIT);
+                Loan loan = new Loan();
+                loan.setCustomer(customerEntity);
+                loan.setMediaMember(mediaMemberEntity);
+                loan.setStart(new Date(Calendar.getInstance().getTime().getTime()));
+                loan.setEnd(new Date(Calendar.getInstance().getTime().getTime() + (loanTerm * 24 * 3600 * 1000)));
+                return _facade.add(loan, TransactionType.AUTO_COMMIT);
+            }
+
+            return 0;
+        } else {
+            return 0;
         }
-
-        return 0;
     }
 }
