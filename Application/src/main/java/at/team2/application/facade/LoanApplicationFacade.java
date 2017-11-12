@@ -7,6 +7,10 @@ import at.team2.common.dto.detailed.AccountDetailedDto;
 import at.team2.common.dto.detailed.LoanDetailedDto;
 import at.team2.common.dto.small.CustomerSmallDto;
 import at.team2.common.dto.small.MediaMemberSmallDto;
+import at.team2.database_wrapper.common.Filter;
+import at.team2.database_wrapper.common.FilterConnector;
+import at.team2.database_wrapper.enums.CaseType;
+import at.team2.database_wrapper.enums.MatchType;
 import at.team2.database_wrapper.facade.*;
 import at.team2.domain.entities.*;
 import org.modelmapper.ModelMapper;
@@ -146,5 +150,12 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
         } else {
             return 0;
         }
+    }
+
+    public List<Loan> getListByCustomer(int id) {
+        FilterConnector<LoanProperty, LoanProperty> connector = new FilterConnector<>(
+                new Filter<>(id, LoanProperty.CUSTOMER__ID, MatchType.EQUALS, CaseType.NORMAL));
+
+        return _facade.filter(connector);
     }
 }

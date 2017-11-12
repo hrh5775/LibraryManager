@@ -8,5 +8,8 @@ public enum ReservationProperty implements DomainEntityProperty {
     INFORMATION_DATE,
     CLOSED,
     CUSTOMER,
-    MEDIA
+    MEDIA,
+
+    // additional property
+    CUSTOMER__ID
 }
