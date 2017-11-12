@@ -75,5 +75,8 @@ Describe and show how to run the tests with code examples.
 ## Coding conventions
 Use the [Google style guide](https://google.github.io/styleguide/javaguide.html)
 
+## FXML Introduction
+[Introduction to FXML](https://docs.oracle.com/javase/8/javafx/api/javafx/fxml/doc-files/introduction_to_fxml.html)
+
 ## README syntax
 [Documentation](https://enterprise.github.com/downloads/en/markdown-cheatsheet.pdf)
