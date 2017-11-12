@@ -14,7 +14,7 @@ public class Account extends BaseDomainEntity<AccountProperty> {
     private AccountRole _accountRole;
 
     @Override
-    public int getID() {
+    public int getId() {
         return _id;
     }
 

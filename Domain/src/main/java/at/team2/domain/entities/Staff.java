@@ -18,7 +18,7 @@ public class Staff extends BaseDomainEntity<StaffProperty> {
     private Account _account;
 
     @Override
-    public int getID() {
+    public int getId() {
         return _id;
     }
 

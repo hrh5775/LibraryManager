@@ -14,7 +14,7 @@ public class Reminder extends BaseDomainEntity<ReminderProperty> {
     private Integer _reminderCount;
 
     @Override
-    public int getID() {
+    public int getId() {
         return _id;
     }
 

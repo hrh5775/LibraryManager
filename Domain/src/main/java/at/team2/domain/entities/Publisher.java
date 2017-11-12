@@ -14,7 +14,7 @@ public class Publisher extends BaseDomainEntity<PublisherProperty> {
     private PublisherType _publisherType;
 
     @Override
-    public int getID() {
+    public int getId() {
         return _id;
     }
 

@@ -1,5 +1,5 @@
 package at.team2.domain.interfaces;
 
 public interface DomainEntity {
-    public int getID();
+    public int getId();
 }

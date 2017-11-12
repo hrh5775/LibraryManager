@@ -13,7 +13,7 @@ public class AccountRole extends BaseDomainEntity<AccountRoleProperty> {
     private String _roleName;
 
     @Override
-    public int getID() {
+    public int getId() {
         return _id;
     }
 

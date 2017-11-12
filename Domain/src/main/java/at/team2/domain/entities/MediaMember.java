@@ -13,7 +13,7 @@ public class MediaMember extends BaseDomainEntity<MediaMemberProperty> {
     private String _extendedIndex;
 
     @Override
-    public int getID() {
+    public int getId() {
         return _id;
     }
 

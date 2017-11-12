@@ -12,7 +12,7 @@ public class Genre extends BaseDomainEntity<GenreProperty> {
     private String _name;
 
     @Override
-    public int getID() {
+    public int getId() {
         return _id;
     }
 

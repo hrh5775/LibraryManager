@@ -13,7 +13,7 @@ public class LoanCondition extends BaseDomainEntity<LoanConditionProperty> {
     private int _extension;
 
     @Override
-    public int getID() {
+    public int getId() {
         return _id;
     }
 

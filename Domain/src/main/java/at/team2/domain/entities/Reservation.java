@@ -17,7 +17,7 @@ public class Reservation extends BaseDomainEntity<ReservationProperty> {
     private Media _media;
 
     @Override
-    public int getID() {
+    public int getId() {
         return _id;
     }
 

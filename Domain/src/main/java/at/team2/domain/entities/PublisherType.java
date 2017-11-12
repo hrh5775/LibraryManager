@@ -12,7 +12,7 @@ public class PublisherType extends BaseDomainEntity<PublisherTypeProperty> {
     private String _typeName;
 
     @Override
-    public int getID() {
+    public int getId() {
         return _id;
     }
 

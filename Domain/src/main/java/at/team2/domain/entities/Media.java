@@ -24,7 +24,7 @@ public class Media extends BaseDomainEntity<MediaProperty> {
     private List<CreatorPerson> _creatorPersons;
 
     @Override
-    public int getID() {
+    public int getId() {
         return _id;
     }
 
