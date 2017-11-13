@@ -73,6 +73,7 @@ public class SearchCustomer extends BasePage<Void, NullType, NullType, NullType>
         setCenter(parent);
 
         _isLoading.setValue(false);
+        _isAdditionalInfoLoading.setValue(false);
         _loadingIndicator.visibleProperty().bind(_isLoading);
         _additionalInformationLoadingIndicator.visibleProperty().bind(_isAdditionalInfoLoading);
 

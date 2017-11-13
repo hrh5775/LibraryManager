@@ -25,7 +25,7 @@
            stylesheets="/at/team2/client/pages/searchMedium/searchMedium.css">
 
     <fx:define>
-        <SimpleBooleanProperty fx:id="_isLoading" value="false" />
+        <SimpleBooleanProperty fx:id="_isLoading" />
         <SimpleListProperty fx:id="_mediaList" />
         <SimpleBooleanProperty fx:id="_listViewVisible" />
         <SimpleBooleanProperty fx:id="_isDvdChecked" />

@@ -12,7 +12,7 @@
            stylesheets="/at/team2/client/pages/login/login.css">
 
     <fx:define>
-        <SimpleBooleanProperty fx:id="_isLoading" value="false" />
+        <SimpleBooleanProperty fx:id="_isLoading" />
         <SimpleStringProperty fx:id="_userName" value="" />
         <SimpleStringProperty fx:id="_password" value="" />
     </fx:define>

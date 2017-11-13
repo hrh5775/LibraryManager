@@ -23,8 +23,8 @@
            stylesheets="/at/team2/client/pages/searchcustomer/search_customer.css">
 
     <fx:define>
-        <SimpleBooleanProperty fx:id="_isLoading" value="false" />
-        <SimpleBooleanProperty fx:id="_isAdditionalInfoLoading" value="false" />
+        <SimpleBooleanProperty fx:id="_isLoading" />
+        <SimpleBooleanProperty fx:id="_isAdditionalInfoLoading" />
         <SimpleListProperty fx:id="_customerList" />
         <SimpleListProperty fx:id="_reservationList" />
         <SimpleListProperty fx:id="_loanList" />
