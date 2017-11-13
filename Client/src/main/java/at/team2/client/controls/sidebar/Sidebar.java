@@ -45,4 +45,8 @@ public class Sidebar extends ScrollPane {
 
         return result;
     }
+
+    public void clear() {
+        _accordion.getPanes().clear();
+    }
 }

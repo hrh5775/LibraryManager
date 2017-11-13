@@ -1,4 +1,4 @@
-package at.team2.server.helper;
+package at.team2.application.helper;
 
 import javax.naming.Context;
 import javax.naming.NamingEnumeration;

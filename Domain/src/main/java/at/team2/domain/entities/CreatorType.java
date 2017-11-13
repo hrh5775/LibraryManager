@@ -12,7 +12,7 @@ public class CreatorType extends BaseDomainEntity<CreatorTypeProperty> {
     private String _typeName;
 
     @Override
-    public int getID() {
+    public int getId() {
         return _id;
     }
 

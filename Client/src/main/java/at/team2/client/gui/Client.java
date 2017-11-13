@@ -62,8 +62,8 @@ public class Client extends Application {
         mainContent.setContent(new Group(mainContentPane));
 
         // set the sidebar
-        NavigationBar navigationBar = new NavigationBar(mainContentPane, _configuration);
-        Sidebar sidebar = navigationBar.getNavigationBar();
+        Navigation navigation = Navigation.getInstance(mainContentPane, _configuration);
+        Sidebar sidebar = navigation.getNavigationBar();
 
         // set the split pane
         SplitPane resizeableMainContent = new SplitPane(sidebar, mainContent);
@@ -109,7 +109,7 @@ public class Client extends Application {
                 @Override
                 public Boolean doAction(Scale value) {
                     if(value != null) {
-                        BasePage currentPage = navigationBar.getCurrentPage();
+                        BasePage currentPage = navigation.getCurrentPage();
 
                         if(currentPage != null) {
                             return currentPage.getTransforms().setAll(value);
@@ -120,7 +120,7 @@ public class Client extends Application {
                 }
             });
 
-            navigationBar.setOnLoad(new PageAction<Void, NullType>() {
+            navigation.setOnLoad(new PageAction<Void, NullType>() {
                 @Override
                 public Void doAction(NullType value) {
                     slider.refresh();

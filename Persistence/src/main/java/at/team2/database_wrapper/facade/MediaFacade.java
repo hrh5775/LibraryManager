@@ -157,13 +157,13 @@ public class MediaFacade extends BaseDatabaseFacade<Media, MediaProperty> {
 
         if(creatorPersons != null) {
             for(CreatorPerson item : creatorPersons) {
-                if(item.getID() <= 0) {
+                if(item.getId() <= 0) {
                     CreatorPersonFacade creatorPersonFacade = new CreatorPersonFacade(session);
                     item.setId(creatorPersonFacade.add(item, TransactionType.MANUAL_COMMIT));
                 }
 
                 tmpEntity = new MediaCreatorPersonEntity();
-                tmpEntity.setCreatorPersonId(item.getID());
+                tmpEntity.setCreatorPersonId(item.getId());
                 tmpEntity.setMediaId(entity.getId());
                 session.persist(tmpEntity);
             }

@@ -13,6 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 public abstract class BaseDatabaseFacade<V extends BaseDomainEntity, P extends DomainEntityProperty> implements Session, Editable<V>, Filterable<V, P, P> {
     private EntityManager _session;
@@ -41,17 +42,8 @@ public abstract class BaseDatabaseFacade<V extends BaseDomainEntity, P extends D
     public abstract List<V> getList();
 
     protected Query getByFilter(String queryString, EntityManager session, FilterConnector<P, P> filterConnector) {
-        Query query = null;
-        Pair<StringBuilder, List<HibernateParameter>> filterExpression = null;
-
-        try {
-
-            filterExpression = getFilterExpression(filterConnector);
-
-            query = session.createQuery(queryString + " " + filterExpression.getKey());
-        } catch (Exception e) {
-            System.out.println(e);
-        }
+        Pair<StringBuilder, List<HibernateParameter>> filterExpression = getFilterExpression(filterConnector);
+        Query query = session.createQuery(queryString + " " + filterExpression.getKey());
 
         for(HibernateParameter item : filterExpression.getValue()) {
             if(!item.getPreValue().isEmpty() || !item.getPostValue().isEmpty()) {
@@ -118,7 +110,7 @@ public abstract class BaseDatabaseFacade<V extends BaseDomainEntity, P extends D
         parameter = filter.getParameter();
 
         if(columnIdentifier != null && !columnIdentifier.trim().isEmpty()) {
-            hibernateColumnIdentifier = columnIdentifier.replace(".", "");
+            hibernateColumnIdentifier = "abc" + (new Random()).nextInt(999999999); //columnIdentifier.replace(".", "");
             modifiedColumnIdentifier = columnIdentifier;
 
             if(!(parameter instanceof Integer)) {

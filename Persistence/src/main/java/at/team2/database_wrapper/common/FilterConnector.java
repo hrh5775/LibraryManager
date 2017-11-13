@@ -104,4 +104,30 @@ public class FilterConnector<L extends DomainEntityProperty, R extends DomainEnt
     public FilterConnector<L, R> getRightFilterConnector() {
         return _rightFilterConnector;
     }
+
+    public void setRightFilter(ConnectorType connectorType, Filter<R> rightFilter) {
+        if(connectorType == null) {
+            throw new InvalidParameterException("connectorType cannot be null");
+        }
+
+        if(rightFilter == null) {
+            throw new InvalidParameterException("rightFilter cannot be null");
+        }
+
+        _connectorType = connectorType;
+        _rightFilter = rightFilter;
+    }
+
+    public void setRightFilterConnector(ConnectorType connectorType, FilterConnector<L, R> rightFilterConnector) {
+        if(connectorType == null) {
+            throw new InvalidParameterException("connectorType cannot be null");
+        }
+
+        if(rightFilterConnector == null) {
+            throw new InvalidParameterException("rightFilterConnector cannot be null");
+        }
+
+        _connectorType = connectorType;
+        _rightFilterConnector = rightFilterConnector;
+    }
 }

@@ -4,7 +4,7 @@ import at.team2.common.interfaces.BaseDtoEntity;
 
 import java.sql.Date;
 
-public abstract class MediaSmallDto extends BaseDtoEntity {
+public class MediaSmallDto extends BaseDtoEntity {
     private int _mediaId;
     private String _standardMediaId;
     private boolean _available;
@@ -85,5 +85,10 @@ public abstract class MediaSmallDto extends BaseDtoEntity {
 
     public void setMediaType(MediaTypeSmallDto mediaType) {
         _mediaType = mediaType;
+    }
+
+    @Override
+    public String toString() {
+        return _title;
     }
 }

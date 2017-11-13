@@ -4,14 +4,18 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import javax.lang.model.type.NullType;
 
+import at.team2.client.common.AccountManager;
+import at.team2.client.controls.loadingindicator.LoadingIndicator;
 import at.team2.client.controls.numberfield.NumberField;
 import at.team2.client.pages.BasePage;
-import at.team2.common.dto.small.BookSmallDto;
+import at.team2.common.dto.detailed.AccountDetailedDto;
 import at.team2.common.dto.small.CustomerSmallDto;
-import at.team2.common.dto.small.MediaSmallDto;
+import at.team2.common.dto.small.MediaMemberSmallDto;
 import at.team2.common.helper.RmiHelper;
 import at.team2.common.interfaces.LoanRemoteObjectInf;
 import at.team2.common.interfaces.MainRemoteObjectInf;
+import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
@@ -21,16 +25,21 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.Pane;
 
 public class LendMedium extends BasePage<Void, NullType, NullType, NullType> {
-    //todo: Add some input validation to all of this
-    //todo: Test and make sure this actually works
+    @FXML
+    private LoadingIndicator _loadingIndicator;
+    @FXML
+    private Pane _mainPanel;
+    @FXML
+    private BooleanProperty _isLoading;
     @FXML
     private NumberField _mediaIdNumberField;
     @FXML
     private Label _lendTitellbl;
     @FXML
-    private ListProperty<MediaSmallDto> _mediaList;
+    private ListProperty<MediaMemberSmallDto> _mediaList;
     @FXML
     private TableView _lenditemsTbl;
     @FXML
@@ -46,9 +55,11 @@ public class LendMedium extends BasePage<Void, NullType, NullType, NullType> {
     @FXML
     private Button _lendAddButton;
     @FXML
+
     private SimpleBooleanProperty _lendAddButtonDisabled;
-    private BookSmallDto _currentMedia;
+    private MediaMemberSmallDto _currentMedia;
     private CustomerSmallDto _currentCustomer;
+    private Thread _lendTask;
 
     @Override
     public void initialize() {
@@ -59,11 +70,15 @@ public class LendMedium extends BasePage<Void, NullType, NullType, NullType> {
         Parent parent = loadView(LendMedium.class.getResource("lendMedium.fxml"));
         setCenter(parent);
 
+        _isLoading.setValue(false);
+        _loadingIndicator.visibleProperty().bind(_isLoading);
+        _mainPanel.visibleProperty().bind(_isLoading.not());
+
         _lenditemsTbl.itemsProperty().bind(_mediaList);
         _lendConfirmButton.disableProperty().bind(_lendConfirmDisabled);
         _lendAddButton.disableProperty().bind(_lendAddButtonDisabled);
 
-        ObservableList<MediaSmallDto> list = FXCollections.observableArrayList();
+        ObservableList<MediaMemberSmallDto> list = FXCollections.observableArrayList();
         _mediaList.set(list);
         activateLendConfirm();
         activateLendAdd();
@@ -86,16 +101,16 @@ public class LendMedium extends BasePage<Void, NullType, NullType, NullType> {
     }
 
     @FXML
-    private void findBookByID() {
+    private void findMediaMemberById() {
         try {
             MainRemoteObjectInf remoteObject = RmiHelper.getSession();
             String tmp = _mediaIdNumberField.getText();
 
             if(tmp != null) {
-                BookSmallDto entity = remoteObject.getBookRemoteObject().getBookSmallById(Integer.parseInt(tmp));
+                MediaMemberSmallDto entity = remoteObject.getMediaMemberRemoteObject().getMediaMemberSmallById(Integer.parseInt(tmp));
 
                 if (entity != null) {
-                    _lendTitellbl.setText(entity.getTitle());
+                    _lendTitellbl.setText(entity.getMedia().getTitle());
                     _currentMedia = entity;
                     _mediaIdNumberField.setText("0");
                 } else {
@@ -110,9 +125,16 @@ public class LendMedium extends BasePage<Void, NullType, NullType, NullType> {
     }
 
     @FXML
-    private void addBookToList() {
-        if (_currentMedia != null && !_mediaList.contains(_currentMedia)) {
-            ObservableList list = _mediaList.get();
+    private void addMediaMemberToList() {
+        if (_currentMedia != null) {
+            ObservableList<MediaMemberSmallDto> list = _mediaList.get();
+
+            for(MediaMemberSmallDto item : list) {
+                if(item.getId() == _currentMedia.getId()) {
+                    return;
+                }
+            }
+
             list.add(_currentMedia);
             _mediaList.set(list);
             _currentMedia = null;
@@ -125,7 +147,7 @@ public class LendMedium extends BasePage<Void, NullType, NullType, NullType> {
     }
 
     @FXML
-    private void getCustomerByID() {
+    private void getCustomerById() {
         try {
             MainRemoteObjectInf remoteObject = RmiHelper.getSession();
             String tmp = _customerIdNumberField.getText();
@@ -151,24 +173,51 @@ public class LendMedium extends BasePage<Void, NullType, NullType, NullType> {
     }
 
     @FXML
-    private void lendBooksToCustomer() throws RemoteException, NotBoundException {
+    private void lendMediaMembersToCustomer() throws RemoteException, NotBoundException {
         if(_mediaList.size() > 0 && _currentCustomer != null) {
-            try {
-                MainRemoteObjectInf remoteObject = RmiHelper.getSession();
-                LoanRemoteObjectInf loanRemoteObject = remoteObject.getLoanRemoteObject();
+            _isLoading.setValue(true);
 
-                for(MediaSmallDto item : _mediaList.get()) {
-                    if(loanRemoteObject.loanMedia(item, _currentCustomer) <= 0) {
-                        showErrorMessage("Loan failed for", item.getTitle());
+            _lendTask = startBackgroundTask(() -> {
+                try {
+                    MainRemoteObjectInf remoteObject = RmiHelper.getSession();
+                    LoanRemoteObjectInf loanRemoteObject = remoteObject.getLoanRemoteObject();
+
+                    int count = 0;
+                    AccountDetailedDto account = AccountManager.getInstance().getAccount();
+
+                    for (MediaMemberSmallDto item : _mediaList.get()) {
+                        if (loanRemoteObject.loanMediaMember(item, _currentCustomer, account) <= 0) {
+                            Platform.runLater(() -> showErrorMessage("Loan failed for", item.getMedia().getTitle()));
+                        } else {
+                            count++;
+                        }
                     }
+
+                    ObservableList list = _mediaList.get();
+                    list.clear();
+                    _mediaList.set(list);
+                    this.reload();
+
+                    if (count > 0) {
+                        Platform.runLater(() -> showSuccessMessage("All loans added", ""));
+                    }
+                } catch (Exception e) {
+                    Platform.runLater(() -> showRmiErrorMessage(e));
+                } finally {
+                    Platform.runLater(() -> _isLoading.setValue(false));
                 }
+            });
+        }
+    }
 
-                this.reload();
-
-                showSuccessMessage("All loans added", "");
-            } catch (Exception e) {
-                showRmiErrorMessage(e);
-            }
+    @FXML
+    private void cancel() {
+        try {
+            stopTask(_lendTask);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
+            _isLoading.setValue(false);
         }
     }
 

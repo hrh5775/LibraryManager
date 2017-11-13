@@ -19,11 +19,11 @@ import java.util.List;
 public class AccountFacade extends BaseDatabaseFacade<Account, AccountProperty> {
     private static final Type type = new TypeToken<List<Account>>() {}.getType();
 
-    protected AccountFacade() {
+    public AccountFacade() {
         super();
     }
 
-    protected AccountFacade(EntityManager session) {
+    public AccountFacade(EntityManager session) {
         super(session);
     }
 

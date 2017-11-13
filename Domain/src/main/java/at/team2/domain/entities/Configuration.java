@@ -13,7 +13,7 @@ public class Configuration extends BaseDomainEntity<ConfigurationProperty> {
     private String _data;
 
     @Override
-    public int getID() {
+    public int getId() {
         return _id;
     }
 

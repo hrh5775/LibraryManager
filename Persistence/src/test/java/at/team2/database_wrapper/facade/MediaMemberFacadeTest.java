@@ -37,7 +37,7 @@ public class MediaMemberFacadeTest {
         MediaMemberFacade facade = new MediaMemberFacade();
         MediaMember value = new MediaMember();
         value.setExtendedIndex("Extension Index Test");
-        value.setMediaId(MediaHelper.createMedia(new MediaFacade()));
+        value.setMedia(MediaHelper.createMedia(new MediaFacade()));
 
         int id = facade.add(value, TransactionType.AUTO_COMMIT);
         Assert.assertTrue(id > 0);

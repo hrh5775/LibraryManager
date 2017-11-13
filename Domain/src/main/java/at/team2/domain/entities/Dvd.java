@@ -13,7 +13,7 @@ public class Dvd extends BaseDomainEntity<DvdProperty> {
     private Media _media;
 
     @Override
-    public int getID() {
+    public int getId() {
         return _id;
     }
 

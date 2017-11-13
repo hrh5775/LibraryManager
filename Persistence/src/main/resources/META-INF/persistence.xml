@@ -56,6 +56,7 @@
             <property name="hibernate.id.new_generator_mappings" value="true"/>
 
             <!-- other -->
+            <property name="hibernate.dialect" value="at.team2.database_wrapper.common.MyOwnSQLDialect" />
             <!-- <property name="hibernate.hbm2ddl.auto" value="validate"/> -->
             <!--<property name="dialect" value="org.hibernate.dialect.MySQL5Dialect"/>-->
             <!--<property name="hibernate.connection.driver_class" value="org.mariadb.jdbc.Driver"/>-->

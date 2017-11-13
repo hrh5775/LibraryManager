@@ -38,14 +38,15 @@ public class DvdRemoteObject extends UnicastRemoteObject implements DvdRemoteObj
     }
 
     @Override
-    public List<DvdSmallDto> getDvdSmallList() {
+    public List<DvdSmallDto> getDvdSmallList() throws RemoteException {
         DvdApplicationFacade facade = DvdApplicationFacade.getInstance();
         ModelMapper mapper = MapperHelper.getMapper();
 
         return mapper.map(facade.getList(), typeSmall);
     }
 
-    public List<DvdSmallDto> getDvdSmallList(String searchString){
+    @Override
+    public List<DvdSmallDto> getDvdSmallList(String searchString) throws RemoteException {
         DvdApplicationFacade facade =  DvdApplicationFacade.getInstance();
         ModelMapper mapper = MapperHelper.getMapper();
 

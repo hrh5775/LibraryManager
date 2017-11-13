@@ -5,6 +5,7 @@
 <?import javafx.geometry.Insets?>
 <?import at.team2.client.controls.loadingindicator.LoadingIndicator?>
 <?import javafx.beans.property.SimpleBooleanProperty?>
+<?import javafx.beans.property.SimpleStringProperty?>
 
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
@@ -12,6 +13,8 @@
 
     <fx:define>
         <SimpleBooleanProperty fx:id="_isLoading" value="false" />
+        <SimpleStringProperty fx:id="_userName" value="" />
+        <SimpleStringProperty fx:id="_password" value="" />
     </fx:define>
 
     <children>
@@ -24,9 +27,10 @@
                                 <GridPane>
                                     <children>
                                         <Label text="Username" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                        <TextField fx:id="_userNameInput" promptText="" text="" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
                                         <Label text="Password" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                                        <TextField fx:id="user" promptText="" text="" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                                        <TextField fx:id="password" promptText="" text="" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                        <PasswordField fx:id="_passwordInput" promptText="" text="" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                     </children>
                                     <columnConstraints>
                                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="148.0" minWidth="10.0" prefWidth="109.0" />
@@ -52,6 +56,6 @@
             </padding>
         </StackPane>
 
-        <LoadingIndicator fx:id="_loadingIndicator" />
+        <LoadingIndicator fx:id="_loadingIndicator" onCancel="#cancel" />
     </children>
 </StackPane>

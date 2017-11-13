@@ -17,7 +17,7 @@ public class CreatorPerson extends BaseDomainEntity<CreatorPersonProperty> {
     private CreatorType _creatorType;
 
     @Override
-    public int getID() {
+    public int getId() {
         return _id;
     }
 

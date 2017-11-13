@@ -19,7 +19,7 @@ public class Loan extends BaseDomainEntity<LoanProperty> {
     private Reminder _reminder;
 
     @Override
-    public int getID() {
+    public int getId() {
         return _id;
     }
 

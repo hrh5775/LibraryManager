@@ -6,97 +6,115 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.cell.PropertyValueFactory?>
-
 <?import javafx.beans.property.SimpleBooleanProperty?>
 <?import javafx.beans.property.SimpleListProperty?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.geometry.Insets?>
+<?import at.team2.client.controls.loadingindicator.LoadingIndicator?>
+<?import jfxtras.scene.layout.VBox?>
+<?import javafx.scene.layout.StackPane?>
 
-<GridPane xmlns="http://javafx.com/javafx"
-          xmlns:fx="http://javafx.com/fxml"
-          stylesheets="/at/team2/client/pages/searchMedium/searchMedium.css"
-          prefWidth="Infinity" prefHeight="Infinity">
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           stylesheets="/at/team2/client/pages/searchMedium/searchMedium.css">
 
     <fx:define>
+        <SimpleBooleanProperty fx:id="_isLoading" value="false" />
         <SimpleListProperty fx:id="_mediaList" />
         <SimpleBooleanProperty fx:id="_listViewVisible" />
+        <SimpleBooleanProperty fx:id="_isDvdChecked" />
+        <SimpleBooleanProperty fx:id="_isBookChecked" />
     </fx:define>
 
-    <columnConstraints>
-        <ColumnConstraints hgrow="SOMETIMES" />
-        <ColumnConstraints hgrow="SOMETIMES" />
-    </columnConstraints>
-    <rowConstraints>
-        <RowConstraints vgrow="SOMETIMES" />
-        <RowConstraints vgrow="SOMETIMES" />
-        <RowConstraints vgrow="SOMETIMES" />
-        <RowConstraints />
-    </rowConstraints>
-
     <children>
-        <TextField fx:id="_searchField" GridPane.rowIndex="0" GridPane.columnIndex="0" />
-        <Button fx:id="searchButton" mnemonicParsing="false" text="Search" onAction="#search" GridPane.rowIndex="0" GridPane.columnIndex="1" />
+        <VBox>
+            <children>
+                <VBox>
+                    <VBox>
+                        <HBox>
+                            <TextField fx:id="_searchField" prefWidth="1000" />
+                            <Button fx:id="searchButton" mnemonicParsing="false" text="Search" onAction="#search" defaultButton="true" minWidth="100" />
+                        </HBox>
 
-        <CheckBox fx:id="_bookChecked" mnemonicParsing="false" text="Books" GridPane.rowIndex="1" GridPane.columnIndex="0" />
-        <CheckBox fx:id="_dvdChecked" mnemonicParsing="false" text="DVD" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+                        <HBox>
+                            <padding>
+                                <Insets top="5" />
+                            </padding>
 
-        <HBox GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.columnSpan="2">
-            <padding>
-                <Insets bottom="5.0" top="5.0" />
-            </padding>
-        </HBox>
+                            <CheckBox fx:id="_bookChecked" mnemonicParsing="false" text="Books">
+                                <padding>
+                                    <Insets right="30" />
+                                </padding>
+                            </CheckBox>
+                            <CheckBox fx:id="_dvdChecked" mnemonicParsing="false" text="DVD" />
+                        </HBox>
+                    </VBox>
+                </VBox>
 
-        <TableView fx:id="_tableView" onMouseClicked="#mediaItemClicked" editable="false" GridPane.rowIndex="3" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.vgrow="ALWAYS" GridPane.fillWidth="true">
-            <placeholder>
-                <Label text="Nothing found" />
-            </placeholder>
+                <StackPane fx:id="_tablePane" prefHeight="10000" VBox.vgrow="ALWAYS">
+                    <padding>
+                        <Insets top="30" />
+                    </padding>
 
-            <columns>
-                <TableColumn text="ID" prefWidth="40">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="id" />
-                    </cellValueFactory>
-                </TableColumn>
-                <TableColumn text="Title" prefWidth="350">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="title" />
-                    </cellValueFactory>
-                </TableColumn>
-                <TableColumn text="ISBN/Ident." prefWidth="250">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="standardMediaId" />
-                    </cellValueFactory>
-                </TableColumn>
-                <TableColumn text="Available" prefWidth="100">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="available" />
-                    </cellValueFactory>
-                </TableColumn>
-                <TableColumn text="Published" prefWidth="100">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="publishedDate" />
-                    </cellValueFactory>
-                </TableColumn>
-                <TableColumn text="Index" prefWidth="200">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="baseIndex" />
-                    </cellValueFactory>
-                </TableColumn>
-                <TableColumn text="Type" prefWidth="100">
-                    <cellValueFactory>
-                        <PropertyValueFactory property="mediaType" />
-                    </cellValueFactory>
-                </TableColumn>
-            </columns>
-        </TableView>
+                    <children>
+                        <LoadingIndicator fx:id="_loadingIndicator" onCancel="#cancel" StackPane.alignment="TOP_CENTER" />
+
+                        <TableView fx:id="_tableView" onMouseClicked="#mediaItemClicked" editable="false" VBox.vgrow="ALWAYS" prefWidth="Infinity">
+                            <columnResizePolicy>
+                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                            </columnResizePolicy>
+
+                            <placeholder>
+                                <Label text="Nothing found" />
+                            </placeholder>
+
+                            <columns>
+                                <TableColumn text="ID" prefWidth="40">
+                                    <cellValueFactory>
+                                        <PropertyValueFactory property="id" />
+                                    </cellValueFactory>
+                                </TableColumn>
+                                <TableColumn text="Title" prefWidth="350">
+                                    <cellValueFactory>
+                                        <PropertyValueFactory property="title" />
+                                    </cellValueFactory>
+                                </TableColumn>
+                                <TableColumn text="ISBN/Ident." prefWidth="250">
+                                    <cellValueFactory>
+                                        <PropertyValueFactory property="standardMediaId" />
+                                    </cellValueFactory>
+                                </TableColumn>
+                                <TableColumn text="Available" prefWidth="100">
+                                    <cellValueFactory>
+                                        <PropertyValueFactory property="available" />
+                                    </cellValueFactory>
+                                </TableColumn>
+                                <TableColumn text="Published" prefWidth="100">
+                                    <cellValueFactory>
+                                        <PropertyValueFactory property="publishedDate" />
+                                    </cellValueFactory>
+                                </TableColumn>
+                                <TableColumn text="Index" prefWidth="200">
+                                    <cellValueFactory>
+                                        <PropertyValueFactory property="baseIndex" />
+                                    </cellValueFactory>
+                                </TableColumn>
+                                <TableColumn text="Type" prefWidth="100">
+                                    <cellValueFactory>
+                                        <PropertyValueFactory property="mediaType" />
+                                    </cellValueFactory>
+                                </TableColumn>
+                            </columns>
+                        </TableView>
+                    </children>
+                </StackPane>
+            </children>
+        </VBox>
     </children>
-</GridPane>
+</StackPane>

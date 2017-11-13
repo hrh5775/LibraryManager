@@ -13,7 +13,7 @@ public class Book extends BaseDomainEntity<BookProperty> {
     private Media _media;
 
     @Override
-    public int getID() {
+    public int getId() {
         return _id;
     }
 

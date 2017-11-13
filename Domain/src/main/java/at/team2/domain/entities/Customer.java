@@ -21,7 +21,7 @@ public class Customer extends BaseDomainEntity<CustomerProperty> {
     private Account _account;
 
     @Override
-    public int getID() {
+    public int getId() {
         return _id;
     }
 

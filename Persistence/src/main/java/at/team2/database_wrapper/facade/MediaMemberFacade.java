@@ -136,17 +136,15 @@ public class MediaMemberFacade extends BaseDatabaseFacade<MediaMember, MediaMemb
         return StoreHelper.storeEntities(session, transactionType);
     }
 
-    public MediaMember getNotLoanedMediaMember(int mediaId) {
+    public MediaMember getNotLoanedMediaMember(int mediaMemberId) {
         EntityManager session = getCurrentSession();
-        Query query = session.createQuery("from MediaMemberEntity i left join i.loansById e where i.mediaId = :mediaId and (e = null or e.closed = true)");
-        query.setParameter("mediaId", mediaId);
+        Query query = session.createQuery("from MediaMemberEntity where id = :mediaMemberId and (select count(*) from LoanEntity where mediaMemberId = :mediaMemberId and closed = false) = 0");
+        query.setParameter("mediaMemberId", mediaMemberId);
+        MediaMemberEntity entity = getFirstOrDefault(query);
 
-        List<Object[]> entities = query.getResultList();
-
-        if (entities.size() > 0) {
+        if(entity != null) {
             ModelMapper mapper = MapperHelper.getMapper();
-
-            return mapper.map(entities.get(0)[0], MediaMember.class);
+            return mapper.map(entity, MediaMember.class);
         }
 
         return null;

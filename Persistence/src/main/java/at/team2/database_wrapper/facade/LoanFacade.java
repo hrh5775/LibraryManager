@@ -71,6 +71,8 @@ public class LoanFacade extends BaseDatabaseFacade<Loan, LoanProperty> {
                 return "start";
             case REMINDER:
                 return "reminderByReminderId.reminderDate";
+            case CUSTOMER__ID:
+                return "customerId";
         }
 
         return null;
@@ -93,7 +95,7 @@ public class LoanFacade extends BaseDatabaseFacade<Loan, LoanProperty> {
 
         createReminder(entity, value, session);
         // do not let the user create a closed loan
-        entity.setClosed(true);
+        entity.setClosed(false);
         session.persist(entity);
         StoreHelper.storeEntities(session, transactionType);
 

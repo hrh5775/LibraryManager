@@ -1,7 +1,11 @@
 package at.team2.application.facade;
 
+import at.team2.application.SessionManager;
+import at.team2.application.enums.Role;
 import at.team2.application.helper.MapperHelper;
+import at.team2.application.helper.RoleHelper;
 import at.team2.application.interfaces.BaseApplicationFacade;
+import at.team2.common.dto.detailed.AccountDetailedDto;
 import at.team2.common.dto.detailed.DvdDetailedDto;
 import at.team2.database_wrapper.common.Filter;
 import at.team2.database_wrapper.common.FilterConnector;
@@ -18,58 +22,20 @@ import org.modelmapper.ModelMapper;
 import java.util.LinkedList;
 import java.util.List;
 
-public class DvdApplicationFacade extends BaseApplicationFacade<Dvd, DvdDetailedDto, DvdProperty> {
+public class DvdApplicationFacade extends BaseApplicationFacade<Dvd, DvdDetailedDto, AccountDetailedDto, DvdProperty> {
     private static DvdApplicationFacade _instance;
-    private DvdFacade _facade = new DvdFacade();
+    private DvdFacade _facade;
 
     public static DvdApplicationFacade getInstance() {
         if(_instance == null) {
             _instance = new DvdApplicationFacade();
+            _instance._facade = new DvdFacade();
         }
 
         return _instance;
     }
 
     private DvdApplicationFacade() {
-    }
-
-    public List<Dvd> search(String searchString){
-        FilterConnector<DvdProperty, DvdProperty> connector = new FilterConnector<>(
-                new FilterConnector<>(
-                        new FilterConnector<>(
-                                new Filter<>(searchString, DvdProperty.MEDIA__STANDARD_MEDIA_ID, MatchType.CONTAINS, CaseType.IGNORE_CASE),
-                                ConnectorType.OR,
-                                new Filter<>(searchString, DvdProperty.MEDIA__TITLE, MatchType.CONTAINS, CaseType.IGNORE_CASE)
-                        ),
-                        ConnectorType.OR,
-                        new FilterConnector<>(
-                                new Filter<>(searchString, DvdProperty.MEDIA__DESCRIPTION, MatchType.CONTAINS, CaseType.IGNORE_CASE),
-                                ConnectorType.OR,
-                                new Filter<>(searchString, DvdProperty.MEDIA__PUBLISHER, MatchType.CONTAINS, CaseType.IGNORE_CASE)
-                        )
-                ),
-                ConnectorType.OR,
-                new FilterConnector<>(
-                    new Filter<>(searchString, DvdProperty.MEDIA__PUBLISHER_TYPE, MatchType.CONTAINS, CaseType.IGNORE_CASE),
-                    ConnectorType.OR,
-                    new Filter<>(searchString, DvdProperty.MEDIA__GENRE, MatchType.CONTAINS, CaseType.IGNORE_CASE)
-                )
-                /*new FilterConnector<>(
-                        new FilterConnector<>(
-                                new Filter<>(searchString, DvdProperty.MEDIA__PUBLISHER_TYPE, MatchType.CONTAINS, CaseType.IGNORE_CASE),
-                                ConnectorType.OR,
-                                new Filter<>(searchString, DvdProperty.MEDIA__CREATOR_PERSON_FIRST_NAME, MatchType.CONTAINS, CaseType.IGNORE_CASE)
-                        ),
-                        ConnectorType.OR,
-                        new FilterConnector<>(
-                                new Filter<>(searchString, DvdProperty.MEDIA__CREATOR_PERSON_LAST_NAME, MatchType.CONTAINS, CaseType.IGNORE_CASE),
-                                ConnectorType.OR,
-                                new Filter<>(searchString, DvdProperty.MEDIA__CREATOR_TYPE, MatchType.CONTAINS, CaseType.IGNORE_CASE)
-                        )
-                )*/
-        );
-
-        return _facade.filter(connector);
     }
 
     @Override
@@ -88,39 +54,123 @@ public class DvdApplicationFacade extends BaseApplicationFacade<Dvd, DvdDetailed
     }
 
     @Override
-    public Pair<Integer, List<Pair<DvdProperty, String>>> add(DvdDetailedDto value) {
-        ModelMapper mapper = MapperHelper.getMapper();
-        Dvd entity = mapper.map(value, Dvd.class);
-        List<Pair<DvdProperty, String>> list = entity.validate();
+    public Pair<Integer, List<Pair<DvdProperty, String>>> add(DvdDetailedDto value, AccountDetailedDto updater) {
+        if(SessionManager.getInstance().isSessionAvailable(updater) &&
+                (RoleHelper.hasRole(updater, Role.ADMIN) ||
+                RoleHelper.hasRole(updater, Role.DATENPFLEGER) ||
+                RoleHelper.hasRole(updater, Role.OPERATOR) ||
+                RoleHelper.hasRole(updater, Role.BIBLIOTHEKAR))) {
+            ModelMapper mapper = MapperHelper.getMapper();
+            Dvd entity = mapper.map(value, Dvd.class);
+            List<Pair<DvdProperty, String>> list = entity.validate();
 
-        if(list.size() == 0) {
-            return new Pair<>(_facade.add(entity, TransactionType.AUTO_COMMIT), list);
+            if (list.size() == 0) {
+                return new Pair<>(_facade.add(entity, TransactionType.AUTO_COMMIT), list);
+            }
+
+            return new Pair<>(0, new LinkedList<>());
+        } else {
+            List<Pair<DvdProperty, String>> list = new LinkedList<>();
+            list.add(new Pair<>(DvdProperty.ID, "permission denied"));
+            return new Pair<>(0, list);
         }
-
-        return new Pair<>(0, new LinkedList<>());
     }
 
     @Override
-    public Pair<Integer, List<Pair<DvdProperty, String>>> update(DvdDetailedDto value) {
-        ModelMapper mapper = MapperHelper.getMapper();
-        Dvd entity = mapper.map(value, Dvd.class);
-        List<Pair<DvdProperty, String>> list = entity.validate();
+    public Pair<Integer, List<Pair<DvdProperty, String>>> update(DvdDetailedDto value, AccountDetailedDto updater) {
+        if(SessionManager.getInstance().isSessionAvailable(updater) &&
+                (RoleHelper.hasRole(updater, Role.ADMIN) ||
+                RoleHelper.hasRole(updater, Role.DATENPFLEGER) ||
+                RoleHelper.hasRole(updater, Role.OPERATOR) ||
+                RoleHelper.hasRole(updater, Role.BIBLIOTHEKAR))) {
+            ModelMapper mapper = MapperHelper.getMapper();
+            Dvd entity = mapper.map(value, Dvd.class);
+            List<Pair<DvdProperty, String>> list = entity.validate();
 
-        if(list.size() == 0) {
-            return new Pair<>(_facade.update(entity, TransactionType.AUTO_COMMIT), list);
+            if (list.size() == 0) {
+                return new Pair<>(_facade.update(entity, TransactionType.AUTO_COMMIT), list);
+            }
+
+            return new Pair<>(0, new LinkedList<>());
+        } else {
+            List<Pair<DvdProperty, String>> list = new LinkedList<>();
+            list.add(new Pair<>(DvdProperty.ID, "permission denied"));
+            return new Pair<>(0, list);
         }
-
-        return new Pair<>(0, new LinkedList<>());
     }
 
     @Override
-    public Pair<Boolean, List<Pair<DvdProperty, String>>> delete(int id) {
-        List<Pair<DvdProperty, String>> list = _facade.getById(id).validate();
+    public Pair<Boolean, List<Pair<DvdProperty, String>>> delete(int id, AccountDetailedDto updater) {
+        if(SessionManager.getInstance().isSessionAvailable(updater) &&
+                (RoleHelper.hasRole(updater, Role.ADMIN) ||
+                RoleHelper.hasRole(updater, Role.DATENPFLEGER) ||
+                RoleHelper.hasRole(updater, Role.OPERATOR) ||
+                RoleHelper.hasRole(updater, Role.BIBLIOTHEKAR))) {
+            List<Pair<DvdProperty, String>> list = _facade.getById(id).validate();
 
-        if(list.size() == 0) {
-            return new Pair<>(_facade.delete(id, TransactionType.AUTO_COMMIT), list);
+            if (list.size() == 0) {
+                return new Pair<>(_facade.delete(id, TransactionType.AUTO_COMMIT), list);
+            }
+
+            return new Pair<>(false, new LinkedList<>());
+        } else {
+            List<Pair<DvdProperty, String>> list = new LinkedList<>();
+            list.add(new Pair<>(DvdProperty.ID, "permission denied"));
+            return new Pair<>(false, list);
         }
+    }
 
-        return new Pair<>(false, new LinkedList<>());
+    public List<Dvd> search(String searchString){
+        /*String[] items = searchString.split(" ");
+        FilterConnector<DvdProperty, DvdProperty> connector = null;
+        FilterConnector<DvdProperty, DvdProperty> tmpConnector;
+        FilterConnector<DvdProperty, DvdProperty> lastConnector = null;
+
+        for(int i = 0; i < items.length; i++) {
+            if(connector == null) {
+                connector = getFilterConnector(items[i]);
+                lastConnector = connector;
+            } else {
+                tmpConnector =  getFilterConnector(items[i]);
+                lastConnector.setRightFilterConnector(ConnectorType.AND, tmpConnector);
+                lastConnector = tmpConnector;
+            }
+        }*/
+
+        return _facade.filter(getFilterConnector(searchString));
+    }
+
+    private FilterConnector<DvdProperty, DvdProperty> getFilterConnector(String searchString) {
+        FilterConnector<DvdProperty, DvdProperty> connector = new FilterConnector<>(
+                new FilterConnector<>(
+                        new FilterConnector<>(
+                                new Filter<>(searchString, DvdProperty.MEDIA__STANDARD_MEDIA_ID, MatchType.CONTAINS, CaseType.IGNORE_CASE),
+                                ConnectorType.OR,
+                                new Filter<>(searchString, DvdProperty.MEDIA__TITLE, MatchType.CONTAINS, CaseType.IGNORE_CASE)
+                        ),
+                        ConnectorType.OR,
+                        new FilterConnector<>(
+                                new Filter<>(searchString, DvdProperty.MEDIA__DESCRIPTION, MatchType.CONTAINS, CaseType.IGNORE_CASE),
+                                ConnectorType.OR,
+                                new Filter<>(searchString, DvdProperty.MEDIA__PUBLISHER, MatchType.CONTAINS, CaseType.IGNORE_CASE)
+                        )
+                ),
+                ConnectorType.OR,
+                new FilterConnector<>(
+                        new FilterConnector<>(
+                                new Filter<>(searchString, DvdProperty.MEDIA__PUBLISHER_TYPE, MatchType.CONTAINS, CaseType.IGNORE_CASE),
+                                ConnectorType.OR,
+                                new Filter<>(searchString, DvdProperty.MEDIA__CREATOR_PERSON, MatchType.CONTAINS, CaseType.IGNORE_CASE)
+                        ),
+                        ConnectorType.OR,
+                        new FilterConnector<>(
+                                new Filter<>(searchString, DvdProperty.MEDIA__CREATOR_TYPE, MatchType.CONTAINS, CaseType.IGNORE_CASE),
+                                ConnectorType.OR,
+                                new Filter<>(searchString, DvdProperty.MEDIA__GENRE, MatchType.CONTAINS, CaseType.IGNORE_CASE)
+                        )
+                )
+        );
+
+        return connector;
     }
 }

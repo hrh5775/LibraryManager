@@ -13,7 +13,7 @@ public class MediaType extends BaseDomainEntity<MediaTypeProperty> {
     private LoanCondition _loanCondition;
 
     @Override
-    public int getID() {
+    public int getId() {
         return _id;
     }
 

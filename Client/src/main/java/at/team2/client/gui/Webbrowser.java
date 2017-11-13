@@ -1,9 +1,9 @@
 package at.team2.client.gui;
 
-import com.teamdev.jxbrowser.chromium.Browser;
-import com.teamdev.jxbrowser.chromium.BrowserCore;
-import com.teamdev.jxbrowser.chromium.internal.Environment;
-import com.teamdev.jxbrowser.chromium.javafx.BrowserView;
+//import com.teamdev.jxbrowser.chromium.Browser;
+//import com.teamdev.jxbrowser.chromium.BrowserCore;
+//import com.teamdev.jxbrowser.chromium.internal.Environment;
+//import com.teamdev.jxbrowser.chromium.javafx.BrowserView;
 import javafx.scene.Parent;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
@@ -13,30 +13,30 @@ public class Webbrowser {
     private static boolean _initialized = false;
 
     public static Parent getBrowser(URL initialURL, boolean useJxBrowser) {
-        if(useJxBrowser) {
+        /*if(useJxBrowser) {
             if(!_initialized) {
                 if (Environment.isMac()) {
                     BrowserCore.initialize();
                     _initialized = true;
                 }
             }
-        }
+        }*/
 
         Parent result;
 
-        if(useJxBrowser) {
+        /*if(useJxBrowser) {
             Browser browser = new Browser();
             BrowserView browserView = new BrowserView(browser);
 
             browser.loadURL(initialURL.toExternalForm());
             result = browserView;
-        } else {
+        } else {*/
             WebView _browserView = new WebView();
             _browserView.getEngine().load(initialURL.toExternalForm());
             addListeners(_browserView.getEngine());
 
             result = _browserView;
-        }
+        /*}*/
 
         return result;
     }

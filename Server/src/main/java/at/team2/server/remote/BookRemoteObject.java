@@ -37,14 +37,15 @@ public class BookRemoteObject extends UnicastRemoteObject implements BookRemoteO
     }
 
     @Override
-    public List<BookSmallDto> getBookSmallList() {
+    public List<BookSmallDto> getBookSmallList() throws RemoteException {
         BookApplicationFacade facade = BookApplicationFacade.getInstance();
         ModelMapper mapper = MapperHelper.getMapper();
 
         return mapper.map(facade.getList(), typeSmall);
     }
 
-    public List<BookSmallDto> getBookSmallList(String searchString){
+    @Override
+    public List<BookSmallDto> getBookSmallList(String searchString) throws RemoteException {
         BookApplicationFacade facade =  BookApplicationFacade.getInstance();
         ModelMapper mapper = MapperHelper.getMapper();
 

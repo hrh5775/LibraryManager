@@ -6,14 +6,14 @@ import javafx.util.Pair;
 
 import java.util.List;
 
-public interface Editable<V extends BaseDtoEntity, T extends DomainEntityProperty> {
+public interface Editable<V extends BaseDtoEntity, U extends BaseDtoEntity, T extends DomainEntityProperty> {
     /**
      * Adds the new entity
      * @param value entity
      * @return  a list of errors which is always set and an integer for the ID of the new entityID
      *          <= 0 for an error
      */
-    public Pair<Integer, List<Pair<T, String>>> add(V value);
+    public Pair<Integer, List<Pair<T, String>>> add(V value, U updater);
 
     /**
      * Updates an existing entity
@@ -21,12 +21,12 @@ public interface Editable<V extends BaseDtoEntity, T extends DomainEntityPropert
      * @return  a list of errors which is always set and an integer for the ID of the entity
      *          <= 0 for an error
      */
-    public Pair<Integer, List<Pair<T, String>>> update(V value);
+    public Pair<Integer, List<Pair<T, String>>> update(V value, U updater);
 
     /**
      * Deletes an existing entity
      * @param id  ID of the entity
      * @return  a list of errors which is always set and a boolean value to indicate the status
      */
-    public Pair<Boolean, List<Pair<T, String>>> delete(int id);
+    public Pair<Boolean, List<Pair<T, String>>> delete(int id, U updater);
 }
