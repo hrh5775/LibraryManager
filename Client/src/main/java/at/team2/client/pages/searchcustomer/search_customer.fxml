@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.beans.property.SimpleBooleanProperty?>
+<?import javafx.beans.property.SimpleListProperty?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.geometry.Insets?>
+<?import at.team2.client.controls.loadingindicator.LoadingIndicator?>
+<?import jfxtras.scene.layout.VBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.BorderPane?>
+
+<StackPane xmlns="http://javafx.com/javafx"
+           xmlns:fx="http://javafx.com/fxml"
+           stylesheets="/at/team2/client/pages/searchcustomer/search_customer.css">
+
+    <fx:define>
+        <SimpleBooleanProperty fx:id="_isLoading" value="false" />
+        <SimpleBooleanProperty fx:id="_isAdditionalInfoLoading" value="false" />
+        <SimpleListProperty fx:id="_customerList" />
+        <SimpleListProperty fx:id="_reservationList" />
+        <SimpleListProperty fx:id="_loanList" />
+        <SimpleBooleanProperty fx:id="_customerListViewVisible" />
+        <SimpleBooleanProperty fx:id="_additionalListViewVisible" />
+    </fx:define>
+
+    <children>
+        <VBox>
+            <children>
+                <VBox>
+                    <HBox>
+                        <TextField fx:id="_searchField" prefWidth="1000" />
+                        <Button fx:id="_searchButton" mnemonicParsing="false" text="Search" onAction="#search" defaultButton="true" minWidth="100" />
+                    </HBox>
+                </VBox>
+
+                <StackPane fx:id="_tablePane" prefHeight="10000" VBox.vgrow="ALWAYS">
+                    <padding>
+                        <Insets top="30" />
+                    </padding>
+
+                    <children>
+                        <BorderPane>
+                            <top>
+                                <VBox>
+                                    <TableView fx:id="_customerTableView" onMouseClicked="#customerItemClicked" editable="false" VBox.vgrow="ALWAYS" prefWidth="Infinity" maxHeight="200">
+                                        <placeholder>
+                                            <Label text="Nothing found" />
+                                        </placeholder>
+
+                                        <columns>
+                                            <TableColumn text="ID" prefWidth="40">
+                                                <cellValueFactory>
+                                                    <PropertyValueFactory property="id" />
+                                                </cellValueFactory>
+                                            </TableColumn>
+                                            <TableColumn text="First name" prefWidth="350">
+                                                <cellValueFactory>
+                                                    <PropertyValueFactory property="firstName" />
+                                                </cellValueFactory>
+                                            </TableColumn>
+                                            <TableColumn text="Last name" prefWidth="350">
+                                                <cellValueFactory>
+                                                    <PropertyValueFactory property="lastName" />
+                                                </cellValueFactory>
+                                            </TableColumn>
+                                            <TableColumn text="User name" prefWidth="350">
+                                                <cellValueFactory>
+                                                    <PropertyValueFactory property="accountUserName" />
+                                                </cellValueFactory>
+                                            </TableColumn>
+                                        </columns>
+                                    </TableView>
+
+                                    <LoadingIndicator fx:id="_loadingIndicator" onCancel="#cancel" StackPane.alignment="TOP_CENTER" />
+                                </VBox>
+                            </top>
+
+                            <center>
+                                <VBox>
+                                    <HBox>
+                                        <VBox fx:id="_loanView">
+                                            <Label text="Loans">
+                                                <padding>
+                                                    <Insets bottom="15" />
+                                                </padding>
+                                            </Label>
+
+                                            <TableView fx:id="_loanTableView" editable="false" prefWidth="1000">
+                                                <placeholder>
+                                                    <Label text="Nothing found" />
+                                                </placeholder>
+
+                                                <columns>
+                                                    <TableColumn text="ID" prefWidth="40">
+                                                        <cellValueFactory>
+                                                            <PropertyValueFactory property="id" />
+                                                        </cellValueFactory>
+                                                    </TableColumn>
+                                                    <TableColumn text="Title" prefWidth="350">
+                                                        <cellValueFactory>
+                                                            <PropertyValueFactory property="mediaMember" />
+                                                        </cellValueFactory>
+                                                    </TableColumn>
+                                                    <TableColumn text="Start" prefWidth="140">
+                                                        <cellValueFactory>
+                                                            <PropertyValueFactory property="start" />
+                                                        </cellValueFactory>
+                                                    </TableColumn>
+                                                    <TableColumn text="End" prefWidth="140">
+                                                        <cellValueFactory>
+                                                            <PropertyValueFactory property="end" />
+                                                        </cellValueFactory>
+                                                    </TableColumn>
+                                                    <TableColumn text="Last Renewal Start" prefWidth="140">
+                                                        <cellValueFactory>
+                                                            <PropertyValueFactory property="lastRenewalStart" />
+                                                        </cellValueFactory>
+                                                    </TableColumn>
+                                                </columns>
+                                            </TableView>
+                                        </VBox>
+
+                                        <StackPane>
+                                            <padding>
+                                                <Insets left="30" />
+                                            </padding>
+                                        </StackPane>
+
+                                        <VBox fx:id="_reservationView">
+                                            <Label text="Reservations">
+                                                <padding>
+                                                    <Insets bottom="15" />
+                                                </padding>
+                                            </Label>
+
+                                            <TableView fx:id="_reservationTableView" editable="false" prefWidth="1000">
+                                                <placeholder>
+                                                    <Label text="Nothing found" />
+                                                </placeholder>
+
+                                                <columns>
+                                                    <TableColumn text="ID" prefWidth="40">
+                                                        <cellValueFactory>
+                                                            <PropertyValueFactory property="id" />
+                                                        </cellValueFactory>
+                                                    </TableColumn>
+                                                    <TableColumn text="Title" prefWidth="350">
+                                                        <cellValueFactory>
+                                                            <PropertyValueFactory property="media" />
+                                                        </cellValueFactory>
+                                                    </TableColumn>
+                                                    <TableColumn text="Reservation Date" prefWidth="140">
+                                                        <cellValueFactory>
+                                                            <PropertyValueFactory property="reservationDate" />
+                                                        </cellValueFactory>
+                                                    </TableColumn>
+                                                    <TableColumn text="Information Date" prefWidth="140">
+                                                        <cellValueFactory>
+                                                            <PropertyValueFactory property="informationDate" />
+                                                        </cellValueFactory>
+                                                    </TableColumn>
+                                                </columns>
+                                            </TableView>
+                                        </VBox>
+                                    </HBox>
+
+                                    <LoadingIndicator fx:id="_additionalInformationLoadingIndicator" onCancel="#cancelAdditionalInfo" StackPane.alignment="TOP_CENTER" />
+                                </VBox>
+                            </center>
+                        </BorderPane>
+                    </children>
+                </StackPane>
+            </children>
+        </VBox>
+    </children>
+</StackPane>

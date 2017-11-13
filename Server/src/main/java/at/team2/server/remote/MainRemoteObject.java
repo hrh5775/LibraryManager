@@ -13,6 +13,7 @@ public class MainRemoteObject extends UnicastRemoteObject implements MainRemoteO
     private LoanRemoteObjectInf _loanRemoteObjectInf;
     private MediaMemberRemoteObjectInf _mediaMemberRemoteObjectInf;
     private AccountRemoteObjectInf _accountRemoteObjectInf;
+    private ReservationRemoteObject _reservationRemoteObjectInf;
 
     public MainRemoteObject() throws RemoteException {
         super(0);
@@ -58,6 +59,15 @@ public class MainRemoteObject extends UnicastRemoteObject implements MainRemoteO
         }
 
         return _loanRemoteObjectInf;
+    }
+
+    @Override
+    public ReservationRemoteObjectInf getReservationRemoteObject() throws RemoteException {
+        if(_reservationRemoteObjectInf == null) {
+            _reservationRemoteObjectInf = new ReservationRemoteObject();
+        }
+
+        return _reservationRemoteObjectInf;
     }
 
     @Override

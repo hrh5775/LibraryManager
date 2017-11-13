@@ -7,10 +7,16 @@ import at.team2.application.helper.RoleHelper;
 import at.team2.application.interfaces.BaseApplicationFacade;
 import at.team2.common.dto.detailed.AccountDetailedDto;
 import at.team2.common.dto.detailed.CustomerDetailedDto;
+import at.team2.database_wrapper.common.Filter;
+import at.team2.database_wrapper.common.FilterConnector;
+import at.team2.database_wrapper.enums.CaseType;
+import at.team2.database_wrapper.enums.ConnectorType;
+import at.team2.database_wrapper.enums.MatchType;
 import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.facade.CustomerFacade;
 import at.team2.domain.entities.Customer;
 import at.team2.domain.enums.properties.CustomerProperty;
+import at.team2.domain.interfaces.DomainEntityProperty;
 import javafx.util.Pair;
 import org.modelmapper.ModelMapper;
 
@@ -109,5 +115,34 @@ public class CustomerApplicationFacade extends BaseApplicationFacade<Customer, C
             list.add(new Pair<>(CustomerProperty.ID, "permission denied"));
             return new Pair<>(false, list);
         }
+    }
+
+    public List<Customer> search(String searchString){
+        Integer id = -1;
+
+        try {
+            id = Integer.parseInt(searchString);
+        } catch (NumberFormatException e) {
+        }
+
+        FilterConnector<CustomerProperty, CustomerProperty> connector = new FilterConnector<>(
+            new FilterConnector<>(
+                    new FilterConnector<>(
+                            new Filter<>(searchString, CustomerProperty.ACCOUNT, MatchType.CONTAINS, CaseType.IGNORE_CASE),
+                            ConnectorType.OR,
+                            new Filter<>(id, CustomerProperty.ID, MatchType.EQUALS, CaseType.NORMAL)
+                    ),
+                    ConnectorType.OR,
+                    new Filter<>(searchString, CustomerProperty.FULL_NAME, MatchType.CONTAINS, CaseType.IGNORE_CASE)
+            ),
+            ConnectorType.OR,
+            new FilterConnector<>(
+                    new Filter<>(searchString, CustomerProperty.FIRST_NAME, MatchType.CONTAINS, CaseType.IGNORE_CASE),
+                    ConnectorType.OR,
+                    new Filter<>(searchString, CustomerProperty.LAST_NAME, MatchType.CONTAINS, CaseType.IGNORE_CASE)
+            )
+        );
+
+        return _facade.filter(connector);
     }
 }

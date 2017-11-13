@@ -2,10 +2,12 @@ package at.team2.application.helper;
 
 import at.team2.common.dto.detailed.BookDetailedDto;
 import at.team2.common.dto.detailed.DvdDetailedDto;
+import at.team2.common.dto.detailed.ReservationDetailedDto;
 import at.team2.common.dto.small.*;
 import at.team2.domain.entities.Book;
 import at.team2.domain.entities.Dvd;
 import at.team2.domain.entities.MediaMember;
+import at.team2.domain.entities.Reservation;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 
@@ -192,6 +194,15 @@ public class MapperHelper {
                     protected void configure() {
                         map().setId(source.getId());
                         map().setExtendedIndex(source.getExtendedIndex());
+                        map().getMedia().setMediaId(source.getMedia().getId());
+                        map().getMedia().setStandardMediaId(source.getMedia().getStandardMediaId());
+                    }
+                });
+
+                mapper.addMappings(new PropertyMap<Reservation, ReservationDetailedDto>() {
+                    @Override
+                    protected void configure() {
+                        map().setId(source.getId());
                         map().getMedia().setMediaId(source.getMedia().getId());
                         map().getMedia().setStandardMediaId(source.getMedia().getStandardMediaId());
                     }

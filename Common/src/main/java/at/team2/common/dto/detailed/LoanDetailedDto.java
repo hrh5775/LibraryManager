@@ -17,7 +17,7 @@ public class LoanDetailedDto extends BaseDtoEntity {
     private MediaMemberSmallDto _mediaMember;
     private ReminderSmallDto _reminder;
 
-    public int get_id() {
+    public int getId() {
         return _id;
     }
 
@@ -49,15 +49,15 @@ public class LoanDetailedDto extends BaseDtoEntity {
         return _reminder;
     }
 
-    public void set_id(int id) {
+    public void setId(int id) {
         _id = id;
     }
 
-    public void set_start(Date start) {
+    public void setStart(Date start) {
         _start = start;
     }
 
-    public void set_lastRenewalStart(Date lastRenewalStart) {
+    public void setLastRenewalStart(Date lastRenewalStart) {
         _lastRenewalStart = lastRenewalStart;
     }
 

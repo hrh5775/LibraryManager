@@ -12,6 +12,7 @@ import com.sun.javafx.collections.ObservableListWrapper;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableView;
 import javafx.beans.property.BooleanProperty;
@@ -36,6 +37,8 @@ public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
     private Pane _mainPanel;
     @FXML
     private Pane _tablePane;
+    @FXML
+    private Button _searchButton;
     @FXML
     private BooleanProperty _isLoading;
     @FXML
@@ -68,7 +71,7 @@ public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
 
         _isLoading.setValue(false);
         _loadingIndicator.visibleProperty().bind(_isLoading);
-        _tableView.visibleProperty().bind(_isLoading.not());
+//        _tableView.visibleProperty().bind(_isLoading.not()); // @todo: bug?
 
         _listViewVisible.setValue(false);
         _tableView.visibleProperty().bind(_listViewVisible.and(_isLoading.not()));
@@ -80,6 +83,8 @@ public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
         _isDvdChecked.addListener((observable, oldValue, newValue) -> search());
         _isDvdChecked.addListener((observable, oldValue, newValue) -> search());
         _isBookChecked.addListener((observable, oldValue, newValue) -> search());
+
+        _searchButton.disableProperty().bind(_searchField.textProperty().isEmpty());
     }
 
     @Override

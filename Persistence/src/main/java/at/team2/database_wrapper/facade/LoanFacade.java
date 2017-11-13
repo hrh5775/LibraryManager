@@ -30,7 +30,7 @@ public class LoanFacade extends BaseDatabaseFacade<Loan, LoanProperty> {
     @Override
     public Loan getById(int id) {
         EntityManager session = getCurrentSession();
-        Query query = session.createQuery("from LoanEntity where id = :id");
+        Query query = session.createQuery("from LoanEntity where id = :id and closed = false");
         query.setParameter("id", id);
         LoanEntity entity = getFirstOrDefault(query);
 
@@ -45,7 +45,7 @@ public class LoanFacade extends BaseDatabaseFacade<Loan, LoanProperty> {
     @Override
     public List<Loan> getList() {
         EntityManager session = getCurrentSession();
-        Query query = session.createQuery("from LoanEntity");
+        Query query = session.createQuery("from LoanEntity where closed = false");
         List<LoanEntity> entities = query.getResultList();
         ModelMapper mapper = MapperHelper.getMapper();
 
@@ -80,7 +80,7 @@ public class LoanFacade extends BaseDatabaseFacade<Loan, LoanProperty> {
 
     @Override
     public List<Loan> filter(FilterConnector<LoanProperty, LoanProperty> filterConnector) {
-        Query query = getByFilter("from LoanEntity where", getCurrentSession(), filterConnector);
+        Query query = getByFilter("from LoanEntity where closed = false and", getCurrentSession(), filterConnector);
         List<LoanEntity> entities = query.getResultList();
         ModelMapper mapper = MapperHelper.getMapper();
 
@@ -126,7 +126,7 @@ public class LoanFacade extends BaseDatabaseFacade<Loan, LoanProperty> {
     @Override
     public boolean delete(int id, TransactionType transactionType) {
         EntityManager session = getCurrentSession(transactionType);
-        Query query = session.createQuery("delete LoanEntity where id = :id");
+        Query query = session.createQuery("delete LoanEntity where id = :id and closed = false");
         query.setParameter("id", id);
         query.executeUpdate();
 

@@ -3,16 +3,16 @@ package at.team2.client.singletons;
 import at.team2.client.pages.searchMedium.SearchMedium;
 
 public class SearchMediumSingleton {
-    private static SearchMedium _searchMedium;
+    private static SearchMedium _instance;
 
     private SearchMediumSingleton() {
     }
 
     public static SearchMedium getInstance() {
-        if (_searchMedium == null) {
-            _searchMedium = new SearchMedium();
+        if (_instance == null) {
+            _instance = new SearchMedium();
         }
 
-        return _searchMedium;
+        return _instance;
     }
 }

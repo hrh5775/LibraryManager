@@ -10,7 +10,7 @@ import javax.naming.ldap.LdapContext;
 import java.util.Hashtable;
 
 public class LdapHelper {
-    public static LdapContext getContext(String ldapAdServer, boolean useSSL, String username, String password) throws NamingException {
+    public static Context getContext(String ldapAdServer, boolean useSSL, String username, String password) throws NamingException {
         Hashtable<String, Object> env = new Hashtable();
         String authentication;
 
@@ -42,8 +42,7 @@ public class LdapHelper {
         // the following is helpful in debugging errors
         //env.put("com.sun.jndi.ldap.trace.ber", System.err);
 
-        LdapContext context = new InitialLdapContext(env, null);
-        return context;
+        return new InitialLdapContext(env, null);
     }
 
     public static SearchResult findUser(LdapContext context, String ldapSearchBase, String username) throws NamingException {
@@ -61,7 +60,10 @@ public class LdapHelper {
 
     public static boolean hasValidCredentials(String ldapAdServer, boolean useSSL, String username, String password) {
         try {
-            if(getContext(ldapAdServer, useSSL, username, password) != null) {
+            Context context = getContext(ldapAdServer, useSSL, username, password);
+
+            if(context != null) {
+                context.close();
                 return true;
             }
         } catch (NamingException e) {

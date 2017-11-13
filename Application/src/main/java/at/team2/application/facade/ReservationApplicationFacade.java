@@ -135,7 +135,8 @@ public class ReservationApplicationFacade extends BaseApplicationFacade<Reservat
 
     public List<Reservation> getListByCustomer(int id) {
         FilterConnector<ReservationProperty, ReservationProperty> connector = new FilterConnector<>(
-                new Filter<>(id, ReservationProperty.CUSTOMER__ID, MatchType.EQUALS, CaseType.NORMAL));
+                new Filter<>(id, ReservationProperty.CUSTOMER__ID, MatchType.EQUALS, CaseType.NORMAL)
+        );
 
         return _facade.filter(connector);
     }

@@ -12,5 +12,8 @@ public enum CustomerProperty implements DomainEntityProperty {
     PHONE_NUMBER,
     BANK_ACCOUNT_NUMBER,
     DATE_OF_EXPIRY,
-    ACCOUNT
+    ACCOUNT,
+
+    // additional properties
+    FULL_NAME
 }

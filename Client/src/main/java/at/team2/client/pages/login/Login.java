@@ -13,6 +13,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javax.lang.model.type.NullType;
 import at.team2.client.pages.BasePage;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.layout.Pane;
 
@@ -31,6 +32,8 @@ public class Login extends BasePage<Void, NullType, NullType, NullType> {
     private SimpleStringProperty _userName;
     @FXML
     private SimpleStringProperty _password;
+    @FXML
+    private Button _loginButton;
 
     private Thread _loginTask;
 
@@ -49,6 +52,8 @@ public class Login extends BasePage<Void, NullType, NullType, NullType> {
 
         _userNameInput.textProperty().bindBidirectional(_userName);
         _passwordInput.textProperty().bindBidirectional(_password);
+
+        _loginButton.disableProperty().bind(_password.isEmpty().or(_password.isEmpty()));
     }
 
     @Override
