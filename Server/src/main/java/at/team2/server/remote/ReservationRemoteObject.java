@@ -6,6 +6,7 @@ import at.team2.common.dto.detailed.AccountDetailedDto;
 import at.team2.common.dto.detailed.ReservationDetailedDto;
 import at.team2.common.dto.small.CustomerSmallDto;
 import at.team2.common.dto.small.MediaMemberSmallDto;
+import at.team2.common.dto.small.MediaSmallDto;
 import at.team2.common.interfaces.ReservationRemoteObjectInf;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -30,8 +31,8 @@ public class ReservationRemoteObject extends UnicastRemoteObject implements Rese
     }
 
     @Override
-    public int reserveMediaMember(MediaMemberSmallDto mediaMember, CustomerSmallDto customer, AccountDetailedDto updater) throws RemoteException {
+    public int reserveMedia(MediaSmallDto media, CustomerSmallDto customer, AccountDetailedDto updater) throws RemoteException {
         ReservationApplicationFacade facade = ReservationApplicationFacade.getInstance();
-        return facade.reserveMediaMember(mediaMember, customer, updater);
+        return facade.reserveMedia(media, customer, updater);
     }
 }

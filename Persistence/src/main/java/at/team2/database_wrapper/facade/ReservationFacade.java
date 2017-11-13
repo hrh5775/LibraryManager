@@ -69,6 +69,8 @@ public class ReservationFacade extends BaseDatabaseFacade<Reservation, Reservati
                 return "reservationDate";
             case CUSTOMER__ID:
                 return "customerId";
+            case MEDIA__ID:
+                return "mediaId";
         }
 
         return null;
