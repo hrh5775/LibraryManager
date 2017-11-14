@@ -25,6 +25,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 
 public class LendMedium extends BasePage<Void, NullType, NullType, NullType> {
@@ -35,7 +36,7 @@ public class LendMedium extends BasePage<Void, NullType, NullType, NullType> {
     @FXML
     private BooleanProperty _isLoading;
     @FXML
-    private NumberField _mediaIdNumberField;
+    private TextField _mediaIndexField;
     @FXML
     private Label _lendTitellbl;
     @FXML
@@ -104,15 +105,15 @@ public class LendMedium extends BasePage<Void, NullType, NullType, NullType> {
     private void findMediaMemberById() {
         try {
             MainRemoteObjectInf remoteObject = RmiHelper.getSession();
-            String tmp = _mediaIdNumberField.getText();
+            String tmp = _mediaIndexField.getText();
 
             if(tmp != null) {
-                MediaMemberSmallDto entity = remoteObject.getMediaMemberRemoteObject().getMediaMemberSmallById(Integer.parseInt(tmp));
+                MediaMemberSmallDto entity = remoteObject.getMediaMemberRemoteObject().getMediaMemberByIndex(tmp);
 
                 if (entity != null) {
                     _lendTitellbl.setText(entity.getMedia().getTitle());
                     _currentMedia = entity;
-                    _mediaIdNumberField.setText("0");
+                    _mediaIndexField.setText("");
                 } else {
                     showErrorMessage("Medium not found", "");
                 }

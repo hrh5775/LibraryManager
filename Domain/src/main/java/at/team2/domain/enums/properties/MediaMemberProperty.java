@@ -5,5 +5,8 @@ import at.team2.domain.interfaces.DomainEntityProperty;
 public enum MediaMemberProperty implements DomainEntityProperty {
     ID,
     MEDIA,
-    EXTENDED_INDEX
+    EXTENDED_INDEX,
+
+    // additional properties
+    FULL_INDEX
 }

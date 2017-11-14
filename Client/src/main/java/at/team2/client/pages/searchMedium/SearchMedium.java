@@ -71,7 +71,6 @@ public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
 
         _isLoading.setValue(false);
         _loadingIndicator.visibleProperty().bind(_isLoading);
-//        _tableView.visibleProperty().bind(_isLoading.not()); // @todo: bug?
 
         _listViewVisible.setValue(false);
         _tableView.visibleProperty().bind(_listViewVisible.and(_isLoading.not()));

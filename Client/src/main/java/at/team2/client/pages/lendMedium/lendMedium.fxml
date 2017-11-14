@@ -18,6 +18,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import at.team2.client.controls.loadingindicator.LoadingIndicator?>
 
+<?import javafx.scene.control.TextField?>
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
            stylesheets="/at/team2/client/pages/lendMedium/lendMedium.css">
@@ -66,7 +67,7 @@
                         <Button fx:id="_lendAddButton" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" text="Add" onAction="#addMediaMemberToList" defaultButton="true" GridPane.rowIndex="0" GridPane.columnIndex="2" />
 
                         <Label text="ID:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
-                        <NumberField fx:id="_mediaIdNumberField" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+                        <TextField fx:id="_mediaIndexField" GridPane.rowIndex="1" GridPane.columnIndex="1" />
                         <Button fx:id="_lendIDconfirmbtn" mnemonicParsing="false" onAction="#findMediaMemberById" defaultButton="true" text="OK" GridPane.rowIndex="1" GridPane.columnIndex="2" />
 
                         <Separator GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.columnSpan="3">

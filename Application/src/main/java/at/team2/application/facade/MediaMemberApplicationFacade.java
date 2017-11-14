@@ -4,6 +4,12 @@ import at.team2.application.SessionManager;
 import at.team2.application.enums.Role;
 import at.team2.application.helper.RoleHelper;
 import at.team2.common.dto.detailed.AccountDetailedDto;
+import at.team2.common.dto.detailed.MediaMemberDetailedDto;
+import at.team2.database_wrapper.common.Filter;
+import at.team2.database_wrapper.common.FilterConnector;
+import at.team2.database_wrapper.enums.CaseType;
+import at.team2.database_wrapper.enums.ConnectorType;
+import at.team2.database_wrapper.enums.MatchType;
 import org.modelmapper.ModelMapper;
 
 import java.util.LinkedList;
@@ -51,7 +57,9 @@ public class MediaMemberApplicationFacade extends BaseApplicationFacade<MediaMem
 
     @Override
     public Pair<Integer, List<Pair<MediaMemberProperty, String>>> add(MediaMemberSmallDto value, AccountDetailedDto updater) {
-        if(SessionManager.getInstance().isSessionAvailable(updater) &&
+        updater = SessionManager.getInstance().getSession(updater);
+
+        if(updater != null &&
                 (RoleHelper.hasRole(updater, Role.ADMIN) ||
                 RoleHelper.hasRole(updater, Role.DATENPFLEGER) ||
                 RoleHelper.hasRole(updater, Role.OPERATOR) ||
@@ -74,7 +82,9 @@ public class MediaMemberApplicationFacade extends BaseApplicationFacade<MediaMem
 
     @Override
     public Pair<Integer, List<Pair<MediaMemberProperty, String>>> update(MediaMemberSmallDto value, AccountDetailedDto updater) {
-        if(SessionManager.getInstance().isSessionAvailable(updater) &&
+        updater = SessionManager.getInstance().getSession(updater);
+
+        if(updater != null &&
                 (RoleHelper.hasRole(updater, Role.ADMIN) ||
                 RoleHelper.hasRole(updater, Role.DATENPFLEGER) ||
                 RoleHelper.hasRole(updater, Role.OPERATOR) ||
@@ -97,7 +107,9 @@ public class MediaMemberApplicationFacade extends BaseApplicationFacade<MediaMem
 
     @Override
     public Pair<Boolean, List<Pair<MediaMemberProperty, String>>> delete(int id, AccountDetailedDto updater) {
-        if(SessionManager.getInstance().isSessionAvailable(updater) &&
+        updater = SessionManager.getInstance().getSession(updater);
+
+        if(updater != null &&
                 (RoleHelper.hasRole(updater, Role.ADMIN) ||
                 RoleHelper.hasRole(updater, Role.DATENPFLEGER) ||
                 RoleHelper.hasRole(updater, Role.OPERATOR) ||
@@ -114,5 +126,18 @@ public class MediaMemberApplicationFacade extends BaseApplicationFacade<MediaMem
             list.add(new Pair<>(MediaMemberProperty.ID, "permission denied"));
             return new Pair<>(false, list);
         }
+    }
+
+    public MediaMember getMediaMemberByIndex(String index) {
+        FilterConnector<MediaMemberProperty, MediaMemberProperty> connector = new FilterConnector<>(
+                new Filter<>(index, MediaMemberProperty.FULL_INDEX, MatchType.EQUALS, CaseType.IGNORE_CASE));
+
+        List<MediaMember> list = _facade.filter(connector);
+
+        if(list.size() > 0) {
+            return list.get(0);
+        }
+
+        return null;
     }
 }

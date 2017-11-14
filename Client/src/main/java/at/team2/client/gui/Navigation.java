@@ -96,7 +96,15 @@ public class Navigation {
                             }
 
                             AccountManager.getInstance().setAccount(null);
-                            Platform.runLater(() -> loadPage(HomeScreenSingleton.getInstance()));
+
+                            Platform.runLater(() -> {
+                                for(BasePage page : _initializedPageList) {
+                                    page.reset();
+                                }
+
+                                _initializedPageList.clear();
+                                loadPage(HomeScreenSingleton.getInstance());
+                            });
                     },
                     null
                 );
@@ -195,7 +203,7 @@ public class Navigation {
     }
 
     private boolean loadPage(BasePage page) {
-        if(PageHelper.load(page)) {
+        if(PageHelper.load(_currentPage, page)) {
             initializeNavigationBar();
             addInitializedPageListItem(page);
             setCurrentPage(page);

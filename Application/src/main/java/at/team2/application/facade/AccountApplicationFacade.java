@@ -58,7 +58,9 @@ public class AccountApplicationFacade extends BaseApplicationFacade<Account, Acc
 
     @Override
     public Pair<Integer, List<Pair<AccountProperty, String>>> add(AccountDetailedDto value, AccountDetailedDto updater) {
-        if(SessionManager.getInstance().isSessionAvailable(updater) &&
+        updater = SessionManager.getInstance().getSession(updater);
+
+        if(updater != null &&
                 (RoleHelper.hasRole(updater, Role.ADMIN))) {
             ModelMapper mapper = MapperHelper.getMapper();
             Account entity = mapper.map(value, Account.class);
@@ -78,7 +80,9 @@ public class AccountApplicationFacade extends BaseApplicationFacade<Account, Acc
 
     @Override
     public Pair<Integer, List<Pair<AccountProperty, String>>> update(AccountDetailedDto value, AccountDetailedDto updater) {
-        if(SessionManager.getInstance().isSessionAvailable(updater) &&
+        updater = SessionManager.getInstance().getSession(updater);
+
+        if(updater != null &&
                 (RoleHelper.hasRole(updater, Role.ADMIN))) {
             ModelMapper mapper = MapperHelper.getMapper();
             Account entity = mapper.map(value, Account.class);
@@ -98,7 +102,9 @@ public class AccountApplicationFacade extends BaseApplicationFacade<Account, Acc
 
     @Override
     public Pair<Boolean, List<Pair<AccountProperty, String>>> delete(int id, AccountDetailedDto updater) {
-        if(SessionManager.getInstance().isSessionAvailable(updater) &&
+        updater = SessionManager.getInstance().getSession(updater);
+
+        if(updater != null &&
                 (RoleHelper.hasRole(updater, Role.ADMIN))) {
             List<Pair<AccountProperty, String>> list = _facade.getById(id).validate();
 

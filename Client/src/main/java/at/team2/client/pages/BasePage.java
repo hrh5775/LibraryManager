@@ -45,21 +45,7 @@ public abstract class BasePage<R, V, L, S> extends BorderPane implements BasePag
 
     public BasePage() {
         _tasks = new LinkedList<>();
-        initialize();
-
-        if(_initialize != null) {
-            _initialize.doAction(null);
-        }
-
-        initializeView();
-
-        startBackgroundTask(() -> {
-            load();
-
-            if(_load != null) {
-                _load.doAction(null);
-            }
-        });
+        reset();
     }
 
     protected Thread startBackgroundTask(Runnable runnable) {
@@ -260,6 +246,8 @@ public abstract class BasePage<R, V, L, S> extends BorderPane implements BasePag
                         }
                     }
                 }
+
+                _tasks.clear();
             }).start();
         }
     }
@@ -295,5 +283,29 @@ public abstract class BasePage<R, V, L, S> extends BorderPane implements BasePag
         } catch (Throwable throwable) {
             throwable.printStackTrace();
         }
+    }
+
+    public void reset() {
+        try {
+            stopTasks();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        initialize();
+
+        if(_initialize != null) {
+            _initialize.doAction(null);
+        }
+
+        initializeView();
+
+        startBackgroundTask(() -> {
+            load();
+
+            if(_load != null) {
+                _load.doAction(null);
+            }
+        });
     }
 }
