@@ -44,7 +44,7 @@
 
                 <StackPane fx:id="_tablePane" prefHeight="10000" VBox.vgrow="ALWAYS">
                     <padding>
-                        <Insets top="30" />
+                        <Insets top="15" />
                     </padding>
 
                     <children>
@@ -131,7 +131,7 @@
 
                                         <StackPane>
                                             <padding>
-                                                <Insets left="30" />
+                                                <Insets left="15" />
                                             </padding>
                                         </StackPane>
 

@@ -1,6 +1,7 @@
 package at.team2.client.pages;
 
 import at.team2.client.helper.AlertHelper;
+import at.team2.client.helper.ExceptionHelper;
 import at.team2.client.pages.interfaces.BasePageControl;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -231,13 +232,13 @@ public abstract class BasePage<R, V, L, S> extends BorderPane implements BasePag
             contentText = "Could not convert the data to the specified type.";
         } else if(e instanceof RemoteException) {
             headerText = "Internal Error";
-            contentText = e.getLocalizedMessage();
+            contentText = e.getMessage();
         } else if(e instanceof NotBoundException) {
             headerText = "Not Bound";
-            contentText = e.getLocalizedMessage();
+            contentText = e.getMessage();
         } else {
             headerText = "Unspecified Error";
-            contentText = e.getLocalizedMessage();
+            contentText = ExceptionHelper.getStackTrace(e);
         }
 
         AlertHelper.showErrorMessage(headerText, contentText, this);
@@ -256,9 +257,9 @@ public abstract class BasePage<R, V, L, S> extends BorderPane implements BasePag
             loader.setController(this);
             parent = loader.load();
         } catch (IOException e) {
-            System.out.println(e);
+            showErrorMessage("Stacktrace", ExceptionHelper.getStackTrace(e));
         } catch (Exception e) {
-            System.out.println(e);
+            showErrorMessage("Stacktrace", ExceptionHelper.getStackTrace(e));
         }
 
         return parent;
@@ -266,25 +267,33 @@ public abstract class BasePage<R, V, L, S> extends BorderPane implements BasePag
 
     protected void stopTasks() throws InterruptedException {
         if(_tasks != null) {
-            for(Thread task : _tasks) {
-                task.interrupt();
+            new Thread(() -> {
+                for(Thread task : _tasks) {
+                    task.interrupt();
 
-                while(task.isAlive()) {
-                    Thread.sleep(1000);
+                    while(task.isAlive()) {
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
-            }
+            }).start();
         }
     }
 
     protected void stopTask(Thread task) throws InterruptedException {
-        task.interrupt();
+        if(task.isAlive() && !task.isInterrupted()) {
+            task.interrupt();
 
-        while(task.isAlive()) {
-            Thread.sleep(1000);
-        }
+            while(task.isAlive()) {
+                Thread.sleep(1000);
+            }
 
-        if(_tasks != null) {
-            _tasks.remove(task);
+            if(_tasks != null) {
+                _tasks.remove(task);
+            }
         }
     }
 
