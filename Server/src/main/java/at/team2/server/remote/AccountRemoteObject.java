@@ -26,4 +26,12 @@ public class AccountRemoteObject extends UnicastRemoteObject implements AccountR
 
         return null;
     }
+
+    @Override
+    public void logout(AccountDetailedDto account) throws RemoteException {
+        AccountApplicationFacade facade = AccountApplicationFacade.getInstance();
+        ModelMapper mapper = MapperHelper.getMapper();
+        Account entity = mapper.map(account, Account.class);
+        facade.logout(entity.getId());
+    }
 }

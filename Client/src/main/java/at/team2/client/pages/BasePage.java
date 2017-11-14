@@ -2,6 +2,7 @@ package at.team2.client.pages;
 
 import at.team2.client.helper.AlertHelper;
 import at.team2.client.helper.ExceptionHelper;
+import at.team2.client.helper.RmiErrorHelper;
 import at.team2.client.pages.interfaces.BasePageControl;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -221,27 +222,7 @@ public abstract class BasePage<R, V, L, S> extends BorderPane implements BasePag
     }
 
     protected void showRmiErrorMessage(Exception e) {
-        String headerText;
-        String contentText;
-
-        if(e instanceof ConnectException) {
-            headerText = "Failed to connect to the server";
-            contentText = "Please check your network connection and try again.";
-        } else if(e instanceof UnmarshalException) {
-            headerText = "Internal Error";
-            contentText = "Could not convert the data to the specified type.";
-        } else if(e instanceof RemoteException) {
-            headerText = "Internal Error";
-            contentText = e.getMessage();
-        } else if(e instanceof NotBoundException) {
-            headerText = "Not Bound";
-            contentText = e.getMessage();
-        } else {
-            headerText = "Unspecified Error";
-            contentText = "Please inform the developer\n\n" + ExceptionHelper.getStackTrace(e);
-        }
-
-        AlertHelper.showErrorMessage(headerText, contentText, this);
+        RmiErrorHelper.showRmiErrorMessage(e, this);
     }
 
     /**

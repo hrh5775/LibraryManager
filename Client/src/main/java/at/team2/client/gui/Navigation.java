@@ -3,12 +3,17 @@ package at.team2.client.gui;
 import at.team2.client.common.AccountManager;
 import at.team2.client.controls.sidebar.MenuSection;
 import at.team2.client.controls.sidebar.Sidebar;
+import at.team2.client.helper.DialogHelper;
+import at.team2.client.helper.RmiErrorHelper;
 import at.team2.client.pages.PageAction;
 import at.team2.client.singletons.HomeScreenSingleton;
 import at.team2.client.singletons.LendMediumSingleton;
 import at.team2.client.singletons.SearchCustomerSingleton;
 import at.team2.client.singletons.SearchMediumSingleton;
 import at.team2.common.dto.detailed.AccountDetailedDto;
+import at.team2.common.helper.RmiHelper;
+import at.team2.common.interfaces.MainRemoteObjectInf;
+import javafx.application.Platform;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.BorderPane;
 import at.team2.client.helper.gui.PageHelper;
@@ -82,8 +87,19 @@ public class Navigation {
             menuSectionLogout.setAnimated(false);
             menuSectionLogout.setCollapsible(false);
             menuSectionLogout.setOnMouseClicked(event -> {
-                AccountManager.getInstance().setAccount(null);
-                loadPage(HomeScreenSingleton.getInstance());
+                DialogHelper.showYesNoDialog("Logout", "Do you want to logout?", "", _currentPage, () -> {
+                            try {
+                                MainRemoteObjectInf remoteObject = RmiHelper.getSession();
+                                remoteObject.getAccountRemoteObject().logout(accountManager.getAccount());
+                            } catch (Exception e) {
+                                RmiErrorHelper.showRmiErrorMessage(e, _currentPage);
+                            }
+
+                            AccountManager.getInstance().setAccount(null);
+                            Platform.runLater(() -> loadPage(HomeScreenSingleton.getInstance()));
+                    },
+                    null
+                );
             });
             _sidebar.add(menuSectionLogout);
             menuSectionArrayList.add(menuSectionLogout);
@@ -129,7 +145,6 @@ public class Navigation {
                 case "OPERATOR":
                     break;
             }
-
         }
     }
 

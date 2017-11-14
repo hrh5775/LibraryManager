@@ -165,4 +165,18 @@ public class AccountApplicationFacade extends BaseApplicationFacade<Account, Acc
 
         return null;
     }
+
+    public void logout(int id) {
+        FilterConnector<AccountProperty, AccountProperty> connector = new FilterConnector<>(
+                new Filter<>(id, AccountProperty.ID, MatchType.EQUALS, CaseType.NORMAL)
+        );
+
+        List<Account> list = _facade.filter(connector);
+
+        if(list.size() > 0) {
+            Account tmp = list.get(0);
+            AccountDetailedDto account = MapperHelper.getMapper().map(tmp, AccountDetailedDto.class);
+            SessionManager.getInstance().removeSession(account);
+        }
+    }
 }
