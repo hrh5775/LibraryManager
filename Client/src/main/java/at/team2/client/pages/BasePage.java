@@ -238,7 +238,7 @@ public abstract class BasePage<R, V, L, S> extends BorderPane implements BasePag
             contentText = e.getMessage();
         } else {
             headerText = "Unspecified Error";
-            contentText = ExceptionHelper.getStackTrace(e);
+            contentText = "Please inform the developer\n\n" + ExceptionHelper.getStackTrace(e);
         }
 
         AlertHelper.showErrorMessage(headerText, contentText, this);
@@ -257,9 +257,9 @@ public abstract class BasePage<R, V, L, S> extends BorderPane implements BasePag
             loader.setController(this);
             parent = loader.load();
         } catch (IOException e) {
-            showErrorMessage("Stacktrace", ExceptionHelper.getStackTrace(e));
+            showErrorMessage("Stacktrace", "Please inform the developer\n\n" + ExceptionHelper.getStackTrace(e));
         } catch (Exception e) {
-            showErrorMessage("Stacktrace", ExceptionHelper.getStackTrace(e));
+            showErrorMessage("Stacktrace", "Please inform the developer\n\n" + ExceptionHelper.getStackTrace(e));
         }
 
         return parent;
