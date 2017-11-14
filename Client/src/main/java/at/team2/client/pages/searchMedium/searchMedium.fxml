@@ -25,7 +25,7 @@
            stylesheets="/at/team2/client/pages/searchMedium/searchMedium.css">
 
     <fx:define>
-        <SimpleBooleanProperty fx:id="_isLoading" value="false" />
+        <SimpleBooleanProperty fx:id="_isLoading" />
         <SimpleListProperty fx:id="_mediaList" />
         <SimpleBooleanProperty fx:id="_listViewVisible" />
         <SimpleBooleanProperty fx:id="_isDvdChecked" />
@@ -39,7 +39,7 @@
                     <VBox>
                         <HBox>
                             <TextField fx:id="_searchField" prefWidth="1000" />
-                            <Button fx:id="searchButton" mnemonicParsing="false" text="Search" onAction="#search" defaultButton="true" minWidth="100" />
+                            <Button fx:id="_searchButton" mnemonicParsing="false" text="Search" onAction="#search" defaultButton="true" minWidth="100" />
                         </HBox>
 
                         <HBox>

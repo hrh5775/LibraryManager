@@ -11,5 +11,6 @@ public enum ReservationProperty implements DomainEntityProperty {
     MEDIA,
 
     // additional property
-    CUSTOMER__ID
+    CUSTOMER__ID,
+    MEDIA__ID
 }

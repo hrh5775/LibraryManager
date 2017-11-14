@@ -12,7 +12,7 @@
            stylesheets="/at/team2/client/pages/login/login.css">
 
     <fx:define>
-        <SimpleBooleanProperty fx:id="_isLoading" value="false" />
+        <SimpleBooleanProperty fx:id="_isLoading" />
         <SimpleStringProperty fx:id="_userName" value="" />
         <SimpleStringProperty fx:id="_password" value="" />
     </fx:define>
@@ -43,7 +43,7 @@
                                 </GridPane>
                                 <StackPane prefHeight="-1.0" prefWidth="-1.0">
                                     <children>
-                                        <Button fx:id="loginButton" onAction="#login" alignment="CENTER" defaultButton="true" mnemonicParsing="false" text="Login" StackPane.alignment="CENTER_RIGHT" />
+                                        <Button fx:id="_loginButton" onAction="#login" alignment="CENTER" defaultButton="true" mnemonicParsing="false" text="Login" StackPane.alignment="CENTER_RIGHT" />
                                     </children>
                                 </StackPane>
                             </children>

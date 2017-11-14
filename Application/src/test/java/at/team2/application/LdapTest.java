@@ -1,10 +1,13 @@
 package at.team2.application;
 
 import org.junit.Test;
+
+import javax.naming.Context;
 import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.SearchResult;
 import javax.naming.ldap.LdapContext;
+
 import at.team2.application.helper.LdapHelper;
 
 public class LdapTest {
@@ -27,8 +30,8 @@ public class LdapTest {
         String fullDNInformation = "uid=" + username + (additionalDNInformation != null && !additionalDNInformation.isEmpty() ?
                 "," + additionalDNInformation : "");
 
-        LdapContext context = LdapHelper.getContext(ldapAdServer, true, fullDNInformation, password);
-        SearchResult result = LdapHelper.findUser(context, searchBase, "hrh5775");
+        Context context = LdapHelper.getContext(ldapAdServer, true, fullDNInformation, password);
+        SearchResult result = LdapHelper.findUser((LdapContext) context, searchBase, "hrh5775");
 
         if(result != null) {
             System.out.println("user available:");
@@ -57,8 +60,10 @@ public class LdapTest {
             System.out.println("Credentials are incorrect");
         }
 
+        context.close();
+
         //String searchBase = "dc=example,dc=com";
-        //LdapContext context = LdapHelper.getContext("ldap://ldap.forumsys.com:389", searchBase, "uid=tesla,dc=example,dc=com", "password");
+        //Context context = LdapHelper.getContext("ldap://ldap.forumsys.com:389", searchBase, "uid=tesla,dc=example,dc=com", "password");
         //LdapHelper.findUser(context, searchBase, "riemann");
     }
 }

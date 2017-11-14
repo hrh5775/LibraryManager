@@ -6,6 +6,7 @@ import at.team2.client.controls.sidebar.Sidebar;
 import at.team2.client.pages.PageAction;
 import at.team2.client.singletons.HomeScreenSingleton;
 import at.team2.client.singletons.LendMediumSingleton;
+import at.team2.client.singletons.SearchCustomerSingleton;
 import at.team2.client.singletons.SearchMediumSingleton;
 import at.team2.common.dto.detailed.AccountDetailedDto;
 import javafx.scene.control.Tooltip;
@@ -111,14 +112,17 @@ public class Navigation {
             switch (account.getAccountRole().getKey()) {
                 case "BIBLIOTHEKAR":
                     addLoanItem(menuSectionArrayList);
+                    addSearchCustomer(menuSectionArrayList);
                     break;
                 case "ADMIN":
                     addLoanItem(menuSectionArrayList);
+                    addSearchCustomer(menuSectionArrayList);
                     break;
                 case "DATENPFLEGER":
                     break;
                 case "AUSLEIHE":
                     addLoanItem(menuSectionArrayList);
+                    addSearchCustomer(menuSectionArrayList);
                     break;
                 case "BIBLIOTHEKSBENUTZER":
                     break;
@@ -127,6 +131,16 @@ public class Navigation {
             }
 
         }
+    }
+
+    private void addSearchCustomer(ArrayList<MenuSection> menuSectionArrayList) {
+        MenuSection menuSectionSearchMedium = new MenuSection("Search Customer", "/customers.jpg", null);
+        menuSectionSearchMedium.setTooltip(new Tooltip("Search Customer"));
+        menuSectionSearchMedium.setAnimated(false);
+        menuSectionSearchMedium.setCollapsible(false);
+        menuSectionSearchMedium.setOnMouseClicked(event -> loadPage(SearchCustomerSingleton.getInstance()));
+        _sidebar.add(menuSectionSearchMedium);
+        menuSectionArrayList.add(menuSectionSearchMedium);
     }
 
     private void addSearchItem(ArrayList<MenuSection> menuSectionArrayList) {

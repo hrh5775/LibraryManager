@@ -81,6 +81,8 @@ public class CustomerFacade extends BaseDatabaseFacade<Customer, CustomerPropert
                 return "lastName";
             case PHONE_NUMBER:
                 return "phoneNumber";
+            case FULL_NAME:
+                return "concat(firstName, ' ', lastName)";
         }
 
         return null;

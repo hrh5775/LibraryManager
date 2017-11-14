@@ -30,7 +30,7 @@ public class ReservationFacade extends BaseDatabaseFacade<Reservation, Reservati
     @Override
     public Reservation getById(int id) {
         EntityManager session = getCurrentSession();
-        Query query = session.createQuery("from ReservationEntity where id = :id");
+        Query query = session.createQuery("from ReservationEntity where id = :id and closed = false");
         query.setParameter("id", id);
         ReservationEntity entity = getFirstOrDefault(query);
 
@@ -45,7 +45,7 @@ public class ReservationFacade extends BaseDatabaseFacade<Reservation, Reservati
     @Override
     public List<Reservation> getList() {
         EntityManager session = getCurrentSession();
-        Query query = session.createQuery("from ReservationEntity");
+        Query query = session.createQuery("from ReservationEntity where closed = false");
         List<ReservationEntity> entities = query.getResultList();
         ModelMapper mapper = MapperHelper.getMapper();
 
@@ -69,6 +69,8 @@ public class ReservationFacade extends BaseDatabaseFacade<Reservation, Reservati
                 return "reservationDate";
             case CUSTOMER__ID:
                 return "customerId";
+            case MEDIA__ID:
+                return "mediaId";
         }
 
         return null;
@@ -76,7 +78,7 @@ public class ReservationFacade extends BaseDatabaseFacade<Reservation, Reservati
 
     @Override
     public List<Reservation> filter(FilterConnector<ReservationProperty, ReservationProperty> filterConnector) {
-        Query query = getByFilter("from ReservationEntity where", getCurrentSession(), filterConnector);
+        Query query = getByFilter("from ReservationEntity where closed = false and", getCurrentSession(), filterConnector);
         List<ReservationEntity> entities = query.getResultList();
         ModelMapper mapper = MapperHelper.getMapper();
 
@@ -112,7 +114,7 @@ public class ReservationFacade extends BaseDatabaseFacade<Reservation, Reservati
     @Override
     public boolean delete(int id, TransactionType transactionType) {
         EntityManager session = getCurrentSession(transactionType);
-        Query query = session.createQuery("delete ReservationEntity where id = :id");
+        Query query = session.createQuery("delete ReservationEntity where id = :id and closed = false");
         query.setParameter("id", id);
         query.executeUpdate();
 

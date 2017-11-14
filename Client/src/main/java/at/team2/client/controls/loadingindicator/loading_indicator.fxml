@@ -10,6 +10,6 @@
 
     <children>
         <ImageView fx:id="_imageView" fitWidth="80" fitHeight="80" />
-        <Button text="Cancel" onAction="#cancel" onMouseEntered="#cancel" />
+        <Button fx:id="_cancelButton" text="Cancel" onAction="#cancel" onMouseClicked="#cancel" />
     </children>
 </VBox>

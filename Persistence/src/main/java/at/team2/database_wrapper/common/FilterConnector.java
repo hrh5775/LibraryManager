@@ -50,6 +50,10 @@ public class FilterConnector<L extends DomainEntityProperty, R extends DomainEnt
         if(rightFilterConnector == null) {
             throw new InvalidParameterException("rightFilterConnector cannot be null");
         }
+
+        _leftFilter = leftFilter;
+        _connectorType = connectorType;
+        _rightFilterConnector = rightFilterConnector;
     }
 
     public FilterConnector(FilterConnector<L, R> leftFilterConnector, ConnectorType connectorType, Filter<R> rightFilter) {

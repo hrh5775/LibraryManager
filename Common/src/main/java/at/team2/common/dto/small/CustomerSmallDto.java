@@ -6,6 +6,7 @@ public class CustomerSmallDto extends BaseDtoEntity {
     private int _id;
     private String _firstName;
     private String _lastName;
+    private String _accountUserName;
 
     public int getId() {
         return _id;
@@ -19,6 +20,10 @@ public class CustomerSmallDto extends BaseDtoEntity {
         return _firstName;
     }
 
+    public String getAccountUserName() {
+        return _accountUserName;
+    }
+
     public void setFirstName(String firstName) {
         _firstName = firstName;
     }
@@ -29,5 +34,9 @@ public class CustomerSmallDto extends BaseDtoEntity {
 
     public void setLastName(String lastName) {
         _lastName = lastName;
+    }
+
+    public void setAccountUserName(String accountUserName) {
+        _accountUserName = accountUserName;
     }
 }
