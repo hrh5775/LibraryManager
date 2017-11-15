@@ -27,7 +27,7 @@ public class BookFacade extends BaseDatabaseFacade<Book, BookProperty> {
         super(session);
     }
 
-    private BookMetaEntity getEntityById(int id) {
+    protected BookMetaEntity getEntityById(int id) {
         EntityManager session = getCurrentSession();
         Query query = session.createQuery("from BookMetaEntity where id = :id");
         query.setParameter("id", id);

@@ -101,7 +101,7 @@ public class LoanFacadeTest {
         LoanFacade facade = new LoanFacade();
         Loan value = facade.getById(id);
         value.setEnd(new Date(Calendar.getInstance().getTime().getTime()));
-        value.setClosed(true);
+        value.setClosed(false);
         Assert.assertTrue(facade.update(value, TransactionType.AUTO_COMMIT) > 0);
     }
 
