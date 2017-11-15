@@ -175,7 +175,7 @@ public class LendMedium extends BasePage<Void, NullType, NullType, NullType> {
 
     @FXML
     private void lendMediaMembersToCustomer() throws RemoteException, NotBoundException {
-        if(_mediaList.size() > 0 && _currentCustomer != null) {
+        if(_lendTask == null && _mediaList.size() > 0 && _currentCustomer != null) {
             _isLoading.setValue(true);
 
             _lendTask = startBackgroundTask(() -> {
@@ -205,6 +205,7 @@ public class LendMedium extends BasePage<Void, NullType, NullType, NullType> {
                 } catch (Exception e) {
                     Platform.runLater(() -> showRmiErrorMessage(e));
                 } finally {
+                    _lendTask = null;
                     Platform.runLater(() -> _isLoading.setValue(false));
                 }
             });

@@ -2,16 +2,12 @@ package at.team2.client.pages.searchmedium;
 
 import at.team2.client.controls.loadingindicator.LoadingIndicator;
 import at.team2.client.pages.mediadetail.MediaDetail;
-import at.team2.common.dto.detailed.MediaDetailedDto;
-import at.team2.common.dto.small.BookSmallDto;
-import at.team2.common.dto.small.DvdSmallDto;
 import at.team2.common.dto.small.MediaSmallDto;
 import at.team2.common.helper.RmiHelper;
 import at.team2.common.interfaces.MainRemoteObjectInf;
 import com.sun.javafx.collections.ObservableListWrapper;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableView;
@@ -26,7 +22,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -106,15 +101,14 @@ public class SearchMedia extends BasePage<Void, NullType, NullType, NullType> {
 
     @FXML
     private void search() {
-        if(!_searchField.getText().isEmpty()) {
+        if(_searchTask == null && !_searchField.getText().isEmpty()) {
             _isLoading.setValue(true);
+            List<MediaSmallDto> list = new LinkedList<>();
 
             _searchTask = startBackgroundTask(() -> {
                 try {
                     // @todo: perhaps use a cache
                     MainRemoteObjectInf remoteObject = RmiHelper.getSession();
-
-                    List<MediaSmallDto> list = new LinkedList<>();
 
                     if(_bookChecked.isSelected() || (_dvdChecked.isSelected() && _bookChecked.isSelected()) || (!_dvdChecked.isSelected() && !_bookChecked.isSelected())) {
                         list.addAll(remoteObject.getBookRemoteObject().getBookSmallList(_searchField.getText()));
@@ -123,11 +117,12 @@ public class SearchMedia extends BasePage<Void, NullType, NullType, NullType> {
                     if(_dvdChecked.isSelected() || (_dvdChecked.isSelected() && _bookChecked.isSelected()) || (!_dvdChecked.isSelected() && !_bookChecked.isSelected())) {
                         list.addAll(remoteObject.getDvdRemoteObject().getDvdSmallList(_searchField.getText())); //List<MediaSmallDto>)(List<?>)
                     }
-
-                    _mediaList.set(new ObservableListWrapper<>(list));
                 } catch (Exception e) {
                     Platform.runLater(() -> showRmiErrorMessage(e));
                 } finally {
+                    _mediaList.set(new ObservableListWrapper<>(list));
+                    _searchTask = null;
+
                     Platform.runLater(() -> {
                         _listViewVisible.setValue(true);
                         _isLoading.setValue(false);

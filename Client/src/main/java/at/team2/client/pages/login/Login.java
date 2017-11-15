@@ -75,7 +75,7 @@ public class Login extends BasePage<Void, NullType, NullType, NullType> {
 
     @FXML
     private void login() {
-        if(_userName.getValue() != null && _password.getValue() != null &&
+        if(_loginTask == null && _userName.getValue() != null && _password.getValue() != null &&
                 !_userName.getValue().isEmpty() && !_password.getValue().isEmpty()) {
             _isLoading.setValue(true);
 
@@ -96,6 +96,7 @@ public class Login extends BasePage<Void, NullType, NullType, NullType> {
                 } catch (Exception e) {
                     Platform.runLater(() -> showRmiErrorMessage(e));
                 } finally {
+                    _loginTask = null;
                     Platform.runLater(() -> _isLoading.setValue(false));
                 }
             });
