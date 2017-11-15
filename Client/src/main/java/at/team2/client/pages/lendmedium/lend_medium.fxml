@@ -21,10 +21,10 @@
 <?import javafx.scene.control.TextField?>
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
-           stylesheets="/at/team2/client/pages/lendMedium/lendMedium.css">
+           stylesheets="/at/team2/client/pages/lendmedium/lend_medium.css">
 
     <fx:define>
-        <SimpleBooleanProperty fx:id="_isLoading" value="false" />
+        <SimpleBooleanProperty fx:id="_isLoading" />
         <SimpleListProperty fx:id="_mediaList" />
         <SimpleBooleanProperty fx:id="_lendConfirmDisabled" />
         <SimpleBooleanProperty fx:id="_lendAddButtonDisabled" />

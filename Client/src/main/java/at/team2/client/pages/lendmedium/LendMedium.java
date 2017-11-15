@@ -1,4 +1,4 @@
-package at.team2.client.pages.lendMedium;
+package at.team2.client.pages.lendmedium;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -68,7 +68,7 @@ public class LendMedium extends BasePage<Void, NullType, NullType, NullType> {
 
     @Override
     public void initializeView() {
-        Parent parent = loadView(LendMedium.class.getResource("lendMedium.fxml"));
+        Parent parent = loadView(LendMedium.class.getResource("lend_medium.fxml"));
         setCenter(parent);
 
         _isLoading.setValue(false);

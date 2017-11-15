@@ -167,8 +167,8 @@ public class Navigation {
     }
 
     private void addSearchItem(ArrayList<MenuSection> menuSectionArrayList) {
-        MenuSection menuSectionSearchMedium = new MenuSection("Search Medium", "/search1600.png", null);
-        menuSectionSearchMedium.setTooltip(new Tooltip("Search Medium"));
+        MenuSection menuSectionSearchMedium = new MenuSection("Search Media", "/search1600.png", null);
+        menuSectionSearchMedium.setTooltip(new Tooltip("Search Media"));
         menuSectionSearchMedium.setAnimated(false);
         menuSectionSearchMedium.setCollapsible(false);
         menuSectionSearchMedium.setOnMouseClicked(event -> loadPage(SearchMediumSingleton.getInstance()));

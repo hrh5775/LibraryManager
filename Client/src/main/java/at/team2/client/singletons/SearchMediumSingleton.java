@@ -1,16 +1,16 @@
 package at.team2.client.singletons;
 
-import at.team2.client.pages.searchMedium.SearchMedium;
+import at.team2.client.pages.searchmedium.SearchMedia;
 
 public class SearchMediumSingleton {
-    private static SearchMedium _instance;
+    private static SearchMedia _instance;
 
     private SearchMediumSingleton() {
     }
 
-    public static SearchMedium getInstance() {
+    public static SearchMedia getInstance() {
         if (_instance == null) {
-            _instance = new SearchMedium();
+            _instance = new SearchMedia();
         }
 
         return _instance;

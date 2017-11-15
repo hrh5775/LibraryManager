@@ -1,7 +1,7 @@
-package at.team2.client.pages.searchMedium;
+package at.team2.client.pages.searchmedium;
 
 import at.team2.client.controls.loadingindicator.LoadingIndicator;
-import at.team2.client.pages.searchMedium.showDetail.ShowDetail;
+import at.team2.client.pages.mediadetail.MediaDetail;
 import at.team2.common.dto.detailed.MediaDetailedDto;
 import at.team2.common.dto.small.BookSmallDto;
 import at.team2.common.dto.small.DvdSmallDto;
@@ -30,7 +30,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
+public class SearchMedia extends BasePage<Void, NullType, NullType, NullType> {
     @FXML
     private LoadingIndicator _loadingIndicator;
     @FXML
@@ -66,7 +66,7 @@ public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
 
     @Override
     public void initializeView() {
-        Parent parent = loadView(SearchMedium.class.getResource("searchMedium.fxml"));
+        Parent parent = loadView(SearchMedia.class.getResource("search_media.fxml"));
         setCenter(parent);
 
         _isLoading.setValue(false);
@@ -80,10 +80,12 @@ public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
         _bookChecked.selectedProperty().bindBidirectional(_isBookChecked);
 
         _isDvdChecked.addListener((observable, oldValue, newValue) -> search());
-        _isDvdChecked.addListener((observable, oldValue, newValue) -> search());
         _isBookChecked.addListener((observable, oldValue, newValue) -> search());
 
         _searchButton.disableProperty().bind(_searchField.textProperty().isEmpty());
+
+        _dvdChecked.disableProperty().bind(_searchButton.disableProperty());
+        _bookChecked.disableProperty().bind(_searchButton.disableProperty());
     }
 
     @Override
@@ -160,32 +162,15 @@ public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
     private void showDetail(MediaSmallDto media) {
         startBackgroundTask(() -> Platform.runLater(() -> {
             Stage dialog = new Stage();
-            FXMLLoader loader = new FXMLLoader(ShowDetail.class.getResource("showDetail.fxml"));
-
+            MediaDetail page = new MediaDetail(media, this);
+            Scene scene = new Scene(page);
+            dialog.setScene(scene);
             try {
-                // @todo: perhaps use a cache
-                MainRemoteObjectInf remoteObject = RmiHelper.getSession();
-                MediaDetailedDto entity = null;
-
-                if(media instanceof BookSmallDto) {
-                    entity = remoteObject.getBookRemoteObject().getBookDetailedById(((BookSmallDto) media).getId());
-                } else if(media instanceof DvdSmallDto) {
-                    entity = remoteObject.getDvdRemoteObject().getDvdDetailedById(((DvdSmallDto) media).getId());
-                }
-
-                _listViewVisible.setValue(true);
-                loader.setController(new ShowDetail(entity));
-
-                try {
-                    dialog.setScene(new Scene(loader.load()));
-                    dialog.setAlwaysOnTop(true);
-                    dialog.showAndWait();
-                } catch (IOException e) {
-                    showErrorMessage("Error", e.getMessage());
-                }
+                dialog.showAndWait();
             } catch (Exception e) {
-                showRmiErrorMessage(e);
+                e.printStackTrace();
             }
+            page.exit();
         }));
     }
 }
