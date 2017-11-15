@@ -82,7 +82,7 @@ public class Client extends Application {
             MenuItem menuItem;
 
             menuItem = new MenuItem("Home");
-            menuItem.setOnAction(event -> mainContent.setContent(HomeScreenSingleton.getInstance()));
+            menuItem.setOnAction(event -> Navigation.getInstance().loadStartPage());
             menuItem.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCodeCombination.CONTROL_DOWN));
             menuFile.getItems().add(menuItem);
 
