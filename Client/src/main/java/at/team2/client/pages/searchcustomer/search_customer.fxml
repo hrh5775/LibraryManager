@@ -100,9 +100,9 @@
                                                 </placeholder>
 
                                                 <columns>
-                                                    <TableColumn text="ID" prefWidth="40">
+                                                    <TableColumn text="Medium ID" prefWidth="200">
                                                         <cellValueFactory>
-                                                            <PropertyValueFactory property="id" />
+                                                            <PropertyValueFactory property="mediaMemberFullIndex" />
                                                         </cellValueFactory>
                                                     </TableColumn>
                                                     <TableColumn text="Title" prefWidth="350">
