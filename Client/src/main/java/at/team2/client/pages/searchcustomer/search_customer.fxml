@@ -127,6 +127,7 @@
                                                     </TableColumn>
                                                 </columns>
                                             </TableView>
+                                            <Button fx:id="takeBack" text="Take Back" onAction="#takeBack"></Button>
                                         </VBox>
 
                                         <StackPane>

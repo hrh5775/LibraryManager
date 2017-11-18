@@ -9,6 +9,7 @@ import at.team2.common.dto.small.CustomerSmallDto;
 import at.team2.common.dto.small.MediaMemberSmallDto;
 import at.team2.database_wrapper.common.Filter;
 import at.team2.database_wrapper.common.FilterConnector;
+import at.team2.database_wrapper.entities.LoanEntity;
 import at.team2.database_wrapper.enums.CaseType;
 import at.team2.database_wrapper.enums.MatchType;
 import at.team2.database_wrapper.facade.*;
@@ -158,6 +159,13 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
         } else {
             return 0;
         }
+    }
+
+    public int takeBackMediaMember(LoanDetailedDto loan){
+        Loan loanEntity = _facade.getById(loan.getId());
+        loanEntity.setClosed(true);
+        _facade.update(loanEntity,TransactionType.AUTO_COMMIT);
+        return 0;
     }
 
     public List<Loan> getListByCustomer(int id) {

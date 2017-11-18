@@ -6,6 +6,7 @@ import at.team2.common.dto.detailed.LoanDetailedDto;
 import at.team2.common.dto.detailed.ReservationDetailedDto;
 import at.team2.common.dto.small.CustomerSmallDto;
 import at.team2.common.helper.RmiHelper;
+import at.team2.common.interfaces.LoanRemoteObjectInf;
 import at.team2.common.interfaces.MainRemoteObjectInf;
 import com.sun.javafx.collections.ObservableListWrapper;
 import javafx.application.Platform;
@@ -19,6 +20,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javax.lang.model.type.NullType;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -200,6 +203,30 @@ public class SearchCustomer extends BasePage<Void, NullType, NullType, NullType>
             e.printStackTrace();
         } finally {
             _isAdditionalInfoLoading.setValue(false);
+        }
+    }
+
+    @FXML
+    private void takeBack(){
+        Object entity = _loanTableView.getSelectionModel().getSelectedItem();
+        if(entity != null) {
+            LoanDetailedDto loan = (LoanDetailedDto) entity;
+            if (loan != null) {
+                try {
+                    MainRemoteObjectInf remoteObject = RmiHelper.getSession();
+                    LoanRemoteObjectInf loanRemoteObject = remoteObject.getLoanRemoteObject();
+                    loanRemoteObject.takeBackLoan(loan);
+
+                    List<LoanDetailedDto> loanList = remoteObject.getLoanRemoteObject().getListByCustomer(loan.getCustomer().getId());
+                    _loanList.set(new ObservableListWrapper<>(loanList));
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                } catch (NotBoundException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
         }
     }
 }
