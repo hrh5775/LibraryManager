@@ -29,7 +29,7 @@ public class MediaFacade extends BaseDatabaseFacade<Media, MediaProperty> {
         super(session);
     }
 
-    private MediaEntity getEntityById(int id) {
+    protected MediaEntity getEntityById(int id) {
         EntityManager session = getCurrentSession();
         Query query = session.createQuery("from MediaEntity where id = :id");
         query.setParameter("id", id);

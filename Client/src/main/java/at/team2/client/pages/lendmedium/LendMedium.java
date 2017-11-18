@@ -1,4 +1,4 @@
-package at.team2.client.pages.lendMedium;
+package at.team2.client.pages.lendmedium;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -25,6 +25,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 
 public class LendMedium extends BasePage<Void, NullType, NullType, NullType> {
@@ -35,7 +36,7 @@ public class LendMedium extends BasePage<Void, NullType, NullType, NullType> {
     @FXML
     private BooleanProperty _isLoading;
     @FXML
-    private NumberField _mediaIdNumberField;
+    private TextField _mediaIndexField;
     @FXML
     private Label _lendTitellbl;
     @FXML
@@ -67,7 +68,7 @@ public class LendMedium extends BasePage<Void, NullType, NullType, NullType> {
 
     @Override
     public void initializeView() {
-        Parent parent = loadView(LendMedium.class.getResource("lendMedium.fxml"));
+        Parent parent = loadView(LendMedium.class.getResource("lend_medium.fxml"));
         setCenter(parent);
 
         _isLoading.setValue(false);
@@ -104,15 +105,15 @@ public class LendMedium extends BasePage<Void, NullType, NullType, NullType> {
     private void findMediaMemberById() {
         try {
             MainRemoteObjectInf remoteObject = RmiHelper.getSession();
-            String tmp = _mediaIdNumberField.getText();
+            String tmp = _mediaIndexField.getText();
 
             if(tmp != null) {
-                MediaMemberSmallDto entity = remoteObject.getMediaMemberRemoteObject().getMediaMemberSmallById(Integer.parseInt(tmp));
+                MediaMemberSmallDto entity = remoteObject.getMediaMemberRemoteObject().getMediaMemberByIndex(tmp);
 
                 if (entity != null) {
                     _lendTitellbl.setText(entity.getMedia().getTitle());
                     _currentMedia = entity;
-                    _mediaIdNumberField.setText("0");
+                    _mediaIndexField.setText("");
                 } else {
                     showErrorMessage("Medium not found", "");
                 }
@@ -174,7 +175,7 @@ public class LendMedium extends BasePage<Void, NullType, NullType, NullType> {
 
     @FXML
     private void lendMediaMembersToCustomer() throws RemoteException, NotBoundException {
-        if(_mediaList.size() > 0 && _currentCustomer != null) {
+        if(_lendTask == null && _mediaList.size() > 0 && _currentCustomer != null) {
             _isLoading.setValue(true);
 
             _lendTask = startBackgroundTask(() -> {
@@ -204,6 +205,7 @@ public class LendMedium extends BasePage<Void, NullType, NullType, NullType> {
                 } catch (Exception e) {
                     Platform.runLater(() -> showRmiErrorMessage(e));
                 } finally {
+                    _lendTask = null;
                     Platform.runLater(() -> _isLoading.setValue(false));
                 }
             });

@@ -60,7 +60,9 @@ public class ReservationApplicationFacade extends BaseApplicationFacade<Reservat
 
     @Override
     public Pair<Integer, List<Pair<ReservationProperty, String>>> add(ReservationDetailedDto value, AccountDetailedDto updater) {
-        if(SessionManager.getInstance().isSessionAvailable(updater) &&
+        updater = SessionManager.getInstance().getSession(updater);
+
+        if(updater != null &&
                 (RoleHelper.hasRole(updater, Role.ADMIN) ||
                 RoleHelper.hasRole(updater, Role.BIBLIOTHEKAR) ||
                 RoleHelper.hasRole(updater, Role.AUSLEIHE))) {
@@ -82,7 +84,9 @@ public class ReservationApplicationFacade extends BaseApplicationFacade<Reservat
 
     @Override
     public Pair<Integer, List<Pair<ReservationProperty, String>>> update(ReservationDetailedDto value, AccountDetailedDto updater) {
-        if(SessionManager.getInstance().isSessionAvailable(updater) &&
+        updater = SessionManager.getInstance().getSession(updater);
+
+        if(updater != null &&
                 (RoleHelper.hasRole(updater, Role.ADMIN) ||
                 RoleHelper.hasRole(updater, Role.BIBLIOTHEKAR) ||
                 RoleHelper.hasRole(updater, Role.AUSLEIHE))) {
@@ -104,7 +108,9 @@ public class ReservationApplicationFacade extends BaseApplicationFacade<Reservat
 
     @Override
     public Pair<Boolean, List<Pair<ReservationProperty, String>>> delete(int id, AccountDetailedDto updater) {
-        if(SessionManager.getInstance().isSessionAvailable(updater) &&
+        updater = SessionManager.getInstance().getSession(updater);
+
+        if(updater != null &&
                 (RoleHelper.hasRole(updater, Role.ADMIN) ||
                 RoleHelper.hasRole(updater, Role.BIBLIOTHEKAR) ||
                 RoleHelper.hasRole(updater, Role.AUSLEIHE))) {
@@ -123,7 +129,9 @@ public class ReservationApplicationFacade extends BaseApplicationFacade<Reservat
     }
 
     public int reserveMedia(MediaSmallDto media, CustomerSmallDto customer, AccountDetailedDto updater) {
-        if(SessionManager.getInstance().isSessionAvailable(updater) &&
+        updater = SessionManager.getInstance().getSession(updater);
+
+        if(updater != null &&
                 (RoleHelper.hasRole(updater, Role.ADMIN) ||
                         RoleHelper.hasRole(updater, Role.BIBLIOTHEKAR) ||
                         RoleHelper.hasRole(updater, Role.AUSLEIHE))) {

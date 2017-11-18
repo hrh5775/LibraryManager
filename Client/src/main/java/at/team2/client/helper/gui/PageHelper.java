@@ -3,10 +3,10 @@ package at.team2.client.helper.gui;
 import at.team2.client.pages.BasePage;
 
 public class PageHelper {
-    public static boolean load(BasePage page) {
-        if(page != null) {
-            if(exit(page)) {
-                page.load();
+    public static boolean load(BasePage currentPage, BasePage nextPage) {
+        if(nextPage != null) {
+            if(currentPage == null || exit(currentPage)) {
+                nextPage.load();
                 return true;
             }
 

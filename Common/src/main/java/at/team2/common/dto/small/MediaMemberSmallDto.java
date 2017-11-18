@@ -32,6 +32,13 @@ public class MediaMemberSmallDto extends BaseDtoEntity {
         _extendedIndex = extendedIndex;
     }
 
+    
+    // additional getter and setters
+
+    public String getFullIndex() {
+        return _media.getBaseIndex() + " " + getExtendedIndex();
+    }
+
     @Override
     public String toString() {
         return _media.getTitle();

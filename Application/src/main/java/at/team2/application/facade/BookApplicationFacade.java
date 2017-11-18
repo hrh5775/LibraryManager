@@ -55,7 +55,9 @@ public class BookApplicationFacade extends BaseApplicationFacade<Book, BookDetai
 
     @Override
     public Pair<Integer, List<Pair<BookProperty, String>>> add(BookDetailedDto value, AccountDetailedDto updater) {
-        if(SessionManager.getInstance().isSessionAvailable(updater) &&
+        updater = SessionManager.getInstance().getSession(updater);
+
+        if(updater != null &&
                 (RoleHelper.hasRole(updater, Role.ADMIN) ||
                 RoleHelper.hasRole(updater, Role.DATENPFLEGER) ||
                 RoleHelper.hasRole(updater, Role.OPERATOR) ||
@@ -78,7 +80,9 @@ public class BookApplicationFacade extends BaseApplicationFacade<Book, BookDetai
 
     @Override
     public Pair<Integer, List<Pair<BookProperty, String>>> update(BookDetailedDto value, AccountDetailedDto updater) {
-        if(SessionManager.getInstance().isSessionAvailable(updater) &&
+        updater = SessionManager.getInstance().getSession(updater);
+
+        if(updater != null &&
                 (RoleHelper.hasRole(updater, Role.ADMIN) ||
                 RoleHelper.hasRole(updater, Role.DATENPFLEGER) ||
                 RoleHelper.hasRole(updater, Role.OPERATOR) ||
@@ -101,7 +105,9 @@ public class BookApplicationFacade extends BaseApplicationFacade<Book, BookDetai
 
     @Override
     public Pair<Boolean, List<Pair<BookProperty, String>>> delete(int id, AccountDetailedDto updater) {
-        if(SessionManager.getInstance().isSessionAvailable(updater) &&
+        updater = SessionManager.getInstance().getSession(updater);
+
+        if(updater != null &&
                 (RoleHelper.hasRole(updater, Role.ADMIN) ||
                 RoleHelper.hasRole(updater, Role.DATENPFLEGER) ||
                 RoleHelper.hasRole(updater, Role.OPERATOR) ||

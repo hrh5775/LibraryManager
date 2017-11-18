@@ -76,7 +76,9 @@ public class CustomerApplicationFacade extends BaseApplicationFacade<Customer, C
 
     @Override
     public Pair<Integer, List<Pair<CustomerProperty, String>>> update(CustomerDetailedDto value, AccountDetailedDto updater) {
-        if(SessionManager.getInstance().isSessionAvailable(updater) &&
+        updater = SessionManager.getInstance().getSession(updater);
+
+        if(updater != null &&
                 (RoleHelper.hasRole(updater, Role.ADMIN) ||
                 RoleHelper.hasRole(updater, Role.AUSLEIHE) ||
                 RoleHelper.hasRole(updater, Role.BIBLIOTHEKAR) ||
@@ -101,7 +103,9 @@ public class CustomerApplicationFacade extends BaseApplicationFacade<Customer, C
 
     @Override
     public Pair<Boolean, List<Pair<CustomerProperty, String>>> delete(int id, AccountDetailedDto updater) {
-        if(SessionManager.getInstance().isSessionAvailable(updater) &&
+        updater = SessionManager.getInstance().getSession(updater);
+
+        if(updater != null &&
                 (RoleHelper.hasRole(updater, Role.ADMIN))) {
             List<Pair<CustomerProperty, String>> list = _facade.getById(id).validate();
 

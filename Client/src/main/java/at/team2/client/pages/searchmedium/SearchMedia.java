@@ -1,17 +1,13 @@
-package at.team2.client.pages.searchMedium;
+package at.team2.client.pages.searchmedium;
 
 import at.team2.client.controls.loadingindicator.LoadingIndicator;
-import at.team2.client.pages.searchMedium.showDetail.ShowDetail;
-import at.team2.common.dto.detailed.MediaDetailedDto;
-import at.team2.common.dto.small.BookSmallDto;
-import at.team2.common.dto.small.DvdSmallDto;
+import at.team2.client.pages.mediadetail.MediaDetail;
 import at.team2.common.dto.small.MediaSmallDto;
 import at.team2.common.helper.RmiHelper;
 import at.team2.common.interfaces.MainRemoteObjectInf;
 import com.sun.javafx.collections.ObservableListWrapper;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableView;
@@ -26,11 +22,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
+public class SearchMedia extends BasePage<Void, NullType, NullType, NullType> {
     @FXML
     private LoadingIndicator _loadingIndicator;
     @FXML
@@ -66,12 +61,11 @@ public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
 
     @Override
     public void initializeView() {
-        Parent parent = loadView(SearchMedium.class.getResource("searchMedium.fxml"));
+        Parent parent = loadView(SearchMedia.class.getResource("search_media.fxml"));
         setCenter(parent);
 
         _isLoading.setValue(false);
         _loadingIndicator.visibleProperty().bind(_isLoading);
-//        _tableView.visibleProperty().bind(_isLoading.not()); // @todo: bug?
 
         _listViewVisible.setValue(false);
         _tableView.visibleProperty().bind(_listViewVisible.and(_isLoading.not()));
@@ -81,10 +75,12 @@ public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
         _bookChecked.selectedProperty().bindBidirectional(_isBookChecked);
 
         _isDvdChecked.addListener((observable, oldValue, newValue) -> search());
-        _isDvdChecked.addListener((observable, oldValue, newValue) -> search());
         _isBookChecked.addListener((observable, oldValue, newValue) -> search());
 
         _searchButton.disableProperty().bind(_searchField.textProperty().isEmpty());
+
+        _dvdChecked.disableProperty().bind(_searchButton.disableProperty());
+        _bookChecked.disableProperty().bind(_searchButton.disableProperty());
     }
 
     @Override
@@ -105,15 +101,14 @@ public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
 
     @FXML
     private void search() {
-        if(!_searchField.getText().isEmpty()) {
+        if(_searchTask == null && !_searchField.getText().isEmpty()) {
             _isLoading.setValue(true);
+            List<MediaSmallDto> list = new LinkedList<>();
 
             _searchTask = startBackgroundTask(() -> {
                 try {
                     // @todo: perhaps use a cache
                     MainRemoteObjectInf remoteObject = RmiHelper.getSession();
-
-                    List<MediaSmallDto> list = new LinkedList<>();
 
                     if(_bookChecked.isSelected() || (_dvdChecked.isSelected() && _bookChecked.isSelected()) || (!_dvdChecked.isSelected() && !_bookChecked.isSelected())) {
                         list.addAll(remoteObject.getBookRemoteObject().getBookSmallList(_searchField.getText()));
@@ -122,11 +117,12 @@ public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
                     if(_dvdChecked.isSelected() || (_dvdChecked.isSelected() && _bookChecked.isSelected()) || (!_dvdChecked.isSelected() && !_bookChecked.isSelected())) {
                         list.addAll(remoteObject.getDvdRemoteObject().getDvdSmallList(_searchField.getText())); //List<MediaSmallDto>)(List<?>)
                     }
-
-                    _mediaList.set(new ObservableListWrapper<>(list));
                 } catch (Exception e) {
                     Platform.runLater(() -> showRmiErrorMessage(e));
                 } finally {
+                    _mediaList.set(new ObservableListWrapper<>(list));
+                    _searchTask = null;
+
                     Platform.runLater(() -> {
                         _listViewVisible.setValue(true);
                         _isLoading.setValue(false);
@@ -161,32 +157,15 @@ public class SearchMedium extends BasePage<Void, NullType, NullType, NullType> {
     private void showDetail(MediaSmallDto media) {
         startBackgroundTask(() -> Platform.runLater(() -> {
             Stage dialog = new Stage();
-            FXMLLoader loader = new FXMLLoader(ShowDetail.class.getResource("showDetail.fxml"));
-
+            MediaDetail page = new MediaDetail(media, this);
+            Scene scene = new Scene(page);
+            dialog.setScene(scene);
             try {
-                // @todo: perhaps use a cache
-                MainRemoteObjectInf remoteObject = RmiHelper.getSession();
-                MediaDetailedDto entity = null;
-
-                if(media instanceof BookSmallDto) {
-                    entity = remoteObject.getBookRemoteObject().getBookDetailedById(((BookSmallDto) media).getId());
-                } else if(media instanceof DvdSmallDto) {
-                    entity = remoteObject.getDvdRemoteObject().getDvdDetailedById(((DvdSmallDto) media).getId());
-                }
-
-                _listViewVisible.setValue(true);
-                loader.setController(new ShowDetail(entity));
-
-                try {
-                    dialog.setScene(new Scene(loader.load()));
-                    dialog.setAlwaysOnTop(true);
-                    dialog.showAndWait();
-                } catch (IOException e) {
-                    showErrorMessage("Error", e.getMessage());
-                }
+                dialog.showAndWait();
             } catch (Exception e) {
-                showRmiErrorMessage(e);
+                e.printStackTrace();
             }
+            page.exit();
         }));
     }
 }

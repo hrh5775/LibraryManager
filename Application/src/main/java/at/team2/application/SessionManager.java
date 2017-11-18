@@ -29,6 +29,14 @@ public class SessionManager {
         }
     }
 
+    public void removeSession(AccountDetailedDto account) {
+        String tmp = account.getUserName() + account.getId();
+
+        if(_accounts.get(tmp) == null) {
+            _accounts.remove(account.getUserName() + account.getId(), account);
+        }
+    }
+
     public boolean isSessionAvailable(AccountDetailedDto account) {
         return getSession(account) != null;
     }

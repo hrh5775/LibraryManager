@@ -2,6 +2,7 @@ package at.team2.database_wrapper.facade;
 
 import at.team2.database_wrapper.common.FilterConnector;
 import at.team2.database_wrapper.entities.LoanEntity;
+import at.team2.database_wrapper.entities.MediaEntity;
 import at.team2.database_wrapper.entities.MediaMemberEntity;
 import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.helper.MapperHelper;
@@ -30,7 +31,7 @@ public class MediaMemberFacade extends BaseDatabaseFacade<MediaMember, MediaMemb
         super(session);
     }
 
-    private MediaMemberEntity getEntityById(int id) {
+    protected MediaMemberEntity getEntityById(int id) {
         EntityManager session = getCurrentSession();
         Query query = session.createQuery("from MediaMemberEntity where id = :id");
         query.setParameter("id", id);
@@ -69,6 +70,8 @@ public class MediaMemberFacade extends BaseDatabaseFacade<MediaMember, MediaMemb
                 return "extendedIndex";
             case MEDIA:
                 return "mediaByMediaId.title";
+            case FULL_INDEX:
+                return "concat(mediaByMediaId.baseIndex, ' ', extendedIndex)";
         }
 
         return null;
@@ -96,6 +99,10 @@ public class MediaMemberFacade extends BaseDatabaseFacade<MediaMember, MediaMemb
         session.persist(entity);
         StoreHelper.storeEntities(session, transactionType);
 
+        MediaFacade mediaFacade = new MediaFacade(getCurrentSession());
+        MediaEntity mediaEntity =  mediaFacade.getEntityById(entity.getMediaId());
+        session.refresh(mediaEntity); // @todo: perhaps use another solution
+
         return entity.getId();
     }
 
@@ -108,6 +115,10 @@ public class MediaMemberFacade extends BaseDatabaseFacade<MediaMember, MediaMemb
         createLoans(entity, session);
         session.merge(entity);
         StoreHelper.storeEntities(session, transactionType);
+
+        MediaFacade mediaFacade = new MediaFacade(getCurrentSession());
+        MediaEntity mediaEntity =  mediaFacade.getEntityById(entity.getMediaId());
+        session.refresh(mediaEntity); // @todo: perhaps use another solution
 
         return entity.getId();
     }
@@ -129,11 +140,22 @@ public class MediaMemberFacade extends BaseDatabaseFacade<MediaMember, MediaMemb
     @Override
     public boolean delete(int id, TransactionType transactionType) {
         EntityManager session = getCurrentSession(transactionType);
-        Query query = session.createQuery("delete MediaMemberEntity where id = :id");
-        query.setParameter("id", id);
-        query.executeUpdate();
+        MediaMemberEntity entity = getEntityById(id);
 
-        return StoreHelper.storeEntities(session, transactionType);
+        if(entity != null) {
+            MediaEntity mediaEntity = entity.getMediaByMediaId();
+
+            Query query = session.createQuery("delete MediaMemberEntity where id = :id");
+            query.setParameter("id", id);
+            query.executeUpdate();
+
+            if(mediaEntity != null) {
+                session.refresh(mediaEntity); // @todo: perhaps use another solution
+                return StoreHelper.storeEntities(session, transactionType);
+            }
+        }
+
+        return false;
     }
 
     public MediaMember getNotLoanedMediaMember(int mediaMemberId) {

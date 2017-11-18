@@ -18,12 +18,13 @@
 <?import javafx.scene.layout.StackPane?>
 <?import at.team2.client.controls.loadingindicator.LoadingIndicator?>
 
+<?import javafx.scene.control.TextField?>
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
-           stylesheets="/at/team2/client/pages/lendMedium/lendMedium.css">
+           stylesheets="/at/team2/client/pages/lendmedium/lend_medium.css">
 
     <fx:define>
-        <SimpleBooleanProperty fx:id="_isLoading" value="false" />
+        <SimpleBooleanProperty fx:id="_isLoading" />
         <SimpleListProperty fx:id="_mediaList" />
         <SimpleBooleanProperty fx:id="_lendConfirmDisabled" />
         <SimpleBooleanProperty fx:id="_lendAddButtonDisabled" />
@@ -34,10 +35,10 @@
             <children>
                 <TableView fx:id="_lenditemsTbl">
                     <columns>
-                        <TableColumn fx:id="_lendIDclm" text="ID" >
-                        <cellValueFactory>
-                            <PropertyValueFactory property="id" />
-                        </cellValueFactory>
+                        <TableColumn fx:id="_lendIDclm" text="Medium ID" prefWidth="200">
+                            <cellValueFactory>
+                                <PropertyValueFactory property="fullIndex" />
+                            </cellValueFactory>
                         </TableColumn>
                         <TableColumn fx:id="_lendTitelclm" text="Title" prefWidth="350">
                             <cellValueFactory>
@@ -65,8 +66,8 @@
                         <Label fx:id="_lendTitellbl" GridPane.rowIndex="0" GridPane.columnIndex="1" />
                         <Button fx:id="_lendAddButton" alignment="CENTER_RIGHT" contentDisplay="RIGHT" mnemonicParsing="false" text="Add" onAction="#addMediaMemberToList" defaultButton="true" GridPane.rowIndex="0" GridPane.columnIndex="2" />
 
-                        <Label text="ID:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
-                        <NumberField fx:id="_mediaIdNumberField" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+                        <Label text="Medium ID:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+                        <TextField fx:id="_mediaIndexField" GridPane.rowIndex="1" GridPane.columnIndex="1" />
                         <Button fx:id="_lendIDconfirmbtn" mnemonicParsing="false" onAction="#findMediaMemberById" defaultButton="true" text="OK" GridPane.rowIndex="1" GridPane.columnIndex="2" />
 
                         <Separator GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.columnSpan="3">

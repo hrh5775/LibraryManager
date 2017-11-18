@@ -80,4 +80,11 @@ public class LoanDetailedDto extends BaseDtoEntity {
     public void setReminder(ReminderSmallDto reminder) {
         _reminder = reminder;
     }
+
+
+    // additional getter and setters
+
+    public String getMediaMemberFullIndex() {
+        return getMediaMember().getFullIndex();
+    }
 }

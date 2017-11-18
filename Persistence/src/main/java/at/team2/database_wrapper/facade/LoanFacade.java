@@ -1,8 +1,10 @@
 package at.team2.database_wrapper.facade;
 
 import at.team2.database_wrapper.common.FilterConnector;
+import at.team2.database_wrapper.entities.MediaEntity;
 import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.interfaces.BaseDatabaseFacade;
+import at.team2.domain.entities.Media;
 import at.team2.domain.enums.properties.LoanProperty;
 import org.modelmapper.ModelMapper;
 import at.team2.database_wrapper.entities.LoanEntity;
@@ -20,21 +22,25 @@ public class LoanFacade extends BaseDatabaseFacade<Loan, LoanProperty> {
     private static final Type type = new TypeToken<List<Loan>>() {}.getType();
 
     public LoanFacade() {
-        super();
     }
 
     public LoanFacade(EntityManager session) {
         super(session);
     }
 
-    @Override
-    public Loan getById(int id) {
+    protected LoanEntity getEntityById(int id) {
         EntityManager session = getCurrentSession();
         Query query = session.createQuery("from LoanEntity where id = :id and closed = false");
         query.setParameter("id", id);
-        LoanEntity entity = getFirstOrDefault(query);
 
-        if(entity != null) {
+        return getFirstOrDefault(query);
+    }
+
+    @Override
+    public Loan getById(int id) {
+        LoanEntity entity = getEntityById(id);
+
+        if (entity != null) {
             ModelMapper mapper = MapperHelper.getMapper();
             return mapper.map(entity, Loan.class);
         }
@@ -99,6 +105,12 @@ public class LoanFacade extends BaseDatabaseFacade<Loan, LoanProperty> {
         session.persist(entity);
         StoreHelper.storeEntities(session, transactionType);
 
+        MediaMemberFacade mediaMemberFacade = new MediaMemberFacade(getCurrentSession());
+        int mediaId =  mediaMemberFacade.getEntityById(entity.getMediaMemberId()).getMediaId();
+        MediaFacade mediaFacade = new MediaFacade(getCurrentSession());
+        MediaEntity media = mediaFacade.getEntityById(mediaId);
+        session.refresh(media); // @todo: perhaps use another solution
+
         return entity.getId();
     }
 
@@ -113,6 +125,12 @@ public class LoanFacade extends BaseDatabaseFacade<Loan, LoanProperty> {
         session.merge(entity);
         StoreHelper.storeEntities(session, transactionType);
 
+        MediaMemberFacade mediaMemberFacade = new MediaMemberFacade(getCurrentSession());
+        int mediaId =  mediaMemberFacade.getEntityById(entity.getMediaMemberId()).getMediaId();
+        MediaFacade mediaFacade = new MediaFacade(getCurrentSession());
+        MediaEntity media = mediaFacade.getEntityById(mediaId);
+        session.refresh(media); // @todo: perhaps use another solution
+
         return entity.getId();
     }
 
@@ -126,10 +144,21 @@ public class LoanFacade extends BaseDatabaseFacade<Loan, LoanProperty> {
     @Override
     public boolean delete(int id, TransactionType transactionType) {
         EntityManager session = getCurrentSession(transactionType);
-        Query query = session.createQuery("delete LoanEntity where id = :id and closed = false");
-        query.setParameter("id", id);
-        query.executeUpdate();
+        LoanEntity entity = getEntityById(id);
 
-        return StoreHelper.storeEntities(session, transactionType);
+        if(entity != null) {
+            MediaEntity mediaEntity = entity.getMediaMemberByMediaMemberId().getMediaByMediaId();
+
+            Query query = session.createQuery("delete LoanEntity where id = :id and closed = false");
+            query.setParameter("id", id);
+            query.executeUpdate();
+
+            if(mediaEntity != null) {
+                session.refresh(mediaEntity); // @todo: perhaps use another solution
+                return StoreHelper.storeEntities(session, transactionType);
+            }
+        }
+
+        return false;
     }
 }

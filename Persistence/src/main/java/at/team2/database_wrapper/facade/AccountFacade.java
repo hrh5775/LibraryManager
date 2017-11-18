@@ -27,7 +27,7 @@ public class AccountFacade extends BaseDatabaseFacade<Account, AccountProperty> 
         super(session);
     }
 
-    private AccountEntity getEntityById(int id, boolean includeInactive) {
+    protected AccountEntity getEntityById(int id, boolean includeInactive) {
         EntityManager session = getCurrentSession();
         String includeInactiveQuery = includeInactive ? "" : " and active = true";
         Query query = session.createQuery("from AccountEntity where id = :id" + includeInactiveQuery);

@@ -111,7 +111,7 @@ public class SearchCustomer extends BasePage<Void, NullType, NullType, NullType>
 
     @FXML
     private void search() {
-        if(!_searchField.getText().isEmpty()) {
+        if(_searchTask == null && !_searchField.getText().isEmpty()) {
             _isLoading.setValue(true);
             _additionalListViewVisible.setValue(false);
 
@@ -135,6 +135,8 @@ public class SearchCustomer extends BasePage<Void, NullType, NullType, NullType>
                 } catch (Exception e) {
                     Platform.runLater(() -> showRmiErrorMessage(e));
                 } finally {
+                    _searchTask = null;
+
                     Platform.runLater(() -> {
                         _customerListViewVisible.setValue(true);
                         _isLoading.setValue(false);
