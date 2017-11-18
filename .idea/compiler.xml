@@ -8,7 +8,6 @@
         <outputRelativeToContentRoot value="true" />
         <module name="Application" />
         <module name="Client" />
-        <module name="Connector" />
         <module name="Domain" />
         <module name="Hibernate" />
         <module name="JSONConnector" />

@@ -127,6 +127,7 @@
                                                     </TableColumn>
                                                 </columns>
                                             </TableView>
+                                            <Button text="Extend" fx:id="_ExtendButton" onAction="#extendLoan"></Button>
                                         </VBox>
 
                                         <StackPane>

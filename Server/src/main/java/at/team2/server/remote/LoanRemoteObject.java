@@ -3,6 +3,8 @@ package at.team2.server.remote;
 import java.lang.reflect.Type;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import at.team2.application.facade.LoanApplicationFacade;
@@ -34,5 +36,16 @@ public class LoanRemoteObject extends UnicastRemoteObject implements LoanRemoteO
     public int loanMediaMember(MediaMemberSmallDto mediaMember, CustomerSmallDto customer, AccountDetailedDto updater) throws RemoteException {
         LoanApplicationFacade facade = LoanApplicationFacade.getInstance();
         return facade.loanMediaMember(mediaMember, customer, updater);
+    }
+
+    @Override
+    public void extendLoan(LoanDetailedDto loan, long weekstoextend, AccountDetailedDto updater)
+    {
+        LocalDate end = loan.getEnd().toLocalDate();
+        end = end.plusWeeks(weekstoextend);
+        loan.setEnd(Date.valueOf(end));
+        LoanApplicationFacade facade = LoanApplicationFacade.getInstance();
+        facade.update(loan,updater);
+
     }
 }

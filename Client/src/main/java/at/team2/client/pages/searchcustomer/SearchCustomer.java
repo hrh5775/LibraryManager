@@ -1,11 +1,13 @@
 package at.team2.client.pages.searchcustomer;
 
+import at.team2.client.common.AccountManager;
 import at.team2.client.controls.loadingindicator.LoadingIndicator;
 import at.team2.client.pages.BasePage;
 import at.team2.common.dto.detailed.LoanDetailedDto;
 import at.team2.common.dto.detailed.ReservationDetailedDto;
 import at.team2.common.dto.small.CustomerSmallDto;
 import at.team2.common.helper.RmiHelper;
+import at.team2.common.interfaces.LoanRemoteObjectInf;
 import at.team2.common.interfaces.MainRemoteObjectInf;
 import com.sun.javafx.collections.ObservableListWrapper;
 import javafx.application.Platform;
@@ -19,6 +21,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javax.lang.model.type.NullType;
+
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -59,6 +66,8 @@ public class SearchCustomer extends BasePage<Void, NullType, NullType, NullType>
     private BooleanProperty _additionalListViewVisible;
     @FXML
     private TextField _searchField;
+    @FXML
+    private Button _ExtendButton;
 
     private Thread _searchTask;
     private Thread _showAdditionalInfoTask;
@@ -201,5 +210,23 @@ public class SearchCustomer extends BasePage<Void, NullType, NullType, NullType>
         } finally {
             _isAdditionalInfoLoading.setValue(false);
         }
+    }
+
+    @FXML
+    private void extendLoan()
+    {
+        Object entity = _loanTableView.getSelectionModel().getSelectedItem();
+        LoanDetailedDto loanentity = (LoanDetailedDto) entity;
+        try
+        {
+            MainRemoteObjectInf mainremote = RmiHelper.getSession();
+            LoanRemoteObjectInf loanremote = mainremote.getLoanRemoteObject();
+            loanremote.extendLoan(loanentity,2, AccountManager.getInstance().getAccount());
+            Platform.runLater(()-> showSuccessMessage("Success","Successfully extended the loan by 2 weeks"));
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
     }
 }
