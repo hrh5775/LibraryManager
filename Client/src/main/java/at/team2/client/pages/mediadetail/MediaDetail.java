@@ -1,6 +1,7 @@
 package at.team2.client.pages.mediadetail;
 
 import at.team2.client.pages.BasePage;
+import at.team2.client.pages.reservation.ReservateMedium;
 import at.team2.common.dto.detailed.BookDetailedDto;
 import at.team2.common.dto.detailed.DvdDetailedDto;
 import at.team2.common.dto.detailed.MediaDetailedDto;
@@ -13,9 +14,12 @@ import at.team2.common.interfaces.MainRemoteObjectInf;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+
 import javax.lang.model.type.NullType;
 
 public class MediaDetail extends BasePage<Void, NullType, NullType, NullType> {
@@ -119,5 +123,22 @@ public class MediaDetail extends BasePage<Void, NullType, NullType, NullType> {
 
             _publishersPersons.setText(builder.toString());
         }
+    }
+
+    @FXML public void showReservation(){
+        System.out.println( "Reservation clicked");
+
+        startBackgroundTask(() -> Platform.runLater(() -> {
+            Stage dialog = new Stage();
+            ReservateMedium page = new ReservateMedium( _tmpMedia, this);
+            Scene scene = new Scene( page );
+            dialog.setScene( scene );
+            try {
+                dialog.showAndWait();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            page.exit();
+        }));
     }
 }
