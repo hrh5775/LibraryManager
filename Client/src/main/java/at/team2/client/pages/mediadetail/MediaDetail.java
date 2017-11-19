@@ -1,7 +1,9 @@
 package at.team2.client.pages.mediadetail;
 
+import at.team2.client.common.AccountManager;
 import at.team2.client.pages.BasePage;
 import at.team2.client.pages.reservation.ReservateMedium;
+import at.team2.common.dto.detailed.AccountDetailedDto;
 import at.team2.common.dto.detailed.BookDetailedDto;
 import at.team2.common.dto.detailed.DvdDetailedDto;
 import at.team2.common.dto.detailed.MediaDetailedDto;
@@ -15,6 +17,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.Pane;
@@ -41,6 +44,8 @@ public class MediaDetail extends BasePage<Void, NullType, NullType, NullType> {
     private TextArea _publishersPersons;
     @FXML
     private TextArea _comment;
+    @FXML
+    private Button _btnReservation;
 
     private MediaSmallDto _tmpMedia;
     private MediaDetailedDto _media;
@@ -99,7 +104,7 @@ public class MediaDetail extends BasePage<Void, NullType, NullType, NullType> {
     public void dispose() {
     }
 
-    public void initializeDialog() {
+    private void initializeDialog() {
         setViewText();
         _pane.setDisable(true);
     }
@@ -123,10 +128,24 @@ public class MediaDetail extends BasePage<Void, NullType, NullType, NullType> {
 
             _publishersPersons.setText(builder.toString());
         }
+
+        _btnReservation.setVisible( checkPermissionForReservation() );
+        _btnReservation.setDisable( _media.getAvailable() );
+
+    }
+
+    private boolean checkPermissionForReservation(){
+        //ReservationApplicationFacade (pkg Application) checks the permission for making reservations.
+        //Currently only account-roles ADMIN, BIBLIOTHEKAR and AUSLEIHE have this permission.
+        //Login as <staff1/password> to be able to make reservations.
+        AccountDetailedDto account = AccountManager.getInstance().getAccount();
+        String role = ( account == null )? null : account.getAccountRole().getKey();
+
+        return ( account != null && ( role.equals( "ADMIN" ) || role.equals( "BIBLIOTHEKAR" ) || role.equals( "AUSLEIHE" ) ) )? true : false;
+
     }
 
     @FXML public void showReservation(){
-        System.out.println( "Reservation clicked");
 
         startBackgroundTask(() -> Platform.runLater(() -> {
             Stage dialog = new Stage();

@@ -10,8 +10,20 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import at.team2.client.controls.loadingindicator.LoadingIndicator?>
+
 <!-- fx:controller="at.team2.client.pages.reservation.ReservateMedium" -->
-<AnchorPane prefHeight="382.0" prefWidth="525.0" stylesheets="@reservateMedium.css" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" >
+
+<?import javafx.beans.property.SimpleBooleanProperty?>
+<AnchorPane prefHeight="382.0" prefWidth="525.0"
+            stylesheets="@reservateMedium.css"
+            xmlns="http://javafx.com/javafx/8.0.121"
+            xmlns:fx="http://javafx.com/fxml/1">
+
+    <fx:define>
+        <SimpleBooleanProperty fx:id="_isLoading" />
+    </fx:define>
+
    <children>
       <BorderPane layoutX="81.0" layoutY="82.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="263.0" prefWidth="359.0">
          <center>
@@ -36,11 +48,11 @@
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label id="lbCosumerData" fx:id="lbCosumerData" prefHeight="17.0" prefWidth="170.0" text="Costumer Data:" />
+                        <Label id="_lbCosumerData" fx:id="_lbCosumerData" prefHeight="17.0" prefWidth="170.0" text="Costumer Data:" />
                         <Label prefHeight="17.0" prefWidth="67.0" text="Firstname:" GridPane.rowIndex="1" />
                         <Label text="Lastname:" GridPane.rowIndex="2" />
-                        <Label id="lbFirstname" fx:id="lbFirstname" text="no Data available" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Label id="lbLastname" fx:id="lbLastname" text="no Data available" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Label fx:id="_lbFirstname" id="_lbFirstname" text="no Data available" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label fx:id="_lbLastname" id="_lbLastname" text="no Data available" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                      </children>
                   </GridPane>
                   <GridPane GridPane.rowIndex="1">
@@ -57,11 +69,11 @@
                         <Label text="Media Data:" />
                         <Label text="Media ID:" GridPane.rowIndex="1" />
                         <Label text="Media Title:" GridPane.rowIndex="2" />
-                        <Label id="lbMediaID" fx:id="lbMediaID" text="no Data available" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Label id="lbMediaTitle" fx:id="lbMediaTitle" text="no Data available" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Label id="_lbMediaID" fx:id="_lbMediaID" text="no Data available" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label id="_lbMediaTitle" fx:id="_lbMediaTitle" text="no Data available" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                      </children>
                   </GridPane>
-                  <Button id="btnReservate" fx:id="btnReservate" mnemonicParsing="false" onAction="#doReservate" text="Reservate" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+                  <Button id="_btnReservate" fx:id="_btnReservate" mnemonicParsing="false" onAction="#doReservate" text="Reservate" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
                </children>
             </GridPane>
          </center>
@@ -73,13 +85,16 @@
                   <Insets top="5.0" />
                </HBox.margin>
             </Label>
-            <TextField id="txtCostumerID" fx:id="txtCostumerID" prefHeight="25.0" prefWidth="186.0">
+            <TextField id="_txtCostumerID" fx:id="_txtCostumerID" prefHeight="25.0" prefWidth="186.0">
                <HBox.margin>
                   <Insets left="5.0" />
                </HBox.margin>
             </TextField>
          </children>
       </HBox>
-      <Button id="btnSearchCostumer" fx:id="btnSearchCostumer" layoutX="352.0" layoutY="24.0" mnemonicParsing="false" onAction="#searchCostumer" text="Search Costumer" />
+      <Button id="btnSearchCostumer" fx:id="btnSearchCostumer" layoutX="300.0" layoutY="24.0" mnemonicParsing="false" onAction="#searchCostumer" text="Search Costumer" />
+
+       <LoadingIndicator fx:id="_loadingIndicator" onCancel="#cancel" />
+
    </children>
 </AnchorPane>
