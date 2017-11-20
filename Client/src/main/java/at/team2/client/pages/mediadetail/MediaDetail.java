@@ -7,13 +7,17 @@ import at.team2.common.dto.detailed.MediaDetailedDto;
 import at.team2.common.dto.small.BookSmallDto;
 import at.team2.common.dto.small.CreatorPersonSmallDto;
 import at.team2.common.dto.small.DvdSmallDto;
+import at.team2.common.dto.small.MediaMemberSmallDto;
 import at.team2.common.dto.small.MediaSmallDto;
 import at.team2.common.helper.RmiHelper;
 import at.team2.common.interfaces.MainRemoteObjectInf;
+import at.team2.common.interfaces.MediaMemberRemoteObjectInf;
 import javafx.application.Platform;
+import javafx.beans.property.ListProperty;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.Pane;
 import javax.lang.model.type.NullType;
@@ -37,6 +41,9 @@ public class MediaDetail extends BasePage<Void, NullType, NullType, NullType> {
     private TextArea _publishersPersons;
     @FXML
     private TextArea _comment;
+    @FXML
+    private TableView _MemberTable;
+    private ListProperty<MediaMemberSmallDto> MemberList;
 
     private MediaSmallDto _tmpMedia;
     private MediaDetailedDto _media;
@@ -67,6 +74,8 @@ public class MediaDetail extends BasePage<Void, NullType, NullType, NullType> {
             } else if(_media instanceof DvdDetailedDto) {
                 // cast the object to the specified type
             }
+
+
         } catch (Exception e) {
             Platform.runLater(() -> showRmiErrorMessage(e));
         }

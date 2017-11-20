@@ -9,7 +9,7 @@
       alignment="CENTER">
 
     <children>
-        <ImageView fx:id="_imageView" fitWidth="80" fitHeight="80" />
+        <ImageView fx:id="_imageView" fitWidth="245" fitHeight="307" />
         <Button fx:id="_cancelButton" text="Cancel" onAction="#cancel" onMouseClicked="#cancel" />
     </children>
 </VBox>
