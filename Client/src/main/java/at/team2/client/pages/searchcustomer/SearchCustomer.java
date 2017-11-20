@@ -21,11 +21,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javax.lang.model.type.NullType;
-
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -213,20 +208,30 @@ public class SearchCustomer extends BasePage<Void, NullType, NullType, NullType>
     }
 
     @FXML
-    private void extendLoan()
-    {
+    private void extendLoan() {
         Object entity = _loanTableView.getSelectionModel().getSelectedItem();
-        LoanDetailedDto loanentity = (LoanDetailedDto) entity;
-        try
-        {
-            MainRemoteObjectInf mainremote = RmiHelper.getSession();
-            LoanRemoteObjectInf loanremote = mainremote.getLoanRemoteObject();
-            loanremote.extendLoan(loanentity,2, AccountManager.getInstance().getAccount());
-            Platform.runLater(()-> showSuccessMessage("Success","Successfully extended the loan by 2 weeks"));
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-        }
 
+        if(entity != null) {
+            LoanDetailedDto loanEntity = (LoanDetailedDto) entity;
+
+            try {
+                MainRemoteObjectInf remoteObject = RmiHelper.getSession();
+                LoanRemoteObjectInf loanRemote = remoteObject.getLoanRemoteObject();
+
+                if(loanRemote.extendLoan(loanEntity, AccountManager.getInstance().getAccount())) {
+                    _loanList.getValue().remove(loanEntity); //  @todo: test this
+                    loanEntity = loanRemote.getLoanDetailedById(loanEntity.getId());
+                    _loanList.getValue().add(loanEntity);
+
+                    final LoanDetailedDto finalLoanEntity = loanEntity;
+
+                    Platform.runLater(()-> showSuccessMessage("Success","Successfully extended the loan until " + finalLoanEntity.getEnd() + " weeks"));
+                } else {
+                    Platform.runLater(()-> showSuccessMessage("Error","Failed to extend the loan"));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

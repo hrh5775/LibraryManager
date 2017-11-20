@@ -3,8 +3,6 @@ package at.team2.server.remote;
 import java.lang.reflect.Type;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.List;
 
 import at.team2.application.facade.LoanApplicationFacade;
@@ -26,7 +24,7 @@ public class LoanRemoteObject extends UnicastRemoteObject implements LoanRemoteO
 
     @Override
     public List<LoanDetailedDto> getListByCustomer(int id) throws RemoteException {
-        LoanApplicationFacade facade =  LoanApplicationFacade.getInstance();
+        LoanApplicationFacade facade = LoanApplicationFacade.getInstance();
         ModelMapper mapper = MapperHelper.getMapper();
 
         return mapper.map(facade.getListByCustomer(id), typeDetailed);
@@ -39,13 +37,16 @@ public class LoanRemoteObject extends UnicastRemoteObject implements LoanRemoteO
     }
 
     @Override
-    public void extendLoan(LoanDetailedDto loan, long weekstoextend, AccountDetailedDto updater)
-    {
-        LocalDate end = loan.getEnd().toLocalDate();
-        end = end.plusWeeks(weekstoextend);
-        loan.setEnd(Date.valueOf(end));
+    public boolean extendLoan(LoanDetailedDto loan, AccountDetailedDto updater) {
         LoanApplicationFacade facade = LoanApplicationFacade.getInstance();
-        facade.update(loan,updater);
+        return facade.extendLoan(loan, updater);
+    }
 
+    @Override
+    public LoanDetailedDto getLoanDetailedById(int id) throws RemoteException {
+        LoanApplicationFacade facade = LoanApplicationFacade.getInstance();
+        ModelMapper mapper = MapperHelper.getMapper();
+
+        return mapper.map(facade.getById(id), LoanDetailedDto.class);
     }
 }
