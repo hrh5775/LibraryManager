@@ -219,7 +219,7 @@ public class SearchCustomer extends BasePage<Void, NullType, NullType, NullType>
                 LoanRemoteObjectInf loanRemote = remoteObject.getLoanRemoteObject();
 
                 if(loanRemote.extendLoan(loanEntity, AccountManager.getInstance().getAccount())) {
-                    _loanList.getValue().remove(loanEntity); //  @todo: test this
+                    _loanList.getValue().remove(loanEntity);
                     loanEntity = loanRemote.getLoanDetailedById(loanEntity.getId());
                     _loanList.getValue().add(loanEntity);
 
