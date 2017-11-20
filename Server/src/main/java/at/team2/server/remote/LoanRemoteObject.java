@@ -39,7 +39,6 @@ public class LoanRemoteObject extends UnicastRemoteObject implements LoanRemoteO
     @Override
     public int takeBackLoan(LoanDetailedDto loan) throws RemoteException {
         LoanApplicationFacade facade = LoanApplicationFacade.getInstance();
-        facade.takeBackMediaMember(loan);
-        return 0;
+        return facade.takeBackMediaMember(loan);
     }
 }

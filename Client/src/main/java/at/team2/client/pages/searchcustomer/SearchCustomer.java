@@ -209,24 +209,27 @@ public class SearchCustomer extends BasePage<Void, NullType, NullType, NullType>
     @FXML
     private void takeBack(){
         Object entity = _loanTableView.getSelectionModel().getSelectedItem();
+
         if(entity != null) {
-            LoanDetailedDto loan = (LoanDetailedDto) entity;
-            if (loan != null) {
+            LoanDetailedDto loanEntity = (LoanDetailedDto) entity;
+
+            if (loanEntity != null) {
                 try {
                     MainRemoteObjectInf remoteObject = RmiHelper.getSession();
                     LoanRemoteObjectInf loanRemoteObject = remoteObject.getLoanRemoteObject();
-                    loanRemoteObject.takeBackLoan(loan);
 
-                    List<LoanDetailedDto> loanList = remoteObject.getLoanRemoteObject().getListByCustomer(loan.getCustomer().getId());
-                    _loanList.set(new ObservableListWrapper<>(loanList));
+                    if(loanRemoteObject.takeBackLoan(loanEntity) > 0) {
+                        _loanList.getValue().remove(loanEntity);
+                        Platform.runLater(()-> showSuccessMessage("Success","Successfully returned"));
+                    } else {
+                        Platform.runLater(()-> showSuccessMessage("Error","Could not return"));
+                    }
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 } catch (NotBoundException e) {
                     e.printStackTrace();
                 }
-
             }
-
         }
     }
 }
