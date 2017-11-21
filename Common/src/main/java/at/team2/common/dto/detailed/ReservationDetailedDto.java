@@ -3,14 +3,13 @@ package at.team2.common.dto.detailed;
 import at.team2.common.dto.small.CustomerSmallDto;
 import at.team2.common.dto.small.MediaSmallDto;
 import at.team2.common.interfaces.BaseDtoEntity;
-
 import java.sql.Date;
 
 public class ReservationDetailedDto extends BaseDtoEntity {
     private int _id;
     private Date _reservationDate;
     private Date _informationDate;
-    private byte _closed;
+    private boolean _closed;
     private CustomerSmallDto _customer;
     private MediaSmallDto _media;
 
@@ -26,7 +25,7 @@ public class ReservationDetailedDto extends BaseDtoEntity {
         return _informationDate;
     }
 
-    public byte getClosed() {
+    public boolean getClosed() {
         return _closed;
     }
 
@@ -50,7 +49,7 @@ public class ReservationDetailedDto extends BaseDtoEntity {
         _informationDate = informationDate;
     }
 
-    public void setClosed(byte closed) {
+    public void setClosed(boolean closed) {
         _closed = closed;
     }
 

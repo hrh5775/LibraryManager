@@ -1,11 +1,13 @@
 package at.team2.client.pages.searchcustomer;
 
+import at.team2.client.common.AccountManager;
 import at.team2.client.controls.loadingindicator.LoadingIndicator;
 import at.team2.client.pages.BasePage;
 import at.team2.common.dto.detailed.LoanDetailedDto;
 import at.team2.common.dto.detailed.ReservationDetailedDto;
 import at.team2.common.dto.small.CustomerSmallDto;
 import at.team2.common.helper.RmiHelper;
+import at.team2.common.interfaces.LoanRemoteObjectInf;
 import at.team2.common.interfaces.MainRemoteObjectInf;
 import com.sun.javafx.collections.ObservableListWrapper;
 import javafx.application.Platform;
@@ -19,6 +21,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javax.lang.model.type.NullType;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -59,6 +63,10 @@ public class SearchCustomer extends BasePage<Void, NullType, NullType, NullType>
     private BooleanProperty _additionalListViewVisible;
     @FXML
     private TextField _searchField;
+    @FXML
+    private Button _extendButton;
+    @FXML
+    private Button _takeBackButton;
 
     private Thread _searchTask;
     private Thread _showAdditionalInfoTask;
@@ -91,6 +99,9 @@ public class SearchCustomer extends BasePage<Void, NullType, NullType, NullType>
         _reservationTableView.itemsProperty().bind(_reservationList);
 
         _searchButton.disableProperty().bind(_searchField.textProperty().isEmpty());
+
+        _extendButton.disableProperty().bind(_loanTableView.getSelectionModel().selectedItemProperty().isNull());
+        _takeBackButton.disableProperty().bind(_loanTableView.getSelectionModel().selectedItemProperty().isNull());
     }
 
     @Override
@@ -200,6 +211,60 @@ public class SearchCustomer extends BasePage<Void, NullType, NullType, NullType>
             e.printStackTrace();
         } finally {
             _isAdditionalInfoLoading.setValue(false);
+        }
+    }
+
+    @FXML
+    private void extendLoan() {
+        Object entity = _loanTableView.getSelectionModel().getSelectedItem();
+
+        if(entity != null) {
+            LoanDetailedDto loanEntity = (LoanDetailedDto) entity;
+
+            try {
+                MainRemoteObjectInf remoteObject = RmiHelper.getSession();
+                LoanRemoteObjectInf loanRemote = remoteObject.getLoanRemoteObject();
+
+                if(loanRemote.extendLoan(loanEntity, AccountManager.getInstance().getAccount())) {
+                    _loanList.getValue().remove(loanEntity);
+                    loanEntity = loanRemote.getLoanDetailedById(loanEntity.getId());
+                    _loanList.getValue().add(loanEntity);
+                    final LoanDetailedDto finalLoanEntity = loanEntity;
+
+                    Platform.runLater(()-> showSuccessMessage("Success","Successfully extended the loan until " + finalLoanEntity.getEnd()));
+                } else {
+                    Platform.runLater(()-> showErrorMessage("Error","Cannot extend the loan.\nPlease take back the medium."));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @FXML
+    private void takeBack(){
+        Object entity = _loanTableView.getSelectionModel().getSelectedItem();
+
+        if(entity != null) {
+            LoanDetailedDto loanEntity = (LoanDetailedDto) entity;
+
+            if (loanEntity != null) {
+                try {
+                    MainRemoteObjectInf remoteObject = RmiHelper.getSession();
+                    LoanRemoteObjectInf loanRemoteObject = remoteObject.getLoanRemoteObject();
+
+                    if(loanRemoteObject.takeBackLoan(loanEntity) > 0) {
+                        _loanList.getValue().remove(loanEntity);
+                        Platform.runLater(()-> showSuccessMessage("Success","Successfully returned"));
+                    } else {
+                        Platform.runLater(()-> showErrorMessage("Error","Could not return"));
+                    }
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                } catch (NotBoundException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }

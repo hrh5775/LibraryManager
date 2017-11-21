@@ -87,7 +87,7 @@
                             <center>
                                 <VBox>
                                     <HBox>
-                                        <VBox fx:id="_loanView">
+                                        <VBox fx:id="_loanView" spacing="10">
                                             <Label text="Loans">
                                                 <padding>
                                                     <Insets bottom="15" />
@@ -127,6 +127,16 @@
                                                     </TableColumn>
                                                 </columns>
                                             </TableView>
+
+                                            <HBox>
+                                                <Button fx:id="_takeBackButton" text="Take Back" onAction="#takeBack" />
+                                                <StackPane>
+                                                    <padding>
+                                                        <Insets left="10" />
+                                                    </padding>
+                                                </StackPane>
+                                                <Button fx:id="_extendButton" text="Extend" onAction="#extendLoan" />
+                                            </HBox>
                                         </VBox>
 
                                         <StackPane>

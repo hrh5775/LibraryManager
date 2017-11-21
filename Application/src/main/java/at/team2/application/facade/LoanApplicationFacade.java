@@ -31,6 +31,7 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
     private LoanFacade _facade;
     private MediaMemberFacade _mediaMemberFacade;
     private CustomerFacade _customerFacade;
+    private static final int loanTermMultiplier = 7 * 24 * 3600 * 1000;
 
     private LoanApplicationFacade() {
     }
@@ -144,19 +145,68 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
 
             if (mediaMemberEntity != null && customerEntity != null) {
                 Media mediaEntity = mediaMemberEntity.getMedia();
-                int loanTerm = mediaEntity.getMediaType().getLoanCondition().getLoanTerm();
+                int loanTerm = mediaEntity.getMediaType().getLoanCondition().getLoanTerm(); // weeksToExtend
 
                 Loan loan = new Loan();
                 loan.setCustomer(customerEntity);
                 loan.setMediaMember(mediaMemberEntity);
                 loan.setStart(new Date(Calendar.getInstance().getTime().getTime()));
-                loan.setEnd(new Date(Calendar.getInstance().getTime().getTime() + (loanTerm * 24 * 3600 * 1000)));
+                loan.setEnd(new Date(Calendar.getInstance().getTime().getTime() + (loanTerm * loanTermMultiplier)));
                 return _facade.add(loan, TransactionType.AUTO_COMMIT);
             }
 
             return 0;
         } else {
             return 0;
+        }
+    }
+
+    public int takeBackMediaMember(LoanDetailedDto loan){
+        Loan loanEntity = _facade.getById(loan.getId());
+        loanEntity.setClosed(true);
+        return _facade.update(loanEntity,TransactionType.AUTO_COMMIT);
+    }
+
+    public boolean extendLoan(LoanDetailedDto loan, AccountDetailedDto updater) {
+        updater = SessionManager.getInstance().getSession(updater);
+
+        if (updater != null &&
+                (RoleHelper.hasRole(updater, Role.ADMIN) ||
+                        RoleHelper.hasRole(updater, Role.BIBLIOTHEKAR) ||
+                        RoleHelper.hasRole(updater, Role.AUSLEIHE))) {
+            Loan loanEntity = _facade.getById(loan.getId());
+
+            if (loanEntity != null) {
+                loanEntity.setLastRenewalStart(new Date(Calendar.getInstance().getTime().getTime()));
+                LoanCondition loanCondition = loanEntity.getMediaMember().getMedia().getMediaType().getLoanCondition();
+
+                int weeksToExtend = loanCondition.getLoanTerm();
+                int extendedCount;
+
+                if (loanEntity.getLastRenewalStart() != null) {
+                    extendedCount = (int) (((loanEntity.getEnd().getTime() - loanEntity.getStart().getTime()) / (weeksToExtend * loanTermMultiplier)));
+                } else {
+                    extendedCount = 0;
+                }
+
+                if (extendedCount < loanCondition.getExtension()) {
+                    loanEntity.setLastRenewalStart(new Date(Calendar.getInstance().getTime().getTime()));
+                    loanEntity.setEnd(new Date(loanEntity.getEnd().getTime() + (weeksToExtend * loanTermMultiplier)));
+                    ModelMapper mapper = MapperHelper.getMapper();
+                    Loan entity = mapper.map(loanEntity, Loan.class);
+                    _facade.update(entity, TransactionType.AUTO_COMMIT);
+
+                    return true;
+                }
+
+                return false;
+            }
+
+            return false;
+        } else {
+            List<Pair<LoanProperty, String>> list = new LinkedList<>();
+            list.add(new Pair<>(LoanProperty.ID, "permission denied"));
+            return false;
         }
     }
 
