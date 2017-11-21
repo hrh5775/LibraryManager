@@ -11,7 +11,6 @@ import at.team2.common.dto.small.MediaMemberSmallDto;
 import at.team2.common.dto.small.MediaSmallDto;
 import at.team2.common.helper.RmiHelper;
 import at.team2.common.interfaces.MainRemoteObjectInf;
-import at.team2.common.interfaces.MediaMemberRemoteObjectInf;
 import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import javafx.fxml.FXML;
@@ -42,8 +41,8 @@ public class MediaDetail extends BasePage<Void, NullType, NullType, NullType> {
     @FXML
     private TextArea _comment;
     @FXML
-    private TableView _MemberTable;
-    private ListProperty<MediaMemberSmallDto> MemberList;
+    private TableView _memberTable;
+    private ListProperty<MediaMemberSmallDto> _memberList;
 
     private MediaSmallDto _tmpMedia;
     private MediaDetailedDto _media;

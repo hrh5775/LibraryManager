@@ -13,8 +13,8 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="804.0" prefWidth="922.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
-
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml">
     <left>
         <ImageView id="imgCover" fx:id="imgCover" pickOnBounds="true" preserveRatio="true">
             <image>
@@ -97,7 +97,7 @@
                   <Label fx:id="_published" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                </children>
             </GridPane>
-            <TableView fx:id="_MemberTable" prefHeight="317.0" prefWidth="358.0">
+            <TableView fx:id="_memberTable" prefHeight="317.0" prefWidth="358.0">
               <columns>
                 <TableColumn prefWidth="170.0" text="Index" />
                 <TableColumn prefWidth="187.0" text="Available" />
