@@ -1,5 +1,6 @@
 package at.team2.client.pages.searchcustomer;
 
+import at.team2.client.common.AccountManager;
 import at.team2.client.controls.loadingindicator.LoadingIndicator;
 import at.team2.client.pages.BasePage;
 import at.team2.common.dto.detailed.LoanDetailedDto;
@@ -62,6 +63,10 @@ public class SearchCustomer extends BasePage<Void, NullType, NullType, NullType>
     private BooleanProperty _additionalListViewVisible;
     @FXML
     private TextField _searchField;
+    @FXML
+    private Button _extendButton;
+    @FXML
+    private Button _takeBackButton;
 
     private Thread _searchTask;
     private Thread _showAdditionalInfoTask;
@@ -94,6 +99,9 @@ public class SearchCustomer extends BasePage<Void, NullType, NullType, NullType>
         _reservationTableView.itemsProperty().bind(_reservationList);
 
         _searchButton.disableProperty().bind(_searchField.textProperty().isEmpty());
+
+        _extendButton.disableProperty().bind(_loanTableView.getSelectionModel().selectedItemProperty().isNull());
+        _takeBackButton.disableProperty().bind(_loanTableView.getSelectionModel().selectedItemProperty().isNull());
     }
 
     @Override
@@ -207,6 +215,33 @@ public class SearchCustomer extends BasePage<Void, NullType, NullType, NullType>
     }
 
     @FXML
+    private void extendLoan() {
+        Object entity = _loanTableView.getSelectionModel().getSelectedItem();
+
+        if(entity != null) {
+            LoanDetailedDto loanEntity = (LoanDetailedDto) entity;
+
+            try {
+                MainRemoteObjectInf remoteObject = RmiHelper.getSession();
+                LoanRemoteObjectInf loanRemote = remoteObject.getLoanRemoteObject();
+
+                if(loanRemote.extendLoan(loanEntity, AccountManager.getInstance().getAccount())) {
+                    _loanList.getValue().remove(loanEntity);
+                    loanEntity = loanRemote.getLoanDetailedById(loanEntity.getId());
+                    _loanList.getValue().add(loanEntity);
+                    final LoanDetailedDto finalLoanEntity = loanEntity;
+
+                    Platform.runLater(()-> showSuccessMessage("Success","Successfully extended the loan until " + finalLoanEntity.getEnd()));
+                } else {
+                    Platform.runLater(()-> showErrorMessage("Error","Cannot extend the loan.\nPlease take back the medium."));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @FXML
     private void takeBack(){
         Object entity = _loanTableView.getSelectionModel().getSelectedItem();
 
@@ -222,7 +257,7 @@ public class SearchCustomer extends BasePage<Void, NullType, NullType, NullType>
                         _loanList.getValue().remove(loanEntity);
                         Platform.runLater(()-> showSuccessMessage("Success","Successfully returned"));
                     } else {
-                        Platform.runLater(()-> showSuccessMessage("Error","Could not return"));
+                        Platform.runLater(()-> showErrorMessage("Error","Could not return"));
                     }
                 } catch (RemoteException e) {
                     e.printStackTrace();

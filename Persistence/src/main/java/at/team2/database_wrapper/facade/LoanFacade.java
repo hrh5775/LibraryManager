@@ -4,7 +4,6 @@ import at.team2.database_wrapper.common.FilterConnector;
 import at.team2.database_wrapper.entities.MediaEntity;
 import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.interfaces.BaseDatabaseFacade;
-import at.team2.domain.entities.Media;
 import at.team2.domain.enums.properties.LoanProperty;
 import org.modelmapper.ModelMapper;
 import at.team2.database_wrapper.entities.LoanEntity;
@@ -41,7 +40,7 @@ public class LoanFacade extends BaseDatabaseFacade<Loan, LoanProperty> {
         LoanEntity entity = getEntityById(id);
 
         if (entity != null) {
-            ModelMapper mapper = MapperHelper.getMapper();
+            ModelMapper mapper = MapperHelper.getMapper(); // @todo: somehow the mapping sometimes breaks - this seams like an hibernate issue, because the loanEntity properties are not set
             return mapper.map(entity, Loan.class);
         }
 

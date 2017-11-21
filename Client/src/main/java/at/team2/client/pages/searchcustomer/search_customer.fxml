@@ -127,7 +127,16 @@
                                                     </TableColumn>
                                                 </columns>
                                             </TableView>
-                                            <Button fx:id="takeBack" text="Take Back" onAction="#takeBack"></Button>
+
+                                            <HBox>
+                                                <Button fx:id="_takeBackButton" text="Take Back" onAction="#takeBack" />
+                                                <StackPane>
+                                                    <padding>
+                                                        <Insets left="10" />
+                                                    </padding>
+                                                </StackPane>
+                                                <Button fx:id="_extendButton" text="Extend" onAction="#extendLoan" />
+                                            </HBox>
                                         </VBox>
 
                                         <StackPane>
