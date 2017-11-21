@@ -75,7 +75,7 @@
                             </placeholder>
 
                             <columns>
-                                <TableColumn text="ID" prefWidth="40">
+                                <TableColumn text="ID" prefWidth="40" visible="false">
                                     <cellValueFactory>
                                         <PropertyValueFactory property="id" />
                                     </cellValueFactory>

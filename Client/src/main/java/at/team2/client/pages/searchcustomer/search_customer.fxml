@@ -87,7 +87,7 @@
                             <center>
                                 <VBox>
                                     <HBox>
-                                        <VBox fx:id="_loanView">
+                                        <VBox fx:id="_loanView" spacing="10">
                                             <Label text="Loans">
                                                 <padding>
                                                     <Insets bottom="15" />

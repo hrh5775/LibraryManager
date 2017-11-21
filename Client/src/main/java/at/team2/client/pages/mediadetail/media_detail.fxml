@@ -2,92 +2,108 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml">
+<BorderPane prefHeight="804.0" prefWidth="922.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
 
     <left>
         <ImageView id="imgCover" fx:id="imgCover" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="/Buecherwurm.jpg" />
             </image>
+         <BorderPane.margin>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </BorderPane.margin>
         </ImageView>
     </left>
 
-    <center>
-        <GridPane scaleShape="false" snapToPixel="false">
-            <padding>
-                <Insets left="30.0" bottom="300" />
-            </padding>
-
-            <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" prefWidth="100" />
-                <ColumnConstraints hgrow="SOMETIMES" />
-            </columnConstraints>
-            <rowConstraints>
-                <RowConstraints vgrow="SOMETIMES" />
-                <RowConstraints vgrow="SOMETIMES" />
-                <RowConstraints vgrow="SOMETIMES" />
-                <RowConstraints vgrow="SOMETIMES" />
-                <RowConstraints vgrow="SOMETIMES" />
-                <RowConstraints vgrow="SOMETIMES" />
-            </rowConstraints>
-            <children>
-                <Label text="Media Type:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
-                <Label fx:id="_mediaType" GridPane.rowIndex="0" GridPane.columnIndex="1" />
-
-                <Label text="Index:" GridPane.rowIndex="1" GridPane.columnIndex="0" />
-                <Label fx:id="_index" GridPane.rowIndex="1" GridPane.columnIndex="1" />
-
-                <Label text="Available:" GridPane.rowIndex="2" GridPane.columnIndex="0" />
-                <Label fx:id="_available" GridPane.rowIndex="2" GridPane.columnIndex="1" />
-
-                <Label text="Title:" GridPane.rowIndex="3" GridPane.columnIndex="0" />
-                <Label fx:id="_title" GridPane.rowIndex="3" GridPane.columnIndex="1" />
-
-                <Label text="Genre:" GridPane.rowIndex="4" GridPane.columnIndex="0" />
-                <Label fx:id="_genre" GridPane.rowIndex="4" GridPane.columnIndex="1" />
-
-                <Label text="Published: " GridPane.rowIndex="5" GridPane.columnIndex="0" />
-                <Label fx:id="_published" GridPane.rowIndex="5" GridPane.columnIndex="1" />
-            </children>
-            <GridPane.margin>
-                <Insets left="5.0" />
-            </GridPane.margin>
-        </GridPane>
-    </center>
-
     <right>
-        <GridPane>
+        <GridPane prefHeight="804.0" prefWidth="485.0">
             <padding>
-                <Insets left="30.0" />
+                <Insets bottom="10.0" left="30.0" right="10.0" top="10.0" />
             </padding>
 
             <children>
-                <Label text="Description:" GridPane.rowIndex="0" GridPane.columnIndex="0" />
-                <TextArea fx:id="_description" wrapText="true" editable="false" mouseTransparent="true" focusTraversable="false" GridPane.rowIndex="1" GridPane.columnIndex="0" />
+                <Label text="Description:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                <TextArea fx:id="_description" editable="false" focusTraversable="false" mouseTransparent="true" prefHeight="227.0" prefWidth="489.0" wrapText="true" GridPane.columnIndex="0" GridPane.rowIndex="1" />
 
-                <Label text="Creator Persons:" GridPane.rowIndex="2" GridPane.columnIndex="0">
+                <Label text="Creator Persons:" GridPane.columnIndex="0" GridPane.rowIndex="2">
                     <padding>
                         <Insets top="20" />
                     </padding>
                 </Label>
-                <TextArea fx:id="_publishersPersons" editable="false" mouseTransparent="true" focusTraversable="false" GridPane.rowIndex="3" GridPane.columnIndex="0" />
+                <TextArea fx:id="_publishersPersons" editable="false" focusTraversable="false" mouseTransparent="true" GridPane.columnIndex="0" GridPane.rowIndex="3" />
 
-                <Label text="Comment:" GridPane.rowIndex="4" GridPane.columnIndex="0">
+                <Label text="Comment:" GridPane.columnIndex="0" GridPane.rowIndex="4">
                     <padding>
                         <Insets top="20" />
                     </padding>
                 </Label>
-                <TextArea fx:id="_comment" editable="false" mouseTransparent="true" focusTraversable="false" GridPane.rowIndex="5" GridPane.columnIndex="0" />
+                <TextArea fx:id="_comment" editable="false" focusTraversable="false" mouseTransparent="true" GridPane.columnIndex="0" GridPane.rowIndex="5" />
             </children>
+         <columnConstraints>
+            <ColumnConstraints />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+            <RowConstraints />
+         </rowConstraints>
         </GridPane>
     </right>
+   <center>
+      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <GridPane scaleShape="false" snapToPixel="false">
+               <padding>
+                  <Insets left="30.0" />
+               </padding>
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="209.0" minWidth="95.0" prefWidth="95.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="233.0" minWidth="119.0" prefWidth="233.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints maxHeight="71.0" minHeight="34.0" prefHeight="65.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="88.0" minHeight="0.0" prefHeight="62.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="195.0" minHeight="0.0" prefHeight="77.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="259.0" minHeight="0.0" prefHeight="75.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="276.0" minHeight="90.0" prefHeight="92.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="193.0" minHeight="0.0" prefHeight="82.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Label text="Media Type:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                  <Label fx:id="_mediaType" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                  <Label text="Index:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                  <Label fx:id="_index" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label text="Available:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                  <Label fx:id="_available" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Label text="Title:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                  <Label fx:id="_title" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <Label text="Genre:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                  <Label fx:id="_genre" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <Label text="Published: " GridPane.columnIndex="0" GridPane.rowIndex="5" />
+                  <Label fx:id="_published" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+               </children>
+            </GridPane>
+            <TableView fx:id="_MemberTable" prefHeight="317.0" prefWidth="358.0">
+              <columns>
+                <TableColumn prefWidth="170.0" text="Index" />
+                <TableColumn prefWidth="187.0" text="Available" />
+              </columns>
+            </TableView>
+         </children>
+      </VBox>
+   </center>
 </BorderPane>
