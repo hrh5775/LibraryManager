@@ -40,7 +40,7 @@ public class LoanFacade extends BaseDatabaseFacade<Loan, LoanProperty> {
         LoanEntity entity = getEntityById(id);
 
         if (entity != null) {
-            ModelMapper mapper = MapperHelper.getMapper(); // @todo: somehow the mapping sometimes breaks - this seams like an hibernate issue, because the loanEntity properties are not set
+            ModelMapper mapper = MapperHelper.getMapper();
             return mapper.map(entity, Loan.class);
         }
 
@@ -109,6 +109,7 @@ public class LoanFacade extends BaseDatabaseFacade<Loan, LoanProperty> {
         MediaFacade mediaFacade = new MediaFacade(getCurrentSession());
         MediaEntity media = mediaFacade.getEntityById(mediaId);
         session.refresh(media); // @todo: perhaps use another solution
+        session.refresh(entity); // fixes a nasty bug which occurs on update and create
 
         return entity.getId();
     }
@@ -129,6 +130,7 @@ public class LoanFacade extends BaseDatabaseFacade<Loan, LoanProperty> {
         MediaFacade mediaFacade = new MediaFacade(getCurrentSession());
         MediaEntity media = mediaFacade.getEntityById(mediaId);
         session.refresh(media); // @todo: perhaps use another solution
+        session.refresh(entity); // fixes a nasty bug which occurs on update and create
 
         return entity.getId();
     }

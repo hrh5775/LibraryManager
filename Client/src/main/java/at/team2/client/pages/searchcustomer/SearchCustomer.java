@@ -232,7 +232,7 @@ public class SearchCustomer extends BasePage<Void, NullType, NullType, NullType>
                     _loanList.getValue().add(loanEntity);
                     final LoanDetailedDto finalLoanEntity = loanEntity;
 
-                    Platform.runLater(()-> showSuccessMessage("Success","Successfully extended the loan "+finalLoanEntity.getMediaMemberFullIndex()+" until " + finalLoanEntity.getEnd()));
+                    Platform.runLater(()-> showSuccessMessage("Success","Successfully extended the loan for the medium id '" + finalLoanEntity.getMediaMemberFullIndex() + "' until " + finalLoanEntity.getEnd()));
                 } else {
                     Platform.runLater(()-> showErrorMessage("Error","Cannot extend the loan.\nPlease take back the medium."));
                 }
@@ -256,7 +256,7 @@ public class SearchCustomer extends BasePage<Void, NullType, NullType, NullType>
 
                     if(loanRemoteObject.takeBackLoan(loanEntity) > 0) {
                         _loanList.getValue().remove(loanEntity);
-                        Platform.runLater(()-> showSuccessMessage("Success",loanEntity.getMediaMemberFullIndex() +" successfully returned"));
+                        Platform.runLater(()-> showSuccessMessage("Success","The Medium with the id '" + loanEntity.getMediaMemberFullIndex() + "' successfully returned"));
                     } else {
                         Platform.runLater(()-> showErrorMessage("Error","Could not return"));
                     }
