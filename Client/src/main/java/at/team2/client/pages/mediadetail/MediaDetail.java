@@ -134,7 +134,7 @@ public class MediaDetail extends BasePage<Void, NullType, NullType, NullType> {
         }
 
         _btnReservation.setVisible(checkPermissionForReservation());
-        _btnReservation.setDisable(!_media.getAvailable());
+        _btnReservation.setDisable(_media.getAvailable());
     }
 
     private boolean checkPermissionForReservation(){

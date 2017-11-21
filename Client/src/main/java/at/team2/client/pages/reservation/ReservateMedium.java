@@ -83,44 +83,41 @@ public class ReservateMedium extends BasePage<Void, NullType, NullType, NullType
 
     @FXML
     public void doReservate(){
-        ReservationDetailedDto reservation = new ReservationDetailedDto();
-        reservation.setMedia(_media);
-        reservation.setReservationDate(new Date(Calendar.getInstance().getTime().getTime()));
-        reservation.setClosed(false);
-        reservation.setCustomer(_customer);
-        _isLoading.setValue(true);
+        if(_reservateTask == null) {
+            ReservationDetailedDto reservation = new ReservationDetailedDto();
+            reservation.setMedia(_media);
+            reservation.setReservationDate(new Date(Calendar.getInstance().getTime().getTime()));
+            reservation.setClosed(false);
+            reservation.setCustomer(_customer);
+            _isLoading.setValue(true);
 
-        _reservateTask = startBackgroundTask(() -> {
-            try {
-                MainRemoteObjectInf remoteObject = RmiHelper.getSession();
-                ReservationRemoteObjectInf reservatedObject = remoteObject.getReservationRemoteObject();
-                //ReservationApplicationFacade (pkg Application) checks the permission for making reservation.
-                //Currently only account-roles ADMIN, BIBLIOTHEKAR and AUSLEIHE have this permission
-                //Login as <staff1/password> to be able to make reservations.
-                AccountDetailedDto account = AccountManager.getInstance().getAccount();
-                int result = reservatedObject.reserveMedia( _media , _customer, account);
+            _reservateTask = startBackgroundTask(() -> {
+                try {
+                    MainRemoteObjectInf remoteObject = RmiHelper.getSession();
+                    ReservationRemoteObjectInf reservatedObject = remoteObject.getReservationRemoteObject();
+                    //ReservationApplicationFacade (pkg Application) checks the permission for making reservation.
+                    //Currently only account-roles ADMIN, BIBLIOTHEKAR and AUSLEIHE have this permission
+                    //Login as <staff1/password> to be able to make reservations.
+                    AccountDetailedDto account = AccountManager.getInstance().getAccount();
+                    int result = reservatedObject.reserveMedia(_media, _customer, account);
 
-                if ( result == 0) {
-                    Platform.runLater(() -> showErrorMessage("This book was already reservated for ", _customer.getFirstName() + " " + _customer.getLastName()));
-                } else if( result < 0 ) {
-                    Platform.runLater(() -> showErrorMessage("Reservation failed for", _media.getTitle()));
-                } else if( result > 0 ){
-                    Platform.runLater(() -> showSuccessMessage("Reservation successful", "Reservation number: " + result));
+                    if (result == 0) {
+                        Platform.runLater(() -> showErrorMessage("This book was already reservated for ", _customer.getFirstName() + " " + _customer.getLastName()));
+                    } else if (result < 0) {
+                        Platform.runLater(() -> showErrorMessage("Reservation failed for", _media.getTitle()));
+                    } else if (result > 0) {
+                        Platform.runLater(() -> showSuccessMessage("Reservation successful", "Reservation number: " + result));
+                    }
+                } catch (Exception e) {
+                    Platform.runLater(() -> showRmiErrorMessage(e));
+                } finally {
+                    _reservateTask = null;
+                    Platform.runLater(() -> _isLoading.setValue(false));
                 }
-            } catch (Exception e) {
-                Platform.runLater(() -> showRmiErrorMessage(e));
-            } finally {
-                Platform.runLater(() -> _isLoading.setValue(false));
-            }
-        });
+            });
 
-        try {
-            _reservateTask.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            initializeCustomer();
         }
-
-        initializeCustomer();
     }
 
     @FXML

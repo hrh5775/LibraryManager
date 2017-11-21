@@ -159,35 +159,36 @@ public class SearchCustomer extends BasePage<Void, NullType, NullType, NullType>
 
     @FXML
     public void customerItemClicked(MouseEvent mouseEvent) {
-        Object entity = _customerTableView.getSelectionModel().getSelectedItem();
+        if(_showAdditionalInfoTask == null) {
+            Object entity = _customerTableView.getSelectionModel().getSelectedItem();
 
-        if(entity != null) {
-            CustomerSmallDto customer = (CustomerSmallDto) entity;
+            if (entity != null) {
+                CustomerSmallDto customer = (CustomerSmallDto) entity;
 
-            if(customer != null) {
-                _isAdditionalInfoLoading.setValue(true);
-                _additionalListViewVisible.setValue(false);
+                if (customer != null) {
+                    _isAdditionalInfoLoading.setValue(true);
+                    _additionalListViewVisible.setValue(false);
 
-                _showAdditionalInfoTask = startBackgroundTask(() -> {
-                    try {
-                        // @todo: perhaps use a cache
-                        MainRemoteObjectInf remoteObject = RmiHelper.getSession();
+                    _showAdditionalInfoTask = startBackgroundTask(() -> {
+                        try {
+                            // @todo: perhaps use a cache
+                            MainRemoteObjectInf remoteObject = RmiHelper.getSession();
 
-                        List<ReservationDetailedDto> reservationList = remoteObject.getReservationRemoteObject().getListByCustomer(customer.getId());
-                        _reservationList.set(new ObservableListWrapper<>(reservationList));
+                            List<ReservationDetailedDto> reservationList = remoteObject.getReservationRemoteObject().getListByCustomer(customer.getId());
+                            _reservationList.set(new ObservableListWrapper<>(reservationList));
 
-                        List<LoanDetailedDto> loanList = remoteObject.getLoanRemoteObject().getListByCustomer(customer.getId());
-                        _loanList.set(new ObservableListWrapper<>(loanList));
+                            List<LoanDetailedDto> loanList = remoteObject.getLoanRemoteObject().getListByCustomer(customer.getId());
+                            _loanList.set(new ObservableListWrapper<>(loanList));
 
-                        Platform.runLater(() -> _additionalListViewVisible.setValue(true));
-                    } catch (Exception e) {
-                        Platform.runLater(() -> showRmiErrorMessage(e));
-                    } finally {
-                        Platform.runLater(() -> {
-                            _isAdditionalInfoLoading.setValue(false);
-                        });
-                    }
-                });
+                            Platform.runLater(() -> _additionalListViewVisible.setValue(true));
+                        } catch (Exception e) {
+                            Platform.runLater(() -> showRmiErrorMessage(e));
+                        } finally {
+                            _showAdditionalInfoTask = null;
+                            Platform.runLater(() -> _isAdditionalInfoLoading.setValue(false));
+                        }
+                    });
+                }
             }
         }
     }

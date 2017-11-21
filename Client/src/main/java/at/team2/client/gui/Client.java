@@ -2,6 +2,7 @@ package at.team2.client.gui;
 
 import at.team2.client.pages.PageAction;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -18,7 +19,6 @@ import at.team2.client.configuration.Configuration;
 import at.team2.client.controls.sidebar.Sidebar;
 import at.team2.client.controls.slider.Slider;
 import at.team2.client.pages.BasePage;
-import at.team2.client.singletons.HomeScreenSingleton;
 import javax.lang.model.type.NullType;
 import java.net.URL;
 import java.util.Locale;
@@ -53,10 +53,6 @@ public class Client extends Application {
         mainContent.setFitToHeight(true);
         mainContent.setFitToWidth(true);
         BorderPane mainContentPane = new BorderPane();
-        mainContentPane.minHeightProperty().bind(mainContent.minHeightProperty());
-        mainContentPane.maxHeightProperty().bind(mainContent.heightProperty());
-        mainContentPane.minWidthProperty().bind(mainContent.minWidthProperty());
-        mainContentPane.maxWidthProperty().bind(mainContent.widthProperty());
 
         // inserting the mainContentPane in a group enables the scroll pane to get the size of its main content
         mainContent.setContent(new Group(mainContentPane));
@@ -72,6 +68,17 @@ public class Client extends Application {
         sidebar.setPrefWidth(80);
         resizeableMainContent.setOrientation(Orientation.HORIZONTAL);
         content.setCenter(resizeableMainContent);
+
+        Platform.runLater(() -> {
+            // set the size of the main content
+            ScrollBar verticalMainContentScrollbar = (ScrollBar) mainContent.lookup(".scroll-bar:vertical");
+            ScrollBar horizontalMainContentScrollbar = (ScrollBar) mainContent.lookup(".scroll-bar:horizontal");
+
+            mainContentPane.minHeightProperty().bind(mainContent.heightProperty().subtract(verticalMainContentScrollbar.widthProperty())); // @todo: the width is not always exact
+            mainContentPane.maxHeightProperty().bind(mainContent.heightProperty().subtract(verticalMainContentScrollbar.widthProperty()));
+            mainContentPane.minWidthProperty().bind(mainContent.widthProperty().subtract(horizontalMainContentScrollbar.widthProperty()));
+            mainContentPane.maxWidthProperty().bind(mainContent.widthProperty().subtract(horizontalMainContentScrollbar.widthProperty()));
+        });
 
         // set the menubar
         if (_configuration.getShowMenuBar()) {
@@ -164,4 +171,6 @@ public class Client extends Application {
 
         primaryStage.show();
     }
+
+
 }
