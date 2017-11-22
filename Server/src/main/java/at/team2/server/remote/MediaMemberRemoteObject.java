@@ -67,4 +67,12 @@ public class MediaMemberRemoteObject extends UnicastRemoteObject implements Medi
 
         return null;
     }
+
+    @Override
+    public List<MediaMemberSmallDto> getMediaMemberSmallListByMediaId(int id) throws RemoteException {
+        MediaMemberApplicationFacade facade = MediaMemberApplicationFacade.getInstance();
+        ModelMapper mapper = MapperHelper.getMapper();
+
+        return mapper.map(facade.getListByMediaId(id), typeSmall);
+    }
 }

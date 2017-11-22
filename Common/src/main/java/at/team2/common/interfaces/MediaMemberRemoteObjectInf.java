@@ -12,4 +12,5 @@ public interface MediaMemberRemoteObjectInf extends Remote {
     public List<MediaMemberSmallDto> getMediaMemberSmallList() throws RemoteException;
     public MediaMemberSmallDto getMediaMemberByIndex(String searchString) throws RemoteException;
     public MediaMemberDetailedDto getMediaMemberDetailedById(int id) throws RemoteException;
+    public List<MediaMemberSmallDto> getMediaMemberSmallListByMediaId(int id) throws RemoteException;
 }

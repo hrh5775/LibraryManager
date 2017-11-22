@@ -72,6 +72,8 @@ public class MediaMemberFacade extends BaseDatabaseFacade<MediaMember, MediaMemb
                 return "mediaByMediaId.title";
             case FULL_INDEX:
                 return "concat(mediaByMediaId.baseIndex, ' ', extendedIndex)";
+            case MEDIA__ID:
+                return "mediaId";
         }
 
         return null;

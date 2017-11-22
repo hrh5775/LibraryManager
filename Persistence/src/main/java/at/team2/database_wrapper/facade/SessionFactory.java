@@ -20,7 +20,12 @@ public class SessionFactory {
             }
         }
 
-        return _entityManagerFactory.createEntityManager();
+        _entityManagerFactory.getCache().evictAll();
+        EntityManager session = _entityManagerFactory.createEntityManager();
+        //manager.setProperty("javax.persistence.cache.storeMode", CacheStoreMode.REFRESH);
+        session.clear();
+
+        return session;
     }
 
     public static void close() {

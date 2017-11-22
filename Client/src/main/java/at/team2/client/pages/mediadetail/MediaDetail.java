@@ -14,6 +14,7 @@ import at.team2.common.dto.small.MediaMemberSmallDto;
 import at.team2.common.dto.small.MediaSmallDto;
 import at.team2.common.helper.RmiHelper;
 import at.team2.common.interfaces.MainRemoteObjectInf;
+import com.sun.javafx.collections.ObservableListWrapper;
 import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import javafx.fxml.FXML;
@@ -26,6 +27,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javax.lang.model.type.NullType;
+import java.util.LinkedList;
 
 public class MediaDetail extends BasePage<Void, NullType, NullType, NullType> {
     @FXML
@@ -48,7 +50,9 @@ public class MediaDetail extends BasePage<Void, NullType, NullType, NullType> {
     private TextArea _comment;
     @FXML
     private Button _btnReservation;
+    @FXML
     private TableView _memberTable;
+    @FXML
     private ListProperty<MediaMemberSmallDto> _memberList;
 
     private MediaSmallDto _tmpMedia;
@@ -80,6 +84,12 @@ public class MediaDetail extends BasePage<Void, NullType, NullType, NullType> {
             } else if(_media instanceof DvdDetailedDto) {
                 // cast the object to the specified type
             }
+
+            if(_media != null) {
+                ObservableListWrapper<MediaMemberSmallDto> list = new ObservableListWrapper<>(new LinkedList<>());
+                list.addAll(remoteObject.getMediaMemberRemoteObject().getMediaMemberSmallListByMediaId(_media.getMediaId()));
+                _memberList.set(list);
+            }
         } catch (Exception e) {
             Platform.runLater(() -> showRmiErrorMessage(e));
         }
@@ -89,6 +99,8 @@ public class MediaDetail extends BasePage<Void, NullType, NullType, NullType> {
     public void initializeView() {
         Parent parent = loadView(MediaDetail.class.getResource("media_detail.fxml"));
         setCenter(parent);
+
+        _memberTable.itemsProperty().bind(_memberList);
     }
 
     @Override

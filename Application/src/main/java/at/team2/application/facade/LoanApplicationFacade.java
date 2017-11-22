@@ -184,7 +184,7 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
                 int extendedCount;
 
                 if (loanEntity.getLastRenewalStart() != null) {
-                    extendedCount = (int) (((loanEntity.getEnd().getTime() - loanEntity.getStart().getTime()) / (weeksToExtend * loanTermMultiplier)));
+                    extendedCount = (int) (((loanEntity.getEnd().getTime() - loanEntity.getStart().getTime()) / (weeksToExtend * loanTermMultiplier)) - 1);
                 } else {
                     extendedCount = 0;
                 }

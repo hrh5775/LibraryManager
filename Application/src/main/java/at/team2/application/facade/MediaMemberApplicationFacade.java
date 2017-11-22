@@ -140,4 +140,11 @@ public class MediaMemberApplicationFacade extends BaseApplicationFacade<MediaMem
 
         return null;
     }
+
+    public List<MediaMember> getListByMediaId(int id) {
+        FilterConnector<MediaMemberProperty, MediaMemberProperty> connector = new FilterConnector<>(
+                new Filter<>(id, MediaMemberProperty.MEDIA__ID, MatchType.EQUALS, CaseType.IGNORE_CASE));
+
+        return _facade.filter(connector);
+    }
 }

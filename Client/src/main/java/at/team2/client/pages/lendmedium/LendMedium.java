@@ -188,7 +188,7 @@ public class LendMedium extends BasePage<Void, NullType, NullType, NullType> {
 
                     for (MediaMemberSmallDto item : _mediaList.get()) {
                         if (loanRemoteObject.loanMediaMember(item, _currentCustomer, account) <= 0) {
-                            Platform.runLater(() -> showErrorMessage("Loan failed for", item.getMedia().getTitle()));
+                            Platform.runLater(() -> showErrorMessage("Loan failed for", item.getMedia().getTitle() + "\n\n" + "Already loaned"));
                         } else {
                             count++;
                         }

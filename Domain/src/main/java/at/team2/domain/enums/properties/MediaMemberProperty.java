@@ -8,5 +8,6 @@ public enum MediaMemberProperty implements DomainEntityProperty {
     EXTENDED_INDEX,
 
     // additional properties
-    FULL_INDEX
+    FULL_INDEX,
+    MEDIA__ID
 }

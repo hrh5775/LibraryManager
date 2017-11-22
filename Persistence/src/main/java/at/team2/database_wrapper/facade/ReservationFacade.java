@@ -95,6 +95,7 @@ public class ReservationFacade extends BaseDatabaseFacade<Reservation, Reservati
         entity.setClosed(false);
         session.persist(entity);
         StoreHelper.storeEntities(session, transactionType);
+        session.refresh(entity);
 
         return entity.getId();
     }
@@ -107,6 +108,7 @@ public class ReservationFacade extends BaseDatabaseFacade<Reservation, Reservati
 
         session.merge(entity);
         StoreHelper.storeEntities(session, transactionType);
+        session.refresh(entity);
 
         return entity.getId();
     }

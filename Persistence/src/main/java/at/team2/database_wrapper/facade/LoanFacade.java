@@ -2,8 +2,10 @@ package at.team2.database_wrapper.facade;
 
 import at.team2.database_wrapper.common.FilterConnector;
 import at.team2.database_wrapper.entities.MediaEntity;
+import at.team2.database_wrapper.entities.MediaMemberEntity;
 import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.interfaces.BaseDatabaseFacade;
+import at.team2.domain.entities.MediaMember;
 import at.team2.domain.enums.properties.LoanProperty;
 import org.modelmapper.ModelMapper;
 import at.team2.database_wrapper.entities.LoanEntity;
@@ -25,6 +27,14 @@ public class LoanFacade extends BaseDatabaseFacade<Loan, LoanProperty> {
 
     public LoanFacade(EntityManager session) {
         super(session);
+    }
+
+    private LoanEntity getEntityByIdWithClosed(int id) {
+        EntityManager session = getCurrentSession();
+        Query query = session.createQuery("from LoanEntity where id = :id");
+        query.setParameter("id", id);
+
+        return getFirstOrDefault(query);
     }
 
     protected LoanEntity getEntityById(int id) {
@@ -105,11 +115,15 @@ public class LoanFacade extends BaseDatabaseFacade<Loan, LoanProperty> {
         StoreHelper.storeEntities(session, transactionType);
 
         MediaMemberFacade mediaMemberFacade = new MediaMemberFacade(getCurrentSession());
-        int mediaId =  mediaMemberFacade.getEntityById(entity.getMediaMemberId()).getMediaId();
+
+        MediaMemberEntity mediaMember =  mediaMemberFacade.getEntityById(entity.getMediaMemberId());
+        int mediaId = mediaMember.getMediaId();
+
         MediaFacade mediaFacade = new MediaFacade(getCurrentSession());
-        MediaEntity media = mediaFacade.getEntityById(mediaId);
-        session.refresh(media); // @todo: perhaps use another solution
-        session.refresh(entity); // fixes a nasty bug which occurs on update and create
+        session.refresh(entity); // @todo: fixes a nasty bug which occurs on update and create
+        mediaFacade.updateAvailability(mediaId, transactionType); // @todo: perhaps use another solution
+        /*session.refresh(mediaMember.getMediaByMediaId());
+        session.refresh(mediaMember);*/
 
         return entity.getId();
     }
@@ -126,11 +140,13 @@ public class LoanFacade extends BaseDatabaseFacade<Loan, LoanProperty> {
         StoreHelper.storeEntities(session, transactionType);
 
         MediaMemberFacade mediaMemberFacade = new MediaMemberFacade(getCurrentSession());
-        int mediaId =  mediaMemberFacade.getEntityById(entity.getMediaMemberId()).getMediaId();
+        MediaMemberEntity mediaMember =  mediaMemberFacade.getEntityById(entity.getMediaMemberId());
+        int mediaId = mediaMember.getMediaId();
         MediaFacade mediaFacade = new MediaFacade(getCurrentSession());
-        MediaEntity media = mediaFacade.getEntityById(mediaId);
-        session.refresh(media); // @todo: perhaps use another solution
-        session.refresh(entity); // fixes a nasty bug which occurs on update and create
+        mediaFacade.updateAvailability(mediaId, transactionType); // @todo: perhaps use another solution
+        //session.refresh(getEntityByIdWithClosed(entity.getId())); // @todo: fixes a nasty bug which occurs on update and create
+        /*session.refresh(mediaMember.getMediaByMediaId());
+        session.refresh(mediaMember);*/
 
         return entity.getId();
     }
@@ -155,8 +171,13 @@ public class LoanFacade extends BaseDatabaseFacade<Loan, LoanProperty> {
             query.executeUpdate();
 
             if(mediaEntity != null) {
-                session.refresh(mediaEntity); // @todo: perhaps use another solution
-                return StoreHelper.storeEntities(session, transactionType);
+                //session.refresh(mediaEntity); // @todo: perhaps use another solution
+                MediaFacade mediaFacade = new MediaFacade(getCurrentSession());
+
+                boolean result = StoreHelper.storeEntities(session, transactionType);
+                mediaFacade.updateAvailability(mediaEntity.getId(), transactionType); // @todo: perhaps use another solution
+
+                return result;
             }
         }
 
