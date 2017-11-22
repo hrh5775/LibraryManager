@@ -64,7 +64,7 @@ public class MediaCreatorPersonEntity {
         return result;
     }
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "mediaId", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     public MediaEntity getMediaByMediaId() {
         return mediaByMediaId;

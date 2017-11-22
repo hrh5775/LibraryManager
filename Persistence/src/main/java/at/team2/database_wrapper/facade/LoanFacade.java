@@ -1,11 +1,11 @@
 package at.team2.database_wrapper.facade;
 
 import at.team2.database_wrapper.common.FilterConnector;
+import at.team2.database_wrapper.entities.BookMetaEntity;
 import at.team2.database_wrapper.entities.MediaEntity;
 import at.team2.database_wrapper.entities.MediaMemberEntity;
 import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.interfaces.BaseDatabaseFacade;
-import at.team2.domain.entities.MediaMember;
 import at.team2.domain.enums.properties.LoanProperty;
 import org.modelmapper.ModelMapper;
 import at.team2.database_wrapper.entities.LoanEntity;
@@ -112,18 +112,18 @@ public class LoanFacade extends BaseDatabaseFacade<Loan, LoanProperty> {
         // do not let the user create a closed loan
         entity.setClosed(false);
         session.persist(entity);
-        StoreHelper.storeEntities(session, transactionType);
 
+        // @todo: perhaps in a other method
         MediaMemberFacade mediaMemberFacade = new MediaMemberFacade(getCurrentSession());
+        MediaMemberEntity mediaMemberEntity =  mediaMemberFacade.getEntityById(entity.getMediaMemberId());
 
-        MediaMemberEntity mediaMember =  mediaMemberFacade.getEntityById(entity.getMediaMemberId());
-        int mediaId = mediaMember.getMediaId();
+        MediaFacade mediaFacade = new MediaFacade(session);
+        MediaEntity mediaEntity = mediaFacade.getEntityById(mediaMemberEntity.getMediaId());
+        mediaEntity.setAvailable(mediaFacade.isAvailable(mediaEntity.getId(), true, session));
+        session.merge(mediaEntity);
 
-        MediaFacade mediaFacade = new MediaFacade(getCurrentSession());
-        session.refresh(entity); // @todo: fixes a nasty bug which occurs on update and create
-        mediaFacade.updateAvailability(mediaId, transactionType); // @todo: perhaps use another solution
-        /*session.refresh(mediaMember.getMediaByMediaId());
-        session.refresh(mediaMember);*/
+        StoreHelper.storeEntities(session, transactionType);
+        session.refresh(entity);
 
         return entity.getId();
     }
@@ -137,16 +137,24 @@ public class LoanFacade extends BaseDatabaseFacade<Loan, LoanProperty> {
         // the specific media and customer can't be changed in this method
         createReminder(entity, value, session);
         session.merge(entity);
+
+        // @todo: perhaps in a other method
+        MediaMemberFacade mediaMemberFacade = new MediaMemberFacade(session);
+        MediaMemberEntity mediaMemberEntity =  mediaMemberFacade.getEntityById(entity.getMediaMemberId());
+
+        MediaFacade mediaFacade = new MediaFacade(session);
+        MediaEntity mediaEntity = mediaFacade.getEntityById(mediaMemberEntity.getMediaId());
+        mediaEntity.setAvailable(mediaFacade.isAvailable(mediaEntity.getId(), false, session));
+        session.merge(mediaEntity);
+
         StoreHelper.storeEntities(session, transactionType);
 
-        MediaMemberFacade mediaMemberFacade = new MediaMemberFacade(getCurrentSession());
-        MediaMemberEntity mediaMember =  mediaMemberFacade.getEntityById(entity.getMediaMemberId());
-        int mediaId = mediaMember.getMediaId();
-        MediaFacade mediaFacade = new MediaFacade(getCurrentSession());
-        mediaFacade.updateAvailability(mediaId, transactionType); // @todo: perhaps use another solution
-        //session.refresh(getEntityByIdWithClosed(entity.getId())); // @todo: fixes a nasty bug which occurs on update and create
-        /*session.refresh(mediaMember.getMediaByMediaId());
-        session.refresh(mediaMember);*/
+        entity = getEntityByIdWithClosed(entity.getId()); // this avoids the problem of the context
+        session.refresh(entity);
+
+        BookFacade bookFacade = new BookFacade(session);
+        BookMetaEntity bookMetaEntity = bookFacade.getEntityByMediaId(mediaEntity.getId());
+        session.refresh(bookMetaEntity.getMediaByMediaId());
 
         return entity.getId();
     }
@@ -171,11 +179,12 @@ public class LoanFacade extends BaseDatabaseFacade<Loan, LoanProperty> {
             query.executeUpdate();
 
             if(mediaEntity != null) {
-                //session.refresh(mediaEntity); // @todo: perhaps use another solution
-                MediaFacade mediaFacade = new MediaFacade(getCurrentSession());
+                MediaFacade mediaFacade = new MediaFacade(session);
+                mediaEntity.setAvailable(mediaFacade.isAvailable(mediaEntity.getId(), false, session));
+                session.merge(mediaEntity);
 
                 boolean result = StoreHelper.storeEntities(session, transactionType);
-                mediaFacade.updateAvailability(mediaEntity.getId(), transactionType); // @todo: perhaps use another solution
+                session.refresh(mediaEntity);
 
                 return result;
             }

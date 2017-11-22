@@ -19,7 +19,7 @@ public abstract class BaseDatabaseFacade<V extends BaseDomainEntity, P extends D
     private EntityManager _session;
 
     public BaseDatabaseFacade() {
-        this(SessionFactory.getSession());
+        this(SessionFactory.createSession());
     }
 
     public BaseDatabaseFacade(EntityManager session) {

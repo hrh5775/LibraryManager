@@ -65,7 +65,7 @@ public class MediaTypeEntity {
         return result;
     }
 
-    @OneToMany(mappedBy = "mediaTypeByMediaTypeId")
+    @OneToMany(mappedBy = "mediaTypeByMediaTypeId", cascade = CascadeType.REFRESH)
     public Collection<MediaEntity> getMediaById() {
         return mediaById;
     }

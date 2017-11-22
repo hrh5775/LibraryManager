@@ -75,7 +75,7 @@ public class MediaMemberEntity {
         this.loansById = loansById;
     }
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "mediaId", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     public MediaEntity getMediaByMediaId() {
         return mediaByMediaId;

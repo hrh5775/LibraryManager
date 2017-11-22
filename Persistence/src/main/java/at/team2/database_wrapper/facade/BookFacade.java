@@ -35,6 +35,14 @@ public class BookFacade extends BaseDatabaseFacade<Book, BookProperty> {
         return getFirstOrDefault(query);
     }
 
+    protected BookMetaEntity getEntityByMediaId(int id) {
+        EntityManager session = getCurrentSession();
+        Query query = session.createQuery("from BookMetaEntity where mediaId = :id");
+        query.setParameter("id", id);
+
+        return getFirstOrDefault(query);
+    }
+
     @Override
     public Book getById(int id) {
         BookMetaEntity entity = getEntityById(id);
@@ -68,6 +76,8 @@ public class BookFacade extends BaseDatabaseFacade<Book, BookProperty> {
                 return "mediaByMediaId.title";
             case EDITION:
                 return "edition";
+            case MEDIA__ID:
+                return "mediaId";
             case MEDIA__TITLE:
                 return "mediaByMediaId.title";
             case MEDIA__PUBLISHER:
@@ -94,6 +104,14 @@ public class BookFacade extends BaseDatabaseFacade<Book, BookProperty> {
         Query query = getByFilter("from BookMetaEntity as book where", getCurrentSession(), filterConnector);
         List<BookMetaEntity> entities = query.getResultList();
         ModelMapper mapper = MapperHelper.getMapper();
+
+        /////
+        EntityManager session = getCurrentSession();
+
+        for(int i = 0; i < entities.size(); i++) {
+            session.refresh(entities.get(i).getMediaByMediaId());
+        }
+        // @todo: this is the only solution that works -> create a refresh method and call it in every required method
 
         return mapper.map(entities, type);
     }

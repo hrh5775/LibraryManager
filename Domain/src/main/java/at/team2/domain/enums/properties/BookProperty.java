@@ -8,6 +8,7 @@ public enum BookProperty implements DomainEntityProperty {
     MEDIA,
 
     // additional properties for table joins
+    MEDIA__ID,
     MEDIA__STANDARD_MEDIA_ID,
     MEDIA__TITLE,
     MEDIA__DESCRIPTION,

@@ -194,7 +194,7 @@ public class MediaEntity {
         return result;
     }
 
-    @OneToMany(mappedBy = "mediaByMediaId")
+    @OneToMany(mappedBy = "mediaByMediaId", cascade = CascadeType.REFRESH)
     public Collection<BookMetaEntity> getBookMetasById() {
         return bookMetasById;
     }
@@ -203,7 +203,7 @@ public class MediaEntity {
         this.bookMetasById = bookMetasById;
     }
 
-    @OneToMany(mappedBy = "mediaByMediaId")
+    @OneToMany(mappedBy = "mediaByMediaId", cascade = CascadeType.REFRESH)
     public Collection<DvdMetaEntity> getDvdMetasById() {
         return dvdMetasById;
     }
@@ -242,7 +242,7 @@ public class MediaEntity {
         this.publisherByPublisherId = publisherByPublisherId;
     }
 
-    @OneToMany(mappedBy = "mediaByMediaId")
+    @OneToMany(mappedBy = "mediaByMediaId", cascade = CascadeType.REFRESH)
     public Collection<MediaMemberEntity> getMediaMembersById() {
         return mediaMembersById;
     }

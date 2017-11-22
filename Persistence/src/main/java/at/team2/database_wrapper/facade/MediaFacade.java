@@ -1,8 +1,6 @@
 package at.team2.database_wrapper.facade;
 
 import at.team2.database_wrapper.common.FilterConnector;
-import at.team2.database_wrapper.entities.BookMetaEntity;
-import at.team2.database_wrapper.entities.DvdMetaEntity;
 import at.team2.database_wrapper.entities.MediaCreatorPersonEntity;
 import at.team2.database_wrapper.entities.MediaEntity;
 import at.team2.database_wrapper.enums.TransactionType;
@@ -15,7 +13,6 @@ import at.team2.domain.entities.CreatorPerson;
 import at.team2.domain.entities.Media;
 import org.modelmapper.TypeToken;
 
-import javax.persistence.Cache;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.lang.reflect.Type;
@@ -116,7 +113,6 @@ public class MediaFacade extends BaseDatabaseFacade<Media, MediaProperty> {
         StoreHelper.storeEntities(session, transactionType);
 
         createCreatorPersonEntities(entity, value, session);
-        updateAvailability(entity.getId(), transactionType);
 
         return entity.getId();
     }
@@ -130,11 +126,10 @@ public class MediaFacade extends BaseDatabaseFacade<Media, MediaProperty> {
         // a genre name, publisher name, reservation name can't be changed in this method, because this would affect
         // multiple media
         createEntities(entity, value, session);
+        createCreatorPersonEntities(entity, value, session);
+
         session.merge(entity);
         StoreHelper.storeEntities(session, transactionType);
-
-        createCreatorPersonEntities(entity, value, session);
-        updateAvailability(entity.getId(), transactionType);
 
         return entity.getId();
     }
@@ -187,15 +182,10 @@ public class MediaFacade extends BaseDatabaseFacade<Media, MediaProperty> {
         query.setParameter("id", id);
         query.executeUpdate();
 
-        boolean result = StoreHelper.storeEntities(session, transactionType);
-        updateAvailability(id, transactionType);
-
-        return result;
+        return StoreHelper.storeEntities(session, transactionType);
     }
 
-    protected void updateAvailability(int id, TransactionType transactionType) {
-        EntityManager session = getCurrentSession(transactionType);
-
+    protected boolean isAvailable(int id, boolean isCreate, EntityManager session) {
         Query query = session.createQuery("select count(*) from LoanEntity as l join MediaMemberEntity as m on l.mediaMemberId = m.id where m.mediaId = :id and l.closed = false");
         query.setParameter("id", id);
         query.getResultList();
@@ -205,46 +195,9 @@ public class MediaFacade extends BaseDatabaseFacade<Media, MediaProperty> {
         query.setParameter("id", id);
         long maxMediaMembers = getFirstOrDefault(query);
 
-        MediaEntity entity = getEntityById(id);
-        entity.setAvailable(openLoanCount < maxMediaMembers);
-        session.refresh(entity);
-        session.merge(entity);
+        openLoanCount += isCreate ? 1 : -1;
+        boolean isAvailable = openLoanCount < maxMediaMembers;
 
-        query = session.createQuery("from BookMetaEntity where mediaId = :mediaId");
-        query.setParameter("mediaId", id);
-        List<BookMetaEntity> bookMetaEntities = query.getResultList();
-
-        for(int i = 0; i < bookMetaEntities.size(); i++) {
-            session.refresh(bookMetaEntities.get(i));
-            session.refresh(bookMetaEntities.get(i).getMediaByMediaId());
-            bookMetaEntities.get(i).getMediaByMediaId().setAvailable(entity.getAvailable());
-            session.merge(bookMetaEntities.get(i));
-            session.merge(bookMetaEntities.get(i).getMediaByMediaId());
-        }
-
-        query = session.createQuery("from DvdMetaEntity where mediaId = :mediaId");
-        query.setParameter("mediaId", id);
-        List<DvdMetaEntity> dvdMetaEntities = query.getResultList();
-
-        for(int i = 0; i< dvdMetaEntities.size(); i++) {
-            session.refresh(dvdMetaEntities.get(i));
-            session.refresh(dvdMetaEntities.get(i).getMediaByMediaId());
-            dvdMetaEntities.get(i).getMediaByMediaId().setAvailable(entity.getAvailable());
-            session.merge(dvdMetaEntities.get(i));
-            session.merge(dvdMetaEntities.get(i).getMediaByMediaId());
-        }
-
-        /*session.getEntityManagerFactory().getCache().evict(BookMetaEntity.class);
-        session.getEntityManagerFactory().getCache().evict(DvdMetaEntity.class);
-        session.getEntityManagerFactory().getCache().evict(MediaEntity.class);
-        session.getEntityManagerFactory().getCache().evictAll();*/
-        /*session.clear();*/
-        session.flush();
-
-        StoreHelper.storeEntities(session, transactionType);
-
-        /*Cache cache = session.getEntityManagerFactory().getCache();
-        cache.evictAll(); // Evict data from all query regions.
-        session.close();*/
+        return isAvailable;
     }
 }

@@ -11,7 +11,7 @@ public class SessionFactory {
     private SessionFactory() {
     }
 
-    public static EntityManager getSession() throws HibernateException {
+    public static EntityManager createSession() throws HibernateException {
         if (_entityManagerFactory == null) {
             try {
                 _entityManagerFactory = Persistence.createEntityManagerFactory("library");

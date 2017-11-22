@@ -1,26 +1,38 @@
 package at.team2.database_wrapper.helper;
 
+import at.team2.database_wrapper.entities.LoanEntity;
 import at.team2.database_wrapper.entities.MediaCreatorPersonEntity;
 import at.team2.database_wrapper.entities.MediaEntity;
 import at.team2.domain.entities.CreatorPerson;
+import at.team2.domain.entities.Loan;
 import at.team2.domain.entities.Media;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
 
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
 public class MapperHelper {
-    private static ModelMapper modelMapper;
+    private static ModelMapper mapper;
 
     public static ModelMapper getMapper() {
-        if(modelMapper == null) {
-            modelMapper = new ModelMapper();
+        if(mapper == null) {
+            mapper = new ModelMapper();
             // http://modelmapper.org/user-manual/property-mapping/
             // https://www.programcreek.com/java-api-examples/index.php?api=org.modelmapper.ModelMapper
+
+            mapper.addMappings(new PropertyMap<Loan, LoanEntity>() {
+                @Override
+                protected void configure() {
+                    skip().setMediaMemberByMediaMemberId(null);
+                    skip().setCustomerByCustomerId(null);
+                    skip().setReminderByReminderId(null);
+                }
+            });
         }
 
-        return modelMapper;
+        return mapper;
     }
 
     public static Media map(MediaEntity entity) {

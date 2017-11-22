@@ -144,7 +144,7 @@ public class LoanEntity {
         this.customerByCustomerId = customerByCustomerId;
     }
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.REFRESH, CascadeType.MERGE})
     @JoinColumn(name = "mediaMemberId", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
     public MediaMemberEntity getMediaMemberByMediaMemberId() {
         return mediaMemberByMediaMemberId;
