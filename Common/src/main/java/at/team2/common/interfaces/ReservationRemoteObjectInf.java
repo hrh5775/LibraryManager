@@ -13,4 +13,5 @@ import java.util.List;
 public interface ReservationRemoteObjectInf extends Remote {
     public List<ReservationDetailedDto> getListByCustomer(int id) throws RemoteException;
     public int reserveMedia(MediaSmallDto mediaMember, CustomerSmallDto customer, AccountDetailedDto updater) throws RemoteException;
+    public boolean isReserved(MediaMemberSmallDto mediaMember) throws RemoteException;
 }

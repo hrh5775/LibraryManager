@@ -10,6 +10,8 @@ import at.team2.common.helper.RmiHelper;
 import at.team2.common.interfaces.LoanRemoteObjectInf;
 import at.team2.common.interfaces.MainRemoteObjectInf;
 import com.sun.javafx.collections.ObservableListWrapper;
+
+import at.team2.common.interfaces.ReservationRemoteObjectInf;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
@@ -221,20 +223,26 @@ public class SearchCustomer extends BasePage<Void, NullType, NullType, NullType>
 
         if(entity != null) {
             LoanDetailedDto loanEntity = (LoanDetailedDto) entity;
-
             try {
                 MainRemoteObjectInf remoteObject = RmiHelper.getSession();
                 LoanRemoteObjectInf loanRemote = remoteObject.getLoanRemoteObject();
+                ReservationRemoteObjectInf reserveRemote = remoteObject.getReservationRemoteObject();
+                if(!reserveRemote.isReserved(((LoanDetailedDto) entity).getMediaMember()))
+                {
+                    if(loanRemote.extendLoan(loanEntity, AccountManager.getInstance().getAccount())) {
+                        _loanList.getValue().remove(loanEntity);
+                        loanEntity = loanRemote.getLoanDetailedById(loanEntity.getId());
+                        _loanList.getValue().add(loanEntity);
+                        final LoanDetailedDto finalLoanEntity = loanEntity;
 
-                if(loanRemote.extendLoan(loanEntity, AccountManager.getInstance().getAccount())) {
-                    _loanList.getValue().remove(loanEntity);
-                    loanEntity = loanRemote.getLoanDetailedById(loanEntity.getId());
-                    _loanList.getValue().add(loanEntity);
-                    final LoanDetailedDto finalLoanEntity = loanEntity;
-
-                    Platform.runLater(()-> showSuccessMessage("Success","Successfully extended the loan for the medium id '" + finalLoanEntity.getMediaMemberFullIndex() + "' until " + finalLoanEntity.getEnd()));
-                } else {
-                    Platform.runLater(()-> showErrorMessage("Error","Cannot extend the loan.\nPlease take back the medium."));
+                        Platform.runLater(()-> showSuccessMessage("Success","Successfully extended the loan for the medium id '" + finalLoanEntity.getMediaMemberFullIndex() + "' until " + finalLoanEntity.getEnd()));
+                    } else {
+                        Platform.runLater(()-> showErrorMessage("Error","Cannot extend the loan.\nPlease take back the medium."));
+                    }
+                }
+                else
+                {
+                    Platform.runLater(() -> showErrorMessage("Error","Cannot extend the loan.\n The Media is currently reserved"));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
