@@ -18,15 +18,23 @@ import java.util.List;
 public class DvdRemoteObject extends UnicastRemoteObject implements DvdRemoteObjectInf {
     private static Type typeSmall = new TypeToken<List<DvdSmallDto>>() {}.getType();
     private static Type typeCreatorPersonSmall = new TypeToken<List<CreatorPersonSmallDto>>() {}.getType();
-
+    private DvdApplicationFacade _dvdFacade;
 
     public DvdRemoteObject() throws RemoteException {
         super(0);
     }
 
+    private DvdApplicationFacade getDvdFacade() {
+        if(_dvdFacade == null) {
+            _dvdFacade = new DvdApplicationFacade();
+        }
+
+        return _dvdFacade;
+    }
+
     @Override
     public DvdSmallDto getDvdSmallById(int id) throws RemoteException {
-        DvdApplicationFacade facade = DvdApplicationFacade.getInstance();
+        DvdApplicationFacade facade = getDvdFacade();
         ModelMapper mapper = MapperHelper.getMapper();
         Dvd entity = facade.getById(id);
 
@@ -39,7 +47,7 @@ public class DvdRemoteObject extends UnicastRemoteObject implements DvdRemoteObj
 
     @Override
     public List<DvdSmallDto> getDvdSmallList() throws RemoteException {
-        DvdApplicationFacade facade = DvdApplicationFacade.getInstance();
+        DvdApplicationFacade facade = getDvdFacade();
         ModelMapper mapper = MapperHelper.getMapper();
 
         return mapper.map(facade.getList(), typeSmall);
@@ -47,7 +55,7 @@ public class DvdRemoteObject extends UnicastRemoteObject implements DvdRemoteObj
 
     @Override
     public List<DvdSmallDto> getDvdSmallList(String searchString) throws RemoteException {
-        DvdApplicationFacade facade =  DvdApplicationFacade.getInstance();
+        DvdApplicationFacade facade = getDvdFacade();
         ModelMapper mapper = MapperHelper.getMapper();
 
         return mapper.map(facade.search(searchString), typeSmall);
@@ -55,7 +63,7 @@ public class DvdRemoteObject extends UnicastRemoteObject implements DvdRemoteObj
 
     @Override
     public DvdDetailedDto getDvdDetailedById(int id) throws RemoteException {
-        DvdApplicationFacade facade = DvdApplicationFacade.getInstance();
+        DvdApplicationFacade facade = getDvdFacade();
         ModelMapper mapper = MapperHelper.getMapper();
         Dvd entity = facade.getById(id);
 
@@ -66,5 +74,14 @@ public class DvdRemoteObject extends UnicastRemoteObject implements DvdRemoteObj
         }
 
         return null;
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        if(_dvdFacade != null) {
+            _dvdFacade.closeSession();
+        }
+
+        super.finalize();
     }
 }

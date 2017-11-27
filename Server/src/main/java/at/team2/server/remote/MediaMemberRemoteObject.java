@@ -16,14 +16,23 @@ import java.util.List;
 
 public class MediaMemberRemoteObject extends UnicastRemoteObject implements MediaMemberRemoteObjectInf {
     private static Type typeSmall = new TypeToken<List<MediaMemberSmallDto>>() {}.getType();
+    private MediaMemberApplicationFacade _mediaMemberFacade;
 
     public MediaMemberRemoteObject() throws RemoteException {
         super(0);
     }
 
+    private MediaMemberApplicationFacade getMediamemberFacade() {
+        if(_mediaMemberFacade == null) {
+            _mediaMemberFacade = new MediaMemberApplicationFacade();
+        }
+
+        return _mediaMemberFacade;
+    }
+
     @Override
     public MediaMemberSmallDto getMediaMemberSmallById(int id) throws RemoteException {
-        MediaMemberApplicationFacade facade = MediaMemberApplicationFacade.getInstance();
+        MediaMemberApplicationFacade facade = getMediamemberFacade();
         ModelMapper mapper = MapperHelper.getMapper();
         MediaMember entity = facade.getById(id);
 
@@ -36,7 +45,7 @@ public class MediaMemberRemoteObject extends UnicastRemoteObject implements Medi
 
     @Override
     public List<MediaMemberSmallDto> getMediaMemberSmallList() throws RemoteException {
-        MediaMemberApplicationFacade facade = MediaMemberApplicationFacade.getInstance();
+        MediaMemberApplicationFacade facade = getMediamemberFacade();
         ModelMapper mapper = MapperHelper.getMapper();
 
         return mapper.map(facade.getList(), typeSmall);
@@ -44,7 +53,7 @@ public class MediaMemberRemoteObject extends UnicastRemoteObject implements Medi
 
     @Override
     public MediaMemberSmallDto getMediaMemberByIndex(String searchString) throws RemoteException {
-        MediaMemberApplicationFacade facade = MediaMemberApplicationFacade.getInstance();
+        MediaMemberApplicationFacade facade = getMediamemberFacade();
         MediaMember entity = facade.getMediaMemberByIndex(searchString);
 
         if(entity != null) {
@@ -57,7 +66,7 @@ public class MediaMemberRemoteObject extends UnicastRemoteObject implements Medi
 
     @Override
     public MediaMemberDetailedDto getMediaMemberDetailedById(int id) throws RemoteException {
-        MediaMemberApplicationFacade facade = MediaMemberApplicationFacade.getInstance();
+        MediaMemberApplicationFacade facade = getMediamemberFacade();
         ModelMapper mapper = MapperHelper.getMapper();
         MediaMember entity = facade.getById(id);
 
@@ -70,9 +79,18 @@ public class MediaMemberRemoteObject extends UnicastRemoteObject implements Medi
 
     @Override
     public List<MediaMemberSmallDto> getMediaMemberSmallListByMediaId(int id) throws RemoteException {
-        MediaMemberApplicationFacade facade = MediaMemberApplicationFacade.getInstance();
+        MediaMemberApplicationFacade facade = getMediamemberFacade();
         ModelMapper mapper = MapperHelper.getMapper();
 
         return mapper.map(facade.getListByMediaId(id), typeSmall);
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        if(_mediaMemberFacade != null) {
+            _mediaMemberFacade.closeSession();
+        }
+
+        super.finalize();
     }
 }

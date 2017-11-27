@@ -178,9 +178,11 @@ public class SearchCustomer extends BasePage<Void, NullType, NullType, NullType>
                             _reservationList.set(new ObservableListWrapper<>(reservationList));
 
                             List<LoanDetailedDto> loanList = remoteObject.getLoanRemoteObject().getListByCustomer(customer.getId());
-                            _loanList.set(new ObservableListWrapper<>(loanList));
 
-                            Platform.runLater(() -> _additionalListViewVisible.setValue(true));
+                            Platform.runLater(() -> {
+                                _loanList.set(new ObservableListWrapper<>(loanList));
+                                _additionalListViewVisible.setValue(true);
+                            });
                         } catch (Exception e) {
                             Platform.runLater(() -> showRmiErrorMessage(e));
                         } finally {
@@ -228,6 +230,9 @@ public class SearchCustomer extends BasePage<Void, NullType, NullType, NullType>
 
                 if(loanRemote.extendLoan(loanEntity, AccountManager.getInstance().getAccount())) {
                     _loanList.getValue().remove(loanEntity);
+
+                    // renew the main object after changing entries in the database
+                    loanRemote = remoteObject.getLoanRemoteObject();
                     loanEntity = loanRemote.getLoanDetailedById(loanEntity.getId());
                     _loanList.getValue().add(loanEntity);
                     final LoanDetailedDto finalLoanEntity = loanEntity;

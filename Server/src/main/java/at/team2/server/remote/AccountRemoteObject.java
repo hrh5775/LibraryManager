@@ -11,12 +11,22 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
 public class AccountRemoteObject extends UnicastRemoteObject implements AccountRemoteObjectInf {
+    private AccountApplicationFacade _accountFacade;
+
     protected AccountRemoteObject() throws RemoteException {
         super(0);
     }
 
+    private AccountApplicationFacade getAccountFacade() {
+        if(_accountFacade == null) {
+            _accountFacade = new AccountApplicationFacade();
+        }
+
+        return _accountFacade;
+    }
+
     public AccountDetailedDto login(String userName, String password) throws RemoteException {
-        AccountApplicationFacade facade = AccountApplicationFacade.getInstance();
+        AccountApplicationFacade facade = getAccountFacade();
         ModelMapper mapper = MapperHelper.getMapper();
         Account entity = facade.login(userName, password);
 
@@ -29,9 +39,18 @@ public class AccountRemoteObject extends UnicastRemoteObject implements AccountR
 
     @Override
     public void logout(AccountDetailedDto account) throws RemoteException {
-        AccountApplicationFacade facade = AccountApplicationFacade.getInstance();
+        AccountApplicationFacade facade = getAccountFacade();
         ModelMapper mapper = MapperHelper.getMapper();
         Account entity = mapper.map(account, Account.class);
         facade.logout(entity.getId());
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        if(_accountFacade != null) {
+            _accountFacade.closeSession();
+        }
+
+        super.finalize();
     }
 }

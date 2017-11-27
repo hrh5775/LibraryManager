@@ -101,10 +101,6 @@ public class MediaMemberFacade extends BaseDatabaseFacade<MediaMember, MediaMemb
         session.persist(entity);
         StoreHelper.storeEntities(session, transactionType);
 
-        MediaFacade mediaFacade = new MediaFacade(getCurrentSession());
-        MediaEntity mediaEntity =  mediaFacade.getEntityById(entity.getMediaId());
-        session.refresh(mediaEntity); // @todo: perhaps use another solution
-
         return entity.getId();
     }
 
@@ -117,10 +113,6 @@ public class MediaMemberFacade extends BaseDatabaseFacade<MediaMember, MediaMemb
         createLoans(entity, session);
         session.merge(entity);
         StoreHelper.storeEntities(session, transactionType);
-
-        MediaFacade mediaFacade = new MediaFacade(getCurrentSession());
-        MediaEntity mediaEntity =  mediaFacade.getEntityById(entity.getMediaId());
-        session.refresh(mediaEntity); // @todo: perhaps use another solution
 
         return entity.getId();
     }
@@ -152,7 +144,6 @@ public class MediaMemberFacade extends BaseDatabaseFacade<MediaMember, MediaMemb
             query.executeUpdate();
 
             if(mediaEntity != null) {
-                session.refresh(mediaEntity); // @todo: perhaps use another solution
                 return StoreHelper.storeEntities(session, transactionType);
             }
         }

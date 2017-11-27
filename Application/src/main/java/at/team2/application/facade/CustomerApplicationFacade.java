@@ -16,7 +16,6 @@ import at.team2.database_wrapper.enums.TransactionType;
 import at.team2.database_wrapper.facade.CustomerFacade;
 import at.team2.domain.entities.Customer;
 import at.team2.domain.enums.properties.CustomerProperty;
-import at.team2.domain.interfaces.DomainEntityProperty;
 import javafx.util.Pair;
 import org.modelmapper.ModelMapper;
 
@@ -24,34 +23,38 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class CustomerApplicationFacade extends BaseApplicationFacade<Customer, CustomerDetailedDto, AccountDetailedDto, CustomerProperty> {
-    private static CustomerApplicationFacade _instance;
-    private CustomerFacade _facade;
+    private CustomerFacade _customerFacade;
 
-    public static CustomerApplicationFacade getInstance() {
-        if(_instance == null) {
-            _instance = new CustomerApplicationFacade();
-            _instance._facade = new CustomerFacade();
-        }
-
-        return _instance;
+    public CustomerApplicationFacade() {
+        super();
     }
 
-    private CustomerApplicationFacade() {
+    private CustomerFacade getCustomerFacade() {
+        if(_customerFacade == null) {
+            _customerFacade = new CustomerFacade(getSession());
+        }
+
+        return _customerFacade;
     }
 
     @Override
     public Customer getById(int id) {
-        return _facade.getById(id);
+        return getCustomerFacade().getById(id);
     }
 
     @Override
     public List<Customer> getList() {
-        return _facade.getList();
+        return getCustomerFacade().getList();
     }
 
     @Override
     public void closeSession() {
-        _facade.closeSession();
+        if(_customerFacade != null) {
+            _customerFacade.closeSession();
+            _customerFacade = null;
+        }
+
+        super.closeSession();
     }
 
     @Override
@@ -63,7 +66,7 @@ public class CustomerApplicationFacade extends BaseApplicationFacade<Customer, C
             List<Pair<CustomerProperty, String>> list = entity.validate();
 
             if (list.size() == 0) {
-                return new Pair<>(_facade.add(entity, TransactionType.AUTO_COMMIT), list);
+                return new Pair<>(getCustomerFacade().add(entity, TransactionType.AUTO_COMMIT), list);
             }
 
             return new Pair<>(0, new LinkedList<>());
@@ -90,7 +93,7 @@ public class CustomerApplicationFacade extends BaseApplicationFacade<Customer, C
             List<Pair<CustomerProperty, String>> list = entity.validate();
 
             if (list.size() == 0) {
-                return new Pair<>(_facade.update(entity, TransactionType.AUTO_COMMIT), list);
+                return new Pair<>(getCustomerFacade().update(entity, TransactionType.AUTO_COMMIT), list);
             }
 
             return new Pair<>(0, new LinkedList<>());
@@ -107,10 +110,11 @@ public class CustomerApplicationFacade extends BaseApplicationFacade<Customer, C
 
         if(updater != null &&
                 (RoleHelper.hasRole(updater, Role.ADMIN))) {
-            List<Pair<CustomerProperty, String>> list = _facade.getById(id).validate();
+            CustomerFacade customerFacade = getCustomerFacade();
+            List<Pair<CustomerProperty, String>> list = customerFacade.getById(id).validate();
 
             if (list.size() == 0) {
-                return new Pair<>(_facade.delete(id, TransactionType.AUTO_COMMIT), list);
+                return new Pair<>(customerFacade.delete(id, TransactionType.AUTO_COMMIT), list);
             }
 
             return new Pair<>(false, new LinkedList<>());
@@ -147,6 +151,6 @@ public class CustomerApplicationFacade extends BaseApplicationFacade<Customer, C
             )
         );
 
-        return _facade.filter(connector);
+        return getCustomerFacade().filter(connector);
     }
 }

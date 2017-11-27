@@ -20,42 +20,44 @@ import at.team2.domain.entities.*;
 import at.team2.domain.enums.properties.ReservationProperty;
 import javafx.util.Pair;
 import org.modelmapper.ModelMapper;
-
-import javax.ws.rs.NotSupportedException;
 import java.sql.Date;
 import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
 public class ReservationApplicationFacade extends BaseApplicationFacade<Reservation, ReservationDetailedDto, AccountDetailedDto, ReservationProperty> {
-    private static ReservationApplicationFacade _instance;
-    private ReservationFacade _facade;
+    private ReservationFacade _reservationFacade;
 
-    private ReservationApplicationFacade() {
+    public ReservationApplicationFacade() {
+        super();
     }
 
-    public static ReservationApplicationFacade getInstance() {
-        if(_instance == null) {
-            _instance = new ReservationApplicationFacade();
-            _instance._facade = new ReservationFacade();
+    private ReservationFacade getReservationFacade() {
+        if(_reservationFacade == null) {
+            _reservationFacade = new ReservationFacade(getSession());
         }
 
-        return _instance;
+        return _reservationFacade;
     }
 
     @Override
     public Reservation getById(int id) {
-        return _facade.getById(id);
+        return getReservationFacade().getById(id);
     }
 
     @Override
     public List<Reservation> getList() {
-        return _facade.getList();
+        return getReservationFacade().getList();
     }
 
     @Override
     public void closeSession() {
-        _facade.closeSession();
+        if(_reservationFacade != null) {
+            _reservationFacade.closeSession();
+            _reservationFacade = null;
+        }
+
+        super.closeSession();
     }
 
     @Override
@@ -71,7 +73,7 @@ public class ReservationApplicationFacade extends BaseApplicationFacade<Reservat
             List<Pair<ReservationProperty, String>> list = entity.validate();
 
             if (list.size() == 0) {
-                return new Pair<>(_facade.add(entity, TransactionType.AUTO_COMMIT), list);
+                return new Pair<>(getReservationFacade().add(entity, TransactionType.AUTO_COMMIT), list);
             }
 
             return new Pair<>(0, new LinkedList<>());
@@ -95,7 +97,7 @@ public class ReservationApplicationFacade extends BaseApplicationFacade<Reservat
             List<Pair<ReservationProperty, String>> list = entity.validate();
 
             if (list.size() == 0) {
-                return new Pair<>(_facade.update(entity, TransactionType.AUTO_COMMIT), list);
+                return new Pair<>(getReservationFacade().update(entity, TransactionType.AUTO_COMMIT), list);
             }
 
             return new Pair<>(0, new LinkedList<>());
@@ -114,10 +116,11 @@ public class ReservationApplicationFacade extends BaseApplicationFacade<Reservat
                 (RoleHelper.hasRole(updater, Role.ADMIN) ||
                 RoleHelper.hasRole(updater, Role.BIBLIOTHEKAR) ||
                 RoleHelper.hasRole(updater, Role.AUSLEIHE))) {
-            List<Pair<ReservationProperty, String>> list = _facade.getById(id).validate();
+            ReservationFacade reservationFacade = getReservationFacade();
+            List<Pair<ReservationProperty, String>> list = reservationFacade.getById(id).validate();
 
             if (list.size() == 0) {
-                return new Pair<>(_facade.delete(id, TransactionType.AUTO_COMMIT), list);
+                return new Pair<>(reservationFacade.delete(id, TransactionType.AUTO_COMMIT), list);
             }
 
             return new Pair<>(false, new LinkedList<>());
@@ -136,8 +139,9 @@ public class ReservationApplicationFacade extends BaseApplicationFacade<Reservat
                         RoleHelper.hasRole(updater, Role.BIBLIOTHEKAR) ||
                         RoleHelper.hasRole(updater, Role.AUSLEIHE))) {
 
+            ReservationFacade reservationFacade = getReservationFacade();
             // do not add duplicated entries
-            List<Reservation> currentReservations = _facade.filter(new FilterConnector<>(
+            List<Reservation> currentReservations = reservationFacade.filter(new FilterConnector<>(
                     new Filter<>(media.getMediaId(), ReservationProperty.MEDIA__ID, MatchType.EQUALS, CaseType.NORMAL),
                     ConnectorType.AND,
                     new Filter<>(customer.getId(), ReservationProperty.CUSTOMER__ID, MatchType.EQUALS, CaseType.NORMAL)
@@ -153,7 +157,7 @@ public class ReservationApplicationFacade extends BaseApplicationFacade<Reservat
                 reservation.setMedia(tmpMedia);
                 reservation.setReservationDate(new Date(Calendar.getInstance().getTime().getTime()));
 
-                return _facade.add(reservation, TransactionType.AUTO_COMMIT);
+                return reservationFacade.add(reservation, TransactionType.AUTO_COMMIT);
             }
 
             // there are pending reservations for this media and this customer
@@ -170,6 +174,6 @@ public class ReservationApplicationFacade extends BaseApplicationFacade<Reservat
                 new Filter<>(id, ReservationProperty.CUSTOMER__ID, MatchType.EQUALS, CaseType.NORMAL)
         );
 
-        return _facade.filter(connector);
+        return getReservationFacade().filter(connector);
     }
 }

@@ -23,34 +23,38 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class DvdApplicationFacade extends BaseApplicationFacade<Dvd, DvdDetailedDto, AccountDetailedDto, DvdProperty> {
-    private static DvdApplicationFacade _instance;
-    private DvdFacade _facade;
+    private DvdFacade _dvdFacade;
 
-    public static DvdApplicationFacade getInstance() {
-        if(_instance == null) {
-            _instance = new DvdApplicationFacade();
-            _instance._facade = new DvdFacade();
-        }
-
-        return _instance;
+    public DvdApplicationFacade() {
+        super();
     }
 
-    private DvdApplicationFacade() {
+    private DvdFacade getDvdFacade() {
+        if(_dvdFacade == null) {
+            _dvdFacade = new DvdFacade(getSession());
+        }
+
+        return _dvdFacade;
     }
 
     @Override
     public Dvd getById(int id) {
-        return _facade.getById(id);
+        return getDvdFacade().getById(id);
     }
 
     @Override
     public List<Dvd> getList() {
-        return _facade.getList();
+        return getDvdFacade().getList();
     }
 
     @Override
     public void closeSession() {
-        _facade.closeSession();
+        if(_dvdFacade != null) {
+            _dvdFacade.closeSession();
+            _dvdFacade = null;
+        }
+
+        super.closeSession();
     }
 
     @Override
@@ -67,7 +71,7 @@ public class DvdApplicationFacade extends BaseApplicationFacade<Dvd, DvdDetailed
             List<Pair<DvdProperty, String>> list = entity.validate();
 
             if (list.size() == 0) {
-                return new Pair<>(_facade.add(entity, TransactionType.AUTO_COMMIT), list);
+                return new Pair<>(getDvdFacade().add(entity, TransactionType.AUTO_COMMIT), list);
             }
 
             return new Pair<>(0, new LinkedList<>());
@@ -92,7 +96,7 @@ public class DvdApplicationFacade extends BaseApplicationFacade<Dvd, DvdDetailed
             List<Pair<DvdProperty, String>> list = entity.validate();
 
             if (list.size() == 0) {
-                return new Pair<>(_facade.update(entity, TransactionType.AUTO_COMMIT), list);
+                return new Pair<>(getDvdFacade().update(entity, TransactionType.AUTO_COMMIT), list);
             }
 
             return new Pair<>(0, new LinkedList<>());
@@ -112,10 +116,11 @@ public class DvdApplicationFacade extends BaseApplicationFacade<Dvd, DvdDetailed
                 RoleHelper.hasRole(updater, Role.DATENPFLEGER) ||
                 RoleHelper.hasRole(updater, Role.OPERATOR) ||
                 RoleHelper.hasRole(updater, Role.BIBLIOTHEKAR))) {
-            List<Pair<DvdProperty, String>> list = _facade.getById(id).validate();
+            DvdFacade dvdFacade = getDvdFacade();
+            List<Pair<DvdProperty, String>> list = dvdFacade.getById(id).validate();
 
             if (list.size() == 0) {
-                return new Pair<>(_facade.delete(id, TransactionType.AUTO_COMMIT), list);
+                return new Pair<>(dvdFacade.delete(id, TransactionType.AUTO_COMMIT), list);
             }
 
             return new Pair<>(false, new LinkedList<>());
@@ -143,7 +148,7 @@ public class DvdApplicationFacade extends BaseApplicationFacade<Dvd, DvdDetailed
             }
         }*/
 
-        return _facade.filter(getFilterConnector(searchString));
+        return getDvdFacade().filter(getFilterConnector(searchString));
     }
 
     private FilterConnector<DvdProperty, DvdProperty> getFilterConnector(String searchString) {

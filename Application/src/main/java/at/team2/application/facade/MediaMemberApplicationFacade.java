@@ -4,14 +4,11 @@ import at.team2.application.SessionManager;
 import at.team2.application.enums.Role;
 import at.team2.application.helper.RoleHelper;
 import at.team2.common.dto.detailed.AccountDetailedDto;
-import at.team2.common.dto.detailed.MediaMemberDetailedDto;
 import at.team2.database_wrapper.common.Filter;
 import at.team2.database_wrapper.common.FilterConnector;
 import at.team2.database_wrapper.enums.CaseType;
-import at.team2.database_wrapper.enums.ConnectorType;
 import at.team2.database_wrapper.enums.MatchType;
 import org.modelmapper.ModelMapper;
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -25,34 +22,38 @@ import at.team2.domain.enums.properties.MediaMemberProperty;
 import javafx.util.Pair;
 
 public class MediaMemberApplicationFacade extends BaseApplicationFacade<MediaMember, MediaMemberSmallDto, AccountDetailedDto, MediaMemberProperty> {
-    private static MediaMemberApplicationFacade _instance;
-    private MediaMemberFacade _facade;
+    private MediaMemberFacade _mediaMemberFacade;
 
-    private MediaMemberApplicationFacade() {
+    public MediaMemberApplicationFacade() {
+        super();
     }
 
-    public static MediaMemberApplicationFacade getInstance() {
-        if(_instance == null) {
-            _instance = new MediaMemberApplicationFacade();
-            _instance._facade = new MediaMemberFacade();
+    private MediaMemberFacade getMediaMemberFacade() {
+        if(_mediaMemberFacade == null) {
+            _mediaMemberFacade = new MediaMemberFacade(getSession());
         }
 
-        return _instance;
+        return _mediaMemberFacade;
     }
 
     @Override
     public MediaMember getById(int id) {
-        return _facade.getById(id);
+        return getMediaMemberFacade().getById(id);
     }
 
     @Override
     public List<MediaMember> getList() {
-        return _facade.getList();
+        return getMediaMemberFacade().getList();
     }
 
     @Override
     public void closeSession() {
-        _facade.closeSession();
+        if(_mediaMemberFacade != null) {
+            _mediaMemberFacade.closeSession();
+            _mediaMemberFacade = null;
+        }
+
+        super.closeSession();
     }
 
     @Override
@@ -69,7 +70,7 @@ public class MediaMemberApplicationFacade extends BaseApplicationFacade<MediaMem
             List<Pair<MediaMemberProperty, String>> list = entity.validate();
 
             if (list.size() == 0) {
-                return new Pair<>(_facade.add(entity, TransactionType.AUTO_COMMIT), list);
+                return new Pair<>(getMediaMemberFacade().add(entity, TransactionType.AUTO_COMMIT), list);
             }
 
             return new Pair<>(0, new LinkedList<>());
@@ -94,7 +95,7 @@ public class MediaMemberApplicationFacade extends BaseApplicationFacade<MediaMem
             List<Pair<MediaMemberProperty, String>> list = entity.validate();
 
             if (list.size() == 0) {
-                return new Pair<>(_facade.update(entity, TransactionType.AUTO_COMMIT), list);
+                return new Pair<>(getMediaMemberFacade().update(entity, TransactionType.AUTO_COMMIT), list);
             }
 
             return new Pair<>(0, new LinkedList<>());
@@ -114,10 +115,11 @@ public class MediaMemberApplicationFacade extends BaseApplicationFacade<MediaMem
                 RoleHelper.hasRole(updater, Role.DATENPFLEGER) ||
                 RoleHelper.hasRole(updater, Role.OPERATOR) ||
                 RoleHelper.hasRole(updater, Role.BIBLIOTHEKAR))) {
-            List<Pair<MediaMemberProperty, String>> list = _facade.getById(id).validate();
+            MediaMemberFacade mediaMemberFacade = getMediaMemberFacade();
+            List<Pair<MediaMemberProperty, String>> list = mediaMemberFacade.getById(id).validate();
 
             if (list.size() == 0) {
-                return new Pair<>(_facade.delete(id, TransactionType.AUTO_COMMIT), list);
+                return new Pair<>(mediaMemberFacade.delete(id, TransactionType.AUTO_COMMIT), list);
             }
 
             return new Pair<>(false, new LinkedList<>());
@@ -132,7 +134,7 @@ public class MediaMemberApplicationFacade extends BaseApplicationFacade<MediaMem
         FilterConnector<MediaMemberProperty, MediaMemberProperty> connector = new FilterConnector<>(
                 new Filter<>(index, MediaMemberProperty.FULL_INDEX, MatchType.EQUALS, CaseType.IGNORE_CASE));
 
-        List<MediaMember> list = _facade.filter(connector);
+        List<MediaMember> list = getMediaMemberFacade().filter(connector);
 
         if(list.size() > 0) {
             return list.get(0);
@@ -145,6 +147,6 @@ public class MediaMemberApplicationFacade extends BaseApplicationFacade<MediaMem
         FilterConnector<MediaMemberProperty, MediaMemberProperty> connector = new FilterConnector<>(
                 new Filter<>(id, MediaMemberProperty.MEDIA__ID, MatchType.EQUALS, CaseType.IGNORE_CASE));
 
-        return _facade.filter(connector);
+        return getMediaMemberFacade().filter(connector);
     }
 }

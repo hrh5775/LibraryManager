@@ -23,34 +23,38 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class BookApplicationFacade extends BaseApplicationFacade<Book, BookDetailedDto, AccountDetailedDto, BookProperty> {
-    private static BookApplicationFacade _instance;
-    private BookFacade _facade;
+    private BookFacade _bookFacade;
 
-    public static BookApplicationFacade getInstance() {
-        if(_instance == null) {
-            _instance = new BookApplicationFacade();
-            _instance._facade = new BookFacade();
-        }
-
-        return _instance;
+    public BookApplicationFacade() {
+        super();
     }
 
-    private BookApplicationFacade() {
+    private BookFacade getBookFacade() {
+        if(_bookFacade == null) {
+            _bookFacade = new BookFacade(getSession());
+        }
+
+        return _bookFacade;
     }
 
     @Override
     public Book getById(int id) {
-        return _facade.getById(id);
+        return getBookFacade().getById(id);
     }
 
     @Override
     public List<Book> getList() {
-        return _facade.getList();
+        return getBookFacade().getList();
     }
 
     @Override
     public void closeSession() {
-        _facade.closeSession();
+        if(_bookFacade != null) {
+            _bookFacade.closeSession();
+            _bookFacade = null;
+        }
+
+        super.closeSession();
     }
 
     @Override
@@ -67,7 +71,7 @@ public class BookApplicationFacade extends BaseApplicationFacade<Book, BookDetai
             List<Pair<BookProperty, String>> list = entity.validate();
 
             if (list.size() == 0) {
-                return new Pair<>(_facade.add(entity, TransactionType.AUTO_COMMIT), list);
+                return new Pair<>(getBookFacade().add(entity, TransactionType.AUTO_COMMIT), list);
             }
 
             return new Pair<>(0, new LinkedList<>());
@@ -92,7 +96,7 @@ public class BookApplicationFacade extends BaseApplicationFacade<Book, BookDetai
             List<Pair<BookProperty, String>> list = entity.validate();
 
             if (list.size() == 0) {
-                return new Pair<>(_facade.update(entity, TransactionType.AUTO_COMMIT), list);
+                return new Pair<>(getBookFacade().update(entity, TransactionType.AUTO_COMMIT), list);
             }
 
             return new Pair<>(0, new LinkedList<>());
@@ -112,10 +116,11 @@ public class BookApplicationFacade extends BaseApplicationFacade<Book, BookDetai
                 RoleHelper.hasRole(updater, Role.DATENPFLEGER) ||
                 RoleHelper.hasRole(updater, Role.OPERATOR) ||
                 RoleHelper.hasRole(updater, Role.BIBLIOTHEKAR))) {
-            List<Pair<BookProperty, String>> list = _facade.getById(id).validate();
+            BookFacade bookFacade = getBookFacade();
+            List<Pair<BookProperty, String>> list = bookFacade.getById(id).validate();
 
             if (list.size() == 0) {
-                return new Pair<>(_facade.delete(id, TransactionType.AUTO_COMMIT), list);
+                return new Pair<>(bookFacade.delete(id, TransactionType.AUTO_COMMIT), list);
             }
 
             return new Pair<>(false, new LinkedList<>());
@@ -143,7 +148,7 @@ public class BookApplicationFacade extends BaseApplicationFacade<Book, BookDetai
             }
         }*/
 
-        return _facade.filter(getFilterConnector(searchString));
+        return getBookFacade().filter(getFilterConnector(searchString));
     }
 
     private FilterConnector<BookProperty, BookProperty> getFilterConnector(String searchString) {
