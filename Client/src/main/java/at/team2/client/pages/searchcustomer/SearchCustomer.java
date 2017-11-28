@@ -232,7 +232,7 @@ public class SearchCustomer extends BasePage<Void, NullType, NullType, NullType>
 
                 AccountDetailedDto accountDetailedDto = AccountManager.getInstance().getAccount();
 
-                if(loanRemote.isLoanPossible(loanEntity.getMediaMember().getMedia().getMediaId(), loanEntity.getCustomer().getId())) {
+                if(loanRemote.isLoanPossible(loanEntity.getMediaMember().getMedia().getMediaId(), loanEntity.getCustomer().getId(), true)) {
                     if(loanRemote.extendLoan(loanEntity, accountDetailedDto)) {
                         _loanList.getValue().remove(loanEntity);
 

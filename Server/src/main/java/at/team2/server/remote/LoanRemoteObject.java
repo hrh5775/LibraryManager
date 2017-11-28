@@ -66,9 +66,9 @@ public class LoanRemoteObject extends UnicastRemoteObject implements LoanRemoteO
     }
 
     @Override
-    public boolean isLoanPossible(int mediaId, int customerId) throws RemoteException {
+    public boolean isLoanPossible(int mediaId, int customerId, boolean isExtend) throws RemoteException {
         LoanApplicationFacade facade = getLoanFacade();
-        return facade.isLoanPossible(mediaId, customerId);
+        return facade.isLoanPossible(mediaId, customerId, isExtend);
     }
 
     @Override

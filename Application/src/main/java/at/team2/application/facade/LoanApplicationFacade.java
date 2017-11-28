@@ -204,7 +204,7 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
             Customer customerEntity = getCustomerFacade().getById(customer.getId());
 
             if (mediaMemberEntity != null && customerEntity != null &&
-                    isLoanPossible(mediaMemberEntity.getMedia().getId(), customerEntity.getId())) {
+                    isLoanPossible(mediaMemberEntity.getMedia().getId(), customerEntity.getId(), false)) {
                 Media mediaEntity = mediaMemberEntity.getMedia();
                 int loanTerm = mediaEntity.getMediaType().getLoanCondition().getLoanTerm(); // weeksToExtend
 
@@ -240,7 +240,7 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
             Loan loanEntity = loanFacade.getById(loan.getId());
 
             if (loanEntity != null &&
-                    isLoanPossible(loan.getMediaMember().getMedia().getMediaId(), loan.getCustomer().getId())) {
+                    isLoanPossible(loan.getMediaMember().getMedia().getMediaId(), loan.getCustomer().getId(), false)) {
                 loanEntity.setLastRenewalStart(new Date(Calendar.getInstance().getTime().getTime()));
                 LoanCondition loanCondition = loanEntity.getMediaMember().getMedia().getMediaType().getLoanCondition();
 
@@ -291,7 +291,7 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
      * @return true     the loan is possible
      *         false    otherwise
      */
-    public boolean isLoanPossible(int mediaId, int customerId) {
+    public boolean isLoanPossible(int mediaId, int customerId, boolean isExtend) {
         MediaFacade mediaFacade = getMediaFacade();
         Media mediaEntity = mediaFacade.getById(mediaId);
 
@@ -350,6 +350,14 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
                 List<Loan> loanList = getLoanFacade().filter(loanConnector);
 
                 // compare the sizes
+                if(isExtend) {
+                    // we can extend if there are less loans open than media members available, but only when there is
+                    // no pending reservation available
+                    if(reservationList.size() == 0) {
+                        return loanList.size() <= mediaMemberList.size();
+                    }
+                }
+
                 return (reservationList.size() + loanList.size()) < mediaMemberList.size();
             }
         }
