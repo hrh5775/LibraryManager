@@ -55,4 +55,10 @@ public class LoanRemoteObject extends UnicastRemoteObject implements LoanRemoteO
 
         return mapper.map(facade.getById(id), LoanDetailedDto.class);
     }
+
+    @Override
+    public boolean isLoanPossible(int mediaId, int customerId) throws RemoteException {
+        LoanApplicationFacade facade = LoanApplicationFacade.getInstance();
+        return facade.isLoanPossible(mediaId, customerId);
+    }
 }

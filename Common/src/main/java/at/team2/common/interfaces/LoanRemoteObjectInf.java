@@ -16,4 +16,5 @@ public interface LoanRemoteObjectInf extends Remote {
     public boolean extendLoan(LoanDetailedDto loan, AccountDetailedDto updater) throws RemoteException;
 
     public LoanDetailedDto getLoanDetailedById(int id) throws RemoteException;
+    public boolean isLoanPossible(int mediaId, int customerId) throws RemoteException;
 }

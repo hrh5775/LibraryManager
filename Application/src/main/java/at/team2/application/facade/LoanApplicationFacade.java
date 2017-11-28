@@ -143,7 +143,8 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
             MediaMember mediaMemberEntity = _mediaMemberFacade.getNotLoanedMediaMember(mediaMember.getId());
             Customer customerEntity = _customerFacade.getById(customer.getId());
 
-            if (mediaMemberEntity != null && customerEntity != null) {
+            if (mediaMemberEntity != null && customerEntity != null &&
+                    isLoanPossible(mediaMemberEntity.getMedia().getId(), customerEntity.getId())) {
                 Media mediaEntity = mediaMemberEntity.getMedia();
                 int loanTerm = mediaEntity.getMediaType().getLoanCondition().getLoanTerm(); // weeksToExtend
 
@@ -176,7 +177,8 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
                         RoleHelper.hasRole(updater, Role.AUSLEIHE))) {
             Loan loanEntity = _facade.getById(loan.getId());
 
-            if (loanEntity != null) {
+            if (loanEntity != null &&
+                    isLoanPossible(loan.getMediaMember().getMedia().getMediaId(), loan.getCustomer().getId())) {
                 loanEntity.setLastRenewalStart(new Date(Calendar.getInstance().getTime().getTime()));
                 LoanCondition loanCondition = loanEntity.getMediaMember().getMedia().getMediaType().getLoanCondition();
 
@@ -215,5 +217,24 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
                 new Filter<>(id, LoanProperty.CUSTOMER__ID, MatchType.EQUALS, CaseType.NORMAL));
 
         return _facade.filter(connector);
+    }
+
+    /**
+     * We have to check if there are more reservations than available media members, which are currently not on loan
+     * and the unique reservation with the mediaId for the customer has the "informationDate" set, which would lead to
+     * a possible loan. A loan is also possible if there are less reservations available than available media members,
+     * which are currently not on loan. A loan extend will also fail if there are pending reservations, which have a
+     * valid "informationDate".
+     * @param mediaId
+     * @param customerId
+     * @return true     the loan is possible
+     *         false    otherwise
+     */
+    public boolean isLoanPossible(int mediaId, int customerId) {
+        // @todo: add a thread which removes invalid reservations
+
+        // @todo: add this logic from the "SearchCustomer" page to the "lendmedium" page
+
+        return true;
     }
 }

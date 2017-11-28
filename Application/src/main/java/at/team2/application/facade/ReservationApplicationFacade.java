@@ -21,7 +21,6 @@ import at.team2.domain.enums.properties.ReservationProperty;
 import javafx.util.Pair;
 import org.modelmapper.ModelMapper;
 
-import javax.ws.rs.NotSupportedException;
 import java.sql.Date;
 import java.util.Calendar;
 import java.util.LinkedList;

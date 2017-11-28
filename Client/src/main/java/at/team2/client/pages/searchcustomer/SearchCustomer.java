@@ -3,6 +3,7 @@ package at.team2.client.pages.searchcustomer;
 import at.team2.client.common.AccountManager;
 import at.team2.client.controls.loadingindicator.LoadingIndicator;
 import at.team2.client.pages.BasePage;
+import at.team2.common.dto.detailed.AccountDetailedDto;
 import at.team2.common.dto.detailed.LoanDetailedDto;
 import at.team2.common.dto.detailed.ReservationDetailedDto;
 import at.team2.common.dto.small.CustomerSmallDto;
@@ -11,7 +12,6 @@ import at.team2.common.interfaces.LoanRemoteObjectInf;
 import at.team2.common.interfaces.MainRemoteObjectInf;
 import com.sun.javafx.collections.ObservableListWrapper;
 
-import at.team2.common.interfaces.ReservationRemoteObjectInf;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
@@ -223,13 +223,15 @@ public class SearchCustomer extends BasePage<Void, NullType, NullType, NullType>
 
         if(entity != null) {
             LoanDetailedDto loanEntity = (LoanDetailedDto) entity;
+
             try {
                 MainRemoteObjectInf remoteObject = RmiHelper.getSession();
                 LoanRemoteObjectInf loanRemote = remoteObject.getLoanRemoteObject();
-                ReservationRemoteObjectInf reserveRemote = remoteObject.getReservationRemoteObject();
-                if(!reserveRemote.isReserved(((LoanDetailedDto) entity).getMediaMember()))
-                {
-                    if(loanRemote.extendLoan(loanEntity, AccountManager.getInstance().getAccount())) {
+
+                AccountDetailedDto accountDetailedDto = AccountManager.getInstance().getAccount();
+
+                if(loanRemote.isLoanPossible(loanEntity.getMediaMember().getMedia().getMediaId(), loanEntity.getCustomer().getId())) {
+                    if(loanRemote.extendLoan(loanEntity, accountDetailedDto)) {
                         _loanList.getValue().remove(loanEntity);
                         loanEntity = loanRemote.getLoanDetailedById(loanEntity.getId());
                         _loanList.getValue().add(loanEntity);
@@ -239,10 +241,8 @@ public class SearchCustomer extends BasePage<Void, NullType, NullType, NullType>
                     } else {
                         Platform.runLater(()-> showErrorMessage("Error","Cannot extend the loan.\nPlease take back the medium."));
                     }
-                }
-                else
-                {
-                    Platform.runLater(() -> showErrorMessage("Error","Cannot extend the loan.\n The Media is currently reserved"));
+                } else {
+                    Platform.runLater(() -> showErrorMessage("Error","Cannot extend the loan.\nThe Media is currently reserved"));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -251,7 +251,7 @@ public class SearchCustomer extends BasePage<Void, NullType, NullType, NullType>
     }
 
     @FXML
-    private void takeBack(){
+    private void takeBack() {
         Object entity = _loanTableView.getSelectionModel().getSelectedItem();
 
         if(entity != null) {
