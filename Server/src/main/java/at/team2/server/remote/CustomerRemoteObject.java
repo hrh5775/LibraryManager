@@ -16,14 +16,23 @@ import org.modelmapper.TypeToken;
 
 public class CustomerRemoteObject extends UnicastRemoteObject implements CustomerRemoteObjectInf {
     private static Type typeSmall = new TypeToken<List<CustomerSmallDto>>() {}.getType();
+    private CustomerApplicationFacade _customerFacade;
 
     protected CustomerRemoteObject() throws RemoteException {
         super(0);
     }
 
+    private CustomerApplicationFacade getCustomerFacade() {
+        if(_customerFacade == null) {
+            _customerFacade = new CustomerApplicationFacade();
+        }
+
+        return _customerFacade;
+    }
+
     @Override
     public CustomerSmallDto getCustomerSmallById(int id) throws RemoteException {
-        CustomerApplicationFacade facade = CustomerApplicationFacade.getInstance();
+        CustomerApplicationFacade facade = getCustomerFacade();
         ModelMapper mapper = MapperHelper.getMapper();
         Customer entity = facade.getById(id);
 
@@ -36,9 +45,18 @@ public class CustomerRemoteObject extends UnicastRemoteObject implements Custome
 
     @Override
     public List<CustomerSmallDto> getList(String searchString) throws RemoteException {
-        CustomerApplicationFacade facade = CustomerApplicationFacade.getInstance();
+        CustomerApplicationFacade facade = getCustomerFacade();
         ModelMapper mapper = MapperHelper.getMapper();
 
         return mapper.map(facade.search(searchString), typeSmall);
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        if(_customerFacade != null) {
+            _customerFacade.closeSession();
+        }
+
+        super.finalize();
     }
 }

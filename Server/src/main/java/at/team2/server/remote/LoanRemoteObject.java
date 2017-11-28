@@ -17,14 +17,23 @@ import org.modelmapper.TypeToken;
 
 public class LoanRemoteObject extends UnicastRemoteObject implements LoanRemoteObjectInf {
     private static Type typeDetailed = new TypeToken<List<LoanDetailedDto>>() {}.getType();
+    private LoanApplicationFacade _loanFacade;
 
     protected LoanRemoteObject() throws RemoteException {
         super(0);
     }
 
+    private LoanApplicationFacade getLoanFacade() {
+        if(_loanFacade == null) {
+            _loanFacade = new LoanApplicationFacade();
+        }
+
+        return _loanFacade;
+    }
+
     @Override
     public List<LoanDetailedDto> getListByCustomer(int id) throws RemoteException {
-        LoanApplicationFacade facade = LoanApplicationFacade.getInstance();
+        LoanApplicationFacade facade = getLoanFacade();
         ModelMapper mapper = MapperHelper.getMapper();
 
         return mapper.map(facade.getListByCustomer(id), typeDetailed);
@@ -32,25 +41,25 @@ public class LoanRemoteObject extends UnicastRemoteObject implements LoanRemoteO
 
     @Override
     public int loanMediaMember(MediaMemberSmallDto mediaMember, CustomerSmallDto customer, AccountDetailedDto updater) throws RemoteException {
-        LoanApplicationFacade facade = LoanApplicationFacade.getInstance();
+        LoanApplicationFacade facade = getLoanFacade();
         return facade.loanMediaMember(mediaMember, customer, updater);
     }
 
     @Override
     public int takeBackLoan(LoanDetailedDto loan) throws RemoteException {
-        LoanApplicationFacade facade = LoanApplicationFacade.getInstance();
+        LoanApplicationFacade facade = getLoanFacade();
         return facade.takeBackMediaMember(loan);
     }
 
     @Override
     public boolean extendLoan(LoanDetailedDto loan, AccountDetailedDto updater) {
-        LoanApplicationFacade facade = LoanApplicationFacade.getInstance();
+        LoanApplicationFacade facade = getLoanFacade();
         return facade.extendLoan(loan, updater);
     }
 
     @Override
     public LoanDetailedDto getLoanDetailedById(int id) throws RemoteException {
-        LoanApplicationFacade facade = LoanApplicationFacade.getInstance();
+        LoanApplicationFacade facade = getLoanFacade();
         ModelMapper mapper = MapperHelper.getMapper();
 
         return mapper.map(facade.getById(id), LoanDetailedDto.class);
@@ -58,7 +67,16 @@ public class LoanRemoteObject extends UnicastRemoteObject implements LoanRemoteO
 
     @Override
     public boolean isLoanPossible(int mediaId, int customerId) throws RemoteException {
-        LoanApplicationFacade facade = LoanApplicationFacade.getInstance();
+        LoanApplicationFacade facade = getLoanFacade();
         return facade.isLoanPossible(mediaId, customerId);
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        if(_loanFacade != null) {
+            _loanFacade.closeSession();
+        }
+
+        super.finalize();
     }
 }

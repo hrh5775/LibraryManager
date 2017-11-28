@@ -24,36 +24,52 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class AccountApplicationFacade extends BaseApplicationFacade<Account, AccountDetailedDto, AccountDetailedDto, AccountProperty> {
-    private static AccountApplicationFacade _instance;
-    private AccountFacade _facade;
+    private AccountFacade _accountFacade;
     private ConfigurationFacade _configurationFacade;
 
-    private AccountApplicationFacade() {
+    public AccountApplicationFacade() {
+        super();
     }
 
-    public static AccountApplicationFacade getInstance() {
-        if(_instance == null) {
-            _instance = new AccountApplicationFacade();
-            _instance._facade = new AccountFacade();
-            _instance._configurationFacade = new ConfigurationFacade(_instance._facade.getCurrentSession());
+    private AccountFacade getAccountFacade() {
+        if(_accountFacade == null) {
+            _accountFacade = new AccountFacade(getSession());
         }
 
-        return _instance;
+        return _accountFacade;
+    }
+
+    private ConfigurationFacade getConfigurationFacade() {
+        if(_configurationFacade == null) {
+            _configurationFacade = new ConfigurationFacade(getSession());
+        }
+
+        return _configurationFacade;
     }
 
     @Override
     public Account getById(int id) {
-        return _facade.getById(id);
+        return getAccountFacade().getById(id);
     }
 
     @Override
     public List<Account> getList() {
-        return _facade.getList();
+        return getAccountFacade().getList();
     }
 
     @Override
     public void closeSession() {
-        _facade.closeSession();
+        if(_accountFacade != null) {
+            _accountFacade.closeSession();
+            _accountFacade = null;
+        }
+
+        if(_configurationFacade != null) {
+            _configurationFacade.closeSession();
+            _configurationFacade = null;
+        }
+
+        super.closeSession();
     }
 
     @Override
@@ -67,7 +83,7 @@ public class AccountApplicationFacade extends BaseApplicationFacade<Account, Acc
             List<Pair<AccountProperty, String>> list = entity.validate();
 
             if (list.size() == 0) {
-                return new Pair<>(_facade.add(entity, TransactionType.AUTO_COMMIT), list);
+                return new Pair<>(getAccountFacade().add(entity, TransactionType.AUTO_COMMIT), list);
             }
 
             return new Pair<>(0, new LinkedList<>());
@@ -89,7 +105,7 @@ public class AccountApplicationFacade extends BaseApplicationFacade<Account, Acc
             List<Pair<AccountProperty,String>> list = entity.validate();
 
             if(list.size() == 0) {
-                return new Pair<>(_facade.update(entity, TransactionType.AUTO_COMMIT), list);
+                return new Pair<>(getAccountFacade().update(entity, TransactionType.AUTO_COMMIT), list);
             }
 
             return new Pair<>(0, new LinkedList<>());
@@ -106,10 +122,10 @@ public class AccountApplicationFacade extends BaseApplicationFacade<Account, Acc
 
         if(updater != null &&
                 (RoleHelper.hasRole(updater, Role.ADMIN))) {
-            List<Pair<AccountProperty, String>> list = _facade.getById(id).validate();
+            List<Pair<AccountProperty, String>> list = getAccountFacade().getById(id).validate();
 
             if (list.size() == 0) {
-                return new Pair<>(_facade.delete(id, TransactionType.AUTO_COMMIT), list);
+                return new Pair<>(getAccountFacade().delete(id, TransactionType.AUTO_COMMIT), list);
             }
 
             return new Pair<>(false, new LinkedList<>());
@@ -126,7 +142,7 @@ public class AccountApplicationFacade extends BaseApplicationFacade<Account, Acc
                 ConnectorType.AND,
                 new Filter<>(password, AccountProperty.PASSWORT, MatchType.EQUALS, CaseType.NORMAL));
 
-        List<Account> list = _facade.filter(connector);
+        List<Account> list = getAccountFacade().filter(connector);
 
         if(list.size() > 0) {
             Account tmp = list.get(0);
@@ -138,11 +154,11 @@ public class AccountApplicationFacade extends BaseApplicationFacade<Account, Acc
         // try to login with ldap
         FilterConnector<ConfigurationProperty, ConfigurationProperty> ldapAdServerConnector = new FilterConnector<>(
                 new Filter<>("LDAP_AD_SERVER", ConfigurationProperty.IDENTIFIER, MatchType.EQUALS, CaseType.NORMAL));
-        List<Configuration> ldapAdServerList = _configurationFacade.filter(ldapAdServerConnector);
+        List<Configuration> ldapAdServerList = getConfigurationFacade().filter(ldapAdServerConnector);
 
         FilterConnector<ConfigurationProperty, ConfigurationProperty> additionalDNInformationConnector = new FilterConnector<>(
                 new Filter<>("LDAP_ADDITIONAL_DN_INFORMATION", ConfigurationProperty.IDENTIFIER, MatchType.EQUALS, CaseType.NORMAL));
-        List<Configuration> additionalDNInformationList = _configurationFacade.filter(additionalDNInformationConnector);
+        List<Configuration> additionalDNInformationList = getConfigurationFacade().filter(additionalDNInformationConnector);
 
         if(ldapAdServerList.size() > 0 && additionalDNInformationList.size() > 0) {
             String ldapAdServer = ldapAdServerList.get(0).getData();
@@ -177,7 +193,7 @@ public class AccountApplicationFacade extends BaseApplicationFacade<Account, Acc
                 new Filter<>(id, AccountProperty.ID, MatchType.EQUALS, CaseType.NORMAL)
         );
 
-        List<Account> list = _facade.filter(connector);
+        List<Account> list = getAccountFacade().filter(connector);
 
         if(list.size() > 0) {
             Account tmp = list.get(0);

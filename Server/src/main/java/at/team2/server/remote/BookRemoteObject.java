@@ -18,14 +18,23 @@ import java.util.List;
 public class BookRemoteObject extends UnicastRemoteObject implements BookRemoteObjectInf {
     private static Type typeSmall = new TypeToken<List<BookSmallDto>>() {}.getType();
     private static Type typeCreatorPersonSmall = new TypeToken<List<CreatorPersonSmallDto>>() {}.getType();
+    private BookApplicationFacade _bookFacade;
 
     public BookRemoteObject() throws RemoteException {
         super(0);
     }
 
+    private BookApplicationFacade getBookFacade() {
+        if(_bookFacade == null) {
+            _bookFacade = new BookApplicationFacade();
+        }
+
+        return _bookFacade;
+    }
+
     @Override
     public BookSmallDto getBookSmallById(int id) throws RemoteException {
-        BookApplicationFacade facade = BookApplicationFacade.getInstance();
+        BookApplicationFacade facade = getBookFacade();
         ModelMapper mapper = MapperHelper.getMapper();
         Book entity = facade.getById(id);
 
@@ -38,7 +47,7 @@ public class BookRemoteObject extends UnicastRemoteObject implements BookRemoteO
 
     @Override
     public List<BookSmallDto> getBookSmallList() throws RemoteException {
-        BookApplicationFacade facade = BookApplicationFacade.getInstance();
+        BookApplicationFacade facade = getBookFacade();
         ModelMapper mapper = MapperHelper.getMapper();
 
         return mapper.map(facade.getList(), typeSmall);
@@ -46,7 +55,7 @@ public class BookRemoteObject extends UnicastRemoteObject implements BookRemoteO
 
     @Override
     public List<BookSmallDto> getBookSmallList(String searchString) throws RemoteException {
-        BookApplicationFacade facade =  BookApplicationFacade.getInstance();
+        BookApplicationFacade facade = getBookFacade();
         ModelMapper mapper = MapperHelper.getMapper();
 
         return mapper.map(facade.search(searchString), typeSmall);
@@ -54,7 +63,7 @@ public class BookRemoteObject extends UnicastRemoteObject implements BookRemoteO
 
     @Override
     public BookDetailedDto getBookDetailedById(int id) throws RemoteException {
-        BookApplicationFacade facade = BookApplicationFacade.getInstance();
+        BookApplicationFacade facade = getBookFacade();
         ModelMapper mapper = MapperHelper.getMapper();
         Book entity = facade.getById(id);
 
@@ -65,5 +74,14 @@ public class BookRemoteObject extends UnicastRemoteObject implements BookRemoteO
         }
 
         return null;
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        if(_bookFacade != null) {
+            _bookFacade.closeSession();
+        }
+
+        super.finalize();
     }
 }

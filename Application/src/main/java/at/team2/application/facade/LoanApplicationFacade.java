@@ -27,39 +27,67 @@ import at.team2.domain.enums.properties.LoanProperty;
 import javafx.util.Pair;
 
 public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetailedDto, AccountDetailedDto, LoanProperty> {
-    private static LoanApplicationFacade _instance;
-    private LoanFacade _facade;
+    private static final int loanTermMultiplier = 7 * 24 * 3600 * 1000;
+    private LoanFacade _loanFacade;
     private MediaMemberFacade _mediaMemberFacade;
     private CustomerFacade _customerFacade;
-    private static final int loanTermMultiplier = 7 * 24 * 3600 * 1000;
 
-    private LoanApplicationFacade() {
+    public LoanApplicationFacade() {
+        super();
     }
 
-    public static LoanApplicationFacade getInstance() {
-        if(_instance == null) {
-            _instance = new LoanApplicationFacade();
-            _instance._facade = new LoanFacade();
-            _instance._mediaMemberFacade = new MediaMemberFacade(_instance._facade.getCurrentSession());
-            _instance._customerFacade = new CustomerFacade(_instance._facade.getCurrentSession());
+    private LoanFacade getLoanFacade() {
+        if(_loanFacade == null) {
+            _loanFacade = new LoanFacade(getSession());
         }
 
-        return _instance;
+        return _loanFacade;
+    }
+
+    private MediaMemberFacade getMediaMemberFacade() {
+        if(_mediaMemberFacade == null) {
+            _mediaMemberFacade = new MediaMemberFacade(getSession());
+        }
+
+        return _mediaMemberFacade;
+    }
+
+    private CustomerFacade getCustomerFacade() {
+        if(_customerFacade == null) {
+            _customerFacade = new CustomerFacade(getSession());
+        }
+
+        return _customerFacade;
     }
 
     @Override
     public Loan getById(int id) {
-        return _facade.getById(id);
+        return getLoanFacade().getById(id);
     }
 
     @Override
     public List<Loan> getList() {
-        return _facade.getList();
+        return getLoanFacade().getList();
     }
 
     @Override
     public void closeSession() {
-        _facade.closeSession();
+        if(_loanFacade != null) {
+            _loanFacade.closeSession();
+            _loanFacade = null;
+        }
+
+        if(_mediaMemberFacade != null) {
+            _mediaMemberFacade.closeSession();
+            _mediaMemberFacade = null;
+        }
+
+        if(_customerFacade != null) {
+            _customerFacade.closeSession();
+            _customerFacade = null;
+        }
+
+        super.closeSession();
     }
 
     @Override
@@ -75,7 +103,7 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
             List<Pair<LoanProperty, String>> list = entity.validate();
 
             if (list.size() == 0) {
-                return new Pair<>(_facade.add(entity, TransactionType.AUTO_COMMIT), list);
+                return new Pair<>(getLoanFacade().add(entity, TransactionType.AUTO_COMMIT), list);
             }
 
             return new Pair<>(0, new LinkedList<>());
@@ -99,7 +127,7 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
             List<Pair<LoanProperty, String>> list = entity.validate();
 
             if (list.size() == 0) {
-                return new Pair<>(_facade.update(entity, TransactionType.AUTO_COMMIT), list);
+                return new Pair<>(getLoanFacade().update(entity, TransactionType.AUTO_COMMIT), list);
             }
 
             return new Pair<>(0, new LinkedList<>());
@@ -118,10 +146,11 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
                 (RoleHelper.hasRole(updater, Role.ADMIN) ||
                 RoleHelper.hasRole(updater, Role.BIBLIOTHEKAR) ||
                 RoleHelper.hasRole(updater, Role.AUSLEIHE))) {
-            List<Pair<LoanProperty, String>> list = _facade.getById(id).validate();
+            LoanFacade loanFacade = getLoanFacade();
+            List<Pair<LoanProperty, String>> list = loanFacade.getById(id).validate();
 
             if (list.size() == 0) {
-                return new Pair<>(_facade.delete(id, TransactionType.AUTO_COMMIT), list);
+                return new Pair<>(loanFacade.delete(id, TransactionType.AUTO_COMMIT), list);
             }
 
             return new Pair<>(false, new LinkedList<>());
@@ -140,8 +169,8 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
                 RoleHelper.hasRole(updater, Role.BIBLIOTHEKAR) ||
                 RoleHelper.hasRole(updater, Role.AUSLEIHE))) {
             // get a list of available media members => books, dvds, for the specified media
-            MediaMember mediaMemberEntity = _mediaMemberFacade.getNotLoanedMediaMember(mediaMember.getId());
-            Customer customerEntity = _customerFacade.getById(customer.getId());
+            MediaMember mediaMemberEntity = getMediaMemberFacade().getNotLoanedMediaMember(mediaMember.getId());
+            Customer customerEntity = getCustomerFacade().getById(customer.getId());
 
             if (mediaMemberEntity != null && customerEntity != null &&
                     isLoanPossible(mediaMemberEntity.getMedia().getId(), customerEntity.getId())) {
@@ -153,7 +182,7 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
                 loan.setMediaMember(mediaMemberEntity);
                 loan.setStart(new Date(Calendar.getInstance().getTime().getTime()));
                 loan.setEnd(new Date(Calendar.getInstance().getTime().getTime() + (loanTerm * loanTermMultiplier)));
-                return _facade.add(loan, TransactionType.AUTO_COMMIT);
+                return getLoanFacade().add(loan, TransactionType.AUTO_COMMIT);
             }
 
             return 0;
@@ -163,9 +192,10 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
     }
 
     public int takeBackMediaMember(LoanDetailedDto loan){
-        Loan loanEntity = _facade.getById(loan.getId());
+        LoanFacade loanFacade = getLoanFacade();
+        Loan loanEntity = loanFacade.getById(loan.getId());
         loanEntity.setClosed(true);
-        return _facade.update(loanEntity,TransactionType.AUTO_COMMIT);
+        return loanFacade.update(loanEntity,TransactionType.AUTO_COMMIT);
     }
 
     public boolean extendLoan(LoanDetailedDto loan, AccountDetailedDto updater) {
@@ -175,7 +205,8 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
                 (RoleHelper.hasRole(updater, Role.ADMIN) ||
                         RoleHelper.hasRole(updater, Role.BIBLIOTHEKAR) ||
                         RoleHelper.hasRole(updater, Role.AUSLEIHE))) {
-            Loan loanEntity = _facade.getById(loan.getId());
+            LoanFacade loanFacade = getLoanFacade();
+            Loan loanEntity = loanFacade.getById(loan.getId());
 
             if (loanEntity != null &&
                     isLoanPossible(loan.getMediaMember().getMedia().getMediaId(), loan.getCustomer().getId())) {
@@ -196,7 +227,7 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
                     loanEntity.setEnd(new Date(loanEntity.getEnd().getTime() + (weeksToExtend * loanTermMultiplier)));
                     ModelMapper mapper = MapperHelper.getMapper();
                     Loan entity = mapper.map(loanEntity, Loan.class);
-                    _facade.update(entity, TransactionType.AUTO_COMMIT);
+                    loanFacade.update(entity, TransactionType.AUTO_COMMIT);
 
                     return true;
                 }
@@ -216,7 +247,7 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
         FilterConnector<LoanProperty, LoanProperty> connector = new FilterConnector<>(
                 new Filter<>(id, LoanProperty.CUSTOMER__ID, MatchType.EQUALS, CaseType.NORMAL));
 
-        return _facade.filter(connector);
+        return getLoanFacade().filter(connector);
     }
 
     /**

@@ -105,14 +105,6 @@ public class BookFacade extends BaseDatabaseFacade<Book, BookProperty> {
         List<BookMetaEntity> entities = query.getResultList();
         ModelMapper mapper = MapperHelper.getMapper();
 
-        /////
-        EntityManager session = getCurrentSession();
-
-        for(int i = 0; i < entities.size(); i++) {
-            session.refresh(entities.get(i).getMediaByMediaId());
-        }
-        // @todo: this is the only solution that works -> create a refresh method and call it in every required method
-
         return mapper.map(entities, type);
     }
 

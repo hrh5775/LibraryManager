@@ -183,10 +183,11 @@ public abstract class BaseDatabaseFacade<V extends BaseDomainEntity, P extends D
 
     @Override
     public void closeSession() {
-        if(_session != null) {
+        if(_session != null && _session.isOpen()) {
             _session.close();
-            _session = null;
         }
+
+        _session = null;
     }
 
     @Override

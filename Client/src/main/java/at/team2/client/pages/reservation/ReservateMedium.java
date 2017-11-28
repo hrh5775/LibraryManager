@@ -38,10 +38,11 @@ public class ReservateMedium extends BasePage<Void, NullType, NullType, NullType
     @FXML
     private LoadingIndicator _loadingIndicator;
     @FXML
-    private Pane _pane;
+    private Pane _mainPane;
     @FXML
     private BooleanProperty _isLoading;
 
+    private Pane _pane;
     private CustomerSmallDto _customer;
     private MediaSmallDto _media;
 
@@ -66,6 +67,7 @@ public class ReservateMedium extends BasePage<Void, NullType, NullType, NullType
 
         _isLoading.setValue(false);
         _loadingIndicator.visibleProperty().bind(_isLoading);
+        _mainPane.visibleProperty().bind(_isLoading.not());
     }
 
     private void initializeMedia(){

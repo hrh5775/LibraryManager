@@ -1,7 +1,6 @@
 package at.team2.database_wrapper.facade;
 
 import at.team2.database_wrapper.common.FilterConnector;
-import at.team2.database_wrapper.entities.BookMetaEntity;
 import at.team2.database_wrapper.entities.MediaEntity;
 import at.team2.database_wrapper.entities.MediaMemberEntity;
 import at.team2.database_wrapper.enums.TransactionType;
@@ -123,7 +122,6 @@ public class LoanFacade extends BaseDatabaseFacade<Loan, LoanProperty> {
         session.merge(mediaEntity);
 
         StoreHelper.storeEntities(session, transactionType);
-        session.refresh(entity);
 
         return entity.getId();
     }
@@ -148,13 +146,6 @@ public class LoanFacade extends BaseDatabaseFacade<Loan, LoanProperty> {
         session.merge(mediaEntity);
 
         StoreHelper.storeEntities(session, transactionType);
-
-        entity = getEntityByIdWithClosed(entity.getId()); // this avoids the problem of the context
-        session.refresh(entity);
-
-        BookFacade bookFacade = new BookFacade(session);
-        BookMetaEntity bookMetaEntity = bookFacade.getEntityByMediaId(mediaEntity.getId());
-        session.refresh(bookMetaEntity.getMediaByMediaId());
 
         return entity.getId();
     }
@@ -183,10 +174,7 @@ public class LoanFacade extends BaseDatabaseFacade<Loan, LoanProperty> {
                 mediaEntity.setAvailable(mediaFacade.isAvailable(mediaEntity.getId(), false, session));
                 session.merge(mediaEntity);
 
-                boolean result = StoreHelper.storeEntities(session, transactionType);
-                session.refresh(mediaEntity);
-
-                return result;
+                return StoreHelper.storeEntities(session, transactionType);
             }
         }
 
