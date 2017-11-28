@@ -31,34 +31,49 @@ public class DvdApplicationFacade extends BaseApplicationFacade<Dvd, DvdDetailed
 
     private DvdFacade getDvdFacade() {
         if(_dvdFacade == null) {
-            _dvdFacade = new DvdFacade(getSession());
+            _dvdFacade = new DvdFacade(getDbSession());
         }
 
         return _dvdFacade;
     }
 
     @Override
-    public Dvd getById(int id) {
-        return getDvdFacade().getById(id);
-    }
-
-    @Override
-    public List<Dvd> getList() {
-        return getDvdFacade().getList();
-    }
-
-    @Override
-    public void closeSession() {
+    public void closeDbSession() {
         if(_dvdFacade != null) {
             _dvdFacade.closeSession();
             _dvdFacade = null;
         }
 
-        super.closeSession();
+        super.closeDbSession();
+    }
+
+    @Override
+    protected void renewDbSession() {
+        super.renewDbSession();
+
+        if(_dvdFacade != null) {
+            _dvdFacade.setSession(getDbSession());
+        }
+    }
+
+    @Override
+    public Dvd getById(int id) {
+        renewDbSession();
+
+        return getDvdFacade().getById(id);
+    }
+
+    @Override
+    public List<Dvd> getList() {
+        renewDbSession();
+
+        return getDvdFacade().getList();
     }
 
     @Override
     public Pair<Integer, List<Pair<DvdProperty, String>>> add(DvdDetailedDto value, AccountDetailedDto updater) {
+        renewDbSession();
+
         updater = SessionManager.getInstance().getSession(updater);
 
         if(updater != null &&
@@ -84,6 +99,8 @@ public class DvdApplicationFacade extends BaseApplicationFacade<Dvd, DvdDetailed
 
     @Override
     public Pair<Integer, List<Pair<DvdProperty, String>>> update(DvdDetailedDto value, AccountDetailedDto updater) {
+        renewDbSession();
+
         updater = SessionManager.getInstance().getSession(updater);
 
         if(updater != null &&
@@ -109,6 +126,8 @@ public class DvdApplicationFacade extends BaseApplicationFacade<Dvd, DvdDetailed
 
     @Override
     public Pair<Boolean, List<Pair<DvdProperty, String>>> delete(int id, AccountDetailedDto updater) {
+        renewDbSession();
+
         updater = SessionManager.getInstance().getSession(updater);
 
         if(updater != null &&
@@ -131,7 +150,9 @@ public class DvdApplicationFacade extends BaseApplicationFacade<Dvd, DvdDetailed
         }
     }
 
-    public List<Dvd> search(String searchString){
+    public List<Dvd> search(String searchString) {
+        renewDbSession();
+
         /*String[] items = searchString.split(" ");
         FilterConnector<DvdProperty, DvdProperty> connector = null;
         FilterConnector<DvdProperty, DvdProperty> tmpConnector;

@@ -43,7 +43,7 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
 
     private LoanFacade getLoanFacade() {
         if(_loanFacade == null) {
-            _loanFacade = new LoanFacade(getSession());
+            _loanFacade = new LoanFacade(getDbSession());
         }
 
         return _loanFacade;
@@ -51,7 +51,7 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
 
     private MediaMemberFacade getMediaMemberFacade() {
         if(_mediaMemberFacade == null) {
-            _mediaMemberFacade = new MediaMemberFacade(getSession());
+            _mediaMemberFacade = new MediaMemberFacade(getDbSession());
         }
 
         return _mediaMemberFacade;
@@ -59,7 +59,7 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
 
     private MediaFacade getMediaFacade() {
         if(_mediaFacade == null) {
-            _mediaFacade = new MediaFacade(getSession());
+            _mediaFacade = new MediaFacade(getDbSession());
         }
 
         return _mediaFacade;
@@ -67,7 +67,7 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
 
     private CustomerFacade getCustomerFacade() {
         if(_customerFacade == null) {
-            _customerFacade = new CustomerFacade(getSession());
+            _customerFacade = new CustomerFacade(getDbSession());
         }
 
         return _customerFacade;
@@ -75,24 +75,14 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
 
     private ReservationFacade getReservationFacade() {
         if(_reservationFacade == null) {
-            _reservationFacade = new ReservationFacade(getSession());
+            _reservationFacade = new ReservationFacade(getDbSession());
         }
 
         return _reservationFacade;
     }
 
     @Override
-    public Loan getById(int id) {
-        return getLoanFacade().getById(id);
-    }
-
-    @Override
-    public List<Loan> getList() {
-        return getLoanFacade().getList();
-    }
-
-    @Override
-    public void closeSession() {
+    public void closeDbSession() {
         if(_loanFacade != null) {
             _loanFacade.closeSession();
             _loanFacade = null;
@@ -118,11 +108,52 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
             _reservationFacade = null;
         }
 
-        super.closeSession();
+        super.closeDbSession();
+    }
+
+    @Override
+    protected void renewDbSession() {
+        super.renewDbSession();
+
+        if(_loanFacade != null) {
+            _loanFacade.setSession(getDbSession());
+        }
+
+        if(_mediaMemberFacade != null) {
+            _mediaMemberFacade.setSession(getDbSession());
+        }
+
+        if(_mediaFacade != null) {
+            _mediaFacade.setSession(getDbSession());
+        }
+
+        if(_customerFacade != null) {
+            _customerFacade.setSession(getDbSession());
+        }
+
+        if(_reservationFacade != null) {
+            _reservationFacade.setSession(getDbSession());
+        }
+    }
+
+    @Override
+    public Loan getById(int id) {
+        renewDbSession();
+
+        return getLoanFacade().getById(id);
+    }
+
+    @Override
+    public List<Loan> getList() {
+        renewDbSession();
+
+        return getLoanFacade().getList();
     }
 
     @Override
     public Pair<Integer, List<Pair<LoanProperty, String>>> add(LoanDetailedDto value, AccountDetailedDto updater) {
+        renewDbSession();
+
         updater = SessionManager.getInstance().getSession(updater);
 
         if(updater != null &&
@@ -147,6 +178,8 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
 
     @Override
     public Pair<Integer, List<Pair<LoanProperty, String>>> update(LoanDetailedDto value, AccountDetailedDto updater) {
+        renewDbSession();
+
         updater = SessionManager.getInstance().getSession(updater);
 
         if(updater != null &&
@@ -171,6 +204,8 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
 
     @Override
     public Pair<Boolean, List<Pair<LoanProperty, String>>> delete(int id, AccountDetailedDto updater) {
+        renewDbSession();
+
         updater = SessionManager.getInstance().getSession(updater);
 
         if(updater != null &&
@@ -193,6 +228,8 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
     }
 
     public int loanMediaMember(MediaMemberSmallDto mediaMember, CustomerSmallDto customer, AccountDetailedDto updater) {
+        renewDbSession();
+
         updater = SessionManager.getInstance().getSession(updater);
 
         if(updater != null &&
@@ -204,7 +241,7 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
             Customer customerEntity = getCustomerFacade().getById(customer.getId());
 
             if (mediaMemberEntity != null && customerEntity != null &&
-                    isLoanPossible(mediaMemberEntity.getMedia().getId(), customerEntity.getId(), false)) {
+                    checkIsLoanPossible(mediaMemberEntity.getMedia().getId(), customerEntity.getId(), false)) {
                 Media mediaEntity = mediaMemberEntity.getMedia();
                 int loanTerm = mediaEntity.getMediaType().getLoanCondition().getLoanTerm(); // weeksToExtend
 
@@ -223,6 +260,8 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
     }
 
     public int takeBackMediaMember(LoanDetailedDto loan){
+        renewDbSession();
+
         LoanFacade loanFacade = getLoanFacade();
         Loan loanEntity = loanFacade.getById(loan.getId());
         loanEntity.setClosed(true);
@@ -230,6 +269,8 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
     }
 
     public boolean extendLoan(LoanDetailedDto loan, AccountDetailedDto updater) {
+        renewDbSession();
+
         updater = SessionManager.getInstance().getSession(updater);
 
         if (updater != null &&
@@ -240,7 +281,7 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
             Loan loanEntity = loanFacade.getById(loan.getId());
 
             if (loanEntity != null &&
-                    isLoanPossible(loan.getMediaMember().getMedia().getMediaId(), loan.getCustomer().getId(), false)) {
+                    checkIsLoanPossible(loanEntity.getMediaMember().getMedia().getId(), loan.getCustomer().getId(), true)) {
                 loanEntity.setLastRenewalStart(new Date(Calendar.getInstance().getTime().getTime()));
                 LoanCondition loanCondition = loanEntity.getMediaMember().getMedia().getMediaType().getLoanCondition();
 
@@ -275,10 +316,18 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
     }
 
     public List<Loan> getListByCustomer(int id) {
+        renewDbSession();
+
         FilterConnector<LoanProperty, LoanProperty> connector = new FilterConnector<>(
                 new Filter<>(id, LoanProperty.CUSTOMER__ID, MatchType.EQUALS, CaseType.NORMAL));
 
         return getLoanFacade().filter(connector);
+    }
+
+    public boolean isLoanPossible(int mediaId, int customerId, boolean isExtend) {
+        renewDbSession();
+
+        return checkIsLoanPossible(mediaId, customerId, isExtend);
     }
 
     /**
@@ -291,11 +340,17 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
      * @return true     the loan is possible
      *         false    otherwise
      */
-    public boolean isLoanPossible(int mediaId, int customerId, boolean isExtend) {
+    private boolean checkIsLoanPossible(int mediaId, int customerId, boolean isExtend) {
         MediaFacade mediaFacade = getMediaFacade();
         Media mediaEntity = mediaFacade.getById(mediaId);
 
-        if(mediaEntity != null && mediaEntity.getAvailable()) {
+        if(mediaEntity != null) {
+            if(!isExtend) {
+                if(!mediaEntity.getAvailable()) {
+                    return false;
+                }
+            }
+
             CustomerFacade customerFacade = getCustomerFacade();
             Customer customerEntity = customerFacade.getById(customerId);
 
@@ -311,7 +366,8 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
                         )
                 );
 
-                List<Reservation> reservationList = getReservationFacade().filter(reservationConnector);
+                ReservationFacade reservationFacade = getReservationFacade();
+                List<Reservation> reservationList = reservationFacade.filter(reservationConnector);
 
                 // there should only be one at most, but we check intentionally if the size is greater than 0
                 if(reservationList.size() > 0) {
@@ -338,7 +394,7 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
                         new Filter<>(mediaEntity.getId(), ReservationProperty.MEDIA__ID, MatchType.EQUALS, CaseType.NORMAL)
                 );
 
-                reservationList = getReservationFacade().filter(reservationConnector);
+                reservationList = reservationFacade.filter(reservationConnector);
 
                 // get the active loans for the mediaId
                 FilterConnector<LoanProperty, LoanProperty> loanConnector = new FilterConnector<>(

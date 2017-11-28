@@ -48,7 +48,7 @@ public class ReservationRemoteObject extends UnicastRemoteObject implements Rese
     @Override
     protected void finalize() throws Throwable {
         if(_reservationFacade != null) {
-            _reservationFacade.closeSession();
+            _reservationFacade.closeDbSession();
         }
 
         super.finalize();

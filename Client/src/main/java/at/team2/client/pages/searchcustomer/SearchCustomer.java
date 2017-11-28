@@ -235,10 +235,6 @@ public class SearchCustomer extends BasePage<Void, NullType, NullType, NullType>
                 if(loanRemote.isLoanPossible(loanEntity.getMediaMember().getMedia().getMediaId(), loanEntity.getCustomer().getId(), true)) {
                     if(loanRemote.extendLoan(loanEntity, accountDetailedDto)) {
                         _loanList.getValue().remove(loanEntity);
-
-                        // renew the main object after changing entries in the database
-                        loanRemote = remoteObject.getLoanRemoteObject();
-
                         loanEntity = loanRemote.getLoanDetailedById(loanEntity.getId());
                         _loanList.getValue().add(loanEntity);
                         final LoanDetailedDto finalLoanEntity = loanEntity;
@@ -251,7 +247,7 @@ public class SearchCustomer extends BasePage<Void, NullType, NullType, NullType>
                     Platform.runLater(() -> showErrorMessage("Error","Cannot extend the loan.\nThe Media is currently reserved"));
                 }
             } catch (Exception e) {
-                e.printStackTrace();
+                Platform.runLater(() -> showRmiErrorMessage(e));
             }
         }
     }
@@ -274,10 +270,8 @@ public class SearchCustomer extends BasePage<Void, NullType, NullType, NullType>
                     } else {
                         Platform.runLater(()-> showErrorMessage("Error","Could not return"));
                     }
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                } catch (NotBoundException e) {
-                    e.printStackTrace();
+                } catch (Exception e) {
+                    Platform.runLater(() -> showRmiErrorMessage(e));
                 }
             }
         }

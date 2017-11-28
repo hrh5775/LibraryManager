@@ -74,7 +74,7 @@ public class LoanRemoteObject extends UnicastRemoteObject implements LoanRemoteO
     @Override
     protected void finalize() throws Throwable {
         if(_loanFacade != null) {
-            _loanFacade.closeSession();
+            _loanFacade.closeDbSession();
         }
 
         super.finalize();

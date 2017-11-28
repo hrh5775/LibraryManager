@@ -79,7 +79,7 @@ public class BookRemoteObject extends UnicastRemoteObject implements BookRemoteO
     @Override
     protected void finalize() throws Throwable {
         if(_bookFacade != null) {
-            _bookFacade.closeSession();
+            _bookFacade.closeDbSession();
         }
 
         super.finalize();

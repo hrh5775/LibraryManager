@@ -8,11 +8,9 @@ import at.team2.database_wrapper.facade.SessionFactory;
 import at.team2.domain.interfaces.BaseDomainEntity;
 import at.team2.domain.interfaces.DomainEntityProperty;
 import javafx.util.Pair;
-import org.hibernate.type.DateType;
-import org.hibernate.type.ShortType;
-
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import java.sql.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -25,7 +23,7 @@ public abstract class BaseDatabaseFacade<V extends BaseDomainEntity, P extends D
     }
 
     public BaseDatabaseFacade(EntityManager session) {
-        _session = session;
+        setSession(session);
     }
 
     public abstract V getById(int id);
@@ -121,7 +119,7 @@ public abstract class BaseDatabaseFacade<V extends BaseDomainEntity, P extends D
             if(parameter != null) {
                 hibernateColumnIdentifier = "abc" + (new Random()).nextInt(999999999); //columnIdentifier.replace(".", "");
 
-                if(!(parameter instanceof Integer || parameter instanceof Boolean)) {
+                if(!(parameter instanceof Integer || parameter instanceof Boolean || parameter instanceof Date)) {
                     modifiedParameter = parameter.toString();
 
                     switch (filter.getCaseType()) {
@@ -207,6 +205,11 @@ public abstract class BaseDatabaseFacade<V extends BaseDomainEntity, P extends D
     }
 
     protected abstract String getColumnNameForProperty(P property);
+
+    @Override
+    public void setSession(EntityManager session) {
+        _session = session;
+    }
 
     @Override
     public void closeSession() {

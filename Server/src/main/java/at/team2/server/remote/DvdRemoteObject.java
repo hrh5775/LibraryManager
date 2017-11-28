@@ -79,7 +79,7 @@ public class DvdRemoteObject extends UnicastRemoteObject implements DvdRemoteObj
     @Override
     protected void finalize() throws Throwable {
         if(_dvdFacade != null) {
-            _dvdFacade.closeSession();
+            _dvdFacade.closeDbSession();
         }
 
         super.finalize();

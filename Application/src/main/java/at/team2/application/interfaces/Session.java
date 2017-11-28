@@ -4,5 +4,5 @@ public interface Session {
     /**
      * closes the session in the underlying layer
      */
-    public void closeSession();
+    public void closeDbSession();
 }

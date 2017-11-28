@@ -185,7 +185,7 @@ public class MediaFacade extends BaseDatabaseFacade<Media, MediaProperty> {
         return StoreHelper.storeEntities(session, transactionType);
     }
 
-    protected boolean isAvailable(int id, boolean isCreate, EntityManager session) {
+    protected boolean isAvailable(int id, EntityManager session) {
         Query query = session.createQuery("select count(*) from LoanEntity as l join MediaMemberEntity as m on l.mediaMemberId = m.id where m.mediaId = :id and l.closed = false");
         query.setParameter("id", id);
         query.getResultList();
@@ -195,9 +195,6 @@ public class MediaFacade extends BaseDatabaseFacade<Media, MediaProperty> {
         query.setParameter("id", id);
         long maxMediaMembers = getFirstOrDefault(query);
 
-        openLoanCount += isCreate ? 1 : -1;
-        boolean isAvailable = openLoanCount < maxMediaMembers;
-
-        return isAvailable;
+        return openLoanCount < maxMediaMembers;
     }
 }

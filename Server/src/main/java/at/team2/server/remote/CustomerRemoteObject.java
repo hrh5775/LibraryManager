@@ -54,7 +54,7 @@ public class CustomerRemoteObject extends UnicastRemoteObject implements Custome
     @Override
     protected void finalize() throws Throwable {
         if(_customerFacade != null) {
-            _customerFacade.closeSession();
+            _customerFacade.closeDbSession();
         }
 
         super.finalize();

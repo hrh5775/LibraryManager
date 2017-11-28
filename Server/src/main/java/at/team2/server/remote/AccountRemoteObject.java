@@ -48,7 +48,7 @@ public class AccountRemoteObject extends UnicastRemoteObject implements AccountR
     @Override
     protected void finalize() throws Throwable {
         if(_accountFacade != null) {
-            _accountFacade.closeSession();
+            _accountFacade.closeDbSession();
         }
 
         super.finalize();

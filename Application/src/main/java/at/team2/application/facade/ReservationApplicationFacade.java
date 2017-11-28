@@ -15,9 +15,11 @@ import at.team2.database_wrapper.enums.CaseType;
 import at.team2.database_wrapper.enums.ConnectorType;
 import at.team2.database_wrapper.enums.MatchType;
 import at.team2.database_wrapper.enums.TransactionType;
+import at.team2.database_wrapper.facade.ConfigurationFacade;
 import at.team2.database_wrapper.facade.MediaFacade;
 import at.team2.database_wrapper.facade.ReservationFacade;
 import at.team2.domain.entities.*;
+import at.team2.domain.enums.properties.ConfigurationProperty;
 import at.team2.domain.enums.properties.ReservationProperty;
 import javafx.util.Pair;
 import org.modelmapper.ModelMapper;
@@ -30,6 +32,7 @@ import java.util.List;
 public class ReservationApplicationFacade extends BaseApplicationFacade<Reservation, ReservationDetailedDto, AccountDetailedDto, ReservationProperty> {
     private ReservationFacade _reservationFacade;
     private MediaFacade _mediaFacade;
+    private ConfigurationFacade _configurationFacade;
 
     public ReservationApplicationFacade() {
         super();
@@ -37,7 +40,7 @@ public class ReservationApplicationFacade extends BaseApplicationFacade<Reservat
 
     private ReservationFacade getReservationFacade() {
         if(_reservationFacade == null) {
-            _reservationFacade = new ReservationFacade(getSession());
+            _reservationFacade = new ReservationFacade(getDbSession());
         }
 
         return _reservationFacade;
@@ -45,24 +48,22 @@ public class ReservationApplicationFacade extends BaseApplicationFacade<Reservat
 
     private MediaFacade getMediaFacade() {
         if(_mediaFacade == null) {
-            _mediaFacade = new MediaFacade(getSession());
+            _mediaFacade = new MediaFacade(getDbSession());
         }
 
         return _mediaFacade;
     }
 
-    @Override
-    public Reservation getById(int id) {
-        return getReservationFacade().getById(id);
+    private ConfigurationFacade getConfigurationFacade() {
+        if(_configurationFacade == null) {
+            _configurationFacade = new ConfigurationFacade(getDbSession());
+        }
+
+        return _configurationFacade;
     }
 
     @Override
-    public List<Reservation> getList() {
-        return getReservationFacade().getList();
-    }
-
-    @Override
-    public void closeSession() {
+    public void closeDbSession() {
         if(_reservationFacade != null) {
             _reservationFacade.closeSession();
             _reservationFacade = null;
@@ -73,11 +74,49 @@ public class ReservationApplicationFacade extends BaseApplicationFacade<Reservat
             _mediaFacade = null;
         }
 
-        super.closeSession();
+        if(_configurationFacade != null) {
+            _configurationFacade.closeSession();
+            _configurationFacade = null;
+        }
+
+        super.closeDbSession();
+    }
+
+    @Override
+    protected void renewDbSession() {
+        super.renewDbSession();
+
+        if(_reservationFacade != null) {
+            _reservationFacade.setSession(getDbSession());
+        }
+
+        if(_mediaFacade != null) {
+            _mediaFacade.setSession(getDbSession());
+        }
+
+        if(_configurationFacade != null) {
+            _configurationFacade.setSession(getDbSession());
+        }
+    }
+
+    @Override
+    public Reservation getById(int id) {
+        renewDbSession();
+
+        return getReservationFacade().getById(id);
+    }
+
+    @Override
+    public List<Reservation> getList() {
+        renewDbSession();
+
+        return getReservationFacade().getList();
     }
 
     @Override
     public Pair<Integer, List<Pair<ReservationProperty, String>>> add(ReservationDetailedDto value, AccountDetailedDto updater) {
+        renewDbSession();
+
         updater = SessionManager.getInstance().getSession(updater);
 
         if(updater != null &&
@@ -102,6 +141,8 @@ public class ReservationApplicationFacade extends BaseApplicationFacade<Reservat
 
     @Override
     public Pair<Integer, List<Pair<ReservationProperty, String>>> update(ReservationDetailedDto value, AccountDetailedDto updater) {
+        renewDbSession();
+
         updater = SessionManager.getInstance().getSession(updater);
 
         if(updater != null &&
@@ -126,6 +167,8 @@ public class ReservationApplicationFacade extends BaseApplicationFacade<Reservat
 
     @Override
     public Pair<Boolean, List<Pair<ReservationProperty, String>>> delete(int id, AccountDetailedDto updater) {
+        renewDbSession();
+
         updater = SessionManager.getInstance().getSession(updater);
 
         if(updater != null &&
@@ -148,6 +191,8 @@ public class ReservationApplicationFacade extends BaseApplicationFacade<Reservat
     }
 
     public int reserveMedia(MediaSmallDto media, CustomerSmallDto customer, AccountDetailedDto updater) {
+        renewDbSession();
+
         updater = SessionManager.getInstance().getSession(updater);
 
         if(updater != null &&
@@ -197,10 +242,41 @@ public class ReservationApplicationFacade extends BaseApplicationFacade<Reservat
     }
 
     public List<Reservation> getListByCustomer(int id) {
+        renewDbSession();
+
         FilterConnector<ReservationProperty, ReservationProperty> connector = new FilterConnector<>(
                 new Filter<>(id, ReservationProperty.CUSTOMER__ID, MatchType.EQUALS, CaseType.NORMAL)
         );
 
         return getReservationFacade().filter(connector);
+    }
+
+    public void removeOldReservations() {
+        renewDbSession();
+
+        ConfigurationFacade configurationFacade = getConfigurationFacade();
+
+        // load the configuration from the database
+        FilterConnector<ConfigurationProperty, ConfigurationProperty> ldapAdServerConnector = new FilterConnector<>(
+                new Filter<>("DAYS_TO_PRESERVE_RESERVATIONS", ConfigurationProperty.IDENTIFIER, MatchType.EQUALS, CaseType.NORMAL));
+
+        List<Configuration> daysToPreserveReservationsList = configurationFacade.filter(ldapAdServerConnector);
+
+        int daysToPreserveReservations = Integer.parseInt(daysToPreserveReservationsList.get(0).getData());
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_MONTH, -daysToPreserveReservations);
+
+        ReservationFacade facade = getReservationFacade();
+
+        FilterConnector<ReservationProperty, ReservationProperty> connector = new FilterConnector<>(
+                new Filter<>(new Date(calendar.getTime().getTime()), ReservationProperty.INFORMATION_DATE, MatchType.LESS_THAN, CaseType.NORMAL)
+        );
+
+        List<Reservation> reservationList = facade.filter(connector);
+
+        for(Reservation item : reservationList) {
+            facade.delete(item.getId(), TransactionType.AUTO_COMMIT);
+        }
     }
 }

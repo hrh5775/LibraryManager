@@ -31,34 +31,49 @@ public class CustomerApplicationFacade extends BaseApplicationFacade<Customer, C
 
     private CustomerFacade getCustomerFacade() {
         if(_customerFacade == null) {
-            _customerFacade = new CustomerFacade(getSession());
+            _customerFacade = new CustomerFacade(getDbSession());
         }
 
         return _customerFacade;
     }
 
     @Override
-    public Customer getById(int id) {
-        return getCustomerFacade().getById(id);
-    }
-
-    @Override
-    public List<Customer> getList() {
-        return getCustomerFacade().getList();
-    }
-
-    @Override
-    public void closeSession() {
+    public void closeDbSession() {
         if(_customerFacade != null) {
             _customerFacade.closeSession();
             _customerFacade = null;
         }
 
-        super.closeSession();
+        super.closeDbSession();
+    }
+
+    @Override
+    protected void renewDbSession() {
+        super.renewDbSession();
+
+        if(_customerFacade != null) {
+            _customerFacade.setSession(getDbSession());
+        }
+    }
+
+    @Override
+    public Customer getById(int id) {
+        renewDbSession();
+
+        return getCustomerFacade().getById(id);
+    }
+
+    @Override
+    public List<Customer> getList() {
+        renewDbSession();
+
+        return getCustomerFacade().getList();
     }
 
     @Override
     public Pair<Integer, List<Pair<CustomerProperty, String>>> add(CustomerDetailedDto value, AccountDetailedDto updater) {
+        renewDbSession();
+
         if(SessionManager.getInstance().isSessionAvailable(updater) &&
                 (RoleHelper.hasRole(updater, Role.ADMIN))) {
             ModelMapper mapper = MapperHelper.getMapper();
@@ -79,6 +94,8 @@ public class CustomerApplicationFacade extends BaseApplicationFacade<Customer, C
 
     @Override
     public Pair<Integer, List<Pair<CustomerProperty, String>>> update(CustomerDetailedDto value, AccountDetailedDto updater) {
+        renewDbSession();
+
         updater = SessionManager.getInstance().getSession(updater);
 
         if(updater != null &&
@@ -106,6 +123,8 @@ public class CustomerApplicationFacade extends BaseApplicationFacade<Customer, C
 
     @Override
     public Pair<Boolean, List<Pair<CustomerProperty, String>>> delete(int id, AccountDetailedDto updater) {
+        renewDbSession();
+
         updater = SessionManager.getInstance().getSession(updater);
 
         if(updater != null &&
@@ -126,6 +145,8 @@ public class CustomerApplicationFacade extends BaseApplicationFacade<Customer, C
     }
 
     public List<Customer> search(String searchString){
+        renewDbSession();
+
         Integer id = -1;
 
         try {

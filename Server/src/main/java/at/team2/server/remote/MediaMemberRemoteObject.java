@@ -88,7 +88,7 @@ public class MediaMemberRemoteObject extends UnicastRemoteObject implements Medi
     @Override
     protected void finalize() throws Throwable {
         if(_mediaMemberFacade != null) {
-            _mediaMemberFacade.closeSession();
+            _mediaMemberFacade.closeDbSession();
         }
 
         super.finalize();

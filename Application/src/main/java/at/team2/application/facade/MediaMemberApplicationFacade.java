@@ -30,34 +30,49 @@ public class MediaMemberApplicationFacade extends BaseApplicationFacade<MediaMem
 
     private MediaMemberFacade getMediaMemberFacade() {
         if(_mediaMemberFacade == null) {
-            _mediaMemberFacade = new MediaMemberFacade(getSession());
+            _mediaMemberFacade = new MediaMemberFacade(getDbSession());
         }
 
         return _mediaMemberFacade;
     }
 
     @Override
-    public MediaMember getById(int id) {
-        return getMediaMemberFacade().getById(id);
-    }
-
-    @Override
-    public List<MediaMember> getList() {
-        return getMediaMemberFacade().getList();
-    }
-
-    @Override
-    public void closeSession() {
+    public void closeDbSession() {
         if(_mediaMemberFacade != null) {
             _mediaMemberFacade.closeSession();
             _mediaMemberFacade = null;
         }
 
-        super.closeSession();
+        super.closeDbSession();
+    }
+
+    @Override
+    protected void renewDbSession() {
+        super.renewDbSession();
+
+        if(_mediaMemberFacade != null) {
+            _mediaMemberFacade.setSession(getDbSession());
+        }
+    }
+
+    @Override
+    public MediaMember getById(int id) {
+        renewDbSession();
+
+        return getMediaMemberFacade().getById(id);
+    }
+
+    @Override
+    public List<MediaMember> getList() {
+        renewDbSession();
+
+        return getMediaMemberFacade().getList();
     }
 
     @Override
     public Pair<Integer, List<Pair<MediaMemberProperty, String>>> add(MediaMemberSmallDto value, AccountDetailedDto updater) {
+        renewDbSession();
+
         updater = SessionManager.getInstance().getSession(updater);
 
         if(updater != null &&
@@ -83,6 +98,8 @@ public class MediaMemberApplicationFacade extends BaseApplicationFacade<MediaMem
 
     @Override
     public Pair<Integer, List<Pair<MediaMemberProperty, String>>> update(MediaMemberSmallDto value, AccountDetailedDto updater) {
+        renewDbSession();
+
         updater = SessionManager.getInstance().getSession(updater);
 
         if(updater != null &&
@@ -108,6 +125,8 @@ public class MediaMemberApplicationFacade extends BaseApplicationFacade<MediaMem
 
     @Override
     public Pair<Boolean, List<Pair<MediaMemberProperty, String>>> delete(int id, AccountDetailedDto updater) {
+        renewDbSession();
+
         updater = SessionManager.getInstance().getSession(updater);
 
         if(updater != null &&
@@ -131,6 +150,8 @@ public class MediaMemberApplicationFacade extends BaseApplicationFacade<MediaMem
     }
 
     public MediaMember getMediaMemberByIndex(String index) {
+        renewDbSession();
+
         FilterConnector<MediaMemberProperty, MediaMemberProperty> connector = new FilterConnector<>(
                 new Filter<>(index, MediaMemberProperty.FULL_INDEX, MatchType.EQUALS, CaseType.IGNORE_CASE));
 
@@ -144,6 +165,8 @@ public class MediaMemberApplicationFacade extends BaseApplicationFacade<MediaMem
     }
 
     public List<MediaMember> getListByMediaId(int id) {
+        renewDbSession();
+
         FilterConnector<MediaMemberProperty, MediaMemberProperty> connector = new FilterConnector<>(
                 new Filter<>(id, MediaMemberProperty.MEDIA__ID, MatchType.EQUALS, CaseType.IGNORE_CASE));
 

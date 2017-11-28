@@ -120,7 +120,7 @@ public class LoanFacade extends BaseDatabaseFacade<Loan, LoanProperty> {
 
         MediaFacade mediaFacade = new MediaFacade(session);
         MediaEntity mediaEntity = mediaFacade.getEntityById(mediaMemberEntity.getMediaId());
-        mediaEntity.setAvailable(mediaFacade.isAvailable(mediaEntity.getId(), true, session));
+        mediaEntity.setAvailable(mediaFacade.isAvailable(mediaEntity.getId(), session));
         session.merge(mediaEntity);
 
         StoreHelper.storeEntities(session, transactionType);
@@ -144,7 +144,7 @@ public class LoanFacade extends BaseDatabaseFacade<Loan, LoanProperty> {
 
         MediaFacade mediaFacade = new MediaFacade(session);
         MediaEntity mediaEntity = mediaFacade.getEntityById(mediaMemberEntity.getMediaId());
-        mediaEntity.setAvailable(mediaFacade.isAvailable(mediaEntity.getId(), false, session));
+        mediaEntity.setAvailable(mediaFacade.isAvailable(mediaEntity.getId(), session));
         session.merge(mediaEntity);
 
         StoreHelper.storeEntities(session, transactionType);
@@ -173,7 +173,7 @@ public class LoanFacade extends BaseDatabaseFacade<Loan, LoanProperty> {
 
             if(mediaEntity != null) {
                 MediaFacade mediaFacade = new MediaFacade(session);
-                mediaEntity.setAvailable(mediaFacade.isAvailable(mediaEntity.getId(), false, session));
+                mediaEntity.setAvailable(mediaFacade.isAvailable(mediaEntity.getId(), session));
                 session.merge(mediaEntity);
 
                 return StoreHelper.storeEntities(session, transactionType);

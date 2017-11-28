@@ -31,34 +31,49 @@ public class BookApplicationFacade extends BaseApplicationFacade<Book, BookDetai
 
     private BookFacade getBookFacade() {
         if(_bookFacade == null) {
-            _bookFacade = new BookFacade(getSession());
+            _bookFacade = new BookFacade(getDbSession());
         }
 
         return _bookFacade;
     }
 
     @Override
-    public Book getById(int id) {
-        return getBookFacade().getById(id);
-    }
-
-    @Override
-    public List<Book> getList() {
-        return getBookFacade().getList();
-    }
-
-    @Override
-    public void closeSession() {
+    public void closeDbSession() {
         if(_bookFacade != null) {
             _bookFacade.closeSession();
             _bookFacade = null;
         }
 
-        super.closeSession();
+        super.closeDbSession();
+    }
+
+    @Override
+    protected void renewDbSession() {
+        super.renewDbSession();
+
+        if(_bookFacade != null) {
+            _bookFacade.setSession(getDbSession());
+        }
+    }
+
+    @Override
+    public Book getById(int id) {
+        renewDbSession();
+
+        return getBookFacade().getById(id);
+    }
+
+    @Override
+    public List<Book> getList() {
+        renewDbSession();
+
+        return getBookFacade().getList();
     }
 
     @Override
     public Pair<Integer, List<Pair<BookProperty, String>>> add(BookDetailedDto value, AccountDetailedDto updater) {
+        renewDbSession();
+
         updater = SessionManager.getInstance().getSession(updater);
 
         if(updater != null &&
@@ -84,6 +99,8 @@ public class BookApplicationFacade extends BaseApplicationFacade<Book, BookDetai
 
     @Override
     public Pair<Integer, List<Pair<BookProperty, String>>> update(BookDetailedDto value, AccountDetailedDto updater) {
+        renewDbSession();
+
         updater = SessionManager.getInstance().getSession(updater);
 
         if(updater != null &&
@@ -109,6 +126,8 @@ public class BookApplicationFacade extends BaseApplicationFacade<Book, BookDetai
 
     @Override
     public Pair<Boolean, List<Pair<BookProperty, String>>> delete(int id, AccountDetailedDto updater) {
+        renewDbSession();
+
         updater = SessionManager.getInstance().getSession(updater);
 
         if(updater != null &&
@@ -132,6 +151,8 @@ public class BookApplicationFacade extends BaseApplicationFacade<Book, BookDetai
     }
 
     public List<Book> search(String searchString){
+        renewDbSession();
+
         /*String[] items = searchString.split(" ");
         FilterConnector<BookProperty, BookProperty> connector = null;
         FilterConnector<BookProperty, BookProperty> tmpConnector;

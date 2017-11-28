@@ -30,6 +30,14 @@ public class MapperHelper {
                     skip().setReminderByReminderId(null);
                 }
             });
+
+            mapper.addMappings(new PropertyMap<LoanEntity, Loan>() {
+                @Override
+                protected void configure() {
+                    map().getMediaMember().setId(source.getMediaMemberId());
+                    map().getMediaMember().getMedia().setId(source.getMediaMemberByMediaMemberId().getMediaId());
+                }
+            });
         }
 
         return mapper;

@@ -4,6 +4,7 @@ import at.team2.common.configuration.ConnectionInfo;
 import at.team2.common.helper.RmiHelper;
 import at.team2.common.interfaces.MainRemoteObjectInf;
 import at.team2.server.remote.MainRemoteObject;
+import at.team2.server.tasks.RemoveInvalidReservationsTask;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -41,6 +42,9 @@ public class RmiController {
         Registry registry = RmiHelper.getRegistry();
         MainRemoteObject obj = new MainRemoteObject();
         registry.rebind(ConnectionInfo.url, obj);
+
+        System.out.println("\nStart background tasks");
+        new Thread(new RemoveInvalidReservationsTask()).start();
 
         System.out.println("Server has started successfully");
         // https://docs.oracle.com/javase/7/docs/technotes/guides/rmi/hello/hello-world.html

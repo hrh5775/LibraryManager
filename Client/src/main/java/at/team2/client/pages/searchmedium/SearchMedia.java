@@ -160,11 +160,13 @@ public class SearchMedia extends BasePage<Void, NullType, NullType, NullType> {
             MediaDetail page = new MediaDetail(media, this);
             Scene scene = new Scene(page);
             dialog.setScene(scene);
+
             try {
                 dialog.showAndWait();
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
             page.exit();
         }));
     }

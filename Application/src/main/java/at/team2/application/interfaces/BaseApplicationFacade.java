@@ -29,7 +29,7 @@ public abstract class BaseApplicationFacade<D extends BaseDomainEntity, T extend
     public abstract List<D> getList();
 
     @Override
-    public void closeSession() {
+    public void closeDbSession() {
         if(_session != null && _session.isOpen()) {
             _session.close();
         }
@@ -37,7 +37,12 @@ public abstract class BaseApplicationFacade<D extends BaseDomainEntity, T extend
         _session = null;
     }
 
-    protected EntityManager getSession() {
+    protected EntityManager getDbSession() {
         return _session;
+    }
+
+    protected void renewDbSession() {
+        closeDbSession();
+        _session = SessionFactory.createSession();
     }
 }
