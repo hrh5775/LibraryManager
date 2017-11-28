@@ -8,6 +8,8 @@ import at.team2.database_wrapper.facade.SessionFactory;
 import at.team2.domain.interfaces.BaseDomainEntity;
 import at.team2.domain.interfaces.DomainEntityProperty;
 import javafx.util.Pair;
+import org.hibernate.type.DateType;
+import org.hibernate.type.ShortType;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -46,10 +48,14 @@ public abstract class BaseDatabaseFacade<V extends BaseDomainEntity, P extends D
         Query query = session.createQuery(queryString + " " + filterExpression.getKey());
 
         for(HibernateParameter item : filterExpression.getValue()) {
-            if(!item.getPreValue().isEmpty() || !item.getPostValue().isEmpty()) {
-                query.setParameter(item.getIdentifier(), item.getPreValue() + item.getValue() + item.getPostValue());
+            if(item.getValue() != null) {
+                if ((!item.getPreValue().isEmpty() || !item.getPostValue().isEmpty())) {
+                    query.setParameter(item.getIdentifier(), item.getPreValue() + item.getValue() + item.getPostValue());
+                } else {
+                    query.setParameter(item.getIdentifier(), item.getValue());
+                }
             } else {
-                query.setParameter(item.getIdentifier(), item.getValue());
+                //query.setParameter(item.getIdentifier(), item.getValue());
             }
         }
 
@@ -110,22 +116,28 @@ public abstract class BaseDatabaseFacade<V extends BaseDomainEntity, P extends D
         parameter = filter.getParameter();
 
         if(columnIdentifier != null && !columnIdentifier.trim().isEmpty()) {
-            hibernateColumnIdentifier = "abc" + (new Random()).nextInt(999999999); //columnIdentifier.replace(".", "");
             modifiedColumnIdentifier = columnIdentifier;
 
-            if(!(parameter instanceof Integer)) {
-                modifiedParameter = parameter.toString();
+            if(parameter != null) {
+                hibernateColumnIdentifier = "abc" + (new Random()).nextInt(999999999); //columnIdentifier.replace(".", "");
 
-                switch (filter.getCaseType()) {
-                    case NORMAL:
-                        break;
-                    case IGNORE_CASE:
-                        modifiedParameter = ((String)modifiedParameter).toLowerCase();
-                        modifiedColumnIdentifier = "lower(" + columnIdentifier + ")";
-                        break;
+                if(!(parameter instanceof Integer || parameter instanceof Boolean)) {
+                    modifiedParameter = parameter.toString();
+
+                    switch (filter.getCaseType()) {
+                        case NORMAL:
+                            break;
+                        case IGNORE_CASE:
+                            modifiedParameter = ((String) modifiedParameter).toLowerCase();
+                            modifiedColumnIdentifier = "lower(" + columnIdentifier + ")";
+                            break;
+                    }
+                } else {
+                    modifiedParameter = parameter;
                 }
             } else {
                 modifiedParameter = parameter;
+                hibernateColumnIdentifier = null;
             }
 
             switch (filter.getMatchType()) {
@@ -133,6 +145,16 @@ public abstract class BaseDatabaseFacade<V extends BaseDomainEntity, P extends D
                     parameterStart = "";
                     parameterEnd = "";
                     match = "=";
+                    break;
+                case NOT_EQUAL:
+                    parameterStart = "";
+                    parameterEnd = "";
+                    match = "!=";
+                    break;
+                case IS_NOT:
+                    parameterStart = "";
+                    parameterEnd = "";
+                    match = "is not";
                     break;
                 case LESS_THAN:
                     parameterStart = "";
@@ -172,7 +194,12 @@ public abstract class BaseDatabaseFacade<V extends BaseDomainEntity, P extends D
             }
 
             parameterList.add(new HibernateParameter(hibernateColumnIdentifier, modifiedParameter, parameterStart, parameterEnd));
-            builder.append(modifiedColumnIdentifier + " " + match + " " + " :" + hibernateColumnIdentifier);
+
+            if(parameter != null) {
+                builder.append(modifiedColumnIdentifier + " " + match + " " + " :" + hibernateColumnIdentifier);
+            } else {
+                builder.append(modifiedColumnIdentifier + " " + match + " " + "null");
+            }
         }
 
         builder.append(")");

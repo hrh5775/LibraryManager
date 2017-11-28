@@ -51,6 +51,8 @@
 
             <!-- only for testing -->
             <property name="hibernate.show_sql" value="true" />
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.use_sql_comments" value="true"/>
             <property name="openjpa.Log" value="DefaultLevel=WARN, Runtime=INFO, Tool=INFO, SQL=TRACE"/>
             <property name="openjpa.ConnectionFactoryProperties" value="PrintParameters=true" />
             <property name="hibernate.id.new_generator_mappings" value="true"/>

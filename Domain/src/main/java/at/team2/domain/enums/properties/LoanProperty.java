@@ -13,5 +13,6 @@ public enum LoanProperty implements DomainEntityProperty {
     REMINDER,
 
     // additional properties
-    CUSTOMER__ID
+    CUSTOMER__ID,
+    MEDIA__ID
 }

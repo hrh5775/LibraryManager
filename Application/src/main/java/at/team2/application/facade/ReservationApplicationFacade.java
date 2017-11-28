@@ -15,6 +15,7 @@ import at.team2.database_wrapper.enums.CaseType;
 import at.team2.database_wrapper.enums.ConnectorType;
 import at.team2.database_wrapper.enums.MatchType;
 import at.team2.database_wrapper.enums.TransactionType;
+import at.team2.database_wrapper.facade.MediaFacade;
 import at.team2.database_wrapper.facade.ReservationFacade;
 import at.team2.domain.entities.*;
 import at.team2.domain.enums.properties.ReservationProperty;
@@ -28,6 +29,7 @@ import java.util.List;
 
 public class ReservationApplicationFacade extends BaseApplicationFacade<Reservation, ReservationDetailedDto, AccountDetailedDto, ReservationProperty> {
     private ReservationFacade _reservationFacade;
+    private MediaFacade _mediaFacade;
 
     public ReservationApplicationFacade() {
         super();
@@ -39,6 +41,14 @@ public class ReservationApplicationFacade extends BaseApplicationFacade<Reservat
         }
 
         return _reservationFacade;
+    }
+
+    private MediaFacade getMediaFacade() {
+        if(_mediaFacade == null) {
+            _mediaFacade = new MediaFacade(getSession());
+        }
+
+        return _mediaFacade;
     }
 
     @Override
@@ -56,6 +66,11 @@ public class ReservationApplicationFacade extends BaseApplicationFacade<Reservat
         if(_reservationFacade != null) {
             _reservationFacade.closeSession();
             _reservationFacade = null;
+        }
+
+        if(_mediaFacade != null) {
+            _mediaFacade.closeSession();
+            _mediaFacade = null;
         }
 
         super.closeSession();
@@ -148,23 +163,34 @@ public class ReservationApplicationFacade extends BaseApplicationFacade<Reservat
                     new Filter<>(customer.getId(), ReservationProperty.CUSTOMER__ID, MatchType.EQUALS, CaseType.NORMAL)
             ));
 
-            if(currentReservations.size() == 0) {
-                ModelMapper mapper = MapperHelper.getMapper();
-                Customer tmpCustomer = mapper.map(customer, Customer.class);
-                Media tmpMedia = mapper.map(media, Media.class);
+            MediaFacade mediaFacade = getMediaFacade();
+            Media mediaEntity = mediaFacade.getById(media.getMediaId());
 
-                Reservation reservation = new Reservation();
-                reservation.setCustomer(tmpCustomer);
-                reservation.setMedia(tmpMedia);
-                reservation.setReservationDate(new Date(Calendar.getInstance().getTime().getTime()));
+            if(mediaEntity != null) {
+                if(!mediaEntity.getAvailable()) {
+                    if (currentReservations.size() == 0) {
+                        ModelMapper mapper = MapperHelper.getMapper();
+                        Customer tmpCustomer = mapper.map(customer, Customer.class);
+                        Media tmpMedia = mapper.map(media, Media.class);
 
-                return reservationFacade.add(reservation, TransactionType.AUTO_COMMIT);
+                        Reservation reservation = new Reservation();
+                        reservation.setCustomer(tmpCustomer);
+                        reservation.setMedia(tmpMedia);
+                        reservation.setReservationDate(new Date(Calendar.getInstance().getTime().getTime()));
+
+                        return reservationFacade.add(reservation, TransactionType.AUTO_COMMIT);
+                    }
+
+                    // there are pending reservations for this media and this customer
+                    return 0;
+                }
+
+                // the media cannot be reserved because one or more media members are available
+                return 0;
             }
 
-            // there are pending reservations for this media and this customer
+            // the media was not found
             return 0;
-
-            //return 0;
         } else {
             return 0;
         }

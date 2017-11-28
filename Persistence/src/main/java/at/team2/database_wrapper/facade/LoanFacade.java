@@ -87,6 +87,8 @@ public class LoanFacade extends BaseDatabaseFacade<Loan, LoanProperty> {
                 return "reminderByReminderId.reminderDate";
             case CUSTOMER__ID:
                 return "customerId";
+            case MEDIA__ID:
+                return "mediaMemberByMediaMemberId.mediaId";
         }
 
         return null;

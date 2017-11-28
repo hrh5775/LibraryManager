@@ -10,9 +10,12 @@ import at.team2.common.dto.small.MediaMemberSmallDto;
 import at.team2.database_wrapper.common.Filter;
 import at.team2.database_wrapper.common.FilterConnector;
 import at.team2.database_wrapper.enums.CaseType;
+import at.team2.database_wrapper.enums.ConnectorType;
 import at.team2.database_wrapper.enums.MatchType;
 import at.team2.database_wrapper.facade.*;
 import at.team2.domain.entities.*;
+import at.team2.domain.enums.properties.MediaMemberProperty;
+import at.team2.domain.enums.properties.ReservationProperty;
 import org.modelmapper.ModelMapper;
 
 import java.sql.Date;
@@ -30,7 +33,9 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
     private static final int loanTermMultiplier = 7 * 24 * 3600 * 1000;
     private LoanFacade _loanFacade;
     private MediaMemberFacade _mediaMemberFacade;
+    private MediaFacade _mediaFacade;
     private CustomerFacade _customerFacade;
+    private ReservationFacade _reservationFacade;
 
     public LoanApplicationFacade() {
         super();
@@ -52,12 +57,28 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
         return _mediaMemberFacade;
     }
 
+    private MediaFacade getMediaFacade() {
+        if(_mediaFacade == null) {
+            _mediaFacade = new MediaFacade(getSession());
+        }
+
+        return _mediaFacade;
+    }
+
     private CustomerFacade getCustomerFacade() {
         if(_customerFacade == null) {
             _customerFacade = new CustomerFacade(getSession());
         }
 
         return _customerFacade;
+    }
+
+    private ReservationFacade getReservationFacade() {
+        if(_reservationFacade == null) {
+            _reservationFacade = new ReservationFacade(getSession());
+        }
+
+        return _reservationFacade;
     }
 
     @Override
@@ -82,9 +103,19 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
             _mediaMemberFacade = null;
         }
 
+        if(_mediaFacade != null) {
+            _mediaFacade.closeSession();
+            _mediaFacade = null;
+        }
+
         if(_customerFacade != null) {
             _customerFacade.closeSession();
             _customerFacade = null;
+        }
+
+        if(_reservationFacade != null) {
+            _reservationFacade.closeSession();
+            _reservationFacade = null;
         }
 
         super.closeSession();
@@ -251,21 +282,78 @@ public class LoanApplicationFacade extends BaseApplicationFacade<Loan, LoanDetai
     }
 
     /**
-     * We have to check if there are more reservations than available media members, which are currently not on loan
+     * We have to check if there are less reservations than available media members, which are currently not on loan
      * and the unique reservation with the mediaId for the customer has the "informationDate" set, which would lead to
-     * a possible loan. A loan is also possible if there are less reservations available than available media members,
-     * which are currently not on loan. A loan extend will also fail if there are pending reservations, which have a
-     * valid "informationDate".
+     * a possible loan. A loan extend will also fail if there are pending reservations, which have a valid
+     * "informationDate".
      * @param mediaId
      * @param customerId
      * @return true     the loan is possible
      *         false    otherwise
      */
     public boolean isLoanPossible(int mediaId, int customerId) {
-        // @todo: add a thread which removes invalid reservations
+        MediaFacade mediaFacade = getMediaFacade();
+        Media mediaEntity = mediaFacade.getById(mediaId);
 
-        // @todo: add this logic from the "SearchCustomer" page to the "lendmedium" page
+        if(mediaEntity != null && mediaEntity.getAvailable()) {
+            CustomerFacade customerFacade = getCustomerFacade();
+            Customer customerEntity = customerFacade.getById(customerId);
 
-        return true;
+            if(customerEntity != null) {
+                // check if the reservation with a valid "informationDate" was made for the customerId
+                FilterConnector<ReservationProperty, ReservationProperty> reservationConnector = new FilterConnector<>(
+                        new Filter<>(null, ReservationProperty.INFORMATION_DATE, MatchType.IS_NOT, CaseType.NORMAL),
+                        ConnectorType.AND,
+                        new FilterConnector<>(
+                                new Filter<>(mediaEntity.getId(), ReservationProperty.MEDIA__ID, MatchType.EQUALS, CaseType.NORMAL),
+                                ConnectorType.AND,
+                                new Filter<>(customerEntity.getId(), ReservationProperty.CUSTOMER__ID, MatchType.EQUALS, CaseType.NORMAL)
+                        )
+                );
+
+                List<Reservation> reservationList = getReservationFacade().filter(reservationConnector);
+
+                // there should only be one at most, but we check intentionally if the size is greater than 0
+                if(reservationList.size() > 0) {
+                    // the customer picks up his reservation, therefore allow it
+                    return true;
+                }
+
+
+                // in every other case we have to check the above mentioned conditions
+                // now we do not have to use the customerId anymore
+
+
+                // get the list with the media members for the mediaId
+                FilterConnector<MediaMemberProperty, MediaMemberProperty> mediaMemberConnector = new FilterConnector<>(
+                        new Filter<>(mediaEntity.getId(), MediaMemberProperty.MEDIA__ID, MatchType.EQUALS, CaseType.NORMAL)
+                );
+
+                List<MediaMember> mediaMemberList = getMediaMemberFacade().filter(mediaMemberConnector);
+
+                // get the reservations for the mediaId with a valid "informationDate", which is in this case not null
+                reservationConnector = new FilterConnector<>(
+                        new Filter<>(null, ReservationProperty.INFORMATION_DATE, MatchType.IS_NOT, CaseType.NORMAL),
+                        ConnectorType.AND,
+                        new Filter<>(mediaEntity.getId(), ReservationProperty.MEDIA__ID, MatchType.EQUALS, CaseType.NORMAL)
+                );
+
+                reservationList = getReservationFacade().filter(reservationConnector);
+
+                // get the active loans for the mediaId
+                FilterConnector<LoanProperty, LoanProperty> loanConnector = new FilterConnector<>(
+                        new Filter<>(mediaEntity.getId(), LoanProperty.MEDIA__ID, MatchType.EQUALS, CaseType.NORMAL),
+                        ConnectorType.AND,
+                        new Filter<>(false, LoanProperty.CLOSED, MatchType.EQUALS, CaseType.NORMAL)
+                );
+
+                List<Loan> loanList = getLoanFacade().filter(loanConnector);
+
+                // compare the sizes
+                return (reservationList.size() + loanList.size()) < mediaMemberList.size();
+            }
+        }
+
+        return false;
     }
 }
