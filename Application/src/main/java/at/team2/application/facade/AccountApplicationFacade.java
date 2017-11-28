@@ -203,8 +203,8 @@ public class AccountApplicationFacade extends BaseApplicationFacade<Account, Acc
 
                 AccountRole role = new AccountRole();
                 role.setId(0);
-                role.setKey("");
-                role.setRoleName("");
+                role.setKey(Role.ADMIN.toString());
+                role.setRoleName(Role.ADMIN.toString());
                 account.setAccountRole(role);
 
                 AccountDetailedDto accountDto = MapperHelper.getMapper().map(account, AccountDetailedDto.class);
