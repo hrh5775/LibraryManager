@@ -9,8 +9,8 @@ pipeline {
         }
         stage('Test'){
             steps {
-                #sh 'mvn test -DskipTests=false'
-                #junit '**/target/surefire-reports/*.xml' 
+                /*sh 'mvn test -DskipTests=false'
+                junit '**/target/surefire-reports/*.xml'*/
             }
         }
         stage('Deploy') {
