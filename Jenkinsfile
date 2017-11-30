@@ -9,8 +9,8 @@ pipeline {
         }
         stage('Test'){
             steps {
-                sh 'mvn test -DskipTests=true'
-                junit '**/target/surefire-reports/*.xml' 
+                #sh 'mvn test -DskipTests=false'
+                #junit '**/target/surefire-reports/*.xml' 
             }
         }
         stage('Deploy') {
@@ -23,6 +23,7 @@ pipeline {
         always {
             archive '**/target/*.jar'
             archive '**/target/*.war'
+            archive '**/target/*.ear'
         }
     }
 }
