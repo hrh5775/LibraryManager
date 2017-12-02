@@ -27,9 +27,6 @@ public class ConfigurationManager {
                         case Configuration.ROOT_DIR:
                             config.setRootDir(tmpValue);
                             break;
-                        case Configuration.ROOT_URI:
-                            config.setRootURI(tmpValue);
-                            break;
                         case Configuration.APP_NAME:
                             config.setAppName(tmpValue);
                             break;
@@ -45,7 +42,16 @@ public class ConfigurationManager {
                         case Configuration.SHOW_MENU_BAR:
                             config.setShowMenuBar(Boolean.parseBoolean(tmpValue));
                             break;
-                        case Configuration.OPEN_IN_WEBBROWSER:
+                        case Configuration.SERVER_URL:
+                            config.setServerURL(tmpValue);
+                            break;
+                        case Configuration.ADDITIONAL_SERVER_URL_EXTENSION:
+                            config.setAdditionalServerUrlExtension(tmpValue);
+                            break;
+                        case Configuration.PORT:
+                            config.setPort(Integer.parseInt(tmpValue));
+                            break;
+                        /*case Configuration.OPEN_IN_WEBBROWSER:
                             config.setOpenInWebbrowser(Boolean.parseBoolean(tmpValue));
                             break;
                         case Configuration.USE_JX_BROWSER:
@@ -53,7 +59,7 @@ public class ConfigurationManager {
                             break;
                         case Configuration.USE_WEB_CLIENT:
                             config.setUseWebClient(Boolean.parseBoolean(tmpValue));
-                            break;
+                            break;*/
                         default:
                             break;
                     }

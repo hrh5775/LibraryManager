@@ -1,6 +1,7 @@
 package at.team2.client.gui;
 
 import at.team2.client.pages.PageAction;
+import at.team2.common.configuration.ConnectionInfo;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Orientation;
@@ -46,6 +47,11 @@ public class Client extends Application {
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle(_configuration.getAppName());
         primaryStage.getIcons().add(AppConfiguration.getAppIcon());
+
+        // set some settings
+        ConnectionInfo.hostname = _configuration.getServerURL();
+        ConnectionInfo.additionalUrlExtension = _configuration.getAdditionalUrlExtension();
+        ConnectionInfo.port = _configuration.getPort();
 
         BorderPane content = new BorderPane();
 
@@ -167,7 +173,7 @@ public class Client extends Application {
 
         primaryStage.setScene(scene);
         primaryStage.setOnCloseRequest(t -> Common.closeAppWithWarning(t, primaryStage, _configuration));
-        primaryStage.setMaximized(true);
+        //primaryStage.setMaximized(true); // @todo: set this only when the size of the window at maximum
 
         primaryStage.show();
     }

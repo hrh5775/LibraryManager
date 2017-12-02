@@ -1,6 +1,6 @@
 package at.team2.client.configuration;
 
-import java.awt.*;
+import at.team2.common.configuration.ConnectionInfo;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -10,45 +10,43 @@ public class Configuration implements IConfigurable {
     protected static final double _version = 1.1;
     protected static final String VERSION = "Version";
     protected static final String ROOT_DIR = "Root_Dir";
-    protected static final String ROOT_URI = "ROOT_URI";
     protected static final String APP_NAME = "App_Name";
     protected static final String HEIGHT = "Height";
     protected static final String WIDTH = "Width";
     protected static final String SHOW_CLOSE_WARNING = "Show_Close_Warning";
     protected static final String SHOW_MENU_BAR = "Show_Menu_Bar";
-    protected static final String OPEN_IN_WEBBROWSER = "Open_In_Webbrowser";
+    protected static final String SERVER_URL = "Server_URL";
+    protected static final String ADDITIONAL_SERVER_URL_EXTENSION = "Additional_Server_URL_Extension";
+    protected static final String PORT = "Port";
+    /*protected static final String OPEN_IN_WEBBROWSER = "Open_In_Webbrowser";
     protected static final String USE_JX_BROWSER = "Use_Jx_Browser";
-    protected static final String USE_WEB_CLIENT = "Use_Web_Client";
+    protected static final String USE_WEB_CLIENT = "Use_Web_Client";*/
 
     private HashMap<String, Object> _keyValues;
 
     public Configuration() {
-        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-
         _keyValues = new HashMap<>();
         setVersion(_version);
         setRootDir("./");
-        setRootURI("http://localhost:8080");
-        setAppName("LibraryManager");
+        setAppName("Library Manager");
         setHeight(-1);
         setWidth(-1);
         setShowCloseWarning(true);
         setShowMenuBar(true);
-        setOpenInWebbrowser(false);
+        setServerURL(ConnectionInfo.hostname);
+        setAdditionalServerUrlExtension(ConnectionInfo.additionalUrlExtension);
+        setPort(ConnectionInfo.port);
+        /*setOpenInWebbrowser(false);
         setUseJxBrowser(false);
-        setUseWebClient(false);
+        setUseWebClient(false);*/
+    }
+
+    public double getVersion() {
+        return (double) _keyValues.get(VERSION);
     }
 
     public String getRootDir() {
         return (String) _keyValues.get(ROOT_DIR);
-    }
-
-    public String getRootURI() {
-        return (String) _keyValues.get(ROOT_URI);
-    }
-
-    public String getAppName() {
-        return (String) _keyValues.get(APP_NAME);
     }
 
     public int getHeight() {
@@ -67,7 +65,23 @@ public class Configuration implements IConfigurable {
         return (boolean) _keyValues.get(SHOW_MENU_BAR);
     }
 
-    public boolean getOpenInWebbrowser() {
+    public String getAppName() {
+        return (String) _keyValues.get(APP_NAME);
+    }
+
+    public String getServerURL() {
+        return (String) _keyValues.get(SERVER_URL);
+    }
+
+    public String getAdditionalUrlExtension() {
+        return (String) _keyValues.get(ADDITIONAL_SERVER_URL_EXTENSION);
+    }
+
+    public int getPort() {
+        return (int) _keyValues.get(PORT);
+    }
+
+    /*public boolean getOpenInWebbrowser() {
         return (boolean) _keyValues.get(OPEN_IN_WEBBROWSER);
     }
 
@@ -75,20 +89,16 @@ public class Configuration implements IConfigurable {
         return (boolean) _keyValues.get(USE_JX_BROWSER);
     }
 
-    public double getVersion() {
-        return (double) _keyValues.get(VERSION);
-    }
-
     public boolean getUseWebClient() {
         return (boolean) _keyValues.get(USE_WEB_CLIENT);
+    }*/
+
+    public void setVersion(double version) {
+        _keyValues.put(VERSION, version);
     }
 
     public void setRootDir(String rootDir) {
         _keyValues.put(ROOT_DIR, rootDir);
-    }
-
-    public void setRootURI(String rootURI) {
-        _keyValues.put(ROOT_URI, rootURI);
     }
 
     public void setAppName(String appName) {
@@ -111,7 +121,19 @@ public class Configuration implements IConfigurable {
         _keyValues.put(SHOW_MENU_BAR, showMenuBar);
     }
 
-    public void setOpenInWebbrowser(boolean openInWebbrowser) {
+    public void setServerURL(String hostname) {
+        _keyValues.put(SERVER_URL, hostname);
+    }
+
+    public void setAdditionalServerUrlExtension(String additionalUrlExtension) {
+        _keyValues.put(ADDITIONAL_SERVER_URL_EXTENSION, additionalUrlExtension);
+    }
+
+    public void setPort(int port) {
+        _keyValues.put(PORT, port);
+    }
+
+    /*public void setOpenInWebbrowser(boolean openInWebbrowser) {
         _keyValues.put(OPEN_IN_WEBBROWSER, openInWebbrowser);
     }
 
@@ -119,13 +141,9 @@ public class Configuration implements IConfigurable {
         _keyValues.put(USE_JX_BROWSER, useJxBrowser);
     }
 
-    public void setVersion(double version) {
-        _keyValues.put(VERSION, version);
-    }
-
     public void setUseWebClient(boolean useWebClient) {
         _keyValues.put(USE_WEB_CLIENT, useWebClient);
-    }
+    }*/
 
     @Override
     public Set<Map.Entry<String, Object>> getList() {

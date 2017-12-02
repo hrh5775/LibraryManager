@@ -15,8 +15,8 @@ public class Common {
 
     public static void closeApp(Stage primaryStage, Configuration configuration) {
         AppConfiguration.saveConfiguration(primaryStage, configuration);
-
         close();
+        System.exit(0);
     }
 
     public static void closeAppWithWarning(Event event, Stage primaryStage, Configuration _configuration) {
@@ -39,7 +39,6 @@ public class Common {
 
         if (close) {
             Common.closeApp(primaryStage, _configuration);
-            System.exit(0);
         } else {
             if (event != null) {
                 event.consume();
