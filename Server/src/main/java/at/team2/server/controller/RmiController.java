@@ -22,8 +22,8 @@ public class RmiController {
 
         // print help
         System.out.println("# The following options are available:");
-        System.out.println("server_URL=\"" + ConnectionInfo.hostname + "\"");
-        System.out.println("additional_server_URL_extension=\"" + ConnectionInfo.additionalUrlExtension + "\"");
+        System.out.println("server_url=\"" + ConnectionInfo.hostname + "\"");
+        System.out.println("additional_server_url_extension=\"" + ConnectionInfo.additionalUrlExtension + "\"");
         System.out.println("port=\"" + ConnectionInfo.port + "\"");
 
 
@@ -33,12 +33,12 @@ public class RmiController {
             argSplit = item.split("=");
 
             switch (argSplit[0].toLowerCase()) {
-                case "server_URL":
+                case "server_url":
                     if(argSplit.length > 1) {
                         serverURL = argSplit[1];
                     }
                     break;
-                case "additional_server_URL_extension":
+                case "additional_server_url_extension":
                     if(argSplit.length > 1) {
                         additionalServerURLExtension = argSplit[1];
                     }
@@ -67,8 +67,8 @@ public class RmiController {
         // print configuration
         System.out.println();
         System.out.println("# Current configuration:");
-        System.out.println("+ server_URL:                       " + "\"" + ConnectionInfo.hostname + "\"");
-        System.out.println("+ additional_server_URL_extension:  " + "\"" + ConnectionInfo.additionalUrlExtension + "\"");
+        System.out.println("+ server_url:                       " + "\"" + ConnectionInfo.hostname + "\"");
+        System.out.println("+ additional_server_url_extension:  " + "\"" + ConnectionInfo.additionalUrlExtension + "\"");
         System.out.println("+ full url:                         " + "\"" + ConnectionInfo.url + "\"");
         System.out.println("+ port:                             " + "\"" + ConnectionInfo.port + "\"");
         System.out.println();

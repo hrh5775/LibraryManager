@@ -4,7 +4,8 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>at.team2.server</groupId>
     <artifactId>server</artifactId>
-    <packaging>war</packaging>
+    <!--<packaging>war</packaging>-->
+    <packaging>jar</packaging>
     <version>1.0</version>
     <name>Server</name>
     <url></url>
@@ -101,11 +102,24 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
+            <!--<plugin>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.0.0</version>
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.0.2</version>
+                <configuration>
+                    <archive>
+                        <index>true</index>
+                        <manifest>
+                            <mainClass>at.team2.server.controller.RmiController</mainClass>
+                        </manifest>
+                    </archive>
                 </configuration>
             </plugin>
             <plugin>
