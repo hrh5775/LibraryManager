@@ -12,19 +12,19 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 
 import javax.ejb.Remote;
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
 import java.lang.reflect.Type;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
-@Stateful
-@Remote(at.team2.common.interfaces.ReservationRemoteObjectInf.class)
+@Stateless
+@Remote(ReservationRemoteObjectInf.class)
 public class ReservationRemoteObject extends UnicastRemoteObject implements ReservationRemoteObjectInf {
     private static Type typeDetailed = new TypeToken<List<ReservationDetailedDto>>() {}.getType();
     private ReservationApplicationFacade _reservationFacade;
 
-    protected ReservationRemoteObject() throws RemoteException {
+    public ReservationRemoteObject() throws RemoteException {
         super(0);
     }
 

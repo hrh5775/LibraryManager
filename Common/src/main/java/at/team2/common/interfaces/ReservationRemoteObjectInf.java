@@ -9,6 +9,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
 
+@javax.ejb.Remote
 public interface ReservationRemoteObjectInf extends Remote {
     public List<ReservationDetailedDto> getListByCustomer(int id) throws RemoteException;
     public int reserveMedia(MediaSmallDto mediaMember, CustomerSmallDto customer, AccountDetailedDto updater) throws RemoteException;

@@ -15,15 +15,15 @@ import at.team2.domain.entities.Customer;
 import org.modelmapper.TypeToken;
 
 import javax.ejb.Remote;
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
 
-@Stateful
-@Remote(at.team2.common.interfaces.CustomerRemoteObjectInf.class)
+@Stateless
+@Remote(CustomerRemoteObjectInf.class)
 public class CustomerRemoteObject extends UnicastRemoteObject implements CustomerRemoteObjectInf {
     private static Type typeSmall = new TypeToken<List<CustomerSmallDto>>() {}.getType();
     private CustomerApplicationFacade _customerFacade;
 
-    protected CustomerRemoteObject() throws RemoteException {
+    public CustomerRemoteObject() throws RemoteException {
         super(0);
     }
 

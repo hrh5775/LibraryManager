@@ -51,6 +51,12 @@ public class ConfigurationManager {
                         case Configuration.PORT:
                             config.setPort(Integer.parseInt(tmpValue));
                             break;
+                        case Configuration.GLASSFISH_DIRECTORY:
+                            config.setGlassfishDirectory(tmpValue);
+                            break;
+                        case Configuration.USE_EJB:
+                            config.setUseEJB(Boolean.parseBoolean(tmpValue));
+                            break;
                         /*case Configuration.OPEN_IN_WEBBROWSER:
                             config.setOpenInWebbrowser(Boolean.parseBoolean(tmpValue));
                             break;
