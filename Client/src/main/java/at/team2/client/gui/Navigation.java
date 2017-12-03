@@ -138,6 +138,7 @@ public class Navigation {
                 case "BIBLIOTHEKAR":
                     addLoanItem(menuSectionArrayList);
                     addSearchCustomer(menuSectionArrayList);
+                    addRemoteLoanItem(menuSectionArrayList);
                     break;
                 case "ADMIN":
                     addLoanItem(menuSectionArrayList);
@@ -187,9 +188,9 @@ public class Navigation {
         menuSectionArrayList.add(menuSectionLendMedium);
     }
 
-    private void addRemoteLoanItem(ArrayList<MenuSection> menuSectionArrayList){
+    private void addRemoteLoanItem(ArrayList<MenuSection> menuSectionArrayList) {
         MenuSection menuSectionRemoteLoanItem = new MenuSection("Remote Loans","/ViewReadRemoteLoans.png",null);
-        menuSectionRemoteLoanItem.setTooltip(new Tooltip("View and send messages regarding remote loans"));
+        menuSectionRemoteLoanItem.setTooltip(new Tooltip("View messages regarding remote loans"));
         menuSectionRemoteLoanItem.setAnimated(false);
         menuSectionRemoteLoanItem.setCollapsible(false);
         menuSectionRemoteLoanItem.setOnMouseClicked(event -> loadPage(ViewReadRemoteLoanSingleton.getInstance()));
