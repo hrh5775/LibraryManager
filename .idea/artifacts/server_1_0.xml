@@ -1,0 +1,6 @@
+<component name="ArtifactManager">
+  <artifact type="ejb-jar" build-on-make="true" name="server-1.0">
+    <output-path>$PROJECT_DIR$/Server/target</output-path>
+    <root id="archive" name="server-1.0.jar" />
+  </artifact>
+</component>

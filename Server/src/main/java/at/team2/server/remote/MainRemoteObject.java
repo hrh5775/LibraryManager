@@ -3,9 +3,13 @@ package at.team2.server.remote;
 import at.team2.common.configuration.ConnectionInfo;
 import at.team2.common.interfaces.*;
 
+import javax.ejb.Remote;
+import javax.ejb.Stateless;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
+@Stateless
+@Remote(MainRemoteObjectInf.class)
 public class MainRemoteObject extends UnicastRemoteObject implements MainRemoteObjectInf {
     public MainRemoteObject() throws RemoteException {
         super(0);
@@ -50,5 +54,10 @@ public class MainRemoteObject extends UnicastRemoteObject implements MainRemoteO
     @Override
     public AccountRemoteObjectInf getAccountRemoteObject() throws RemoteException {
         return new AccountRemoteObject();
+    }
+
+    @Override
+    public MessageRemoteObjectInf getMessageRemoteObject() throws RemoteException {
+        return new MessageRemoteObject();
     }
 }

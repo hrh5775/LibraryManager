@@ -10,11 +10,15 @@ import at.team2.domain.entities.Dvd;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 
+import javax.ejb.Remote;
+import javax.ejb.Stateless;
 import java.lang.reflect.Type;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
+@Stateless
+@Remote(DvdRemoteObjectInf.class)
 public class DvdRemoteObject extends UnicastRemoteObject implements DvdRemoteObjectInf {
     private static Type typeSmall = new TypeToken<List<DvdSmallDto>>() {}.getType();
     private static Type typeCreatorPersonSmall = new TypeToken<List<CreatorPersonSmallDto>>() {}.getType();

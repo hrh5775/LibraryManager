@@ -1,7 +1,9 @@
 package at.team2.client.gui;
 
+import at.team2.client.helper.RmiHelper;
 import at.team2.client.pages.PageAction;
 import at.team2.common.configuration.ConnectionInfo;
+import at.team2.common.interfaces.*;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Orientation;
@@ -20,6 +22,8 @@ import at.team2.client.configuration.Configuration;
 import at.team2.client.controls.sidebar.Sidebar;
 import at.team2.client.controls.slider.Slider;
 import at.team2.client.pages.BasePage;
+
+import javax.ejb.EJB;
 import javax.lang.model.type.NullType;
 import java.net.URL;
 import java.util.Locale;
@@ -27,6 +31,24 @@ import java.util.Locale;
 public class Client extends Application {
     private final static String _version = "1.0.0";
     private static Configuration _configuration;
+    @EJB
+    private static MainRemoteObjectInf _mainRemoteObject;
+    @EJB
+    private static BookRemoteObjectInf _bookRemoteObject;
+    @EJB
+    private static DvdRemoteObjectInf _dvdRemoteObject;
+    @EJB
+    private static CustomerRemoteObjectInf _customerRemoteObject;
+    @EJB
+    private static LoanRemoteObjectInf _loanRemoteObject;
+    @EJB
+    private static ReservationRemoteObjectInf _reservationRemoteObject;
+    @EJB
+    private static MediaMemberRemoteObjectInf _mediaMemberRemoteObject;
+    @EJB
+    private static AccountRemoteObjectInf _accountRemoteObject;
+    @EJB
+    private static MessageRemoteObjectInf _messageRemoteObject;
 
     static {
         _configuration = AppConfiguration.getConfiguration();
@@ -45,6 +67,21 @@ public class Client extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        if(_configuration.getUseEjb()) {
+            // https://stackoverflow.com/questions/3195365/injecting-a-static-ejb-nonsense
+            RmiHelper.setEJBSession(_mainRemoteObject,
+                    _bookRemoteObject,
+                    _dvdRemoteObject,
+                    _customerRemoteObject,
+                    _loanRemoteObject,
+                    _reservationRemoteObject,
+                    _mediaMemberRemoteObject,
+                    _accountRemoteObject,
+                    _messageRemoteObject);
+
+            System.out.println("Version: " + _mainRemoteObject.getVersion());
+        }
+
         primaryStage.setTitle(_configuration.getAppName());
         primaryStage.getIcons().add(AppConfiguration.getAppIcon());
 

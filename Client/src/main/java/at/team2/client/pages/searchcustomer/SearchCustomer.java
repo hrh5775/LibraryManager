@@ -7,7 +7,7 @@ import at.team2.common.dto.detailed.AccountDetailedDto;
 import at.team2.common.dto.detailed.LoanDetailedDto;
 import at.team2.common.dto.detailed.ReservationDetailedDto;
 import at.team2.common.dto.small.CustomerSmallDto;
-import at.team2.common.helper.RmiHelper;
+import at.team2.client.helper.RmiHelper;
 import at.team2.common.interfaces.LoanRemoteObjectInf;
 import at.team2.common.interfaces.MainRemoteObjectInf;
 import com.sun.javafx.collections.ObservableListWrapper;
@@ -23,8 +23,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javax.lang.model.type.NullType;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
 import java.util.LinkedList;
 import java.util.List;
 

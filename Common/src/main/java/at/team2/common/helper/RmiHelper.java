@@ -14,10 +14,6 @@ public class RmiHelper {
         return LocateRegistry.getRegistry(ConnectionInfo.hostname, ConnectionInfo.port);
     }
 
-    public static MainRemoteObjectInf getSession() throws RemoteException, NotBoundException {
-        return getSession(getRegistry());
-    }
-
     public static MainRemoteObjectInf getSession(Registry registry) throws RemoteException, NotBoundException {
         return (MainRemoteObjectInf) registry.lookup(ConnectionInfo.url);
     }

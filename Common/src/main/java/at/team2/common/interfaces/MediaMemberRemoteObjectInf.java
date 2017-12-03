@@ -7,6 +7,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
 
+@javax.ejb.Remote
 public interface MediaMemberRemoteObjectInf extends Remote {
     public MediaMemberSmallDto getMediaMemberSmallById(int id) throws RemoteException;
     public List<MediaMemberSmallDto> getMediaMemberSmallList() throws RemoteException;

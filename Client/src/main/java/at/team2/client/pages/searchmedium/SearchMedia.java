@@ -3,7 +3,7 @@ package at.team2.client.pages.searchmedium;
 import at.team2.client.controls.loadingindicator.LoadingIndicator;
 import at.team2.client.pages.mediadetail.MediaDetail;
 import at.team2.common.dto.small.MediaSmallDto;
-import at.team2.common.helper.RmiHelper;
+import at.team2.client.helper.RmiHelper;
 import at.team2.common.interfaces.MainRemoteObjectInf;
 import com.sun.javafx.collections.ObservableListWrapper;
 import javafx.application.Platform;

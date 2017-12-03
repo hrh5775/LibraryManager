@@ -7,13 +7,18 @@ import at.team2.common.interfaces.AccountRemoteObjectInf;
 import at.team2.domain.entities.Account;
 import org.modelmapper.ModelMapper;
 
+import javax.ejb.Remote;
+import javax.ejb.Stateful;
+import javax.ejb.Stateless;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
+@Stateless
+@Remote(AccountRemoteObjectInf.class)
 public class AccountRemoteObject extends UnicastRemoteObject implements AccountRemoteObjectInf {
     private AccountApplicationFacade _accountFacade;
 
-    protected AccountRemoteObject() throws RemoteException {
+    public AccountRemoteObject() throws RemoteException {
         super(0);
     }
 
@@ -26,6 +31,7 @@ public class AccountRemoteObject extends UnicastRemoteObject implements AccountR
     }
 
     public AccountDetailedDto login(String userName, String password) throws RemoteException {
+        System.out.println("in login");
         AccountApplicationFacade facade = getAccountFacade();
         ModelMapper mapper = MapperHelper.getMapper();
         Account entity = facade.login(userName, password);

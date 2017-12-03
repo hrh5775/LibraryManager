@@ -18,6 +18,8 @@ public class Configuration implements IConfigurable {
     protected static final String SERVER_URL = "Server_URL";
     protected static final String ADDITIONAL_SERVER_URL_EXTENSION = "Additional_Server_URL_Extension";
     protected static final String PORT = "Port";
+    protected static final String GLASSFISH_DIRECTORY = "Glassfish_Directory";
+    protected static final String USE_EJB = "Use_EJB";
     /*protected static final String OPEN_IN_WEBBROWSER = "Open_In_Webbrowser";
     protected static final String USE_JX_BROWSER = "Use_Jx_Browser";
     protected static final String USE_WEB_CLIENT = "Use_Web_Client";*/
@@ -36,6 +38,8 @@ public class Configuration implements IConfigurable {
         setServerURL(ConnectionInfo.hostname);
         setAdditionalServerUrlExtension(ConnectionInfo.additionalUrlExtension);
         setPort(ConnectionInfo.port);
+        setGlassfishDirectory("./");
+        setUseEJB(true);
         /*setOpenInWebbrowser(false);
         setUseJxBrowser(false);
         setUseWebClient(false);*/
@@ -79,6 +83,14 @@ public class Configuration implements IConfigurable {
 
     public int getPort() {
         return (int) _keyValues.get(PORT);
+    }
+
+    public String getGlassfishDirectory() {
+        return (String) _keyValues.get(GLASSFISH_DIRECTORY);
+    }
+
+    public boolean getUseEjb() {
+        return (boolean) _keyValues.get(USE_EJB);
     }
 
     /*public boolean getOpenInWebbrowser() {
@@ -131,6 +143,14 @@ public class Configuration implements IConfigurable {
 
     public void setPort(int port) {
         _keyValues.put(PORT, port);
+    }
+
+    public void setGlassfishDirectory(String glassfishDirectory) {
+        _keyValues.put(GLASSFISH_DIRECTORY, glassfishDirectory);
+    }
+
+    public void setUseEJB(boolean useEjb) {
+        _keyValues.put(USE_EJB, useEjb);
     }
 
     /*public void setOpenInWebbrowser(boolean openInWebbrowser) {

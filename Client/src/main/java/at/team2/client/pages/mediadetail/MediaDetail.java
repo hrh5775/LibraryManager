@@ -12,7 +12,7 @@ import at.team2.common.dto.small.CreatorPersonSmallDto;
 import at.team2.common.dto.small.DvdSmallDto;
 import at.team2.common.dto.small.MediaMemberSmallDto;
 import at.team2.common.dto.small.MediaSmallDto;
-import at.team2.common.helper.RmiHelper;
+import at.team2.client.helper.RmiHelper;
 import at.team2.common.interfaces.MainRemoteObjectInf;
 import com.sun.javafx.collections.ObservableListWrapper;
 import javafx.application.Platform;
