@@ -9,11 +9,15 @@ import at.team2.domain.entities.MediaMember;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 
+import javax.ejb.Remote;
+import javax.ejb.Stateful;
 import java.lang.reflect.Type;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
+@Stateful
+@Remote(at.team2.common.interfaces.MediaMemberRemoteObjectInf.class)
 public class MediaMemberRemoteObject extends UnicastRemoteObject implements MediaMemberRemoteObjectInf {
     private static Type typeSmall = new TypeToken<List<MediaMemberSmallDto>>() {}.getType();
     private MediaMemberApplicationFacade _mediaMemberFacade;

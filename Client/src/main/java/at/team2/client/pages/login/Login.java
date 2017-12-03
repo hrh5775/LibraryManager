@@ -4,7 +4,7 @@ import at.team2.client.common.AccountManager;
 import at.team2.client.controls.loadingindicator.LoadingIndicator;
 import at.team2.client.gui.Navigation;
 import at.team2.common.dto.detailed.AccountDetailedDto;
-import at.team2.common.helper.RmiHelper;
+import at.team2.client.helper.RmiHelper;
 import at.team2.common.interfaces.MainRemoteObjectInf;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;

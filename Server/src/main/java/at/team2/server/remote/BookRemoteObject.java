@@ -10,11 +10,15 @@ import at.team2.domain.entities.Book;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 
+import javax.ejb.Remote;
+import javax.ejb.Stateful;
 import java.lang.reflect.Type;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 
+@Stateful
+@Remote(at.team2.common.interfaces.BookRemoteObjectInf.class)
 public class BookRemoteObject extends UnicastRemoteObject implements BookRemoteObjectInf {
     private static Type typeSmall = new TypeToken<List<BookSmallDto>>() {}.getType();
     private static Type typeCreatorPersonSmall = new TypeToken<List<CreatorPersonSmallDto>>() {}.getType();

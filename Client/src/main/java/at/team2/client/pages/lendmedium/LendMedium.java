@@ -11,7 +11,7 @@ import at.team2.client.pages.BasePage;
 import at.team2.common.dto.detailed.AccountDetailedDto;
 import at.team2.common.dto.small.CustomerSmallDto;
 import at.team2.common.dto.small.MediaMemberSmallDto;
-import at.team2.common.helper.RmiHelper;
+import at.team2.client.helper.RmiHelper;
 import at.team2.common.interfaces.LoanRemoteObjectInf;
 import at.team2.common.interfaces.MainRemoteObjectInf;
 import javafx.application.Platform;

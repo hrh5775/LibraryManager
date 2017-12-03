@@ -8,7 +8,7 @@ import at.team2.common.dto.detailed.AccountDetailedDto;
 import at.team2.common.dto.detailed.ReservationDetailedDto;
 import at.team2.common.dto.small.CustomerSmallDto;
 import at.team2.common.dto.small.MediaSmallDto;
-import at.team2.common.helper.RmiHelper;
+import at.team2.client.helper.RmiHelper;
 import at.team2.common.interfaces.MainRemoteObjectInf;
 import at.team2.common.interfaces.ReservationRemoteObjectInf;
 import javafx.application.Platform;

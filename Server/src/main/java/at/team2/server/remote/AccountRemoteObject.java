@@ -7,9 +7,13 @@ import at.team2.common.interfaces.AccountRemoteObjectInf;
 import at.team2.domain.entities.Account;
 import org.modelmapper.ModelMapper;
 
+import javax.ejb.Remote;
+import javax.ejb.Stateful;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 
+@Stateful
+@Remote(at.team2.common.interfaces.AccountRemoteObjectInf.class)
 public class AccountRemoteObject extends UnicastRemoteObject implements AccountRemoteObjectInf {
     private AccountApplicationFacade _accountFacade;
 
