@@ -10,13 +10,13 @@ import javax.jms.Session;
 import javax.jms.TextMessage;
 
 public class MessageSender {
-    
+
     @Resource(mappedName = "jms/remoteLoanConnectionFactory")
     private static ConnectionFactory connectionFactory;
     @Resource(mappedName = "jms/remoteLoan")
     private static Queue queue;
 
-    public void produceMessages(String message) {
+    public static void produceMessage(String message) {
         MessageProducer messageProducer;
         TextMessage textMessage;
 
@@ -43,7 +43,7 @@ public class MessageSender {
         String message = "test";
 
         //aufrufen um Message zu produzieren
-        new MessageSender().produceMessages(message);
+        new MessageSender().produceMessage(message);
         System.out.println("end");
     }
 }
