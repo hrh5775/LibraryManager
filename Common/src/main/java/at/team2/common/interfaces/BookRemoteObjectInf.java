@@ -7,6 +7,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
 
+@javax.ejb.Remote
 public interface BookRemoteObjectInf extends Remote {
     public BookSmallDto getBookSmallById(int id) throws RemoteException;
     public List<BookSmallDto> getBookSmallList() throws RemoteException;

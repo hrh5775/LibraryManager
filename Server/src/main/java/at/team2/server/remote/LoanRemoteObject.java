@@ -16,15 +16,15 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 
 import javax.ejb.Remote;
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
 
-@Stateful
-@Remote(at.team2.common.interfaces.LoanRemoteObjectInf.class)
+@Stateless
+@Remote(LoanRemoteObjectInf.class)
 public class LoanRemoteObject extends UnicastRemoteObject implements LoanRemoteObjectInf {
     private static Type typeDetailed = new TypeToken<List<LoanDetailedDto>>() {}.getType();
     private LoanApplicationFacade _loanFacade;
 
-    protected LoanRemoteObject() throws RemoteException {
+    public LoanRemoteObject() throws RemoteException {
         super(0);
     }
 

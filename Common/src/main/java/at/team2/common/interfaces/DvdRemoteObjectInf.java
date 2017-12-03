@@ -7,6 +7,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
 
+@javax.ejb.Remote
 public interface DvdRemoteObjectInf extends Remote {
     public DvdSmallDto getDvdSmallById(int id) throws RemoteException;
     public List<DvdSmallDto> getDvdSmallList() throws RemoteException;

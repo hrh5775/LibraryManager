@@ -9,6 +9,7 @@ import at.team2.common.dto.detailed.LoanDetailedDto;
 import at.team2.common.dto.small.CustomerSmallDto;
 import at.team2.common.dto.small.MediaMemberSmallDto;
 
+@javax.ejb.Remote
 public interface LoanRemoteObjectInf extends Remote {
     public List<LoanDetailedDto> getListByCustomer(int id) throws RemoteException;
     public int loanMediaMember(MediaMemberSmallDto loan, CustomerSmallDto customer, AccountDetailedDto updater) throws RemoteException;
