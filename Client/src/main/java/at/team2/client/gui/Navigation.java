@@ -10,6 +10,7 @@ import at.team2.client.singletons.HomeScreenSingleton;
 import at.team2.client.singletons.LendMediumSingleton;
 import at.team2.client.singletons.SearchCustomerSingleton;
 import at.team2.client.singletons.SearchMediumSingleton;
+import at.team2.client.singletons.ViewReadRemoteLoanSingleton;
 import at.team2.common.dto.detailed.AccountDetailedDto;
 import at.team2.client.helper.RmiHelper;
 import at.team2.common.interfaces.MainRemoteObjectInf;
@@ -184,6 +185,16 @@ public class Navigation {
         menuSectionLendMedium.setOnMouseClicked(event -> loadPage(LendMediumSingleton.getInstance()));
         _sidebar.add(menuSectionLendMedium);
         menuSectionArrayList.add(menuSectionLendMedium);
+    }
+
+    private void addRemoteLoanItem(ArrayList<MenuSection> menuSectionArrayList){
+        MenuSection menuSectionRemoteLoanItem = new MenuSection("Remote Loans","/ViewReadRemoteLoans.png",null);
+        menuSectionRemoteLoanItem.setTooltip(new Tooltip("View and send messages regarding remote loans"));
+        menuSectionRemoteLoanItem.setAnimated(false);
+        menuSectionRemoteLoanItem.setCollapsible(false);
+        menuSectionRemoteLoanItem.setOnMouseClicked(event -> loadPage(ViewReadRemoteLoanSingleton.getInstance()));
+        _sidebar.add(menuSectionRemoteLoanItem);
+        menuSectionArrayList.add(menuSectionRemoteLoanItem);
     }
 
     private void setCurrentPage(BasePage page) {
