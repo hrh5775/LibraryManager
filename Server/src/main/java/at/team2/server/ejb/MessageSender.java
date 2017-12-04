@@ -37,13 +37,4 @@ public class MessageSender {
             e.printStackTrace();
         }
     }
-
-    public static void main(String[] args){
-        System.out.println("start");
-        String message = "test";
-
-        //aufrufen um Message zu produzieren
-        new MessageSender().produceMessage(message);
-        System.out.println("end");
-    }
 }
