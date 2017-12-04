@@ -15,11 +15,11 @@
    <children>
       <HBox prefHeight="34.0" prefWidth="570.0" spacing="10.0">
          <children>
-            <ChoiceBox fx:id="RecipientChoiceBox" prefHeight="31.0" prefWidth="484.0" />
-            <Button fx:id="SendButton" mnemonicParsing="false" prefHeight="31.0" prefWidth="78.0" text="Send" />
+            <ChoiceBox fx:id="_recipientChoiceBox" prefHeight="31.0" prefWidth="484.0" />
+            <Button fx:id="_sendButton" onAction="#send" mnemonicParsing="false" prefHeight="31.0" prefWidth="78.0" text="Send" />
          </children>
       </HBox>
-      <TextField fx:id="SubjectTextBox" promptText="Subject..." />
-      <TextArea fx:id="MessageTextfield" prefHeight="223.0" prefWidth="570.0" promptText="Message...." />
+      <TextField fx:id="_subjectTextBox" promptText="Subject..." />
+      <TextArea fx:id="_messageTextfield" prefHeight="223.0" prefWidth="570.0" promptText="Message...." />
    </children>
 </VBox>
