@@ -2,14 +2,13 @@ package at.team2.server.remote;
 
 import at.team2.common.interfaces.MessageRemoteObjectInf;
 import at.team2.server.helper.FileWriterHelper;
+import at.team2.server.jms.MessageReceiverHelper;
 import at.team2.server.jms.MessageSenderHelper;
 
 import javax.annotation.Resource;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
-import javax.jms.ConnectionFactory;
-import javax.jms.JMSException;
-import javax.jms.Queue;
+import javax.jms.*;
 import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -51,8 +50,11 @@ public class MessageRemoteObject extends UnicastRemoteObject implements MessageR
 
     @Override
     public String receiveMessageForInterLibraryLoan() throws RemoteException {
-        // @todo:
-        return null;
+        try {
+           return MessageReceiverHelper.getMessage(connectionFactory, destination);
+        } catch (JMSException e) {
+            throw new RemoteException(e.toString());
+        }
     }
 
     @Override

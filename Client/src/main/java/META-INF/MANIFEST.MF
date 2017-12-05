@@ -1,3 +1,3 @@
 Manifest-Version: 1.0
-Main-Class: at.team2.client.gui.Client
+Main-Class: at.team2.client.Bootstrapper
 

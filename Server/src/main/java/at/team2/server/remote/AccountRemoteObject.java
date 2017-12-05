@@ -8,7 +8,6 @@ import at.team2.domain.entities.Account;
 import org.modelmapper.ModelMapper;
 
 import javax.ejb.Remote;
-import javax.ejb.Stateful;
 import javax.ejb.Stateless;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
