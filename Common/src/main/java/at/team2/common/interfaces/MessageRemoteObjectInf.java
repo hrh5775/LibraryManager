@@ -1,5 +1,6 @@
 package at.team2.common.interfaces;
 
+import javax.management.JMException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
