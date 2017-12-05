@@ -47,6 +47,7 @@ public class SendRemoteLoan extends BasePage<Void,NullType,NullType,NullType> {
         try {
             MainRemoteObjectInf remoteObject = RmiHelper.getSession();
             remoteObject.getMessageRemoteObject().sendMessageForInterLibraryLoan(_messageTextfield.getText());
+            showSuccessMessage("The message was successfully sent", "");
         } catch (Exception e) {
             showRmiErrorMessage(e);
         }
