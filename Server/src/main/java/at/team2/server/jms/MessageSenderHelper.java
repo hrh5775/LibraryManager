@@ -1,27 +1,15 @@
 package at.team2.server.jms;
 
-import javax.annotation.Resource;
-import javax.jms.Connection;
-import javax.jms.ConnectionFactory;
-import javax.jms.JMSException;
-import javax.jms.MessageProducer;
-import javax.jms.Queue;
-import javax.jms.Session;
-import javax.jms.TextMessage;
+import javax.jms.*;
 
 public class MessageSenderHelper {
-    @Resource(mappedName = "jms/remoteLoanConnectionFactory")
-    private static ConnectionFactory connectionFactory;
-    @Resource(mappedName = "jms/remoteLoan")
-    private static Queue queue;
-
-    public static void produceMessage(String message) throws JMSException {
+    public static void produceMessage(ConnectionFactory connectionFactory, Destination destination, String message) throws JMSException {
         MessageProducer messageProducer;
         TextMessage textMessage;
 
         Connection connection = connectionFactory.createConnection();
         Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-        messageProducer = session.createProducer(queue);
+        messageProducer = session.createProducer(destination);
         textMessage = session.createTextMessage();
 
         textMessage.setText(message);

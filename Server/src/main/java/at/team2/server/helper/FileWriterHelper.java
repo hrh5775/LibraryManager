@@ -6,10 +6,10 @@ import java.io.IOException;
 import java.nio.file.Paths;
 
 public class FileWriterHelper {
-    public static synchronized void writeFile(String content, String fileName, String directory, boolean append) throws IOException {
+    public static synchronized void writeFile(String content, String fileName, String directory, boolean append, boolean createDirectories) throws IOException {
         File dir = new File(directory);
 
-        if(!dir.exists()) {
+        if(!dir.exists() && createDirectories) {
             dir.mkdirs();
         }
 
