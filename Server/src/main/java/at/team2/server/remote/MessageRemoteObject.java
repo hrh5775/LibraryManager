@@ -15,7 +15,9 @@ public class MessageRemoteObject extends UnicastRemoteObject implements MessageR
 
     @Override
     public boolean sendMessageForInterLibraryLoan(String message) throws RemoteException {
-        // @todo:
+        // @todo:  MessageSender ist im anderen Branch (CreateFernleihe2)
+        //MessageSender messageSender = new MessageSender;
+        //messageSender.produceMessage(message);
         return false;
     }
 
