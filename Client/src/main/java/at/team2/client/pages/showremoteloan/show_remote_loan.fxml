@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      stylesheets="@show_remote_loan.css">
+    <padding>
+        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+    </padding>
+    <children>
+        <Button fx:id="_sendButton" onAction="#send" mnemonicParsing="false" prefHeight="31.0" prefWidth="172.0" text="View Remote Loan Message" textAlignment="CENTER" />
+        <TextArea fx:id="_messageTextfield" editable="false" prefHeight="223.0" prefWidth="570.0" />
+    </children>
+</VBox>

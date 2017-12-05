@@ -78,7 +78,23 @@ public class ConfigurationManager {
             reader.close();
 
             if(config.getVersion() < Configuration._version) {
-                throw new IOException("old configuration detected, regenerate the configuration");
+                System.out.println("old configuration detected, regenerate the configuration, but use old settings");
+
+                if(config.getVersion() == 1.1) {
+                    Configuration configuration = new Configuration();
+                    configuration.setRootDir(config.getRootDir());
+                    configuration.setAppName(config.getAppName());
+                    configuration.setHeight(config.getHeight());
+                    configuration.setWidth(config.getWidth());
+                    configuration.setShowCloseWarning(config.getShowCloseWarning());
+                    configuration.setShowMenuBar(config.getShowMenuBar());
+
+                    if(config.getGlassfishDirectory() != null || config.getGlassfishDirectory() != "./") {
+                        // this settings are normally not available in this version, but due to a missing versioning system in the old app version we have to support this settings
+                        configuration.setPort(config.getPort());
+                        configuration.setGlassfishDirectory(config.getGlassfishDirectory());
+                    }
+                }
             }
 
             return config;

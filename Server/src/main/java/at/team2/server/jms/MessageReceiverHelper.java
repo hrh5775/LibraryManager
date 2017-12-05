@@ -9,16 +9,20 @@ public class MessageReceiverHelper {
         TextMessage textMessage;
 
         connection = connectionFactory.createConnection();
-        Session session = connection.createSession(false,
-                Session.AUTO_ACKNOWLEDGE);
+        Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
         messageConsumer = session.createConsumer(destination);
         connection.start();
 
-        textMessage = (TextMessage) messageConsumer.receive();
+        textMessage = (TextMessage) messageConsumer.receiveNoWait();
 
         messageConsumer.close();
         session.close();
         connection.close();
-        return textMessage.getText();
+
+        if(textMessage != null) {
+            return textMessage.getText();
+        } else {
+            return null;
+        }
     }
 }

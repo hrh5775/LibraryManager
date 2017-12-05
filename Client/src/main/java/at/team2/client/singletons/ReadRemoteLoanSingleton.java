@@ -2,10 +2,10 @@ package at.team2.client.singletons;
 
 import at.team2.client.pages.sendremoteloan.SendRemoteLoan;
 
-public class ViewReadRemoteLoanSingleton {
+public class ReadRemoteLoanSingleton {
     private static SendRemoteLoan _instance;
 
-    private ViewReadRemoteLoanSingleton() {
+    private ReadRemoteLoanSingleton() {
     }
 
     public static SendRemoteLoan getInstance() {

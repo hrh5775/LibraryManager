@@ -6,11 +6,7 @@ import at.team2.client.controls.sidebar.Sidebar;
 import at.team2.client.helper.DialogHelper;
 import at.team2.client.helper.RmiErrorHelper;
 import at.team2.client.pages.PageAction;
-import at.team2.client.singletons.HomeScreenSingleton;
-import at.team2.client.singletons.LendMediumSingleton;
-import at.team2.client.singletons.SearchCustomerSingleton;
-import at.team2.client.singletons.SearchMediumSingleton;
-import at.team2.client.singletons.ViewReadRemoteLoanSingleton;
+import at.team2.client.singletons.*;
 import at.team2.common.dto.detailed.AccountDetailedDto;
 import at.team2.client.helper.RmiHelper;
 import at.team2.common.interfaces.MainRemoteObjectInf;
@@ -138,7 +134,7 @@ public class Navigation {
                 case "BIBLIOTHEKAR":
                     addLoanItem(menuSectionArrayList);
                     addSearchCustomer(menuSectionArrayList);
-                    addRemoteLoanItem(menuSectionArrayList);
+                    addSendRemoteLoanItem(menuSectionArrayList);
                     break;
                 case "ADMIN":
                     addLoanItem(menuSectionArrayList);
@@ -153,6 +149,7 @@ public class Navigation {
                 case "BIBLIOTHEKSBENUTZER":
                     break;
                 case "OPERATOR":
+                    addReceiveRemoteLoanItem(menuSectionArrayList);
                     break;
             }
         }
@@ -188,12 +185,22 @@ public class Navigation {
         menuSectionArrayList.add(menuSectionLendMedium);
     }
 
-    private void addRemoteLoanItem(ArrayList<MenuSection> menuSectionArrayList) {
-        MenuSection menuSectionRemoteLoanItem = new MenuSection("Remote Loans","/ViewReadRemoteLoans.png",null);
-        menuSectionRemoteLoanItem.setTooltip(new Tooltip("View messages regarding remote loans"));
+    private void addSendRemoteLoanItem(ArrayList<MenuSection> menuSectionArrayList) {
+        MenuSection menuSectionRemoteLoanItem = new MenuSection("Send Remote Loans","/ViewReadRemoteLoans.png",null);
+        menuSectionRemoteLoanItem.setTooltip(new Tooltip("Send messages"));
         menuSectionRemoteLoanItem.setAnimated(false);
         menuSectionRemoteLoanItem.setCollapsible(false);
-        menuSectionRemoteLoanItem.setOnMouseClicked(event -> loadPage(ViewReadRemoteLoanSingleton.getInstance()));
+        menuSectionRemoteLoanItem.setOnMouseClicked(event -> loadPage(ReadRemoteLoanSingleton.getInstance()));
+        _sidebar.add(menuSectionRemoteLoanItem);
+        menuSectionArrayList.add(menuSectionRemoteLoanItem);
+    }
+
+    private void addReceiveRemoteLoanItem(ArrayList<MenuSection> menuSectionArrayList) {
+        MenuSection menuSectionRemoteLoanItem = new MenuSection("Receive Remote Loans","/ViewReadRemoteLoans.png",null);
+        menuSectionRemoteLoanItem.setTooltip(new Tooltip("Receive messages"));
+        menuSectionRemoteLoanItem.setAnimated(false);
+        menuSectionRemoteLoanItem.setCollapsible(false);
+        menuSectionRemoteLoanItem.setOnMouseClicked(event -> loadPage(ShowRemoteLoanSingleton.getInstance()));
         _sidebar.add(menuSectionRemoteLoanItem);
         menuSectionArrayList.add(menuSectionRemoteLoanItem);
     }

@@ -2,6 +2,7 @@ package at.team2.client.pages.sendremoteloan;
 
 import javax.lang.model.type.NullType;
 
+import at.team2.client.common.AccountManager;
 import at.team2.client.helper.RmiHelper;
 import at.team2.client.pages.BasePage;
 import at.team2.common.interfaces.MainRemoteObjectInf;
@@ -48,7 +49,7 @@ public class SendRemoteLoan extends BasePage<Void,NullType,NullType,NullType> {
     private void send() {
         try {
             MainRemoteObjectInf remoteObject = RmiHelper.getSession();
-            remoteObject.getMessageRemoteObject().sendMessageForInterLibraryLoan(_messageTextfield.textProperty().getValue());
+            remoteObject.getMessageRemoteObject().sendMessageForInterLibraryLoan(_messageTextfield.textProperty().getValue(), AccountManager.getInstance().getAccount());
             _messageTextfield.textProperty().setValue("");
             showSuccessMessage("The message was successfully sent", "");
         } catch (Exception e) {

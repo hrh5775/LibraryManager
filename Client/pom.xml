@@ -218,7 +218,11 @@
                         <index>true</index>
                         <manifest>
                             <mainClass>at.team2.client.gui.Client</mainClass>
+                            <!--<mainClass>at.team2.client.Bootstrapper</mainClass>-->
                         </manifest>
+                        <!--<manifestEntries>
+                            <SplashScreen-Image>logo.png</SplashScreen-Image>
+                        </manifestEntries>-->
                     </archive>
                 </configuration>
             </plugin>

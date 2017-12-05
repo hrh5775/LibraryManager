@@ -7,7 +7,7 @@ import java.util.Set;
 
 public class Configuration implements IConfigurable {
     // config symbols
-    protected static final double _version = 1.1;
+    protected static final double _version = 1.2;
     protected static final String VERSION = "Version";
     protected static final String ROOT_DIR = "Root_Dir";
     protected static final String APP_NAME = "App_Name";

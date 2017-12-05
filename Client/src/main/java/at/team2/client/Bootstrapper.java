@@ -43,8 +43,8 @@ public class Bootstrapper {
                     }
                 } else {
                     // for production
-                    String fileName = new File(Client.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getName();
-                    path = Paths.get(path, fileName).toFile().toString();
+                    /*String fileName = new File(Client.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath()).getName();
+                    path = Paths.get(path, fileName).toFile().toString();*/
                 }
 
                 // generate the appclient file path
