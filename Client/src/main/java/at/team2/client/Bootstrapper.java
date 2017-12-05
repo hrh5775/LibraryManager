@@ -13,7 +13,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.util.List;
 
-public class Bootstraper {
+public class Bootstrapper {
     public static void main(String[] args) {
         Configuration configuration = AppConfiguration.getConfiguration();
 
