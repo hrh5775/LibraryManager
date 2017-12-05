@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Calendar;
+import java.util.Date;
 
 @Stateless
 @Remote(MessageRemoteObjectInf.class)
@@ -22,6 +23,8 @@ public class MessageRemoteObject extends UnicastRemoteObject implements MessageR
     private ConnectionFactory connectionFactory;
     @Resource(mappedName = "jms/remoteLoan")
     private Queue destination;
+    private String debuggingDirectory = "debugging";
+    private String interlibraryLoanDirectory = debuggingDirectory + "/" + "interlibrary_loan";
 
     public MessageRemoteObject() throws RemoteException {
         super(0);
@@ -36,7 +39,8 @@ public class MessageRemoteObject extends UnicastRemoteObject implements MessageR
         }
 
         try {
-            FileWriterHelper.writeFile(message, "loan_message_send.txt", getDirectory(), true, true);
+            FileWriterHelper.writeFile("produced: " + new Date().toString() + "\n" +
+                    "message: " + "'" + message + "'" + "\n\n", "loan_message_send.txt", interlibraryLoanDirectory + getDirectory(), true, true);
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -64,6 +68,6 @@ public class MessageRemoteObject extends UnicastRemoteObject implements MessageR
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
 
-        return  "./" + year + "_" + month + "" + day + "__" + hour + "_" + minute;
+        return  "/" + year + "_" + month + "_" + day + "__" + hour + "_" + minute;
     }
 }

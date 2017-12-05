@@ -8,11 +8,11 @@ import at.team2.common.interfaces.MainRemoteObjectInf;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.control.TextArea;
 
 public class SendRemoteLoan extends BasePage<Void,NullType,NullType,NullType> {
     @FXML
-    private TextField _messageTextfield;
+    private TextArea _messageTextfield;
     @FXML
     private Button _sendButton;
 
@@ -20,6 +20,8 @@ public class SendRemoteLoan extends BasePage<Void,NullType,NullType,NullType> {
     public void initialize() {
         Parent parent = loadView(SendRemoteLoan.class.getResource("send_remote_loan.fxml"));
         setCenter(parent);
+
+        _sendButton.disableProperty().bind(_messageTextfield.textProperty().isEmpty());
     }
 
     @Override
@@ -46,7 +48,8 @@ public class SendRemoteLoan extends BasePage<Void,NullType,NullType,NullType> {
     private void send() {
         try {
             MainRemoteObjectInf remoteObject = RmiHelper.getSession();
-            remoteObject.getMessageRemoteObject().sendMessageForInterLibraryLoan(_messageTextfield.getText());
+            remoteObject.getMessageRemoteObject().sendMessageForInterLibraryLoan(_messageTextfield.textProperty().getValue());
+            _messageTextfield.textProperty().setValue("");
             showSuccessMessage("The message was successfully sent", "");
         } catch (Exception e) {
             showRmiErrorMessage(e);

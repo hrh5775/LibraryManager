@@ -61,7 +61,7 @@ public class Bootstraper {
                 ProcessBuilder processBuilder = new ProcessBuilder(appclientPath,
                         "-client", "\"" + path + "\"",
                         "-mainclass", Client.class.getCanonicalName(),
-                        "-targetserver", configuration.getServerURL(),
+                        "-targetserver", configuration.getServerURL() + ":" + configuration.getPort(),
                         debugging1,
                         debugging2);
                 processBuilder.inheritIO();
