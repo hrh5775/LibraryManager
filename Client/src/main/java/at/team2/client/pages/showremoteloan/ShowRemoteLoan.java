@@ -52,6 +52,7 @@ public class ShowRemoteLoan extends BasePage<Void,NullType,NullType,NullType> {
                 _messageTextfield.textProperty().setValue(message);
             } else {
                 showSuccessMessage("There are no more messages available", "");
+                _messageTextfield.textProperty().setValue("");
             }
         } catch (Exception e) {
             showRmiErrorMessage(e);

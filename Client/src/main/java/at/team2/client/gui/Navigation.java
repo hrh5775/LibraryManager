@@ -89,7 +89,7 @@ public class Navigation {
                                 MainRemoteObjectInf remoteObject = RmiHelper.getSession();
                                 remoteObject.getAccountRemoteObject().logout(accountManager.getAccount());
                             } catch (Exception e) {
-                                RmiErrorHelper.showRmiErrorMessage(e, _currentPage);
+                                Platform.runLater(() -> RmiErrorHelper.showRmiErrorMessage(e, _currentPage));
                             }
 
                             AccountManager.getInstance().setAccount(null);
