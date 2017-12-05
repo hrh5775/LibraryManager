@@ -1,4 +1,4 @@
-package at.team2.client.pages.viewreadremoteloan;
+package at.team2.client.pages.sendremoteloan;
 
 import javax.lang.model.type.NullType;
 
@@ -10,10 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
-
-public class ViewReadRemoteLoan extends BasePage<Void,NullType,NullType,NullType> {
+public class SendRemoteLoan extends BasePage<Void,NullType,NullType,NullType> {
     @FXML
     private TextField _messageTextfield;
     @FXML
@@ -21,7 +18,7 @@ public class ViewReadRemoteLoan extends BasePage<Void,NullType,NullType,NullType
 
     @Override
     public void initialize() {
-        Parent parent = loadView(ViewReadRemoteLoan.class.getResource("view_read_remote_loan.fxml"));
+        Parent parent = loadView(SendRemoteLoan.class.getResource("send_remote_loan.fxml"));
         setCenter(parent);
     }
 
@@ -50,10 +47,8 @@ public class ViewReadRemoteLoan extends BasePage<Void,NullType,NullType,NullType
         try {
             MainRemoteObjectInf remoteObject = RmiHelper.getSession();
             remoteObject.getMessageRemoteObject().sendMessageForInterLibraryLoan(_messageTextfield.getText());
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        } catch (NotBoundException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            showRmiErrorMessage(e);
         }
     }
 }

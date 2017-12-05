@@ -1,16 +1,16 @@
 package at.team2.client.singletons;
 
-import at.team2.client.pages.viewreadremoteloan.ViewReadRemoteLoan;
+import at.team2.client.pages.sendremoteloan.SendRemoteLoan;
 
 public class ViewReadRemoteLoanSingleton {
-    private static ViewReadRemoteLoan _instance;
+    private static SendRemoteLoan _instance;
 
     private ViewReadRemoteLoanSingleton() {
     }
 
-    public static ViewReadRemoteLoan getInstance() {
+    public static SendRemoteLoan getInstance() {
         if(_instance == null) {
-            _instance = new ViewReadRemoteLoan();
+            _instance = new SendRemoteLoan();
         }
 
         return _instance;
