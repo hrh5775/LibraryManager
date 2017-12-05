@@ -1,6 +1,10 @@
 <component name="ArtifactManager">
   <artifact type="ejb-jar" build-on-make="true" name="server-1.0">
     <output-path>$PROJECT_DIR$/Server/target</output-path>
-    <root id="archive" name="server-1.0.jar" />
+    <root id="archive" name="server-1.0.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/Server/src/main/java/META-INF/MANIFEST.MF" />
+      </element>
+    </root>
   </artifact>
 </component>
