@@ -37,7 +37,8 @@ public class Configuration implements IConfigurable {
         setShowMenuBar(true);
         setServerURL(ConnectionInfo.hostname);
         setAdditionalServerUrlExtension(ConnectionInfo.additionalUrlExtension);
-        setPort(ConnectionInfo.port);
+        //setPort(ConnectionInfo.port);
+        setPort(3700); // for ejb
         setGlassfishDirectory("./");
         setUseEJB(true);
         /*setOpenInWebbrowser(false);

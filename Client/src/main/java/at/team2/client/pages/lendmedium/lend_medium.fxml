@@ -17,11 +17,11 @@
 <?import javafx.beans.property.SimpleBooleanProperty?>
 <?import javafx.scene.layout.StackPane?>
 <?import at.team2.client.controls.loadingindicator.LoadingIndicator?>
-
 <?import javafx.scene.control.TextField?>
+
 <StackPane xmlns="http://javafx.com/javafx"
            xmlns:fx="http://javafx.com/fxml"
-           stylesheets="/at/team2/client/pages/lendmedium/lend_medium.css">
+           stylesheets="@lend_medium.css">
 
     <fx:define>
         <SimpleBooleanProperty fx:id="_isLoading" />

@@ -2,12 +2,21 @@ package at.team2.server.tasks;
 
 import at.team2.application.facade.ReservationApplicationFacade;
 
+import javax.ejb.Schedule;
+import javax.ejb.Singleton;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+@Singleton
 public class RemoveInvalidReservationsTask implements Runnable {
+    private ReservationApplicationFacade facade;
+
+    public RemoveInvalidReservationsTask() {
+        facade = new ReservationApplicationFacade();
+    }
+
     @Override
     public void run() {
         Calendar calendar = Calendar.getInstance();
@@ -35,9 +44,13 @@ public class RemoveInvalidReservationsTask implements Runnable {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                ReservationApplicationFacade facade = new ReservationApplicationFacade();
-                facade.removeOldReservations();
+                runTask();
             }
         }, timeToRun, everyTime);
+    }
+
+    @Schedule(dayOfMonth = "*", hour = "1", minute = "0", second = "0")
+    private void runTask() {
+        facade.removeOldReservations();
     }
 }

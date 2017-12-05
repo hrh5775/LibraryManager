@@ -79,7 +79,7 @@ public class Client extends Application {
                     _accountRemoteObject,
                     _messageRemoteObject);
 
-            System.out.println("Version: " + _mainRemoteObject.getVersion());
+            // System.out.println("Version: " + _mainRemoteObject.getVersion());
         }
 
         primaryStage.setTitle(_configuration.getAppName());
