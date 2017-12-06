@@ -16,6 +16,7 @@ import java.util.List;
 public class Bootstrapper {
     public static void main(String[] args) {
         Configuration configuration = AppConfiguration.getConfiguration();
+        AppConfiguration.saveConfiguration(null, configuration);
 
         if(configuration.getUseEjb()) {
             try {

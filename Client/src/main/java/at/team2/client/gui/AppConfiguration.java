@@ -61,6 +61,7 @@ public class AppConfiguration {
         try {
             ConfigurationManager.saveConfiguration(configuration, _configDelimiter, _configFile, true);
         } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

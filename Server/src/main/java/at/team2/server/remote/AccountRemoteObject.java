@@ -30,7 +30,6 @@ public class AccountRemoteObject extends UnicastRemoteObject implements AccountR
     }
 
     public AccountDetailedDto login(String userName, String password) throws RemoteException {
-        System.out.println("in login");
         AccountApplicationFacade facade = getAccountFacade();
         ModelMapper mapper = MapperHelper.getMapper();
         Account entity = facade.login(userName, password);

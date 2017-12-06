@@ -94,6 +94,9 @@ public class ConfigurationManager {
                         configuration.setPort(config.getPort());
                         configuration.setGlassfishDirectory(config.getGlassfishDirectory());
                     }
+
+                    config = configuration;
+                    System.out.println(config.getVersion());
                 }
             }
 
