@@ -1,10 +1,12 @@
 package at.team2.client;
 
+import at.team2.client.helper.AlertHelper;
 import com.sun.javafx.PlatformUtil;
 
 import at.team2.client.configuration.Configuration;
 import at.team2.client.gui.AppConfiguration;
 import at.team2.client.gui.Client;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,9 +59,14 @@ public class Bootstrapper {
                     appclientPath += "appclient";
                 }
 
-                appclientPath = new File(configuration.getGlassfishDirectory(), appclientPath).toString();
+                File appclientFile = new File(configuration.getGlassfishDirectory(), appclientPath);
 
-                ProcessBuilder processBuilder = new ProcessBuilder(appclientPath,
+                if(!appclientFile.exists() && !appclientFile.isFile()) {
+                    System.out.println("please set a valid glassfish directory in your configuration file");
+                    return;
+                }
+
+                ProcessBuilder processBuilder = new ProcessBuilder(appclientFile.toString(),
                         "-client", "\"" + path + "\"",
                         "-mainclass", Client.class.getCanonicalName(),
                         "-targetserver", configuration.getServerURL() + ":" + configuration.getPort(),

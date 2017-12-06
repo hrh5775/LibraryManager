@@ -89,14 +89,13 @@ public class ConfigurationManager {
                     configuration.setShowCloseWarning(config.getShowCloseWarning());
                     configuration.setShowMenuBar(config.getShowMenuBar());
 
-                    if(config.getGlassfishDirectory() != null || config.getGlassfishDirectory() != "./") {
+                    if(config.getGlassfishDirectory() != null && config.getGlassfishDirectory() != "./") {
                         // this settings are normally not available in this version, but due to a missing versioning system in the old app version we have to support this settings
                         configuration.setPort(config.getPort());
                         configuration.setGlassfishDirectory(config.getGlassfishDirectory());
                     }
 
                     config = configuration;
-                    System.out.println(config.getVersion());
                 }
             }
 
