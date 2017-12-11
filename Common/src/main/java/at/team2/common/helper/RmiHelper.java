@@ -1,7 +1,7 @@
 package at.team2.common.helper;
 
 import at.team2.common.configuration.ConnectionInfo;
-import at.team2.common.interfaces.MainRemoteObjectInf;
+import at.team2.common.interfaces.rmi.MainRemoteObjectInf;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;

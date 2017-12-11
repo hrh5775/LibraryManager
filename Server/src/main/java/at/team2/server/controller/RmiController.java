@@ -2,8 +2,8 @@ package at.team2.server.controller;
 
 import at.team2.common.configuration.ConnectionInfo;
 import at.team2.common.helper.RmiHelper;
-import at.team2.common.interfaces.MainRemoteObjectInf;
-import at.team2.server.remote.MainRemoteObject;
+import at.team2.common.interfaces.rmi.MainRemoteObjectInf;
+import at.team2.server.remote.rmi.MainRemoteObject;
 import at.team2.server.tasks.RemoveInvalidReservationsTask;
 
 import java.io.IOException;
@@ -62,7 +62,6 @@ public class RmiController {
         if(port > -1) {
             ConnectionInfo.port = port;
         }
-
 
         // print configuration
         System.out.println();

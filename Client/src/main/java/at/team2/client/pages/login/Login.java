@@ -2,10 +2,10 @@ package at.team2.client.pages.login;
 
 import at.team2.client.common.AccountManager;
 import at.team2.client.controls.loadingindicator.LoadingIndicator;
+import at.team2.client.entities.session.SessionWrapperObject;
 import at.team2.client.gui.Navigation;
+import at.team2.client.helper.SessionHelper;
 import at.team2.common.dto.detailed.AccountDetailedDto;
-import at.team2.client.helper.RmiHelper;
-import at.team2.common.interfaces.MainRemoteObjectInf;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -81,7 +81,7 @@ public class Login extends BasePage<Void, NullType, NullType, NullType> {
 
             _loginTask = startBackgroundTask(() -> {
                 try {
-                    MainRemoteObjectInf remoteObject = RmiHelper.getSession();
+                    SessionWrapperObject remoteObject = SessionHelper.getSession();
                     AccountDetailedDto entity = remoteObject.getAccountRemoteObject().login(_userName.getValue(), _password.getValue());
 
                     if (entity != null) {

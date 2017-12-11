@@ -1,9 +1,9 @@
 package at.team2.client.pages.showremoteloan;
 
 import at.team2.client.common.AccountManager;
-import at.team2.client.helper.RmiHelper;
+import at.team2.client.entities.session.SessionWrapperObject;
+import at.team2.client.helper.SessionHelper;
 import at.team2.client.pages.BasePage;
-import at.team2.common.interfaces.MainRemoteObjectInf;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -45,7 +45,7 @@ public class ShowRemoteLoan extends BasePage<Void,NullType,NullType,NullType> {
     @FXML
     private void send() {
         try {
-            MainRemoteObjectInf remoteObject = RmiHelper.getSession();
+            SessionWrapperObject remoteObject = SessionHelper.getSession();
             String message = remoteObject.getMessageRemoteObject().receiveMessageForInterLibraryLoan(AccountManager.getInstance().getAccount());
 
             if(message != null) {

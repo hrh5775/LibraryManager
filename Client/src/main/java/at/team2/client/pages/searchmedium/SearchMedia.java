@@ -1,10 +1,10 @@
 package at.team2.client.pages.searchmedium;
 
 import at.team2.client.controls.loadingindicator.LoadingIndicator;
+import at.team2.client.entities.session.SessionWrapperObject;
+import at.team2.client.helper.SessionHelper;
 import at.team2.client.pages.mediadetail.MediaDetail;
 import at.team2.common.dto.small.MediaSmallDto;
-import at.team2.client.helper.RmiHelper;
-import at.team2.common.interfaces.MainRemoteObjectInf;
 import com.sun.javafx.collections.ObservableListWrapper;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -107,8 +107,7 @@ public class SearchMedia extends BasePage<Void, NullType, NullType, NullType> {
 
             _searchTask = startBackgroundTask(() -> {
                 try {
-                    // @todo: perhaps use a cache
-                    MainRemoteObjectInf remoteObject = RmiHelper.getSession();
+                    SessionWrapperObject remoteObject = SessionHelper.getSession();
 
                     if(_bookChecked.isSelected() || (_dvdChecked.isSelected() && _bookChecked.isSelected()) || (!_dvdChecked.isSelected() && !_bookChecked.isSelected())) {
                         list.addAll(remoteObject.getBookRemoteObject().getBookSmallList(_searchField.getText()));
@@ -120,7 +119,7 @@ public class SearchMedia extends BasePage<Void, NullType, NullType, NullType> {
                 } catch (Exception e) {
                     Platform.runLater(() -> showRmiErrorMessage(e));
                 } finally {
-                    _mediaList.set(new ObservableListWrapper<>(list));
+                    Platform.runLater(() -> _mediaList.set(new ObservableListWrapper<>(list)));;
                     _searchTask = null;
 
                     Platform.runLater(() -> {

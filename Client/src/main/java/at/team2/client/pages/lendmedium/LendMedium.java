@@ -7,13 +7,13 @@ import javax.lang.model.type.NullType;
 import at.team2.client.common.AccountManager;
 import at.team2.client.controls.loadingindicator.LoadingIndicator;
 import at.team2.client.controls.numberfield.NumberField;
+import at.team2.client.entities.session.SessionWrapperObject;
+import at.team2.client.helper.SessionHelper;
 import at.team2.client.pages.BasePage;
 import at.team2.common.dto.detailed.AccountDetailedDto;
 import at.team2.common.dto.small.CustomerSmallDto;
 import at.team2.common.dto.small.MediaMemberSmallDto;
-import at.team2.client.helper.RmiHelper;
-import at.team2.common.interfaces.LoanRemoteObjectInf;
-import at.team2.common.interfaces.MainRemoteObjectInf;
+import at.team2.common.interfaces.rmi.LoanRemoteObjectInf;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ListProperty;
@@ -104,7 +104,7 @@ public class LendMedium extends BasePage<Void, NullType, NullType, NullType> {
     @FXML
     private void findMediaMemberById() {
         try {
-            MainRemoteObjectInf remoteObject = RmiHelper.getSession();
+            SessionWrapperObject remoteObject = SessionHelper.getSession();
             String tmp = _mediaIndexField.getText();
 
             if(tmp != null) {
@@ -150,7 +150,7 @@ public class LendMedium extends BasePage<Void, NullType, NullType, NullType> {
     @FXML
     private void getCustomerById() {
         try {
-            MainRemoteObjectInf remoteObject = RmiHelper.getSession();
+            SessionWrapperObject remoteObject = SessionHelper.getSession();
             String tmp = _customerIdNumberField.getText();
 
             if(tmp != null) {
@@ -180,7 +180,7 @@ public class LendMedium extends BasePage<Void, NullType, NullType, NullType> {
 
             _lendTask = startBackgroundTask(() -> {
                 try {
-                    MainRemoteObjectInf remoteObject = RmiHelper.getSession();
+                    SessionWrapperObject remoteObject = SessionHelper.getSession();
                     LoanRemoteObjectInf loanRemoteObject = remoteObject.getLoanRemoteObject();
 
                     int count = 0;

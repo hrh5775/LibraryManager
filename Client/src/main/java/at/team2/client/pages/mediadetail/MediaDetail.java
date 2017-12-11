@@ -1,6 +1,8 @@
 package at.team2.client.pages.mediadetail;
 
 import at.team2.client.common.AccountManager;
+import at.team2.client.entities.session.SessionWrapperObject;
+import at.team2.client.helper.SessionHelper;
 import at.team2.client.pages.BasePage;
 import at.team2.client.pages.reservation.ReservateMedium;
 import at.team2.common.dto.detailed.AccountDetailedDto;
@@ -12,8 +14,6 @@ import at.team2.common.dto.small.CreatorPersonSmallDto;
 import at.team2.common.dto.small.DvdSmallDto;
 import at.team2.common.dto.small.MediaMemberSmallDto;
 import at.team2.common.dto.small.MediaSmallDto;
-import at.team2.client.helper.RmiHelper;
-import at.team2.common.interfaces.MainRemoteObjectInf;
 import com.sun.javafx.collections.ObservableListWrapper;
 import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
@@ -70,8 +70,7 @@ public class MediaDetail extends BasePage<Void, NullType, NullType, NullType> {
     @Override
     public void initialize() {
         try {
-            // @todo: perhaps use a cache
-            MainRemoteObjectInf remoteObject = RmiHelper.getSession();
+            SessionWrapperObject remoteObject = SessionHelper.getSession();
 
             if(_tmpMedia instanceof BookSmallDto) {
                 _media = remoteObject.getBookRemoteObject().getBookDetailedById(((BookSmallDto) _tmpMedia).getId());

@@ -1,9 +1,10 @@
 package at.team2.client.gui;
 
-import at.team2.client.helper.RmiHelper;
+import at.team2.client.entities.ClientMainRemote;
+import at.team2.client.helper.EjbHelper;
 import at.team2.client.pages.PageAction;
 import at.team2.common.configuration.ConnectionInfo;
-import at.team2.common.interfaces.*;
+import at.team2.common.interfaces.ejb.*;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Orientation;
@@ -32,23 +33,23 @@ public class Client extends Application {
     private final static String _version = "1.0.0";
     private static Configuration _configuration;
     @EJB
-    private static MainRemoteObjectInf _mainRemoteObject;
+    private static AccountRemote _accountRemote;
     @EJB
-    private static BookRemoteObjectInf _bookRemoteObject;
+    private static BookRemote _bookRemote;
     @EJB
-    private static DvdRemoteObjectInf _dvdRemoteObject;
+    private static CustomerRemote _customerRemote;
     @EJB
-    private static CustomerRemoteObjectInf _customerRemoteObject;
+    private static DvdRemote _dvdRemote;
     @EJB
-    private static LoanRemoteObjectInf _loanRemoteObject;
+    private static LoanRemote _loanRemote;
     @EJB
-    private static ReservationRemoteObjectInf _reservationRemoteObject;
+    private static at.team2.common.interfaces.ejb.MainRemote _mainRemote;
     @EJB
-    private static MediaMemberRemoteObjectInf _mediaMemberRemoteObject;
+    private static MediaMemberRemote _mediaMemberRemote;
     @EJB
-    private static AccountRemoteObjectInf _accountRemoteObject;
+    private static MessageRemote _messageRemote;
     @EJB
-    private static MessageRemoteObjectInf _messageRemoteObject;
+    private static ReservationRemote _reservationRemote;
 
     static {
         _configuration = AppConfiguration.getConfiguration();
@@ -69,17 +70,16 @@ public class Client extends Application {
     public void start(Stage primaryStage) throws Exception {
         if(_configuration.getUseEjb()) {
             // https://stackoverflow.com/questions/3195365/injecting-a-static-ejb-nonsense
-            RmiHelper.setEJBSession(_mainRemoteObject,
-                    _bookRemoteObject,
-                    _dvdRemoteObject,
-                    _customerRemoteObject,
-                    _loanRemoteObject,
-                    _reservationRemoteObject,
-                    _mediaMemberRemoteObject,
-                    _accountRemoteObject,
-                    _messageRemoteObject);
+            ClientMainRemote mainRemote = new ClientMainRemote(_accountRemote, _bookRemote, _customerRemote, _dvdRemote,
+                    _loanRemote, _mainRemote, _mediaMemberRemote, _messageRemote, _reservationRemote);
 
-            // System.out.println("Version: " + _mainRemoteObject.getVersion());
+            if(mainRemote == null) {
+                System.out.println("Server not available");
+                return;
+            }
+
+            EjbHelper.setSession(mainRemote);
+            // System.out.println("Version: " + _mainRemote.getVersion());
         }
 
         primaryStage.setTitle(_configuration.getAppName());

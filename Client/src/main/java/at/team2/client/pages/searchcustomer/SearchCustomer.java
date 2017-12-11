@@ -2,14 +2,14 @@ package at.team2.client.pages.searchcustomer;
 
 import at.team2.client.common.AccountManager;
 import at.team2.client.controls.loadingindicator.LoadingIndicator;
+import at.team2.client.entities.session.SessionWrapperObject;
+import at.team2.client.helper.SessionHelper;
 import at.team2.client.pages.BasePage;
 import at.team2.common.dto.detailed.AccountDetailedDto;
 import at.team2.common.dto.detailed.LoanDetailedDto;
 import at.team2.common.dto.detailed.ReservationDetailedDto;
 import at.team2.common.dto.small.CustomerSmallDto;
-import at.team2.client.helper.RmiHelper;
-import at.team2.common.interfaces.LoanRemoteObjectInf;
-import at.team2.common.interfaces.MainRemoteObjectInf;
+import at.team2.common.interfaces.rmi.LoanRemoteObjectInf;
 import com.sun.javafx.collections.ObservableListWrapper;
 
 import javafx.application.Platform;
@@ -138,9 +138,7 @@ public class SearchCustomer extends BasePage<Void, NullType, NullType, NullType>
 
             _searchTask = startBackgroundTask(() -> {
                 try {
-                    // @todo: perhaps use a cache
-                    MainRemoteObjectInf remoteObject = RmiHelper.getSession();
-
+                    SessionWrapperObject remoteObject = SessionHelper.getSession();
                     List<CustomerSmallDto> customerList = remoteObject.getCustomerRemoteObject().getList(_searchField.getText());
                     _customerList.set(new ObservableListWrapper<>(customerList));
                 } catch (Exception e) {
@@ -171,9 +169,7 @@ public class SearchCustomer extends BasePage<Void, NullType, NullType, NullType>
 
                     _showAdditionalInfoTask = startBackgroundTask(() -> {
                         try {
-                            // @todo: perhaps use a cache
-                            MainRemoteObjectInf remoteObject = RmiHelper.getSession();
-
+                            SessionWrapperObject remoteObject = SessionHelper.getSession();
                             List<ReservationDetailedDto> reservationList = remoteObject.getReservationRemoteObject().getListByCustomer(customer.getId());
                             _reservationList.set(new ObservableListWrapper<>(reservationList));
 
@@ -225,7 +221,7 @@ public class SearchCustomer extends BasePage<Void, NullType, NullType, NullType>
             LoanDetailedDto loanEntity = (LoanDetailedDto) entity;
 
             try {
-                MainRemoteObjectInf remoteObject = RmiHelper.getSession();
+                SessionWrapperObject remoteObject = SessionHelper.getSession();
                 LoanRemoteObjectInf loanRemote = remoteObject.getLoanRemoteObject();
 
                 AccountDetailedDto accountDetailedDto = AccountManager.getInstance().getAccount();
@@ -259,7 +255,7 @@ public class SearchCustomer extends BasePage<Void, NullType, NullType, NullType>
 
             if (loanEntity != null) {
                 try {
-                    MainRemoteObjectInf remoteObject = RmiHelper.getSession();
+                    SessionWrapperObject remoteObject = SessionHelper.getSession();
                     LoanRemoteObjectInf loanRemoteObject = remoteObject.getLoanRemoteObject();
 
                     if(loanRemoteObject.takeBackLoan(loanEntity) > 0) {

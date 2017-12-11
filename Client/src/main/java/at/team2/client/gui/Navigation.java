@@ -3,13 +3,14 @@ package at.team2.client.gui;
 import at.team2.client.common.AccountManager;
 import at.team2.client.controls.sidebar.MenuSection;
 import at.team2.client.controls.sidebar.Sidebar;
+import at.team2.client.entities.session.SessionWrapperObject;
 import at.team2.client.helper.DialogHelper;
 import at.team2.client.helper.RmiErrorHelper;
+import at.team2.client.helper.SessionHelper;
 import at.team2.client.pages.PageAction;
 import at.team2.client.singletons.*;
 import at.team2.common.dto.detailed.AccountDetailedDto;
-import at.team2.client.helper.RmiHelper;
-import at.team2.common.interfaces.MainRemoteObjectInf;
+import at.team2.common.interfaces.rmi.MainRemoteObjectInf;
 import javafx.application.Platform;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.BorderPane;
@@ -86,7 +87,7 @@ public class Navigation {
             menuSectionLogout.setOnMouseClicked(event -> {
                 DialogHelper.showYesNoDialog("Logout", "Do you want to logout?", "", _currentPage, () -> {
                             try {
-                                MainRemoteObjectInf remoteObject = RmiHelper.getSession();
+                                SessionWrapperObject remoteObject = SessionHelper.getSession();
                                 remoteObject.getAccountRemoteObject().logout(accountManager.getAccount());
                             } catch (Exception e) {
                                 Platform.runLater(() -> RmiErrorHelper.showRmiErrorMessage(e, _currentPage));

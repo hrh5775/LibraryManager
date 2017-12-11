@@ -3,14 +3,14 @@ package at.team2.client.pages.reservation;
 import at.team2.client.common.AccountManager;
 import at.team2.client.controls.loadingindicator.LoadingIndicator;
 import at.team2.client.controls.numberfield.NumberField;
+import at.team2.client.entities.session.SessionWrapperObject;
+import at.team2.client.helper.SessionHelper;
 import at.team2.client.pages.BasePage;
 import at.team2.common.dto.detailed.AccountDetailedDto;
 import at.team2.common.dto.detailed.ReservationDetailedDto;
 import at.team2.common.dto.small.CustomerSmallDto;
 import at.team2.common.dto.small.MediaSmallDto;
-import at.team2.client.helper.RmiHelper;
-import at.team2.common.interfaces.MainRemoteObjectInf;
-import at.team2.common.interfaces.ReservationRemoteObjectInf;
+import at.team2.common.interfaces.rmi.ReservationRemoteObjectInf;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.fxml.FXML;
@@ -95,7 +95,7 @@ public class ReservateMedium extends BasePage<Void, NullType, NullType, NullType
 
             _reservateTask = startBackgroundTask(() -> {
                 try {
-                    MainRemoteObjectInf remoteObject = RmiHelper.getSession();
+                    SessionWrapperObject remoteObject = SessionHelper.getSession();
                     ReservationRemoteObjectInf reservatedObject = remoteObject.getReservationRemoteObject();
                     //ReservationApplicationFacade (pkg Application) checks the permission for making reservation.
                     //Currently only account-roles ADMIN, BIBLIOTHEKAR and AUSLEIHE have this permission
@@ -125,9 +125,8 @@ public class ReservateMedium extends BasePage<Void, NullType, NullType, NullType
     @FXML
     public void searchCustomer(){
         try {
-
-            MainRemoteObjectInf mro = RmiHelper.getSession();
-            _customer = mro.getCustomerRemoteObject().getCustomerSmallById(Integer.valueOf(_txtCustomerID.getText()));
+            SessionWrapperObject remoteObject = SessionHelper.getSession();
+            _customer = remoteObject.getCustomerRemoteObject().getCustomerSmallById(Integer.valueOf(_txtCustomerID.getText()));
 
             if(_customer != null){
                 _lbFirstname.setText(_customer.getFirstName());
