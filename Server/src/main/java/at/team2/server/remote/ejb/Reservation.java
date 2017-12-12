@@ -11,18 +11,22 @@ import javax.annotation.PreDestroy;
 import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
+import javax.jws.WebMethod;
+import javax.jws.WebService;
 import java.io.Serializable;
 import java.util.List;
 
 @Stateless
-@Local
+@WebService
 @Remote(ReservationRemote.class)
 public class Reservation extends ReservationBase implements ReservationRemote, Serializable {
+    @WebMethod
     @Override
     public List<ReservationDetailedDto> getListByCustomer(int id) {
         return doGetListByCustomer(id);
     }
 
+    @WebMethod
     @Override
     public int reserveMedia(MediaSmallDto mediaMember, CustomerSmallDto customer, AccountDetailedDto updater) {
         return doReserveMedia(mediaMember, customer, updater);

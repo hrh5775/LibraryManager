@@ -9,12 +9,15 @@ import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.jms.JMSException;
+import javax.jws.WebMethod;
+import javax.jws.WebService;
 import java.io.Serializable;
 
 @Stateless
-@Local
+@WebService
 @Remote(MessageRemote.class)
 public class Message extends MessageBase implements MessageRemote, Serializable {
+    @WebMethod
     @Override
     public boolean sendMessageForInterLibraryLoan(String message, AccountDetailedDto updater) {
         try {
@@ -24,6 +27,7 @@ public class Message extends MessageBase implements MessageRemote, Serializable 
         }
     }
 
+    @WebMethod
     @Override
     public String receiveMessageForInterLibraryLoan(AccountDetailedDto updater) {
         try {
