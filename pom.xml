@@ -1,5 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- reactor pom -->
-
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
@@ -19,8 +19,9 @@
         <module>Common</module>
         <module>Server</module>
         <module>Client</module>
+        <module>Web-Application</module>
     </modules>
-    
+
     <properties>
         <jdk.version>1.8</jdk.version>
        <skipTests>true</skipTests>

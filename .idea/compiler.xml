@@ -13,6 +13,7 @@
         <module name="Hibernate" />
         <module name="Persistence" />
         <module name="Server" />
+        <module name="Web-Application" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="1.8">
@@ -23,6 +24,7 @@
       <module name="LibraryManager" target="1.8" />
       <module name="Persistence" target="1.8" />
       <module name="Server" target="1.8" />
+      <module name="Web-Application" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
