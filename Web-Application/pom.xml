@@ -51,8 +51,8 @@
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>at.team2.server</groupId>
-      <artifactId>server</artifactId>
+      <groupId>at.team2.common</groupId>
+      <artifactId>common</artifactId>
       <version>1.0</version>
       <scope>compile</scope>
     </dependency>

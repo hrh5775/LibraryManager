@@ -26,7 +26,6 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.sun.faces:jsf-impl:2.2.15" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.servlet:javax.servlet-api:4.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.primefaces:primefaces:6.1" level="project" />
-    <orderEntry type="module" module-name="server" />
     <orderEntry type="library" name="Maven: javax.servlet:jstl:1.2" level="project" />
     <orderEntry type="library" name="Maven: javax.ws.rs:javax.ws.rs-api:2.1-m05" level="project" />
     <orderEntry type="library" name="Maven: org.mnode.ical4j:ical4j:2.0.0" level="project" />
@@ -85,7 +84,6 @@
     <orderEntry type="library" name="Maven: org.jboss.spec.javax.xml.soap:jboss-saaj-api_1.3_spec:1.0.3.Final" level="project" />
     <orderEntry type="library" name="Maven: org.jboss.spec.javax.xml.ws:jboss-jaxws-api_2.2_spec:2.0.3.Final" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.persistence:javax.persistence:2.1.1" level="project" />
-    <orderEntry type="module" module-name="common" />
     <orderEntry type="library" name="Maven: javax.ejb:javax.ejb-api:3.2" level="project" />
     <orderEntry type="library" name="Maven: javax.transaction:javax.transaction-api:1.2" level="project" />
   </component>
