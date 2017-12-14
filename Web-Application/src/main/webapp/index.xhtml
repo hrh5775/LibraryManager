@@ -1,20 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
-<!-- https://github.com/jsflive/jsf22-examples/blob/master/jsf22-html5/src/main/webapp/personDetails.xhtml -->
+<!--
+https://github.com/jsflive/jsf22-examples/blob/master/jsf22-html5/src/main/webapp/personDetails.xhtml
+https://www.primefaces.org/docs/guide/primefaces_user_guide_6_1.pdf
+ -->
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:jsf="http://xmlns.jcp.org/jsf"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 
-<f:view>
+<h:head>
+</h:head>
+
+<h:body>
     <h1>Index</h1>
     <p>The following sites are available</p>
     <ul>
         <ui:fragment><li><h:link value="Search Media" outcome="searchMedia" /></li></ui:fragment>
     </ul>
-</f:view>
+</h:body>
 </html>

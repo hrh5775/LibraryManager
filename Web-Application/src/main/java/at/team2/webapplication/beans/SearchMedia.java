@@ -6,13 +6,13 @@ import at.team2.common.interfaces.ejb.DvdRemote;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
 @ManagedBean
-@SessionScoped
+@ViewScoped
 public class SearchMedia implements Serializable {
     @EJB
     private DvdRemote _dvdRemote;
@@ -20,6 +20,8 @@ public class SearchMedia implements Serializable {
     private BookRemote _bookRemote;
     private List<MediaSmallDto> _mediaList;
     private String _searchValue;
+    private boolean _showBooks;
+    private boolean _showDvds;
 
     public SearchMedia() {
         _mediaList = new LinkedList<>();
@@ -38,6 +40,22 @@ public class SearchMedia implements Serializable {
         _searchValue = searchValue;
     }
 
+    public boolean getShowBooks() {
+        return _showBooks;
+    }
+
+    public void setShowBooks(boolean showBooks) {
+        _showBooks = showBooks;
+    }
+
+    public boolean getShowDvds() {
+        return _showDvds;
+    }
+
+    public void setShowDvds(boolean showDvds) {
+        _showDvds = showDvds;
+    }
+
     public boolean getIsSearchButtonDisabled() {
         return _searchValue == null || _searchValue.length() == 0;
     }
@@ -46,8 +64,13 @@ public class SearchMedia implements Serializable {
         _mediaList.clear();
 
         if(!getIsSearchButtonDisabled()) {
-            _mediaList.addAll(_bookRemote.getBookSmallList(getSearchValue()));
-            _mediaList.addAll(_dvdRemote.getDvdSmallList(getSearchValue()));
+            if(getShowBooks() || (!getShowDvds() && !getShowBooks())) {
+                _mediaList.addAll(_bookRemote.getBookSmallList(getSearchValue()));
+            }
+
+            if(getShowDvds() || (!getShowDvds() && !getShowBooks())) {
+                _mediaList.addAll(_dvdRemote.getDvdSmallList(getSearchValue()));
+            }
         }
     }
 

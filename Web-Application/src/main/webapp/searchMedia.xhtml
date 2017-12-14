@@ -6,62 +6,106 @@
       xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:jsf="http://xmlns.jcp.org/jsf"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 
-<f:view>
+<!--<h:outputStylesheet name="components.css" library="primefaces" />
+<h:outputScript name="components-mobile.js" library="primefaces" />
+<h:outputScript name="components.js" library="primefaces" />
+<h:outputScript name="core.js" library="primefaces" />-->
+
+<h:head>
+</h:head>
+
+<h:body>
     <h1>Search Media</h1>
 
-    <p>
+    <div>
         <h:form id="mediaSearchForm">
-            <h:inputText value="#{searchMedia.searchValue}" required="true" />
-            <h:commandButton action="#{searchMedia.search()}"
-                             value="Search"><!-- disabled="#{searchMedia.isSearchButtonDisabled}" -->
-                <f:ajax execute="mediaSearchForm" render="mediaList" />
-            </h:commandButton>
+            <p>
+                <h:inputText value="#{searchMedia.searchValue}" />
+                <p:commandButton value="Search" update="mediaList"
+                                 action="#{searchMedia.search()}"
+                                 styleClass="ui-priority-primary"
+                                 global="true" />
+            </p>
+
+            <div>
+                <div style="display: inline-block; float: left; overflow: auto;">
+                    <p style="display: inline-block; float: left; overflow: auto;">
+                        <p:selectBooleanCheckbox id="showBooks"
+                                                 value="#{searchMedia.showBooks}"
+                                                 update="mediaList"
+                                                 onchange="#{searchMedia.search()}">
+                            <f:ajax execute="mediaSearchForm" listener="#{searchMedia.search()}"
+                                    render="mediaList" />
+                        </p:selectBooleanCheckbox>
+                        <h:outputLabel for="showBooks" value="Book" />
+                    </p>
+                </div>
+
+                <div style="display: inline-block; float: left; overflow: auto;">
+                    <span style="visibility: hidden">....</span>
+                </div>
+
+                <div>
+                    <p style="display: inline-block; float: left; overflow: auto;">
+                        <p:selectBooleanCheckbox id="showDvds"
+                                                 value="#{searchMedia.showDvds}"
+                                                 update="mediaList">
+                            <f:ajax execute="mediaSearchForm" listener="#{searchMedia.search()}"
+                                    render="mediaList" />
+                        </p:selectBooleanCheckbox>
+                        <h:outputLabel for="showDvds" value="Dvd" />
+                    </p>
+                </div>
+            </div>
         </h:form>
-    </p>
+    </div>
+
+    <p:ajaxStatus style="display:block;margin-bottom:2em;height:24px;">
+        <f:facet name="default">
+        </f:facet>
+        <f:facet name="start">
+            <p:graphicImage value="/assets/img/spinner.gif"
+                            height="150em"
+                            width="150em" />
+            <h:outputText value="Loading" />
+        </f:facet>
+        <f:facet name="complete">
+        </f:facet>
+    </p:ajaxStatus>
 
     <!-- https://stackoverflow.com/questions/9186364/how-do-i-display-a-list-of-items-from-a-bean-onto-a-jsf-webpage -->
-    <!--<ui:repeat value="#{searchMedia.mediaList}" var="media">
-    </ui:repeat>-->
-    <h:dataTable id="mediaList" value="#{searchMedia.mediaList}" var="media" rendered="#{searchMedia.mediaList.size() > 0}"
-                 tableStyle="width:auto" resizableColumns="true" border="1"
+    <p:dataTable id="mediaList" value="#{searchMedia.mediaList}" var="media"
+                 tableStyle="width:auto" resizableColumns="true"
+                 border="1"
                  cellspacing="0"
                  cellpadding="0">
-        <h:column>
-            <f:facet name="header">Id</f:facet>
-            #{media.id}
-        </h:column>
-        <h:column>
-            <f:facet name="header">Title</f:facet>
-            #{media.title}
-        </h:column>
-        <h:column>
-            <f:facet name="header">Standard Media Id</f:facet>
-            #{media.standardMediaId}
-        </h:column>
-        <h:column>
-            <f:facet name="header">Available</f:facet>
-            #{media.available}
-        </h:column>
-        <h:column>
-            <f:facet name="header">Published Date</f:facet>
-            #{media.publishedDate}
-        </h:column>
-        <h:column>
-            <f:facet name="header">Base Index</f:facet>
-            #{media.baseIndex}
-        </h:column>
-        <h:column>
-            <f:facet name="header">Media Type</f:facet>
-            #{media.mediaType}
-        </h:column>
-        <h:column>
-            <h:commandButton action="#{searchMedia.showDetails(media)}" value="Details" />
-        </h:column>
-    </h:dataTable>
-
-    <h:outputLabel value="Nothing found" rendered="#{searchMedia.mediaList.size() == 0}" />
-</f:view>
+        <p:column headerText="Id">
+            <h:outputText value="#{media.id}" />
+        </p:column>
+        <p:column headerText="Title">
+            <h:outputText value="#{media.title}" />
+        </p:column>
+        <p:column headerText="Standard Media Id">
+            <h:outputText value="#{media.standardMediaId}" />
+        </p:column>
+        <p:column headerText="Available">
+            <h:outputText value="#{media.available}" />
+        </p:column>
+        <p:column headerText="Published Date">
+            <h:outputText value="#{media.publishedDate}" />
+        </p:column>
+        <p:column headerText="Base Index">
+            <h:outputText value="#{media.baseIndex}" />
+        </p:column>
+        <p:column headerText="Media Type">
+            <h:outputText value="#{media.mediaType}" />
+        </p:column>
+        <p:column headerText="">
+            <p:commandLink update="" oncomplete="" title="View Detail"
+                           styleClass="ui-icon ui-icon-newwin" actionListener="#{searchMedia.showDetails(media)}" />
+        </p:column>
+    </p:dataTable>
+</h:body>
 </html>

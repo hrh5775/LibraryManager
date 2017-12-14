@@ -109,11 +109,11 @@ public class SearchMedia extends BasePage<Void, NullType, NullType, NullType> {
                 try {
                     SessionWrapperObject remoteObject = SessionHelper.getSession();
 
-                    if(_bookChecked.isSelected() || (_dvdChecked.isSelected() && _bookChecked.isSelected()) || (!_dvdChecked.isSelected() && !_bookChecked.isSelected())) {
+                    if(_bookChecked.isSelected() || (!_dvdChecked.isSelected() && !_bookChecked.isSelected())) {
                         list.addAll(remoteObject.getBookRemoteObject().getBookSmallList(_searchField.getText()));
                     }
 
-                    if(_dvdChecked.isSelected() || (_dvdChecked.isSelected() && _bookChecked.isSelected()) || (!_dvdChecked.isSelected() && !_bookChecked.isSelected())) {
+                    if(_dvdChecked.isSelected() || (!_dvdChecked.isSelected() && !_bookChecked.isSelected())) {
                         list.addAll(remoteObject.getDvdRemoteObject().getDvdSmallList(_searchField.getText())); //List<MediaSmallDto>)(List<?>)
                     }
                 } catch (Exception e) {
