@@ -33,9 +33,7 @@
                 <div style="display: inline-block; float: left; overflow: auto;">
                     <p style="display: inline-block; float: left; overflow: auto;">
                         <p:selectBooleanCheckbox id="showBooks"
-                                                 value="#{searchMedia.showBooks}"
-                                                 update="mediaList"
-                                                 onchange="#{searchMedia.search()}">
+                                                 value="#{searchMedia.showBooks}">
                             <f:ajax execute="mediaSearchForm" listener="#{searchMedia.search()}"
                                     render="mediaList" />
                         </p:selectBooleanCheckbox>
@@ -50,8 +48,7 @@
                 <div>
                     <p style="display: inline-block; float: left; overflow: auto;">
                         <p:selectBooleanCheckbox id="showDvds"
-                                                 value="#{searchMedia.showDvds}"
-                                                 update="mediaList">
+                                                 value="#{searchMedia.showDvds}">
                             <f:ajax execute="mediaSearchForm" listener="#{searchMedia.search()}"
                                     render="mediaList" />
                         </p:selectBooleanCheckbox>
@@ -103,9 +100,23 @@
             <h:outputText value="#{media.mediaType}" />
         </p:column>
         <p:column headerText="">
-            <p:commandLink update="" oncomplete="" title="View Detail"
-                           styleClass="ui-icon ui-icon-newwin" actionListener="#{searchMedia.showDetails(media)}" />
+            <p:commandLink value="View Detail"
+                           type="button"
+                           styleClass="ui-icon ui-icon-newwin"
+                           immediate="true">
+                <f:ajax render="detailDialogId" listener="#{searchMedia.showDetails(media)}"
+                        onevent="function(data) { PF('detailDialog').show(); }" />
+            </p:commandLink>
         </p:column>
     </p:dataTable>
+
+    <!-- https://stackoverflow.com/questions/22505216/primefaces-update-modal-dialog -->
+    <p:dialog id="detailDialogId" header="#{searchMedia.mediaDetailed.title}" widgetVar="detailDialog"
+              modal="true" height="500" width="500"
+              dynamic="true" resizable="false">
+        <h:panelGroup layout="block">
+            <h:outputText value="#{searchMedia.mediaDetailed}" />
+        </h:panelGroup>
+    </p:dialog>
 </h:body>
 </html>

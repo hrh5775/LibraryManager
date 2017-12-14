@@ -1,5 +1,8 @@
 package at.team2.webapplication.beans;
 
+import at.team2.common.dto.detailed.MediaDetailedDto;
+import at.team2.common.dto.small.BookSmallDto;
+import at.team2.common.dto.small.DvdSmallDto;
 import at.team2.common.dto.small.MediaSmallDto;
 import at.team2.common.interfaces.ejb.BookRemote;
 import at.team2.common.interfaces.ejb.DvdRemote;
@@ -22,6 +25,7 @@ public class SearchMedia implements Serializable {
     private String _searchValue;
     private boolean _showBooks;
     private boolean _showDvds;
+    private MediaDetailedDto _mediaDetailed;
 
     public SearchMedia() {
         _mediaList = new LinkedList<>();
@@ -56,6 +60,10 @@ public class SearchMedia implements Serializable {
         _showDvds = showDvds;
     }
 
+    public MediaDetailedDto getMediaDetailed() {
+        return _mediaDetailed;
+    }
+
     public boolean getIsSearchButtonDisabled() {
         return _searchValue == null || _searchValue.length() == 0;
     }
@@ -75,6 +83,10 @@ public class SearchMedia implements Serializable {
     }
 
     public void showDetails(MediaSmallDto media) {
-        // @todo:
+        if(media instanceof BookSmallDto) {
+            _mediaDetailed = _bookRemote.getBookDetailedById(((BookSmallDto) media).getId());
+        } else if(media instanceof DvdSmallDto) {
+            _mediaDetailed = _dvdRemote.getDvdDetailedById(((DvdSmallDto) media).getId());
+        }
     }
 }
