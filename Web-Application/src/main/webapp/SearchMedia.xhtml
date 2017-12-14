@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<f:view>
+    <h1>Search Media</h1>
+
+    <p>
+        <h:form id="mediaSearchForm">
+
+            <h:inputText value="#{searchMedia.searchValue}" required="true" />
+            <h:commandButton action="#{searchMedia.search()}"
+                             value="Search"><!-- disabled="#{searchMedia.isSearchButtonDisabled}" -->
+                <f:ajax execute="mediaSearchForm" render="mediaList" />
+            </h:commandButton>
+        </h:form>
+    </p>
+
+    <!-- https://stackoverflow.com/questions/9186364/how-do-i-display-a-list-of-items-from-a-bean-onto-a-jsf-webpage -->
+    <!--<ui:repeat value="#{searchMedia.mediaList}" var="media">
+    </ui:repeat>-->
+    <h:dataTable id="mediaList" value="#{searchMedia.mediaList}" var="media" rendered="#{searchMedia.mediaList.size() > 0}"
+                 tableStyle="width:auto" resizableColumns="true" border="1"
+                 cellspacing="0"
+                 cellpadding="0">
+        <h:column>
+            <f:facet name="header">Id</f:facet>
+            #{media.id}
+        </h:column>
+        <h:column>
+            <f:facet name="header">Title</f:facet>
+            #{media.title}
+        </h:column>
+        <h:column>
+            <f:facet name="header">Standard Media Id</f:facet>
+            #{media.standardMediaId}
+        </h:column>
+        <h:column>
+            <f:facet name="header">Available</f:facet>
+            #{media.available}
+        </h:column>
+        <h:column>
+            <f:facet name="header">Published Date</f:facet>
+            #{media.publishedDate}
+        </h:column>
+        <h:column>
+            <f:facet name="header">Base Index</f:facet>
+            #{media.baseIndex}
+        </h:column>
+        <h:column>
+            <f:facet name="header">Media Type</f:facet>
+            #{media.mediaType}
+        </h:column>
+        <h:column>
+            <h:commandButton action="#{searchMedia.showDetails(media)}" value="Details" />
+        </h:column>
+    </h:dataTable>
+
+    <h:outputLabel value="Nothing found" rendered="#{searchMedia.mediaList.size() == 0}" />
+</f:view>
+</html>
