@@ -116,7 +116,22 @@
               dynamic="true" resizable="false">
         <h:panelGroup layout="block">
             <!-- @todo: add here the elements for the detailed view: use #{searchMedia.mediaDetailed} -->
-            <h:outputText value="#{searchMedia.mediaDetailed}" />
+            
+            <h:panelGrid columns="2" cellpadding="5">
+                <h:outputLabel value="Genre:" />
+                <h:outputText value="#{searchMedia.mediaDetailed.genre.name}" />
+
+                <h:outputLabel value="Publisher:" />
+                <h:outputText value="#{searchMedia.mediaDetailed.publisher.name}" />
+
+                <h:outputLabel value="Available:" />
+                <h:outputText value="#{searchMedia.mediaDetailed.available}" />
+
+                <h:outputLabel value="Description:" />
+                <h:outputText value="#{searchMedia.mediaDetailed.description}" />
+
+            </h:panelGrid>
+
         </h:panelGroup>
     </p:dialog>
 </h:body>
