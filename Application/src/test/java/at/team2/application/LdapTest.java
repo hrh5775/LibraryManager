@@ -23,7 +23,7 @@ public class LdapTest {
 
         String searchBase = "o=fhv.at";
         String username = "tf-test";
-        String additionalDNInformation = "uid=tf-test,ou=special,o=fhv.at";//"dc=uclv,dc=net";
+        String additionalDNInformation = "ou=special,o=fhv.at";//"dc=uclv,dc=net";
         String password = null;
 
         String ldapAdServer = "ldap://openldap.fhv.at";

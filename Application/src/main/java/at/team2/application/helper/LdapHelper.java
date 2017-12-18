@@ -21,7 +21,7 @@ public class LdapHelper {
         env.put(Context.SECURITY_PRINCIPAL, username);
 
         // http://docs.oracle.com/javase/jndi/tutorial/ldap/security/ldap.html
-        if(password == null) {
+        if(password == null || password.isEmpty()) {
             authentication = "none";
         } else {
             authentication = "simple";

@@ -53,7 +53,8 @@ public class Login extends BasePage<Void, NullType, NullType, NullType> {
         _userNameInput.textProperty().bindBidirectional(_userName);
         _passwordInput.textProperty().bindBidirectional(_password);
 
-        _loginButton.disableProperty().bind(_password.isEmpty().or(_password.isEmpty()));
+        // allow empty passwords
+        _loginButton.disableProperty().bind(/*_password.isEmpty().or(*/_userName.isEmpty()/*)*/);
     }
 
     @Override
@@ -76,7 +77,8 @@ public class Login extends BasePage<Void, NullType, NullType, NullType> {
     @FXML
     private void login() {
         if(_loginTask == null && _userName.getValue() != null && _password.getValue() != null &&
-                !_userName.getValue().isEmpty() && !_password.getValue().isEmpty()) {
+                // allow empty passwords
+                !_userName.getValue().isEmpty() /*&& !_password.getValue().isEmpty()*/) {
             _isLoading.setValue(true);
 
             _loginTask = startBackgroundTask(() -> {

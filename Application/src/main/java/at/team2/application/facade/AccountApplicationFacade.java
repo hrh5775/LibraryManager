@@ -190,26 +190,30 @@ public class AccountApplicationFacade extends BaseApplicationFacade<Account, Acc
 
         if(ldapAdServerList.size() > 0 && additionalDNInformationList.size() > 0) {
             String ldapAdServer = ldapAdServerList.get(0).getData();
-            String additionalDNInformation = additionalDNInformationList.get(0).getData();
+            String additionalDNInformation;
 
-            String fullDNInformation = "uid=" + userName + (additionalDNInformation != null && !additionalDNInformation.isEmpty() ?
-                    "," + additionalDNInformation : "");
+            for (int i = 0; i < additionalDNInformationList.size(); i++) {
+                additionalDNInformation = additionalDNInformationList.get(i).getData();
 
-            if(LdapHelper.hasValidCredentials(ldapAdServer, true, fullDNInformation, password)) {
-                Account account = new Account();
-                account.setId(0);
-                account.setUserName(userName);
-                account.setPassword(password);
+                String fullDNInformation = "uid=" + userName + (additionalDNInformation != null && !additionalDNInformation.isEmpty() ?
+                        "," + additionalDNInformation : "");
 
-                AccountRole role = new AccountRole();
-                role.setId(0);
-                role.setKey(Role.ADMIN.toString());
-                role.setRoleName(Role.ADMIN.toString());
-                account.setAccountRole(role);
+                if(LdapHelper.hasValidCredentials(ldapAdServer, true, fullDNInformation, password)) {
+                    Account account = new Account();
+                    account.setId(0);
+                    account.setUserName(userName);
+                    account.setPassword(password);
 
-                AccountDetailedDto accountDto = MapperHelper.getMapper().map(account, AccountDetailedDto.class);
-                SessionManager.getInstance().addAccount(accountDto);
-                return account;
+                    AccountRole role = new AccountRole();
+                    role.setId(0);
+                    role.setKey(Role.ADMIN.toString());
+                    role.setRoleName(Role.ADMIN.toString());
+                    account.setAccountRole(role);
+
+                    AccountDetailedDto accountDto = MapperHelper.getMapper().map(account, AccountDetailedDto.class);
+                    SessionManager.getInstance().addAccount(accountDto);
+                    return account;
+                }
             }
         }
 
