@@ -66,7 +66,7 @@
             <p:graphicImage value="/assets/img/spinner.gif"
                             height="150em"
                             width="150em" />
-            <h:outputText value="Loading" />
+            <h:outputText value="Loading..." />
         </f:facet>
         <f:facet name="complete">
         </f:facet>
@@ -112,26 +112,35 @@
 
     <!-- https://stackoverflow.com/questions/22505216/primefaces-update-modal-dialog -->
     <p:dialog id="detailDialogId" header="#{searchMedia.mediaDetailed.title}" widgetVar="detailDialog"
+              rendered="true" responsive="true" closable="true" closeOnEscape="true"
               modal="true" height="500" width="500"
               dynamic="true" resizable="false">
         <h:panelGroup layout="block">
-            <!-- @todo: add here the elements for the detailed view: use #{searchMedia.mediaDetailed} -->
-            
             <h:panelGrid columns="2" cellpadding="5">
-                <h:outputLabel value="Genre:" />
-                <h:outputText value="#{searchMedia.mediaDetailed.genre.name}" />
+                <h:outputLabel value="Media Type:" />
+                <h:outputText value="#{searchMedia.mediaDetailed.mediaType}" />
 
-                <h:outputLabel value="Publisher:" />
-                <h:outputText value="#{searchMedia.mediaDetailed.publisher.name}" />
+                <h:outputLabel value="Index:" />
+                <h:outputText value="#{searchMedia.mediaDetailed.baseIndex}" />
 
                 <h:outputLabel value="Available:" />
                 <h:outputText value="#{searchMedia.mediaDetailed.available}" />
 
+                <h:outputLabel value="Title:" />
+                <h:outputText value="#{searchMedia.mediaDetailed.title}" />
+
+                <h:outputLabel value="Genre:" />
+                <h:outputText value="#{searchMedia.mediaDetailed.genre.name}" />
+
+                <h:outputLabel value="Published:" />
+                <h:outputText value="#{searchMedia.mediaDetailed.publishedDate}" />
+
                 <h:outputLabel value="Description:" />
                 <h:outputText value="#{searchMedia.mediaDetailed.description}" />
 
+                <h:outputLabel value="Comment:" />
+                <h:outputText value="#{searchMedia.mediaDetailed.comment}" />
             </h:panelGrid>
-
         </h:panelGroup>
     </p:dialog>
 </h:body>
