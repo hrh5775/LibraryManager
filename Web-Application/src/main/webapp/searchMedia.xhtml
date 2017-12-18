@@ -6,7 +6,8 @@
       xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
       xmlns:jsf="http://xmlns.jcp.org/jsf"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jstl/core">
 
 <!--<h:outputStylesheet name="components.css" library="primefaces" />
 <h:outputScript name="components-mobile.js" library="primefaces" />
@@ -17,6 +18,7 @@
 </h:head>
 
 <h:body>
+
     <h1>Search Media</h1>
 
     <div>
@@ -111,37 +113,50 @@
     </p:dataTable>
 
     <!-- https://stackoverflow.com/questions/22505216/primefaces-update-modal-dialog -->
-    <p:dialog id="detailDialogId" header="#{searchMedia.mediaDetailed.title}" widgetVar="detailDialog"
-              rendered="true" responsive="true" closable="true" closeOnEscape="true"
-              modal="true" height="500" width="500"
+    <p:dialog styleClass="dialog" id="detailDialogId" widgetVar="detailDialog"
+              modal="true" height="500" width="700"
               dynamic="true" resizable="false">
-        <h:panelGroup layout="block">
-            <h:panelGrid columns="2" cellpadding="5">
-                <h:outputLabel value="Media Type:" />
-                <h:outputText value="#{searchMedia.mediaDetailed.mediaType}" />
 
-                <h:outputLabel value="Index:" />
-                <h:outputText value="#{searchMedia.mediaDetailed.baseIndex}" />
+            <p:panel id="detailpanelID" header="Media Detail" style="margin-bottom:10px;">
+                <h:panelGrid columns="2" cellpadding="5">
+                    <h:outputLabel for="mediaTitle" value="Media Title: " />
+                    <h:outputLabel id="mediaTitle" value="#{searchMedia.mediaDetailed.title}" />
 
-                <h:outputLabel value="Available:" />
-                <h:outputText value="#{searchMedia.mediaDetailed.available}" />
+                    <h:outputLabel for="mediaType" value="Media Type:" />
+                    <h:outputLabel id="mediaType" value="#{searchMedia.mediaDetailed.mediaType}" />
 
-                <h:outputLabel value="Title:" />
-                <h:outputText value="#{searchMedia.mediaDetailed.title}" />
+                    <h:outputLabel for="availability" value="Available:" />
+                    <h:outputLabel id="availability" value="#{searchMedia.mediaDetailed.available}" />
 
-                <h:outputLabel value="Genre:" />
-                <h:outputText value="#{searchMedia.mediaDetailed.genre.name}" />
+                    <h:outputLabel for="baseIndex" value="Index :" />
+                    <h:outputLabel id="baseIndex" value="#{searchMedia.mediaDetailed.baseIndex}" />
 
-                <h:outputLabel value="Published:" />
-                <h:outputText value="#{searchMedia.mediaDetailed.publishedDate}" />
+                    <h:outputLabel for="mediaGenre" value="Genre: " />
+                    <h:outputLabel id="mediaGenre" value="#{searchMedia.mediaDetailed.genre.name}" />
 
-                <h:outputLabel value="Description:" />
-                <h:outputText value="#{searchMedia.mediaDetailed.description}" />
+                    <h:outputLabel for="publishedDate" value="Published :" />
+                    <h:outputLabel id="publishedDate" value="#{searchMedia.mediaDetailed.publishedDate}" />
 
-                <h:outputLabel value="Comment:" />
-                <h:outputText value="#{searchMedia.mediaDetailed.comment}" />
-            </h:panelGrid>
-        </h:panelGroup>
+                    <h:outputLabel for="publisher" value="Publisher :" />
+                    <h:outputLabel id="publisher" value="#{searchMedia.mediaDetailed.publisher.name}" />
+
+                    <h:outputText for="creatorPersons" value="Creator :" />
+                    <h:dataTable id="creatorPersons" value="#{searchMedia.mediaDetailed.creatorPersons}"
+                                 var="pers" >
+
+                        <p:column >
+                            <h:outputText value="#{pers.firstName}" />
+                            <h:outputText value=" #{pers.lastName}" />
+                        </p:column>
+                    </h:dataTable>
+
+                    <h:outputLabel for="mediaDescription" value="Description: " />
+                    <c:set var="description" value="#{searchMedia.mediaDetailed.description}" />
+                    <h:outputLabel id="mediaDescription"
+                                   value="#{description eq 'null' ? 'not available' : description}"/>
+
+                </h:panelGrid>
+            </p:panel>
     </p:dialog>
 </h:body>
 </html>
