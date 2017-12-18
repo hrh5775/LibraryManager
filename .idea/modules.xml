@@ -8,6 +8,7 @@
       <module fileurl="file://$PROJECT_DIR$/Domain/Domain.iml" filepath="$PROJECT_DIR$/Domain/Domain.iml" />
       <module fileurl="file://$PROJECT_DIR$/LibraryManager.iml" filepath="$PROJECT_DIR$/LibraryManager.iml" />
       <module fileurl="file://$PROJECT_DIR$/Persistence/Persistence.iml" filepath="$PROJECT_DIR$/Persistence/Persistence.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PythonTestClient/PythonTestClient.iml" filepath="$PROJECT_DIR$/PythonTestClient/PythonTestClient.iml" />
       <module fileurl="file://$PROJECT_DIR$/Server/Server.iml" filepath="$PROJECT_DIR$/Server/Server.iml" />
       <module fileurl="file://$PROJECT_DIR$/Web-Application/Web-Application.iml" filepath="$PROJECT_DIR$/Web-Application/Web-Application.iml" />
     </modules>
