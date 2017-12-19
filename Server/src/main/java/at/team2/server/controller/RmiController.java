@@ -68,7 +68,7 @@ public class RmiController {
         System.out.println("# Current configuration:");
         System.out.println("+ server_url:                       " + "\"" + ConnectionInfo.hostname + "\"");
         System.out.println("+ additional_server_url_extension:  " + "\"" + ConnectionInfo.additionalUrlExtension + "\"");
-        System.out.println("+ full url:                         " + "\"" + ConnectionInfo.url + "\"");
+        System.out.println("+ full url:                         " + "\"" + ConnectionInfo.getUrl() + "\"");
         System.out.println("+ port:                             " + "\"" + ConnectionInfo.port + "\"");
         System.out.println();
 
@@ -100,7 +100,7 @@ public class RmiController {
         System.setProperty("java.rmi.server.codebase", codebase);
         Registry registry = RmiHelper.getRegistry();
         MainRemoteObject obj = new MainRemoteObject();
-        registry.rebind(ConnectionInfo.url, obj);
+        registry.rebind(ConnectionInfo.getUrl(), obj);
 
         System.out.println("Start background tasks ...");
         System.out.print("\t* Start 'Remove Invalid Reservation Task' ...");

@@ -15,6 +15,6 @@ public class RmiHelper {
     }
 
     public static MainRemoteObjectInf getSession(Registry registry) throws RemoteException, NotBoundException {
-        return (MainRemoteObjectInf) registry.lookup(ConnectionInfo.url);
+        return (MainRemoteObjectInf) registry.lookup(ConnectionInfo.getUrl());
     }
 }
