@@ -1,13 +1,11 @@
 package at.team2.client;
 
-import at.team2.client.helper.AlertHelper;
 import com.sun.javafx.PlatformUtil;
-
 import at.team2.client.configuration.Configuration;
 import at.team2.client.gui.AppConfiguration;
 import at.team2.client.gui.Client;
-import javafx.stage.Stage;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
@@ -67,13 +65,19 @@ public class Bootstrapper {
                 }
 
                 ProcessBuilder processBuilder = new ProcessBuilder(appclientFile.toString(),
-                        "-client", "\"" + path + "\"",
-                        "-mainclass", Client.class.getCanonicalName(),
+                        /*"-client", "\"" + path + "\"",*/
+                        // doesn't work anymore in version 3
+                        // https://github.com/javaee/glassfish/issues/13126
+                        /*"-mainclass", Client.class.getCanonicalName(),*/
+                        "-classpath", "\"" + path + "\"", Client.class.getCanonicalName(),
                         "-targetserver", configuration.getServerURL() + ":" + configuration.getPort(),
                         debugging1,
                         debugging2);
                 processBuilder.inheritIO();
                 Process process = processBuilder.start();
+
+                Thread.sleep(15000);
+                closeSplashScreen();
 
                 while (process.isAlive()) {
                     Thread.sleep(1000);
@@ -86,7 +90,16 @@ public class Bootstrapper {
                 e.printStackTrace();
             }
         } else {
+            closeSplashScreen();
             Client.main(args);
+        }
+    }
+
+    private static void closeSplashScreen() {
+        SplashScreen splashScreen = SplashScreen.getSplashScreen();
+
+        if (splashScreen != null) {
+            splashScreen.close();
         }
     }
 }
