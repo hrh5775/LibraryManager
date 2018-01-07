@@ -2,10 +2,17 @@
 from suds.client import Client
 import sys
 import logging
+import getpass
+
 logging.getLogger('suds.client').setLevel(logging.CRITICAL)
-URL = sys.argv.pop(0)
+URL = sys.argv.pop(1)
+
 Username = raw_input("Please enter your username: ")
-Password = raw_input("Please enter the password for your account: ")
+print "Please enter the password for your account: "
+Password = getpass.getpass()
+#Username = 'staff3'
+#Password = 'password'
+
 Accountwsdl = URL + '/AccountService/Account?wsdl'
 Accountclient = Client(Accountwsdl)
 Account = Accountclient.service.login(Username,Password)
@@ -25,12 +32,3 @@ if returnnumber > 0:
     print returnnumber
 else:
     print 'Loan failed'
-
-
-
-
-
-
-
-
-
