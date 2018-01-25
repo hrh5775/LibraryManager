@@ -18,12 +18,20 @@ public class AppConfiguration {
     private final static String _configDelimiter = "\t";
     private static File _configFile;
 
+    public static File getFile() {
+        return new File(getPath().toString(), _configName);
+    }
+
+    public static Path getPath() {
+        return Paths.get(System.getProperty("user.home"), ".LibraryManagerClient");
+    }
+
     public static Configuration getConfiguration() {
         Configuration _configuration;
 
-        Path configDir = Paths.get(System.getProperty("user.home"), ".LibraryManagerClient");
+        Path configDir = getPath();
         // load the config file
-        _configFile = new File(configDir.toString(), _configName);
+        _configFile = getFile();
 
         try {
             configDir.toFile().mkdirs();
